@@ -10,9 +10,6 @@ import { RolesModule } from './roles/roles.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformIdInterceptor } from './common/interceptors/transform-id/transform-id.interceptor';
 import { AuthModule } from './auth/auth.module';
-import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './auth/local.strategy';
-import { GqlLocalAuthGuard } from './auth/guards/gql-local-auth/gql-local-auth.guard';
 
 @Module({
   imports: [
@@ -30,15 +27,12 @@ import { GqlLocalAuthGuard } from './auth/guards/gql-local-auth/gql-local-auth.g
     UsersModule,
     RolesModule,
     AuthModule,
-    PassportModule.register({ session: true }),
   ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformIdInterceptor,
     },
-    LocalStrategy,
-    GqlLocalAuthGuard,
   ],
 })
 export class AppModule {}

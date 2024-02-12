@@ -50,6 +50,6 @@ module.exports = {
     'prefer-const': 'warn',
     curly: 'warn',
     eqeqeq: ['warn', 'smart'],
-    'no-magic-numbers': ['warn', { 'ignore': [-1, 0, 1, 200, 3000]}],
+    'no-magic-numbers': ['warn', { 'ignore': [-1, 0, 1, 200, 3000, 10]}],
   },
 };

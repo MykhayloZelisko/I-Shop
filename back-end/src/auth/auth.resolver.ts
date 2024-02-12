@@ -1,7 +1,7 @@
-import { Args, Context, GqlExecutionContext, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from '../users/inputs/create-user.input';
 import { AuthService } from './auth.service';
-import { ExecutionContext, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { User } from '../users/models/user.model';
 import { GqlLocalAuthGuard } from './guards/gql-local-auth/gql-local-auth.guard';
 import { LoginInput } from './inputs/login.input';

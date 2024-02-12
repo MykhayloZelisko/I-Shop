@@ -7,20 +7,20 @@ export class User {
   public id: string;
 
   @Field({ description: 'First name' })
-  first_name: string;
+  public first_name: string;
 
   @Field({ description: 'Last name' })
-  last_name: string;
+  public last_name: string;
 
   @Field({ description: 'Phone number' })
-  phone: string;
+  public phone: string;
 
   @Field({ description: 'Email' })
-  email: string;
+  public email: string;
 
   @Field({ description: 'Password' })
-  password: string;
+  public password: string;
 
   @Field(() => [Role])
-  roles: Role[];
+  public roles: Role[];
 }

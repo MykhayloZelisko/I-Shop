@@ -1,8 +1,14 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './models/user.model';
 import { CreateUserInput } from './inputs/create-user.input';
-import { UpdateUserInput } from './inputs/update-user.input';
 import { Role } from '../roles/models/role.model';
 
 @Resolver(() => User)

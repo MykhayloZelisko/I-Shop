@@ -12,14 +12,12 @@ export function apolloOptionsFactory(): NamedOptions {
     default: {
       cache: new InMemoryCache(),
       link: httpLink.create({ uri }),
-      ssrMode: true,
     },
     // These settings will be saved by name: withCredentials
     withCredentials: {
       cache: new InMemoryCache(),
       link: httpLink.create({ uri }),
       credentials: 'include',
-      ssrMode: true,
     },
   };
 }

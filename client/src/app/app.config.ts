@@ -1,7 +1,7 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { routes } from './app.routes';
+import { appRoutes } from './routes/app.routes';
 import {
   provideClientHydration,
   withHttpTransferCacheOptions,
@@ -11,7 +11,7 @@ import { graphqlProvider } from './graphql.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(appRoutes),
     provideClientHydration(
       withHttpTransferCacheOptions({ includePostRequests: true }),
     ),

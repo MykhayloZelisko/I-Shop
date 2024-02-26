@@ -7,10 +7,10 @@ export class User {
   public id: string;
 
   @Field({ description: 'First name' })
-  public first_name: string;
+  public firstName: string;
 
   @Field({ description: 'Last name' })
-  public last_name: string;
+  public lastName: string;
 
   @Field({ description: 'Phone number' })
   public phone: string;
@@ -21,6 +21,6 @@ export class User {
   @Field({ description: 'Password' })
   public password: string;
 
-  @Field(() => [Role])
+  @Field(() => [Role], { description: 'List of roles' })
   public roles: Role[];
 }

@@ -1,29 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { Apollo, gql } from 'apollo-angular';
-import { ApolloQueryResult } from '@apollo/client';
-
-const GET_ALL_USERS = gql`
-  {
-    users {
-      id
-      first_name
-      last_name
-      phone
-      email
-      roles {
-        id
-        role
-      }
-    }
-  }
-`;
+import { Store } from '@ngrx/store';
+import { State } from './+store/reducers';
+import { GetMeActions } from './+store/user/actions/get-me.actions';
 
 @Component({
   selector: 'app-root',
@@ -36,21 +16,9 @@ const GET_ALL_USERS = gql`
 export class AppComponent implements OnInit {
   public users: unknown;
 
-  public constructor(
-    private apollo: Apollo,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  public constructor(private store: Store<State>) {}
 
   public ngOnInit(): void {
-    // TODO: this method will be changed
-    this.apollo
-      .use('withCredentials')
-      .query({
-        query: GET_ALL_USERS,
-      })
-      .subscribe((data: ApolloQueryResult<any>) => {
-        this.users = data.data.users;
-        this.cdr.detectChanges();
-      });
+    this.store.dispatch(GetMeActions.getMe());
   }
 }

@@ -5,15 +5,12 @@ import { Observable } from 'rxjs';
 import { LoginEffects } from './login.effects';
 
 describe('LoginEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: LoginEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        LoginEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [LoginEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(LoginEffects);

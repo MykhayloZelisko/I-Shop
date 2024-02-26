@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { RegistrationEffects } from './registration.effects';
 
 describe('RegistrationEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: RegistrationEffects;
 
   beforeEach(() => {

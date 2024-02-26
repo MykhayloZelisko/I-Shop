@@ -5,15 +5,12 @@ import { Observable } from 'rxjs';
 import { GetMeEffects } from './get-me.effects';
 
 describe('GetMeEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: GetMeEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        GetMeEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [GetMeEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(GetMeEffects);

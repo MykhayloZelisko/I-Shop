@@ -6,27 +6,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { Apollo, gql } from 'apollo-angular';
-import { ApolloQueryResult } from '@apollo/client';
+import { Apollo } from 'apollo-angular';
 import { Store } from '@ngrx/store';
 import { State } from './+store/reducers';
 import { GetMeActions } from './+store/user/actions/get-me.actions';
-
-const GET_ALL_USERS = gql`
-  {
-    users {
-      id
-      first_name
-      last_name
-      phone
-      email
-      roles {
-        id
-        role
-      }
-    }
-  }
-`;
 
 @Component({
   selector: 'app-root',

@@ -5,20 +5,21 @@ import { AuthService } from '../services/auth.service';
 import { GetMeActions } from '../actions/get-me.actions';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 
-
-
 @Injectable()
 export class GetMeEffects {
   public getMe$ = createEffect(() =>
     this.actions$.pipe(
       ofType(GetMeActions.getMe),
       switchMap(() =>
-        this.authService.getCurrentUser().pipe(
-          map((user: UserInterface) => GetMeActions.getMeSuccess(user)),
-        ),
+        this.authService
+          .getCurrentUser()
+          .pipe(map((user: UserInterface) => GetMeActions.getMeSuccess(user))),
       ),
     ),
   );
 
-  constructor(private actions$: Actions, private authService: AuthService) {}
+  public constructor(
+    private actions$: Actions,
+    private authService: AuthService,
+  ) {}
 }

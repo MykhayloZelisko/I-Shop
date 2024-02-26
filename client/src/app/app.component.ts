@@ -8,6 +8,9 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Apollo, gql } from 'apollo-angular';
 import { ApolloQueryResult } from '@apollo/client';
+import { Store } from '@ngrx/store';
+import { State } from './+store/reducers';
+import { GetMeActions } from './+store/user/actions/get-me.actions';
 
 const GET_ALL_USERS = gql`
   {
@@ -39,18 +42,10 @@ export class AppComponent implements OnInit {
   public constructor(
     private apollo: Apollo,
     private cdr: ChangeDetectorRef,
+    private store: Store<State>,
   ) {}
 
   public ngOnInit(): void {
-    // TODO: this method will be changed
-    this.apollo
-      .use('withCredentials')
-      .query({
-        query: GET_ALL_USERS,
-      })
-      .subscribe((data: ApolloQueryResult<any>) => {
-        this.users = data.data.users;
-        this.cdr.detectChanges();
-      });
+    this.store.dispatch(GetMeActions.getMe());
   }
 }

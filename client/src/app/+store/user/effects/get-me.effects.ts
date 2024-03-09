@@ -12,8 +12,7 @@ export class GetMeEffects {
       ofType(GetMeActions.getMe),
       switchMap(() =>
         this.authService.getCurrentUser().pipe(
-          map((user: UserInterface) => GetMeActions.getMeSuccess(user)),
-          catchError(() => of(GetMeActions.getMeFailure())),
+          map((user: UserInterface | null) => GetMeActions.getMeSuccess(user)),
         ),
       ),
     ),

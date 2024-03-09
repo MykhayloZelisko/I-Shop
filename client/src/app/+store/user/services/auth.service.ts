@@ -72,7 +72,7 @@ export class AuthService {
       );
   }
 
-  public getCurrentUser(): Observable<UserInterface> {
+  public getCurrentUser(): Observable<UserInterface | null> {
     return this.apollo
       .use('withCredentials')
       .query<{ me: UserInterface }>({
@@ -95,12 +95,11 @@ export class AuthService {
       .pipe(
         map((response: ApolloQueryResult<{ me: UserInterface }>) => {
           if (response.errors) {
-            throw response.errors[0];
+            return null;
           } else {
             return response.data.me;
           }
         }),
-        catchError((error) => throwError(() => error)),
       );
   }
 }

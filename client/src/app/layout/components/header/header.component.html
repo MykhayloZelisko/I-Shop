@@ -1,1 +1,69 @@
-<p>header works!</p>
+<div class="header">
+  <div class="header__inner">
+    <button class="header__button header__button--icon-btn">
+      <svg-icon
+        class="header__icon"
+        src="assets/images/hamburger-menu-icon.svg"
+      ></svg-icon>
+    </button>
+    <a class="header__logo" routerLink="/">
+      <svg-icon
+        class="header__logo-icon"
+        src="assets/images/logo.svg"
+      ></svg-icon>
+      <span class="header__logo-text">I-SHOP</span>
+    </a>
+    <button class="header__button header__button--catalog">
+      <svg-icon
+        class="header__icon"
+        src="assets/images/four-squares-icon.svg"
+      ></svg-icon>
+      <span class="header__button-text">Каталог</span>
+    </button>
+    <div class="header__search">
+      <input class="header__input" type="text" />
+      <button class="header__button header__button--search">
+        <svg-icon
+          class="header__icon header__icon--search"
+          src="assets/images/search-icon.svg"
+        ></svg-icon>
+        <span class="header__button-text header__button-text--search"
+          >Пошук</span
+        >
+      </button>
+    </div>
+    <div class="header__language">UA</div>
+    @if (!user) {
+      <button
+        class="header__button header__button--large-scr-btn header__button--icon-btn"
+      >
+        <svg-icon
+          class="header__icon"
+          src="assets/images/male-icon.svg"
+        ></svg-icon>
+      </button>
+    }
+    <button
+      class="header__button header__button--large-scr-btn header__button--icon-btn"
+    >
+      <svg-icon
+        class="header__icon"
+        src="assets/images/scale-icon.svg"
+      ></svg-icon>
+    </button>
+    <button class="header__button header__button--icon-btn">
+      <svg-icon
+        class="header__icon"
+        src="assets/images/cart-black-icon.svg"
+      ></svg-icon>
+    </button>
+    @if (isAdmin) {
+      <button class="header__button header__button--icon-btn">
+        <svg-icon
+          class="header__icon"
+          src="assets/images/crown-icon.svg"
+        ></svg-icon>
+      </button>
+    }
+  </div>
+</div>

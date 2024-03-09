@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { GetMeActions } from '../actions/get-me.actions';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
@@ -11,9 +11,10 @@ export class GetMeEffects {
     this.actions$.pipe(
       ofType(GetMeActions.getMe),
       switchMap(() =>
-        this.authService
-          .getCurrentUser()
-          .pipe(map((user: UserInterface) => GetMeActions.getMeSuccess(user))),
+        this.authService.getCurrentUser().pipe(
+          map((user: UserInterface) => GetMeActions.getMeSuccess(user)),
+          catchError(() => of(GetMeActions.getMeFailure())),
+        ),
       ),
     ),
   );

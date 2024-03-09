@@ -5,10 +5,11 @@ import { GetMeActions } from '../actions/get-me.actions';
 
 export const userFeatureKey = 'user';
 
-export const initialState: unknown = null;
+export const initialState: UserInterface | null = null;
 
 export const reducer = createReducer(
   initialState as UserInterface | null,
   on(LoginActions.loginSuccess, (_state, action) => action),
   on(GetMeActions.getMeSuccess, (_state, action) => action),
+  on(GetMeActions.getMeFailure, () => null),
 );

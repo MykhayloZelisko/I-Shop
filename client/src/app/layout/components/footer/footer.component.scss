@@ -1,0 +1,23 @@
+@import "variables";
+
+.footer {
+  background-color: $brown-1;
+  font-family: $source;
+  color: $yellow;
+  padding: 0 10px;
+
+  &__inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 12px 0;
+    text-align: end;
+  }
+}
+
+@media screen and (width <= 768px) {
+  .footer {
+    &__inner {
+      text-align: center;
+    }
+  }
+}

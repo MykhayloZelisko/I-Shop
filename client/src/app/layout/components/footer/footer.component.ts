@@ -8,4 +8,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './footer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FooterComponent {}
+export class FooterComponent {
+  public date: Date = new Date();
+}

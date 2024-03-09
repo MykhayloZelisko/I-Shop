@@ -1,1 +1,9 @@
-<p>footer works!</p>
+<div class="footer">
+  <div class="footer__inner">
+    @if (date.getFullYear() > 2024) {
+      <span>&copy; 2024-{{ date.getFullYear() }}</span>
+    } @else {
+      <span>&copy; 2024</span>
+    }
+  </div>
+</div>

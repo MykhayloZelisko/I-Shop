@@ -28,6 +28,10 @@ export class HeaderComponent implements OnInit {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
+    this.initUser();
+  }
+
+  private initUser(): void {
     this.store.select(userSelector).subscribe((user: UserInterface) => {
       this.user = user;
       this.isAdmin = user

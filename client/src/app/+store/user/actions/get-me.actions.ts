@@ -5,7 +5,6 @@ export const GetMeActions = createActionGroup({
   source: 'GetMe',
   events: {
     getMe: emptyProps(),
-    getMeSuccess: props<UserInterface>(),
-    getMeFailure: emptyProps(),
+    getMeSuccess: props<UserInterface | null>(),
   },
 });

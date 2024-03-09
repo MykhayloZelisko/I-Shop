@@ -11,5 +11,4 @@ export const reducer = createReducer(
   initialState as UserInterface | null,
   on(LoginActions.loginSuccess, (_state, action) => action),
   on(GetMeActions.getMeSuccess, (_state, action) => action),
-  on(GetMeActions.getMeFailure, () => null),
 );

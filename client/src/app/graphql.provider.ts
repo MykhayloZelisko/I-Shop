@@ -16,8 +16,7 @@ export function apolloOptionsFactory(): NamedOptions {
     // These settings will be saved by name: withCredentials
     withCredentials: {
       cache: new InMemoryCache(),
-      link: httpLink.create({ uri }),
-      credentials: 'include',
+      link: httpLink.create({ uri, withCredentials: true }),
     },
   };
 }

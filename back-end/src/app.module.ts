@@ -7,12 +7,12 @@ import * as process from 'process';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { TransformIdInterceptor } from './common/interceptors/transform-id/transform-id.interceptor';
 import { AuthModule } from './auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
+    PassportModule.register({ session: true }),
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
@@ -27,12 +27,6 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     RolesModule,
     AuthModule,
-  ],
-  providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TransformIdInterceptor,
-    },
   ],
 })
 export class AppModule {}

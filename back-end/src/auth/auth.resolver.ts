@@ -1,16 +1,18 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from '../users/inputs/create-user.input';
 import { AuthService } from './auth.service';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UsePipes } from '@nestjs/common';
 import { User } from '../users/models/user.model';
 import { GqlLocalAuthGuard } from './guards/gql-local-auth/gql-local-auth.guard';
 import { LoginInput } from './inputs/login.input';
-import { GqlAuthGuard } from './guards/gql-auth/gql-auth.guard';
+import { GqlAuthGuard } from '../common/guards/gql-auth/gql-auth.guard';
+import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 
 @Resolver()
 export class AuthResolver {
   public constructor(private authService: AuthService) {}
 
+  @UsePipes(ValidationPipe)
   @Mutation(() => Boolean)
   public async registration(
     @Args('createUserInput') createUserInput: CreateUserInput,

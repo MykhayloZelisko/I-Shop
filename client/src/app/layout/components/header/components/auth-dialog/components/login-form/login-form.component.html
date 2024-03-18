@@ -1,0 +1,50 @@
+<div class="login-form">
+  <form [formGroup]="loginForm" class="login-form__form">
+    <div class="login-form__field">
+      <label class="login-form__label" for="email">Електронна пошта: </label>
+      <input
+        id="email"
+        class="login-form__input"
+        formControlName="email"
+        type="email"
+        placeholder="Введіть електронну пошту"
+      />
+      @if (
+        loginForm.controls['email'].invalid &&
+        (loginForm.controls['email'].dirty ||
+          loginForm.controls['email'].touched)
+      ) {
+        <p class="login-form__error">{{ showMessage('email') }}</p>
+      }
+    </div>
+    <div class="login-form__field">
+      <label class="login-form__label" for="password">Пароль: </label>
+      <input
+        id="password"
+        class="login-form__input"
+        formControlName="password"
+        type="password"
+        placeholder="Введіть пароль"
+      />
+      @if (
+        loginForm.controls['password'].invalid &&
+        (loginForm.controls['password'].dirty ||
+          loginForm.controls['password'].touched)
+      ) {
+        <p class="login-form__error">{{ showMessage('password') }}</p>
+      }
+    </div>
+  </form>
+  <p class="login-form__password" (click)="restorePassword()">
+    <span class="login-form__link">Забули пароль?</span>
+  </p>
+  <button class="login-form__button" [disabled]="loginForm.invalid" (click)='login()'>
+    Увійти
+  </button>
+  <button
+    class="login-form__button login-form__button--registration"
+    (click)="registration()"
+  >
+    Зареєструватися
+  </button>
+</div>

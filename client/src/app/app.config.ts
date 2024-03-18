@@ -10,6 +10,7 @@ import { provideEffects } from '@ngrx/effects';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+store/effects';
 import { provideAngularSvgIcon } from 'angular-svg-icon';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects(AppEffects),
     environment.providers,
     provideAngularSvgIcon(),
+    provideEnvironmentNgxMask(),
   ],
 };

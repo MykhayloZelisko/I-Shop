@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { RegistrationInterface } from '../../../shared/models/interfaces/registration.interface';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { LoginInterface } from '../../../shared/models/interfaces/login.interface';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { ApolloQueryResult } from '@apollo/client';
@@ -40,6 +40,7 @@ export class AuthService {
 
   public login(loginData: LoginInterface): Observable<UserInterface> {
     return this.apollo
+      .use('withCredentials')
       .mutate({
         mutation: gql`
           mutation Login($login: LoginInput!) {
@@ -72,7 +73,7 @@ export class AuthService {
       );
   }
 
-  public getCurrentUser(): Observable<UserInterface | null> {
+  public getCurrentUser(): Observable<UserInterface> {
     return this.apollo
       .use('withCredentials')
       .query<{ me: UserInterface }>({
@@ -95,11 +96,12 @@ export class AuthService {
       .pipe(
         map((response: ApolloQueryResult<{ me: UserInterface }>) => {
           if (response.errors) {
-            return null;
+            throw response.errors[0];
           } else {
             return response.data.me;
           }
         }),
+        catchError((error) => throwError(() => error)),
       );
   }
 }

@@ -14,8 +14,6 @@ import { GetMeActions } from './+store/user/actions/get-me.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  public users: unknown;
-
   public constructor(private store: Store<State>) {}
 
   public ngOnInit(): void {

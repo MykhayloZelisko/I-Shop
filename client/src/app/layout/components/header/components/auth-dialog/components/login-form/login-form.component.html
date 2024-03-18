@@ -38,7 +38,11 @@
   <p class="login-form__password" (click)="restorePassword()">
     <span class="login-form__link">Забули пароль?</span>
   </p>
-  <button class="login-form__button" [disabled]="loginForm.invalid" (click)='login()'>
+  <button
+    class="login-form__button"
+    [disabled]="loginForm.invalid"
+    (click)="login()"
+  >
     Увійти
   </button>
   <button

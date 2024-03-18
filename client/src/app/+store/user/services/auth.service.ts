@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { RegistrationInterface } from '../../../shared/models/interfaces/registration.interface';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { LoginInterface } from '../../../shared/models/interfaces/login.interface';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { ApolloQueryResult } from '@apollo/client';

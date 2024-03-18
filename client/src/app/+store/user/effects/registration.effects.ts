@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RegistrationActions } from '../actions/registration.actions';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { AuthDialogActions } from '../../auth-dialog/actions/auth-dialog.actions';

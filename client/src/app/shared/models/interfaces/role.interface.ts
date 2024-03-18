@@ -1,4 +1,4 @@
 export interface RoleInterface {
-  _id: string;
+  id: string;
   role: string;
 }

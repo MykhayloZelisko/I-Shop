@@ -54,6 +54,7 @@ module.exports = {
         '@typescript-eslint/no-mixed-enums': 'error',
         '@typescript-eslint/prefer-includes': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
+        '@typescript-eslint/no-unused-vars': ["error", { "argsIgnorePattern": "^_" }],
         'prettier/prettier': [
           'error',
           {

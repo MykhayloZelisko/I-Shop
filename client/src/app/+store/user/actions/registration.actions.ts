@@ -4,7 +4,7 @@ import { RegistrationInterface } from '../../../shared/models/interfaces/registr
 export const RegistrationActions = createActionGroup({
   source: 'Registration',
   events: {
-    Registration: props<RegistrationInterface>(),
+    Registration: props<{ registration: RegistrationInterface }>(),
     RegistrationSuccess: emptyProps(),
     RegistrationFailure: emptyProps(),
   },

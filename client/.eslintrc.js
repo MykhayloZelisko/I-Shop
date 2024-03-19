@@ -54,6 +54,7 @@ module.exports = {
         '@typescript-eslint/no-mixed-enums': 'error',
         '@typescript-eslint/prefer-includes': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
+        '@typescript-eslint/no-unused-vars': ["error", { "argsIgnorePattern": "^_" }],
         'prettier/prettier': [
           'error',
           {
@@ -74,7 +75,7 @@ module.exports = {
         quotes: ['warn', 'single', { 'allowTemplateLiterals': true }],
         curly: 'warn',
         eqeqeq: ['warn', 'smart'],
-        'no-magic-numbers': ['warn', { 'ignore': [-1, 0, 1]}],
+        'no-magic-numbers': ['warn', { 'ignore': [-1, 0, 1, 3, 8, 32]}],
       }
     },
     {

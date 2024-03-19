@@ -1,0 +1,108 @@
+<div class="registration-form">
+  <form [formGroup]="registrationForm" class="registration-form__form">
+    <div class="registration-form__field">
+      <label class="registration-form__label" for="email"
+        >Електронна пошта:
+      </label>
+      <input
+        id="email"
+        class="registration-form__input"
+        formControlName="email"
+        type="email"
+        placeholder="Введіть електронну пошту"
+      />
+      @if (
+        registrationForm.controls['email'].invalid &&
+        (registrationForm.controls['email'].dirty ||
+          registrationForm.controls['email'].touched)
+      ) {
+        <p class="registration-form__error">{{ showMessage('email') }}</p>
+      }
+    </div>
+    <div class="registration-form__field">
+      <label class="registration-form__label" for="firstName">Ім'я: </label>
+      <input
+        id="firstName"
+        class="registration-form__input"
+        formControlName="firstName"
+        type="text"
+        placeholder="Введіть ім'я"
+      />
+      @if (
+        registrationForm.controls['firstName'].invalid &&
+        (registrationForm.controls['firstName'].dirty ||
+          registrationForm.controls['firstName'].touched)
+      ) {
+        <p class="registration-form__error">{{ showMessage('firstName') }}</p>
+      }
+    </div>
+    <div class="registration-form__field">
+      <label class="registration-form__label" for="lastName">Прізвище:</label>
+      <input
+        id="lastName"
+        class="registration-form__input"
+        formControlName="lastName"
+        type="text"
+        placeholder="Введіть прізвище"
+      />
+      @if (
+        registrationForm.controls['lastName'].invalid &&
+        (registrationForm.controls['lastName'].dirty ||
+          registrationForm.controls['lastName'].touched)
+      ) {
+        <p class="registration-form__error">{{ showMessage('lastName') }}</p>
+      }
+    </div>
+    <div class="registration-form__field">
+      <label class="registration-form__label" for="phone"
+        >Номер телефону:
+      </label>
+      <input
+        id="phone"
+        class="registration-form__input"
+        formControlName="phone"
+        type="text"
+        placeholder="+380 (XX) XXX - XX - XX"
+        mask="(XX) XXX - XX - XX"
+        prefix="+380 "
+      />
+      @if (
+        registrationForm.controls['phone'].invalid &&
+        (registrationForm.controls['phone'].dirty ||
+          registrationForm.controls['phone'].touched)
+      ) {
+        <p class="registration-form__error">{{ showMessage('phone') }}</p>
+      }
+    </div>
+    <div class="registration-form__field">
+      <label class="registration-form__label" for="password">Пароль: </label>
+      <input
+        id="password"
+        class="registration-form__input"
+        formControlName="password"
+        type="password"
+        placeholder="Введіть пароль"
+      />
+      @if (
+        registrationForm.controls['password'].invalid &&
+        (registrationForm.controls['password'].dirty ||
+          registrationForm.controls['password'].touched)
+      ) {
+        <p class="registration-form__error">{{ showMessage('password') }}</p>
+      }
+    </div>
+  </form>
+  <button
+    class="registration-form__button"
+    [disabled]="registrationForm.invalid"
+    (click)="registration()"
+  >
+    Зареєструватися
+  </button>
+  <button
+    class="registration-form__button registration-form__button--login"
+    (click)="login()"
+  >
+    Я вже зареєстрований(-на)
+  </button>
+</div>

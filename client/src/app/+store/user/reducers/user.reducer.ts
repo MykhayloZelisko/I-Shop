@@ -7,8 +7,9 @@ export const userFeatureKey = 'user';
 
 export const initialState: UserInterface | null = null;
 
-export const reducer = createReducer(
+export const userReducer = createReducer(
   initialState as UserInterface | null,
-  on(LoginActions.loginSuccess, (_state, action) => action),
-  on(GetMeActions.getMeSuccess, (_state, action) => action),
+  on(LoginActions.loginSuccess, (_state, action) => action.user),
+  on(GetMeActions.getMeSuccess, (_state, action) => action.user),
+  on(GetMeActions.getMeFailure, () => null),
 );

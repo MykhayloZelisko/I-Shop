@@ -24,11 +24,6 @@ export class UsersService {
     return newUser.toObject();
   }
 
-  public async getAllUsers(): Promise<UserGQL[]> {
-    const users = await this.userModel.find().populate('roles').exec();
-    return users.map((user) => user.toObject());
-  }
-
   public async getUserById(id: string): Promise<UserGQL | null> {
     const user = await this.userModel.findById(id).populate('roles').exec();
     return user ? user.toObject() : null;

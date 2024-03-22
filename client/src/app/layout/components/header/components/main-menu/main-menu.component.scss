@@ -205,3 +205,10 @@
     }
   }
 }
+
+@media screen and (width <= 400px) {
+  .main-menu {
+    width: 100vw;
+  }
+}
+

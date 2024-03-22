@@ -33,6 +33,8 @@ import { LogoutActions } from '../../../../../+store/user/actions/logout.actions
 export class MainMenuComponent {
   @Input({ required: true }) public user$!: Observable<UserInterface | null>;
 
+  @Input({ required: true }) public isAdmin$!: Observable<boolean>;
+
   private store = inject(Store<State>);
 
   private router = inject(Router);

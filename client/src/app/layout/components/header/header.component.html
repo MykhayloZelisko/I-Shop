@@ -79,5 +79,5 @@
 }
 
 @if (isOpenMainMenu$ | async) {
-  <app-main-menu [user$]="user$"></app-main-menu>
+  <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
 }

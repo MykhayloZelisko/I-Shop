@@ -63,6 +63,17 @@
           Каталог
         </button>
       </li>
+      @if (isAdmin$ | async) {
+        <li class="main-menu__list-item main-menu__list-item--underlined">
+          <button class="main-menu__list-button">
+            <svg-icon
+              class="main-menu__list-button-icon"
+              src="assets/images/crown-icon.svg"
+            ></svg-icon>
+            Адміністратор
+          </button>
+        </li>
+      }
       <li class="main-menu__list-item">
         <button class="main-menu__list-button">
           <svg-icon

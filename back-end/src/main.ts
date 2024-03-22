@@ -14,7 +14,7 @@ async function bootstrap(): Promise<void> {
     origin: 'http://localhost:4200',
     credentials: true,
   });
-  app.use(cookieParser());
+  app.use(cookieParser(String(process.env.PRIVATE_KEY)));
   app.use(
     session({
       name: 'SESSION_ID',

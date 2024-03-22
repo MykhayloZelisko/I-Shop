@@ -1,0 +1,142 @@
+<div class="main-menu__wrapper" appMainMenuClickOutside>
+  <div class="main-menu">
+    <div class="main-menu__logo-wrapper">
+      <div class="main-menu__logo" (click)="goHome()">
+        <svg-icon
+          class="main-menu__logo-icon"
+          src="assets/images/logo.svg"
+        ></svg-icon>
+        <span class="main-menu__logo-text">I-SHOP</span>
+      </div>
+      <button class="main-menu__close" (click)="closeMainMenu()">
+        <svg-icon
+          class="main-menu__close-icon"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+    @if (user$ | async; as user) {
+      <div class="main-menu__login-wrapper">
+        <div class="main-menu__user">
+          <span class="main-menu__user-first-letter">{{
+            user.firstName.at(0)
+          }}</span>
+        </div>
+        <div class="main-menu__login">
+          <div class="main-menu__user-name">
+            {{ user.firstName }} {{ user.lastName }}
+          </div>
+          <div class="main-menu__user-email">{{ user.email }}</div>
+        </div>
+      </div>
+    } @else {
+      <div class="main-menu__login-wrapper">
+        <div class="main-menu__user">
+          <svg-icon
+            class="main-menu__user-icon"
+            src="assets/images/male-icon.svg"
+          ></svg-icon>
+        </div>
+        <div class="main-menu__login">
+          <div class="main-menu__login-title">
+            <button class="main-menu__login-button" (click)="login()">
+              Вхід
+            </button>
+            <div class="main-menu__login-divider"></div>
+            <button class="main-menu__login-button" (click)="registration()">
+              Реєстрація
+            </button>
+          </div>
+          <div class="main-menu__login-text">
+            Авторизуйтесь для отримання розширених можливостей
+          </div>
+        </div>
+      </div>
+    }
+    <ul>
+      <li class="main-menu__list-item main-menu__list-item--underlined">
+        <button class="main-menu__list-button">
+          <svg-icon
+            class="main-menu__list-button-icon"
+            src="assets/images/four-squares-icon.svg"
+          ></svg-icon>
+          Каталог
+        </button>
+      </li>
+      <li class="main-menu__list-item">
+        <button class="main-menu__list-button">
+          <svg-icon
+            class="main-menu__list-button-icon"
+            src="assets/images/cart-black-icon.svg"
+          ></svg-icon>
+          Кошик
+        </button>
+      </li>
+      <li class="main-menu__list-item">
+        <button class="main-menu__list-button">
+          <svg-icon
+            class="main-menu__list-button-icon"
+            src="assets/images/scale-icon.svg"
+          ></svg-icon>
+          Порівняння
+        </button>
+      </li>
+      <li class="main-menu__list-item">
+        <button class="main-menu__list-button">
+          <svg-icon
+            class="main-menu__list-button-icon"
+            src="assets/images/language-translator-icon.svg"
+          ></svg-icon>
+          Мова
+        </button>
+      </li>
+      <li class="main-menu__list-item main-menu__list-item--underlined">
+        <button class="main-menu__list-button">
+          <svg-icon
+            class="main-menu__list-button-icon"
+            src="assets/images/maps-pin-black-icon.svg"
+          ></svg-icon>
+          Місто
+        </button>
+      </li>
+      @if (user$ | async) {
+        <li class="main-menu__list-item">
+          <button class="main-menu__list-button">
+            <svg-icon
+              class="main-menu__list-button-icon"
+              src="assets/images/eye-icon.svg"
+            ></svg-icon>
+            Переглянуті товари
+          </button>
+        </li>
+        <li class="main-menu__list-item">
+          <button class="main-menu__list-button">
+            <svg-icon
+              class="main-menu__list-button-icon"
+              src="assets/images/orders-icon.svg"
+            ></svg-icon>
+            Мої замовлення
+          </button>
+        </li>
+        <li class="main-menu__list-item main-menu__list-item--underlined">
+          <button class="main-menu__list-button">
+            <svg-icon
+              class="main-menu__list-button-icon"
+              src="assets/images/message-icon.svg"
+            ></svg-icon>
+            Мої відгуки
+          </button>
+        </li>
+        <li class="main-menu__list-item">
+          <button class="main-menu__list-button" (click)="logout()">
+            <svg-icon
+              class="main-menu__list-button-icon"
+              src="assets/images/door-check-out-icon.svg"
+            ></svg-icon>
+            Вийти з акаунта
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

@@ -20,11 +20,20 @@ import { AuthDialogDataInterface } from '../../../shared/models/interfaces/auth-
 import { authDialogSelector } from '../../../+store/auth-dialog/selectors/auth-dialog.selectors';
 import { AuthDialogActions } from '../../../+store/auth-dialog/actions/auth-dialog.actions';
 import { AuthDialogTypeEnum } from '../../../shared/models/enums/auth-dialog-type.enum';
+import { mainMenuSelector } from '../../../+store/main-menu/selectors/main-menu.selectors';
+import { MainMenuActions } from '../../../+store/main-menu/actions/main-menu.actions';
+import { MainMenuComponent } from './components/main-menu/main-menu.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [SvgIconComponent, RouterLink, AuthDialogComponent, AsyncPipe],
+  imports: [
+    SvgIconComponent,
+    RouterLink,
+    AuthDialogComponent,
+    AsyncPipe,
+    MainMenuComponent,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,11 +41,13 @@ import { AuthDialogTypeEnum } from '../../../shared/models/enums/auth-dialog-typ
 export class HeaderComponent implements OnInit {
   public readonly authDialogEnum = AuthDialogTypeEnum;
 
-  public user$!: Observable<UserInterface>;
+  public user$!: Observable<UserInterface | null>;
 
   public isAdmin$!: Observable<boolean>;
 
   public dialog$!: Observable<AuthDialogDataInterface>;
+
+  public isOpenMainMenu$!: Observable<boolean>;
 
   private store = inject(Store<State>);
 
@@ -44,6 +55,7 @@ export class HeaderComponent implements OnInit {
     this.user$ = this.store.select(userSelector);
     this.isAdmin$ = this.store.select(isAdminSelector);
     this.dialog$ = this.store.select(authDialogSelector);
+    this.isOpenMainMenu$ = this.store.select(mainMenuSelector);
   }
 
   public openDialog(): void {
@@ -55,5 +67,9 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
+  }
+
+  public openMainMenu(): void {
+    this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'open' }));
   }
 }

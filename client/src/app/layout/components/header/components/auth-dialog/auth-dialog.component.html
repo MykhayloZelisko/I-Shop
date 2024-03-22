@@ -1,16 +1,16 @@
-<div class="dialog__wrapper">
-  <div class="dialog">
-    <div class="dialog__header">
-      <h3 class="dialog__title">{{ dialog.title }}</h3>
-      <button class="dialog__close" (click)="closeDialog()">
+<div class="auth-dialog__wrapper" appDialogClickOutside>
+  <div class="auth-dialog">
+    <div class="auth-dialog__header">
+      <h3 class="auth-dialog__title">{{ dialog.title }}</h3>
+      <button class="auth-dialog__close" (click)="closeDialog()">
         <svg-icon
-          class="dialog__icon dialog__icon--header-icon"
+          class="auth-dialog__icon auth-dialog__icon--header-icon"
           src="assets/images/close-round-line-icon.svg"
         ></svg-icon>
       </button>
     </div>
-    <div class="dialog__body">
-      <div class="dialog__form">
+    <div class="auth-dialog__body">
+      <div class="auth-dialog__form">
         @switch (dialog.dialogType) {
           @case (dialogTypeEnum.Registration) {
             <app-registration-form></app-registration-form>
@@ -23,26 +23,26 @@
           }
         }
       </div>
-      <div class="dialog__divider"></div>
-      <div class="dialog__social">
-        <p class="dialog__social-title">Увійти за допомогою</p>
-        <button class="dialog__button">
+      <div class="auth-dialog__divider"></div>
+      <div class="auth-dialog__social">
+        <p class="auth-dialog__social-title">Увійти за допомогою</p>
+        <button class="auth-dialog__button">
           <svg-icon
-            class="dialog__icon"
+            class="auth-dialog__icon"
             src="assets/images/facebook-round-color-icon.svg"
           ></svg-icon>
           <span>Facebook</span>
         </button>
-        <button class="dialog__button">
+        <button class="auth-dialog__button">
           <svg-icon
-            class="dialog__icon"
+            class="auth-dialog__icon"
             src="assets/images/google-color-icon.svg"
           ></svg-icon>
           <span>Google</span>
         </button>
-        <button class="dialog__button">
+        <button class="auth-dialog__button">
           <svg-icon
-            class="dialog__icon"
+            class="auth-dialog__icon"
             src="assets/images/linkedin-app-icon.svg"
           ></svg-icon>
           <span>LinkedIn</span>

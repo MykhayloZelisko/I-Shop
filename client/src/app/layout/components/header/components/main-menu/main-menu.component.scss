@@ -1,0 +1,207 @@
+@import 'variables';
+
+.main-menu {
+  background-color: $white;
+  box-shadow:
+    0 1px 2px 0 $gray-1,
+    0 2px 10px 0 $gray-2;
+  width: 320px;
+  height: 100%;
+
+  &__wrapper {
+    top: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    background-color: $brown-3;
+  }
+
+  &__logo-icon {
+    & svg {
+      position: relative;
+      top: 2px;
+      height: 30px;
+      width: 30px;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  &__logo-text {
+    font-family: $source;
+    font-weight: bolder;
+    font-size: 30px;
+    background: linear-gradient(to right, $yellow, $blue-1);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: $yellow;
+    white-space: nowrap;
+  }
+
+  &__logo-wrapper {
+    padding: 16px 16px 8px;
+    background-color: $brown-1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__close {
+    border: none;
+    border-radius: 12px;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  &__close-icon {
+    & svg {
+      position: relative;
+      top: 2px;
+      height: 24px;
+      width: 24px;
+
+      & path {
+        fill: $yellow;
+      }
+    }
+
+    &:hover {
+      & svg {
+        & path {
+          fill: $red;
+        }
+      }
+    }
+  }
+
+  &__login-wrapper {
+    font-family: $source;
+    padding: 8px 16px 16px;
+    background-color: $brown-1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: $yellow;
+  }
+
+  &__login {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__login-title {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__login-button {
+    font-family: $source;
+    font-size: 14px;
+    color: $yellow;
+    border: none;
+    border-radius: 5px;
+    background-color: $brown-1;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $brown-2;
+    }
+  }
+
+  &__login-text {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  &__login-divider {
+    height: 20px;
+    border-left: 1px solid $yellow;
+  }
+
+  &__user {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: $yellow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__user-icon {
+    & svg {
+      height: 24px;
+      width: 24px;
+
+      & path {
+        fill: $brown-1;
+      }
+    }
+  }
+
+  &__user-first-letter {
+    color: $brown-1;
+    font-size: 24px;
+  }
+
+  &__user-name {
+    font-size: 14px;
+  }
+
+  &__user-email {
+    font-size: 12px;
+  }
+
+  &__list-item {
+    padding: 2px 8px;
+
+    &--underlined {
+      border-bottom: 1px solid $gray-4;
+    }
+  }
+
+  &__list-button {
+    width: 100%;
+    height: 100%;
+    font-family: $source;
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 9px 18px;
+
+    &:hover {
+      background-color: $brown-4;
+    }
+  }
+
+  &__list-button-icon {
+    & svg {
+      position: relative;
+      top: 2px;
+      height: 24px;
+      width: 24px;
+
+      & path {
+        fill: $brown-1;
+      }
+    }
+  }
+}

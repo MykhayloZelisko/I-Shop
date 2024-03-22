@@ -1,6 +1,9 @@
 <div class="header">
   <div class="header__inner">
-    <button class="header__button header__button--icon-btn">
+    <button
+      class="header__button header__button--icon-btn"
+      (click)="openMainMenu()"
+    >
       <svg-icon
         class="header__icon"
         src="assets/images/hamburger-menu-icon.svg"
@@ -73,4 +76,8 @@
   @if (dialog.dialogType !== authDialogEnum.None) {
     <app-auth-dialog [dialog]="dialog"></app-auth-dialog>
   }
+}
+
+@if (isOpenMainMenu$ | async) {
+  <app-main-menu [user$]="user$"></app-main-menu>
 }

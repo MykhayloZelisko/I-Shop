@@ -8,7 +8,7 @@ export const userSelector =
 
 export const isAdminSelector = createSelector(
   userSelector,
-  (user: UserInterface) =>
+  (user: UserInterface | null) =>
     user
       ? user.roles.some((role: RoleInterface) => role.role === 'administrator')
       : false,

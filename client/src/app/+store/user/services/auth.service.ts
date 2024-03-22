@@ -104,4 +104,26 @@ export class AuthService {
         catchError((error) => throwError(() => error)),
       );
   }
+
+  public logout(): Observable<boolean> {
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation Logout {
+            logout
+          }
+        `,
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return response.data.logout;
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
+  }
 }

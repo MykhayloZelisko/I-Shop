@@ -1,8 +1,10 @@
-@import "variables";
+@import 'variables';
 
 .main-menu {
   background-color: $white;
-  box-shadow: 0 1px 2px 0 $gray-1, 0 2px 10px 0 $gray-2;
+  box-shadow:
+    0 1px 2px 0 $gray-1,
+    0 2px 10px 0 $gray-2;
   width: 320px;
   height: 100%;
 
@@ -44,7 +46,7 @@
   }
 
   &__logo-wrapper {
-    padding: 16px 16px 8px 16px;
+    padding: 16px 16px 8px;
     background-color: $brown-1;
     display: flex;
     align-items: center;
@@ -86,7 +88,7 @@
 
   &__login-wrapper {
     font-family: $source;
-    padding: 8px 16px 16px 16px;
+    padding: 8px 16px 16px;
     background-color: $brown-1;
     display: flex;
     align-items: center;

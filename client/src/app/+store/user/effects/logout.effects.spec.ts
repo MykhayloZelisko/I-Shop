@@ -3,17 +3,15 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 
 import { LogoutEffects } from './logout.effects';
+import { Action } from '@ngrx/store';
 
 describe('LogoutEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<Action>;
   let effects: LogoutEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        LogoutEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [LogoutEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(LogoutEffects);

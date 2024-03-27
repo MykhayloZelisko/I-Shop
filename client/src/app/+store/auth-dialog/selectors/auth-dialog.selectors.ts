@@ -1,6 +1,5 @@
 import { createFeatureSelector } from '@ngrx/store';
-import { authDialogFeatureKey } from '../reducers/auth-dialog.reducer';
-import { AuthDialogDataInterface } from '../../../shared/models/interfaces/auth-dialog-data.interface';
+import { authDialogFeatureKey, State } from '../reducers/auth-dialog.reducer';
 
 export const authDialogSelector =
-  createFeatureSelector<AuthDialogDataInterface>(authDialogFeatureKey);
+  createFeatureSelector<State>(authDialogFeatureKey);

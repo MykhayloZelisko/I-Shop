@@ -1,5 +1,4 @@
-import { userReducer, initialState } from './user.reducer';
-import { UserInterface } from '../../../shared/models/interfaces/user.interface';
+import { reducer, initialState } from './user.reducer';
 import { Action } from '@ngrx/store';
 
 describe('User Reducer', () => {
@@ -7,9 +6,9 @@ describe('User Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = userReducer(initialState as UserInterface | null, action);
+      const result = reducer(initialState, action);
 
-      expect(result).toBe(initialState as UserInterface | null);
+      expect(result).toBe(initialState);
     });
   });
 });

@@ -1,10 +1,14 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { userFeatureKey } from '../reducers/user.reducer';
+import { State, userFeatureKey } from '../reducers/user.reducer';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { RoleInterface } from '../../../shared/models/interfaces/role.interface';
 
-export const userSelector =
-  createFeatureSelector<UserInterface>(userFeatureKey);
+export const userStateSelector = createFeatureSelector<State>(userFeatureKey);
+
+export const userSelector = createSelector(
+  userStateSelector,
+  (state: State) => state.user,
+);
 
 export const isAdminSelector = createSelector(
   userSelector,

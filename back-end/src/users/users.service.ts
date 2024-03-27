@@ -24,11 +24,6 @@ export class UsersService {
     return newUser.toObject();
   }
 
-  public async getUserById(id: string): Promise<UserGQL | null> {
-    const user = await this.userModel.findById(id).populate('roles').exec();
-    return user ? user.toObject() : null;
-  }
-
   public async getUserByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email }).populate('roles').exec();
   }

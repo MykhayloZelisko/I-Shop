@@ -4,14 +4,39 @@ import { LoginActions } from '../actions/login.actions';
 import { GetMeActions } from '../actions/get-me.actions';
 import { LogoutActions } from '../actions/logout.actions';
 
-export const userFeatureKey = 'user';
+export const userFeatureKey = 'auth';
 
-export const initialState: UserInterface | null = null;
+export interface State {
+  user: UserInterface | null;
+  registrationError: {
+    code: number;
+    message: string;
+  } | null;
+  loginError: {
+    code: number;
+    message: string;
+  } | null;
+}
 
-export const userReducer = createReducer(
-  initialState as UserInterface | null,
-  on(LoginActions.loginSuccess, (_state, action) => action.user),
-  on(GetMeActions.getMeSuccess, (_state, action) => action.user),
-  on(GetMeActions.getMeFailure, () => null),
-  on(LogoutActions.logoutSuccess, () => null),
+export const initialState: State = {
+  user: null,
+  registrationError: null,
+  loginError: null,
+};
+
+export const reducer = createReducer(
+  initialState,
+  on(LoginActions.loginSuccess, GetMeActions.getMeSuccess, (state, action) => ({
+    ...state,
+    user: action.user,
+  })),
+  on(LogoutActions.logoutSuccess, (state) => ({
+    ...state,
+    ...initialState,
+  })),
+  // TODO: change reducer with error
+  on(GetMeActions.getMeFailure, (state) => ({
+    ...state,
+    ...initialState,
+  })),
 );

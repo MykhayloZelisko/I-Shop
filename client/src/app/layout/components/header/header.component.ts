@@ -24,6 +24,7 @@ import { mainMenuSelector } from '../../../+store/main-menu/selectors/main-menu.
 import { MainMenuActions } from '../../../+store/main-menu/actions/main-menu.actions';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
+import { MainMenuInterface } from '../../../shared/models/interfaces/main-menu.interface';
 
 @Component({
   selector: 'app-header',
@@ -48,7 +49,7 @@ export class HeaderComponent implements OnInit {
 
   public dialog$!: Observable<AuthDialogDataInterface>;
 
-  public isOpenMainMenu$!: Observable<boolean>;
+  public mainMenu$!: Observable<MainMenuInterface>;
 
   private store = inject(Store<State>);
 
@@ -58,7 +59,7 @@ export class HeaderComponent implements OnInit {
     this.user$ = this.store.select(userSelector);
     this.isAdmin$ = this.store.select(isAdminSelector);
     this.dialog$ = this.store.select(authDialogSelector);
-    this.isOpenMainMenu$ = this.store.select(mainMenuSelector);
+    this.mainMenu$ = this.store.select(mainMenuSelector);
   }
 
   public openDialog(): void {

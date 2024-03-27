@@ -6,14 +6,18 @@ import { State } from '../../+store/reducers';
 import { userSelector } from '../../+store/user/selectors/user.selectors';
 import { UserInterface } from '../../shared/models/interfaces/user.interface';
 import { UserRouteNameEnum } from '../../shared/models/enums/user-route-name.enum';
+import { RoleInterface } from '../../shared/models/interfaces/role.interface';
 
 export const adminGuard: CanActivateFn = (): Observable<GuardResult> => {
   const store = inject(Store<State>);
   const router = inject(Router);
 
   return store.select(userSelector).pipe(
-    map((user: UserInterface) => {
-      if (user) {
+    map((user: UserInterface | null) => {
+      if (
+        user &&
+        user.roles.some((role: RoleInterface) => role.role === 'administrator')
+      ) {
         return true;
       } else {
         return router.parseUrl(UserRouteNameEnum.Home);

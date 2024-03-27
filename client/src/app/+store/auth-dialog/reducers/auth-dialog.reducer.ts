@@ -5,12 +5,20 @@ import { AuthDialogActions } from '../actions/auth-dialog.actions';
 
 export const authDialogFeatureKey = 'authDialog';
 
-export const initialState: AuthDialogDataInterface = {
+export interface State {
+  title: string;
+  dialogType: AuthDialogTypeEnum;
+}
+
+export const initialState: State = {
   title: '',
   dialogType: AuthDialogTypeEnum.None,
 };
 
-export const authDialogReducer = createReducer(
+export const reducer = createReducer(
   initialState,
-  on(AuthDialogActions.authDialog, (_state, action) => action.dialog),
+  on(AuthDialogActions.authDialog, (state, action) => ({
+    ...state,
+    ...action.dialog,
+  })),
 );

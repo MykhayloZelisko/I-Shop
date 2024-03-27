@@ -81,6 +81,8 @@
   }
 }
 
-@if (isOpenMainMenu$ | async) {
-  <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
+@if (mainMenu$ | async; as mainMenu) {
+  @if (mainMenu.isOpen) {
+    <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
+  }
 }

@@ -22,7 +22,6 @@ export class CategoriesService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
-
     await this.deleteSubcategories(categoryId);
     await this.categoryModel.findByIdAndDelete(categoryId).exec();
   }
@@ -49,11 +48,9 @@ export class CategoriesService {
     const category = await this.categoryModel
       .findByIdAndUpdate(id, updateCategoryInput, { new: true })
       .exec();
-
     if (!category) {
       throw new NotFoundException('Category not found');
     }
-
     return category.toObject();
   }
 }

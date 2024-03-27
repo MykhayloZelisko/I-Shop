@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { RegistrationInterface } from '../../../shared/models/interfaces/registration.interface';
 import { catchError, map, Observable, throwError } from 'rxjs';
@@ -10,7 +10,7 @@ import { ApolloQueryResult } from '@apollo/client';
   providedIn: 'root',
 })
 export class AuthService {
-  public constructor(private apollo: Apollo) {}
+  private apollo = inject(Apollo);
 
   public registration(
     registrationData: RegistrationInterface,

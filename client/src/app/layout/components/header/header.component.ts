@@ -12,7 +12,7 @@ import {
 } from '../../../+store/user/selectors/user.selectors';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -23,6 +23,7 @@ import { AuthDialogTypeEnum } from '../../../shared/models/enums/auth-dialog-typ
 import { mainMenuSelector } from '../../../+store/main-menu/selectors/main-menu.selectors';
 import { MainMenuActions } from '../../../+store/main-menu/actions/main-menu.actions';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
 
 @Component({
   selector: 'app-header',
@@ -51,6 +52,8 @@ export class HeaderComponent implements OnInit {
 
   private store = inject(Store<State>);
 
+  private router = inject(Router);
+
   public ngOnInit(): void {
     this.user$ = this.store.select(userSelector);
     this.isAdmin$ = this.store.select(isAdminSelector);
@@ -71,5 +74,9 @@ export class HeaderComponent implements OnInit {
 
   public openMainMenu(): void {
     this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'open' }));
+  }
+
+  public goAdmin(): void {
+    this.router.navigateByUrl(LayoutRouteNameEnum.Admin);
   }
 }

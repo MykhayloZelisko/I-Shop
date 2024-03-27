@@ -62,7 +62,10 @@
       ></svg-icon>
     </button>
     @if (isAdmin$ | async) {
-      <button class="header__button header__button--icon-btn">
+      <button
+        class="header__button header__button--icon-btn"
+        (click)="goAdmin()"
+      >
         <svg-icon
           class="header__icon"
           src="assets/images/crown-icon.svg"

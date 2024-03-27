@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from '../layout/layout.component';
 import { LayoutRouteNameEnum } from '../shared/models/enums/layout-route-name.enum';
+import { adminGuard } from '../admin/guards/admin.guard';
 
 export const layoutRoutes: Routes = [
   {
@@ -14,6 +15,7 @@ export const layoutRoutes: Routes = [
       {
         path: LayoutRouteNameEnum.Admin,
         loadChildren: () => import('./admin.routes').then((m) => m.adminRoutes),
+        canActivate: [adminGuard],
       },
       {
         path: LayoutRouteNameEnum.PageNotFound,

@@ -30,12 +30,7 @@ export const reducer = createReducer(
     ...state,
     user: action.user,
   })),
-  on(LogoutActions.logoutSuccess, (state) => ({
-    ...state,
-    ...initialState,
-  })),
-  // TODO: change reducer with error
-  on(GetMeActions.getMeFailure, (state) => ({
+  on(LogoutActions.logoutSuccess, GetMeActions.getMeFailure, (state) => ({
     ...state,
     ...initialState,
   })),

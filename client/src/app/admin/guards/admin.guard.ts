@@ -13,8 +13,9 @@ export const adminGuard: CanActivateFn = (): Observable<GuardResult> => {
   return store
     .select(selectAdmin)
     .pipe(
-      map((isAdmin: boolean) =>
-        isAdmin ? isAdmin : router.parseUrl(UserRouteNameEnum.Home),
+      map(
+        (isAdmin: boolean) =>
+          isAdmin || router.parseUrl(UserRouteNameEnum.Home),
       ),
     );
 };

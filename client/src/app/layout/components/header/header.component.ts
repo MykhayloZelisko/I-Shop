@@ -7,8 +7,8 @@ import {
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import {
-  isAdminSelector,
-  userSelector,
+  selectAdmin,
+  selectUser,
 } from '../../../+store/user/selectors/user.selectors';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -17,10 +17,10 @@ import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.compon
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { AuthDialogDataInterface } from '../../../shared/models/interfaces/auth-dialog-data.interface';
-import { authDialogSelector } from '../../../+store/auth-dialog/selectors/auth-dialog.selectors';
+import { selectAuthDialog } from '../../../+store/auth-dialog/selectors/auth-dialog.selectors';
 import { AuthDialogActions } from '../../../+store/auth-dialog/actions/auth-dialog.actions';
 import { AuthDialogTypeEnum } from '../../../shared/models/enums/auth-dialog-type.enum';
-import { mainMenuSelector } from '../../../+store/main-menu/selectors/main-menu.selectors';
+import { selectMainMenu } from '../../../+store/main-menu/selectors/main-menu.selectors';
 import { MainMenuActions } from '../../../+store/main-menu/actions/main-menu.actions';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
@@ -56,10 +56,10 @@ export class HeaderComponent implements OnInit {
   private router = inject(Router);
 
   public ngOnInit(): void {
-    this.user$ = this.store.select(userSelector);
-    this.isAdmin$ = this.store.select(isAdminSelector);
-    this.dialog$ = this.store.select(authDialogSelector);
-    this.mainMenu$ = this.store.select(mainMenuSelector);
+    this.user$ = this.store.select(selectUser);
+    this.isAdmin$ = this.store.select(selectAdmin);
+    this.dialog$ = this.store.select(selectAuthDialog);
+    this.mainMenu$ = this.store.select(selectMainMenu);
   }
 
   public openDialog(): void {

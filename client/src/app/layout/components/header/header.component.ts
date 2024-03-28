@@ -9,7 +9,7 @@ import { State } from '../../../+store/reducers';
 import {
   selectAdmin,
   selectUser,
-} from '../../../+store/user/selectors/user.selectors';
+} from '../../../+store/auth/selectors/auth.selectors';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { Router, RouterLink } from '@angular/router';

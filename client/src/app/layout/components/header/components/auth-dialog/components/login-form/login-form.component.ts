@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
 import { AuthDialogActions } from '../../../../../../../+store/auth-dialog/actions/auth-dialog.actions';
 import { AuthDialogTypeEnum } from '../../../../../../../shared/models/enums/auth-dialog-type.enum';
-import { LoginActions } from '../../../../../../../+store/user/actions/login.actions';
+import { AuthActions } from '../../../../../../../+store/auth/actions/auth.actions';
 
 @Component({
   selector: 'app-login-form',
@@ -73,6 +73,6 @@ export class LoginFormComponent {
 
   public login(): void {
     const loginData = this.loginForm.getRawValue();
-    this.store.dispatch(LoginActions.login({ login: loginData }));
+    this.store.dispatch(AuthActions.login({ login: loginData }));
   }
 }

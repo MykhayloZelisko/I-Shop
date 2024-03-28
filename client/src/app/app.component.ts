@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from './+store/reducers';
-import { GetMeActions } from './+store/user/actions/get-me.actions';
+import { AuthActions } from './+store/auth/actions/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,6 @@ export class AppComponent implements OnInit {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.store.dispatch(GetMeActions.getMe());
+    this.store.dispatch(AuthActions.getMe());
   }
 }

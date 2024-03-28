@@ -1,4 +1,4 @@
-import { reducer, initialState } from './user.reducer';
+import { reducer, initialState } from './auth.reducer';
 import { Action } from '@ngrx/store';
 
 describe('User Reducer', () => {

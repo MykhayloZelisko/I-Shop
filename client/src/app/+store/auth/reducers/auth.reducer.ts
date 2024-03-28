@@ -1,10 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
-import { LoginActions } from '../actions/login.actions';
-import { GetMeActions } from '../actions/get-me.actions';
-import { LogoutActions } from '../actions/logout.actions';
+import { AuthActions } from '../actions/auth.actions';
 
-export const userFeatureKey = 'auth';
+export const authFeatureKey = 'auth';
 
 export interface State {
   user: UserInterface | null;
@@ -26,11 +24,11 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(LoginActions.loginSuccess, GetMeActions.getMeSuccess, (state, action) => ({
+  on(AuthActions.loginSuccess, AuthActions.getMeSuccess, (state, action) => ({
     ...state,
     user: action.user,
   })),
-  on(LogoutActions.logoutSuccess, GetMeActions.getMeFailure, (state) => ({
+  on(AuthActions.logoutSuccess, AuthActions.getMeFailure, (state) => ({
     ...state,
     ...initialState,
   })),

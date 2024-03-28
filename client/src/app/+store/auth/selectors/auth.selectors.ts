@@ -1,9 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { State, userFeatureKey } from '../reducers/user.reducer';
+import { State, authFeatureKey } from '../reducers/auth.reducer';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { RoleInterface } from '../../../shared/models/interfaces/role.interface';
 
-export const selectUserState = createFeatureSelector<State>(userFeatureKey);
+export const selectUserState = createFeatureSelector<State>(authFeatureKey);
 
 export const selectUser = createSelector(
   selectUserState,

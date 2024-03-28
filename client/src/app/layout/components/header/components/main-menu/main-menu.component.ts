@@ -15,9 +15,9 @@ import { MainMenuActions } from '../../../../../+store/main-menu/actions/main-me
 import { MainMenuClickOutsideDirective } from './directives/main-menu-click-outside.directive';
 import { AuthDialogActions } from '../../../../../+store/auth-dialog/actions/auth-dialog.actions';
 import { AuthDialogTypeEnum } from '../../../../../shared/models/enums/auth-dialog-type.enum';
-import { LogoutActions } from '../../../../../+store/user/actions/logout.actions';
 import { UserRouteNameEnum } from '../../../../../shared/models/enums/user-route-name.enum';
 import { LayoutRouteNameEnum } from '../../../../../shared/models/enums/layout-route-name.enum';
+import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 
 @Component({
   selector: 'app-main-menu',
@@ -75,7 +75,7 @@ export class MainMenuComponent {
   }
 
   public logout(): void {
-    this.store.dispatch(LogoutActions.logout());
+    this.store.dispatch(AuthActions.logout());
     this.closeMainMenu();
   }
 

@@ -1,11 +1,3 @@
-import { RegistrationEffects } from '../user/effects/registration.effects';
-import { LoginEffects } from '../user/effects/login.effects';
-import { GetMeEffects } from '../user/effects/get-me.effects';
-import { LogoutEffects } from '../user/effects/logout.effects';
+import { AuthEffects } from '../auth/effects/auth.effects';
 
-export const AppEffects = [
-  LoginEffects,
-  RegistrationEffects,
-  GetMeEffects,
-  LogoutEffects,
-];
+export const AppEffects = [AuthEffects];

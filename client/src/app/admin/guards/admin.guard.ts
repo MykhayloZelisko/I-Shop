@@ -3,7 +3,7 @@ import { map, Observable } from 'rxjs';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../../+store/reducers';
-import { selectAdmin } from '../../+store/user/selectors/user.selectors';
+import { selectAdmin } from '../../+store/auth/selectors/auth.selectors';
 import { UserRouteNameEnum } from '../../shared/models/enums/user-route-name.enum';
 
 export const adminGuard: CanActivateFn = (): Observable<GuardResult> => {

@@ -1,4 +1,4 @@
-import { InputType, Field, ID } from '@nestjs/graphql';
+import { InputType, Field, ID, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
 
 @InputType()
@@ -13,4 +13,10 @@ export class CreateCategoryInput {
   @Matches(/^[0-9a-fA-F]{24}$/)
   @IsOptional()
   public parentId: string | null;
+
+  @Field(() => Int, { description: 'Parent category id', nullable: true })
+  @IsString({ message: 'Must be a string' })
+  @Matches(/^[0-9a-fA-F]{24}$/)
+  @IsOptional()
+  public level: number;
 }

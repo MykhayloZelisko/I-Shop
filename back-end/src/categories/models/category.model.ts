@@ -8,6 +8,9 @@ export class Category {
   @Field({ description: 'Category name' })
   public categoryName: string;
 
+  @Field({ description: 'Category level' })
+  public level: number;
+
   @Field(() => ID, { description: 'Parent category id', nullable: true })
   public parentId: string | null;
 }

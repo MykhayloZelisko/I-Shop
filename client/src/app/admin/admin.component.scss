@@ -1,0 +1,13 @@
+@import "variables";
+
+:host ::ng-deep {
+  .p-menuitem-link:not(.p-menuitem-link-active) {
+    & .p-menuitem-text {
+      color: $brown-1;
+    }
+
+    &:hover {
+      border-bottom-color: $brown-1;
+    }
+  }
+}

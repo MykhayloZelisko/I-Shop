@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './schemas/category.schema';
@@ -14,7 +18,10 @@ export class CategoriesService {
 
   public async getAllCategories(): Promise<CategoryGQL[]> {
     const categories = await this.categoryModel.find().exec();
-    return categories.map((category) => category.toObject());
+    return categories.map((category: CategoryDocument) => ({
+      ...category.toObject(),
+      parentId: category.parentId ? category.parentId.toString() : null,
+    }));
   }
 
   public async deleteCategory(categoryId: string): Promise<void> {
@@ -22,17 +29,17 @@ export class CategoriesService {
     if (!category) {
       throw new NotFoundException('Category not found');
     }
-    await this.deleteSubcategories(categoryId);
+    // await this.deleteSubcategories(categoryId);
     await this.categoryModel.findByIdAndDelete(categoryId).exec();
   }
 
-  private async deleteSubcategories(parentId: string): Promise<void> {
-    const subcategories = await this.categoryModel.find({ parentId }).exec();
-    for (const subcategory of subcategories) {
-      await this.deleteSubcategories(subcategory._id.toString());
-      await this.categoryModel.findByIdAndDelete(subcategory._id).exec();
-    }
-  }
+  // private async deleteSubcategories(parentId: string): Promise<void> {
+  //   const subcategories = await this.categoryModel.find({ parentId }).exec();
+  //   for (const subcategory of subcategories) {
+  //     await this.deleteSubcategories(subcategory._id.toString());
+  //     await this.categoryModel.findByIdAndDelete(subcategory._id).exec();
+  //   }
+  // }
 
   public async createCategory(
     createCategoryInput: CreateCategoryInput,

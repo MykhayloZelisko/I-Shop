@@ -49,7 +49,6 @@ export const selectCategoriesTree = createSelector(
       });
     }
 
-    // Повертаємо кореневі категорії (категорії верхнього рівня)
     return categoriesWithChildren.filter((category) => category.level === 1);
   },
 );

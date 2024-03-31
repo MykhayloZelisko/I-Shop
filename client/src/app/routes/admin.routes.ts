@@ -13,7 +13,6 @@ export const adminRoutes: Routes = [
           import('../admin/pages/categories/categories.component').then(
             (m) => m.CategoriesComponent,
           ),
-        // data: { path: AdminRouteNameEnum.Categories },
       },
       {
         path: AdminRouteNameEnum.NewProduct,
@@ -21,7 +20,6 @@ export const adminRoutes: Routes = [
           import('../admin/pages/new-product/new-product.component').then(
             (m) => m.NewProductComponent,
           ),
-        // data: { path: AdminRouteNameEnum.NewProduct },
       },
       {
         path: AdminRouteNameEnum.Users,
@@ -29,7 +27,6 @@ export const adminRoutes: Routes = [
           import('../admin/pages/users/users.component').then(
             (m) => m.UsersComponent,
           ),
-        // data: { path: AdminRouteNameEnum.Users },
       },
       {
         path: '',

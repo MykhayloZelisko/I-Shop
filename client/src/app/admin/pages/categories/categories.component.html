@@ -1,1 +1,27 @@
-<p>categories works!</p>
+<div class="categories">
+  <div class="categories__buttons">
+    <button class="categories__button" (click)="expandAll()">
+      Розгорнути все
+    </button>
+    <button class="categories__button" (click)="collapseAll()">
+      Згорнути все
+    </button>
+  </div>
+  @if(categories$ | async; as categories) {
+    <div class="categories__tree">
+      <p-tree [value]="categories" class="w-full md:w-30rem">
+        <ng-template let-node pTemplate="default">
+          @if (node.data) {
+            <div>
+              <p>{{ node.data.categoryName }}</p>
+              <button>1</button>
+              <button>2</button>
+            </div>
+          } @else {
+            <p>empty</p>
+          }
+        </ng-template>
+      </p-tree>
+    </div>
+  }
+</div>

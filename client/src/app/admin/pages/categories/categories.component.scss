@@ -1,0 +1,34 @@
+@import "variables";
+
+.categories {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__buttons {
+    display: flex;
+    gap: 18px;
+  }
+
+  &__button {
+    font-family: $source;
+    padding: 8px 24px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: $yellow;
+    background-color: $brown-1;
+    font-size: 16px;
+
+    &:hover {
+      background-color: $brown-2;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-treenode-children {
+    margin-left: 15px;
+  }
+}

@@ -5,10 +5,10 @@ import { AuthDialogActions } from '../../../../../../+store/auth-dialog/actions/
 import { AuthDialogTypeEnum } from '../../../../../../shared/models/enums/auth-dialog-type.enum';
 
 @Directive({
-  selector: '[appDialogClickOutside]',
+  selector: '[appAuthDialogClickOutside]',
   standalone: true,
 })
-export class DialogClickOutsideDirective {
+export class AuthDialogClickOutsideDirective {
   private elementRef = inject(ElementRef);
 
   private store = inject(Store<State>);

@@ -31,4 +31,26 @@
   .p-treenode-children {
     margin-left: 15px;
   }
+
+  .p-treenode-content {
+    padding: 5px;
+  }
+
+  .p-treenode {
+    padding: 0;
+
+    &:focus {
+      & .p-treenode-content {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .p-tree {
+    padding: 5px;
+  }
+
+  .p-treenode-label {
+    width: 100%;
+  }
 }

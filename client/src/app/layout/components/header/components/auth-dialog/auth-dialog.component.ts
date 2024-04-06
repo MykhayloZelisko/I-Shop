@@ -13,7 +13,7 @@ import { AuthDialogDataInterface } from '../../../../../shared/models/interfaces
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { AuthDialogActions } from '../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { DialogClickOutsideDirective } from './directives/dialog-click-outside.directive';
+import { AuthDialogClickOutsideDirective } from './directives/auth-dialog-click-outside.directive';
 
 @Component({
   selector: 'app-auth-dialog',
@@ -23,7 +23,7 @@ import { DialogClickOutsideDirective } from './directives/dialog-click-outside.d
     RegistrationFormComponent,
     LoginFormComponent,
     RestorePasswordFormComponent,
-    DialogClickOutsideDirective,
+    AuthDialogClickOutsideDirective,
   ],
   templateUrl: './auth-dialog.component.html',
   styleUrl: './auth-dialog.component.scss',

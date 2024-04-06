@@ -1,11 +1,14 @@
-import { createFeature, createSelector } from '@ngrx/store';
+import { createFeature, createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   adapter,
   categoriesFeatureKey,
   reducer,
+  State,
 } from '../reducers/category.reducer';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { TreeNode } from 'primeng/api';
+
+const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 
 export const categoriesFeature = createFeature({
   name: categoriesFeatureKey,
@@ -28,15 +31,6 @@ export const selectCategoriesTree = createSelector(
   (categories: CategoryInterface[]) => {
     const emptyChild: TreeNode<CategoryInterface> = {
       type: 'default',
-    };
-
-    const addEmptyChild = (node: TreeNode<CategoryInterface>): void => {
-      if (node.children) {
-        node.children.forEach((item) => {
-          addEmptyChild(item);
-        });
-        node.children.push(emptyChild);
-      }
     };
 
     const categoriesWithChildren: TreeNode<CategoryInterface>[] =
@@ -62,15 +56,21 @@ export const selectCategoriesTree = createSelector(
       });
     }
 
-    const result = categoriesWithChildren
-      .filter((category) => category.data!.level === 1)
-      .map((item) => {
-        addEmptyChild(item);
-        return item;
-      });
-
+    const result = categoriesWithChildren.filter(
+      (category) => category.data!.level === 1,
+    );
     result.push(emptyChild);
 
     return result;
   },
+);
+
+export const selectCurrentCategoryId = createSelector(
+  selectCategoryState,
+  (state: State) => state.currentCategoryId,
+);
+
+export const selectNewCategory = createSelector(
+  selectCategoryState,
+  (state: State) => state.isNewCategory,
 );

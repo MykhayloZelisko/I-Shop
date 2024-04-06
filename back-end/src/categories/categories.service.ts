@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './schemas/category.schema';
@@ -24,22 +20,34 @@ export class CategoriesService {
     }));
   }
 
-  public async deleteCategory(categoryId: string): Promise<void> {
+  public async deleteCategory(categoryId: string): Promise<string[]> {
     const category = await this.categoryModel.findById(categoryId).exec();
     if (!category) {
       throw new NotFoundException('Category not found');
     }
-    // await this.deleteSubcategories(categoryId);
-    await this.categoryModel.findByIdAndDelete(categoryId).exec();
+    const subCategoriesIds = await this.findSubCategoriesIds(categoryId);
+    // TODO: check subcategories. If a category cannot be deleted you should throw ForbiddenException
+    await this.categoryModel
+      .deleteMany({ _id: { $in: subCategoriesIds } })
+      .exec();
+    return subCategoriesIds;
   }
 
-  // private async deleteSubcategories(parentId: string): Promise<void> {
-  //   const subcategories = await this.categoryModel.find({ parentId }).exec();
-  //   for (const subcategory of subcategories) {
-  //     await this.deleteSubcategories(subcategory._id.toString());
-  //     await this.categoryModel.findByIdAndDelete(subcategory._id).exec();
-  //   }
-  // }
+  private async findSubCategoriesIds(categoryId: string): Promise<string[]> {
+    const subCategories = await this.categoryModel
+      .find({ parentId: categoryId })
+      .exec();
+    let result: string[] = [categoryId];
+
+    for (const category of subCategories) {
+      const subSubCategoriesIds = await this.findSubCategoriesIds(
+        category._id.toString(),
+      );
+      result = result.concat(subSubCategoriesIds);
+    }
+
+    return result;
+  }
 
   public async createCategory(
     createCategoryInput: CreateCategoryInput,

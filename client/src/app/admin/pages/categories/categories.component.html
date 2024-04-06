@@ -7,18 +7,14 @@
       Згорнути все
     </button>
   </div>
-  @if(categories$ | async; as categories) {
+  @if (categories$ | async; as categories) {
     <div class="categories__tree">
       <p-tree [value]="categories" class="w-full md:w-30rem">
         <ng-template let-node pTemplate="default">
           @if (node.data) {
-            <div>
-              <p>{{ node.data.categoryName }}</p>
-              <button>1</button>
-              <button>2</button>
-            </div>
+            <app-category-item [category]="node.data"></app-category-item>
           } @else {
-            <p>empty</p>
+            <app-new-category></app-new-category>
           }
         </ng-template>
       </p-tree>

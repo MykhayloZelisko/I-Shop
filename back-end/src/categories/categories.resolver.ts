@@ -27,18 +27,17 @@ export class CategoriesResolver {
 
   @Mutation(() => Category)
   @UseGuards(GqlAdminGuard)
-  @UsePipes(ValidationPipe)
   public async updateCategory(
     @Args('id') id: string,
-    @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
+    @Args('updateCategoryInput', ValidationPipe)
+    updateCategoryInput: UpdateCategoryInput,
   ): Promise<Category> {
     return this.categoriesService.updateCategory(id, updateCategoryInput);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => [String])
   @UseGuards(GqlAdminGuard)
-  public async deleteCategory(@Args('id') id: string): Promise<boolean> {
-    await this.categoriesService.deleteCategory(id);
-    return true;
+  public async deleteCategory(@Args('id') id: string): Promise<string[]> {
+    return this.categoriesService.deleteCategory(id);
   }
 }

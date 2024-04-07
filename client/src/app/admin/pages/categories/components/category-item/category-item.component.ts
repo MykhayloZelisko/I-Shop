@@ -50,6 +50,7 @@ export class CategoryItemComponent implements OnInit {
         categoryId: this.category.id,
       }),
     );
+    this.store.dispatch(CategoryActions.closeNewCategory());
   }
 
   public cancelEditCategory(): void {

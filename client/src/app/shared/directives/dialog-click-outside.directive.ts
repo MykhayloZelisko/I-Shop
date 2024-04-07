@@ -18,19 +18,17 @@ export class DialogClickOutsideDirective {
     const targetElement = event.target as HTMLElement;
 
     if (
-      !this.elementRef.nativeElement.contains(targetElement) ||
-      this.elementRef.nativeElement !== targetElement
+      this.elementRef.nativeElement.contains(targetElement) &&
+      this.elementRef.nativeElement === targetElement
     ) {
-      return;
+      this.store.dispatch(
+        DialogActions.openDialog({
+          dialog: {
+            title: '',
+            dialogType: DialogTypeEnum.None,
+          },
+        }),
+      );
     }
-
-    this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
-          title: '',
-          dialogType: DialogTypeEnum.None,
-        },
-      }),
-    );
   }
 }

@@ -17,12 +17,10 @@ export class MainMenuClickOutsideDirective {
     const targetElement = event.target as HTMLElement;
 
     if (
-      !this.elementRef.nativeElement.contains(targetElement) ||
-      this.elementRef.nativeElement !== targetElement
+      this.elementRef.nativeElement.contains(targetElement) &&
+      this.elementRef.nativeElement === targetElement
     ) {
-      return;
+      this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'close' }));
     }
-
-    this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'close' }));
   }
 }

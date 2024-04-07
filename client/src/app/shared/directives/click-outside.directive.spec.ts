@@ -1,8 +1,8 @@
-import { DialogClickOutsideDirective } from './dialog-click-outside.directive';
+import { ClickOutsideDirective } from './click-outside.directive';
 
 describe('DialogClickOutsideDirective', () => {
   it('should create an instance', () => {
-    const directive = new DialogClickOutsideDirective();
+    const directive = new ClickOutsideDirective();
     expect(directive).toBeTruthy();
   });
 });

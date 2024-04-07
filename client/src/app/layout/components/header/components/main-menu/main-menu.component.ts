@@ -13,8 +13,8 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { MainMenuActions } from '../../../../../+store/main-menu/actions/main-menu.actions';
 import { MainMenuClickOutsideDirective } from './directives/main-menu-click-outside.directive';
-import { AuthDialogActions } from '../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../../../shared/models/enums/auth-dialog-type.enum';
+import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.enum';
 import { UserRouteNameEnum } from '../../../../../shared/models/enums/user-route-name.enum';
 import { LayoutRouteNameEnum } from '../../../../../shared/models/enums/layout-route-name.enum';
 import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
@@ -52,10 +52,10 @@ export class MainMenuComponent {
 
   public login(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Вхід',
-          dialogType: AuthDialogTypeEnum.Login,
+          dialogType: DialogTypeEnum.Login,
         },
       }),
     );
@@ -64,10 +64,10 @@ export class MainMenuComponent {
 
   public registration(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Реєстрація',
-          dialogType: AuthDialogTypeEnum.Registration,
+          dialogType: DialogTypeEnum.Registration,
         },
       }),
     );

@@ -1,14 +1,14 @@
 import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from '../../../../../../+store/reducers';
-import { AuthDialogActions } from '../../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../../../../shared/models/enums/auth-dialog-type.enum';
+import { State } from '../../+store/reducers';
+import { DialogActions } from '../../+store/dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../models/enums/dialog-type.enum';
 
 @Directive({
-  selector: '[appAuthDialogClickOutside]',
+  selector: '[appDialogClickOutside]',
   standalone: true,
 })
-export class AuthDialogClickOutsideDirective {
+export class DialogClickOutsideDirective {
   private elementRef = inject(ElementRef);
 
   private store = inject(Store<State>);
@@ -19,18 +19,16 @@ export class AuthDialogClickOutsideDirective {
 
     if (
       !this.elementRef.nativeElement.contains(targetElement) ||
-      this.elementRef.nativeElement
-        .querySelector('.auth-dialog')
-        .contains(targetElement)
+      this.elementRef.nativeElement !== targetElement
     ) {
       return;
     }
 
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: '',
-          dialogType: AuthDialogTypeEnum.None,
+          dialogType: DialogTypeEnum.None,
         },
       }),
     );

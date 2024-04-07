@@ -1,4 +1,4 @@
-export enum AuthDialogTypeEnum {
+export enum DialogTypeEnum {
   Registration = 'Registration',
   Login = 'Login',
   RestorePassword = 'Password',

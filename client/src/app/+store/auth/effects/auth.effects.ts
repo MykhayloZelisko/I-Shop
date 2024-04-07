@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
-import { AuthDialogActions } from '../../auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../shared/models/enums/auth-dialog-type.enum';
+import { DialogActions } from '../../dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
 import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
 import { UserRouteNameEnum } from '../../../shared/models/enums/user-route-name.enum';
 import { Router } from '@angular/router';
@@ -39,10 +39,10 @@ export class AuthEffects {
         this.authService.login(action.login).pipe(
           mergeMap((user: UserInterface) => [
             AuthActions.loginSuccess({ user }),
-            AuthDialogActions.authDialog({
+            DialogActions.openDialog({
               dialog: {
                 title: '',
-                dialogType: AuthDialogTypeEnum.None,
+                dialogType: DialogTypeEnum.None,
               },
             }),
           ]),
@@ -117,10 +117,10 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.registrationSuccess),
       map(() =>
-        AuthDialogActions.authDialog({
+        DialogActions.openDialog({
           dialog: {
             title: 'Вхід',
-            dialogType: AuthDialogTypeEnum.Login,
+            dialogType: DialogTypeEnum.Login,
           },
         }),
       ),

@@ -9,8 +9,8 @@ import {
   requiredValidator,
   showErrorMessage,
 } from '../../../../../../../shared/utils/validators';
-import { AuthDialogActions } from '../../../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../../../../../shared/models/enums/auth-dialog-type.enum';
+import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -76,10 +76,10 @@ export class RegistrationFormComponent {
 
   public login(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Вхід',
-          dialogType: AuthDialogTypeEnum.Login,
+          dialogType: DialogTypeEnum.Login,
         },
       }),
     );

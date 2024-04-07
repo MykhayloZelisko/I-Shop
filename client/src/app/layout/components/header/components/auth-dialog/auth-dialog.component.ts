@@ -5,15 +5,15 @@ import {
   Input,
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { AuthDialogTypeEnum } from '../../../../../shared/models/enums/auth-dialog-type.enum';
+import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.enum';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { RestorePasswordFormComponent } from './components/restore-password-form/restore-password-form.component';
-import { AuthDialogDataInterface } from '../../../../../shared/models/interfaces/auth-dialog-data.interface';
+import { DialogDataInterface } from '../../../../../shared/models/interfaces/dialog-data.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
-import { AuthDialogActions } from '../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogClickOutsideDirective } from './directives/auth-dialog-click-outside.directive';
+import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
+import { DialogClickOutsideDirective } from '../../../../../shared/directives/dialog-click-outside.directive';
 
 @Component({
   selector: 'app-auth-dialog',
@@ -23,25 +23,25 @@ import { AuthDialogClickOutsideDirective } from './directives/auth-dialog-click-
     RegistrationFormComponent,
     LoginFormComponent,
     RestorePasswordFormComponent,
-    AuthDialogClickOutsideDirective,
+    DialogClickOutsideDirective,
   ],
   templateUrl: './auth-dialog.component.html',
   styleUrl: './auth-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthDialogComponent {
-  @Input({ required: true }) public dialog!: AuthDialogDataInterface;
+  @Input({ required: true }) public dialog!: DialogDataInterface;
 
-  public readonly dialogTypeEnum = AuthDialogTypeEnum;
+  public readonly dialogTypeEnum = DialogTypeEnum;
 
   private store = inject(Store<State>);
 
   public closeDialog(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: '',
-          dialogType: AuthDialogTypeEnum.None,
+          dialogType: DialogTypeEnum.None,
         },
       }),
     );

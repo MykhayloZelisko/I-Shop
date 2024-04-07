@@ -18,9 +18,7 @@ export class MainMenuClickOutsideDirective {
 
     if (
       !this.elementRef.nativeElement.contains(targetElement) ||
-      this.elementRef.nativeElement
-        .querySelector('.main-menu')
-        .contains(targetElement)
+      this.elementRef.nativeElement !== targetElement
     ) {
       return;
     }

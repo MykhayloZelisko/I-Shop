@@ -9,8 +9,8 @@ import {
 } from '../../../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
-import { AuthDialogActions } from '../../../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../../../../../shared/models/enums/auth-dialog-type.enum';
+import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
 import { AuthActions } from '../../../../../../../+store/auth/actions/auth.actions';
 
 @Component({
@@ -51,10 +51,10 @@ export class LoginFormComponent {
 
   public registration(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Реєстрація',
-          dialogType: AuthDialogTypeEnum.Registration,
+          dialogType: DialogTypeEnum.Registration,
         },
       }),
     );
@@ -62,10 +62,10 @@ export class LoginFormComponent {
 
   public restorePassword(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Відновлення пароля',
-          dialogType: AuthDialogTypeEnum.RestorePassword,
+          dialogType: DialogTypeEnum.RestorePassword,
         },
       }),
     );

@@ -1,4 +1,4 @@
-import { reducer, initialState } from './auth-dialog.reducer';
+import { reducer, initialState } from './dialog.reducer';
 import { Action } from '@ngrx/store';
 
 describe('AuthDialog Reducer', () => {

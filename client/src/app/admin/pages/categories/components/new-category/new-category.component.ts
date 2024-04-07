@@ -34,7 +34,14 @@ export class NewCategoryComponent implements OnInit {
 
   public addCategory(): void {
     this.store.dispatch(CategoryActions.openNewCategory());
-    this.store.dispatch(CategoryActions.clearCurrentCategoryId());
+    this.store.dispatch(
+      CategoryActions.changeCurrentCategoryStatus({
+        categoryStatus: {
+          id: null,
+          isEditable: false,
+        },
+      }),
+    );
   }
 
   public saveCategory(): void {

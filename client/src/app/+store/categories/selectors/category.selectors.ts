@@ -65,9 +65,9 @@ export const selectCategoriesTree = createSelector(
   },
 );
 
-export const selectCurrentCategoryId = createSelector(
+export const selectCurrentCategory = createSelector(
   selectCategoryState,
-  (state: State) => state.currentCategoryId,
+  (state: State) => state.currentCategory,
 );
 
 export const selectNewCategory = createSelector(

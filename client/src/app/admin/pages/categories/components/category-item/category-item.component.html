@@ -1,13 +1,20 @@
-@if (currentCategoryId$ | async; as currentCategoryId) {
-  @if (currentCategoryId === category.id) {
-    <div class="category-item category-item--editable">
-      <p
-        #categoryItem
-        class="category-item__name category-item__name--editable"
-        [contentEditable]="true"
-      >
-        {{ category.categoryName }}
-      </p>
+@if (currentCategory$ | async; as currentCategory) {
+  <div
+    class="category-item"
+    [ngClass]="{ 'category-item--editable': currentCategory.isEditable }"
+  >
+    <p
+      #categoryItem
+      class="category-item__name"
+      [ngClass]="{
+        'category-item__name--editable': currentCategory.isEditable
+      }"
+      [contentEditable]="currentCategory.isEditable"
+    >
+      {{ category.categoryName }}
+    </p>
+
+    @if (currentCategory.isEditable) {
       <div class="category-item__buttons--editable">
         <button class="category-item__button" (click)="saveCategory()">
           <svg-icon
@@ -22,38 +29,39 @@
           ></svg-icon>
         </button>
       </div>
-    </div>
-  } @else {
-    <ng-container *ngTemplateOutlet="block2"></ng-container>
-  }
-} @else {
-  <ng-container *ngTemplateOutlet="block2"></ng-container>
-}
+    } @else {
+      <div class="category-item__buttons">
+        <button class="category-item__button" (click)="addSubCategory()">
+          <svg-icon
+            class="category-item__icon category-item__icon--add"
+            src="assets/images/plus-round-line-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="category-item__button" (click)="editCategory()">
+          <svg-icon
+            class="category-item__icon category-item__icon--edit"
+            src="assets/images/pencil-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="category-item__button" (click)="deleteCategory()">
+          <svg-icon
+            class="category-item__icon category-item__icon--delete"
+            src="assets/images/trash-bin-icon.svg"
+          ></svg-icon>
+        </button>
+      </div>
+    }
 
-<ng-template class="category-item" #block2>
-  <div class="category-item">
-    <p class="category-item__name">
-      {{ category.categoryName }}
-    </p>
-    <div class="category-item__buttons">
-      <button class="category-item__button" (click)="addSubCategory()">
-        <svg-icon
-          class="category-item__icon category-item__icon--add"
-          src="assets/images/plus-round-line-icon.svg"
-        ></svg-icon>
-      </button>
-      <button class="category-item__button" (click)="editCategory()">
-        <svg-icon
-          class="category-item__icon category-item__icon--edit"
-          src="assets/images/pencil-icon.svg"
-        ></svg-icon>
-      </button>
-      <button class="category-item__button" (click)="deleteCategory()">
-        <svg-icon
-          class="category-item__icon category-item__icon--delete"
-          src="assets/images/trash-bin-icon.svg"
-        ></svg-icon>
-      </button>
-    </div>
+    @if (dialog$ | async; as dialog) {
+      @if (
+        dialog.dialogType === dialogEnum.SubCategory &&
+        currentCategory.id === category.id
+      ) {
+        <app-sub-category-dialog
+          [dialog]="dialog"
+          [category]="category"
+        ></app-sub-category-dialog>
+      }
+    }
   </div>
-</ng-template>
+}

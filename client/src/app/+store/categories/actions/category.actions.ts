@@ -1,6 +1,9 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { CreateCategoryType } from '../../../shared/models/types/create-category.type';
+import {
+  CurrentCategoryStatusInterface
+} from '../../../shared/models/interfaces/current-category-status.interface';
 
 export const CategoryActions = createActionGroup({
   source: 'Category/API',
@@ -21,7 +24,8 @@ export const CategoryActions = createActionGroup({
     // ClearCategories: emptyProps(),
     OpenNewCategory: emptyProps(),
     CloseNewCategory: emptyProps(),
-    SetCurrentCategoryId: props<{ categoryId: string }>(),
-    ClearCurrentCategoryId: emptyProps(),
+    ChangeCurrentCategoryStatus: props<{
+      categoryStatus: CurrentCategoryStatusInterface;
+    }>(),
   },
 });

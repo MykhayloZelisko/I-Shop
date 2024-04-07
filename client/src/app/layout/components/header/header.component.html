@@ -76,7 +76,11 @@
 </div>
 
 @if (dialog$ | async; as dialog) {
-  @if (dialog.dialogType !== authDialogEnum.None) {
+  @if (
+    dialog.dialogType === dialogEnum.Login ||
+    dialog.dialogType === dialogEnum.Registration ||
+    dialog.dialogType === dialogEnum.RestorePassword
+  ) {
     <app-auth-dialog [dialog]="dialog"></app-auth-dialog>
   }
 }

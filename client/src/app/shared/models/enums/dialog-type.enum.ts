@@ -3,4 +3,5 @@ export enum DialogTypeEnum {
   Login = 'Login',
   RestorePassword = 'Password',
   None = 'None',
+  SubCategory = 'SubCategory',
 }

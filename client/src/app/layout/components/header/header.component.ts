@@ -41,7 +41,7 @@ import { MainMenuInterface } from '../../../shared/models/interfaces/main-menu.i
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
-  public readonly authDialogEnum = DialogTypeEnum;
+  public readonly dialogEnum = DialogTypeEnum;
 
   public user$!: Observable<UserInterface | null>;
 

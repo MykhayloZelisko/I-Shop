@@ -3,11 +3,14 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CategoryActions } from '../actions/category.actions';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { UpdateStr } from '@ngrx/entity/src/models';
+import {
+  CurrentCategoryStatusInterface
+} from '../../../shared/models/interfaces/current-category-status.interface';
 
 export const categoriesFeatureKey = 'categories';
 
 export interface State extends EntityState<CategoryInterface> {
-  currentCategoryId: string | null;
+  currentCategory: CurrentCategoryStatusInterface;
   isNewCategory: boolean;
 }
 
@@ -15,7 +18,10 @@ export const adapter: EntityAdapter<CategoryInterface> =
   createEntityAdapter<CategoryInterface>();
 
 export const initialState: State = adapter.getInitialState({
-  currentCategoryId: null,
+  currentCategory: {
+    id: null,
+    isEditable: false,
+  },
   isNewCategory: false,
 });
 
@@ -48,12 +54,8 @@ export const reducer = createReducer(
     ...state,
     isNewCategory: false,
   })),
-  on(CategoryActions.setCurrentCategoryId, (state, action) => ({
+  on(CategoryActions.changeCurrentCategoryStatus, (state, action) => ({
     ...state,
-    currentCategoryId: action.categoryId,
-  })),
-  on(CategoryActions.clearCurrentCategoryId, (state) => ({
-    ...state,
-    currentCategoryId: null,
+    currentCategory: action.categoryStatus,
   })),
 );

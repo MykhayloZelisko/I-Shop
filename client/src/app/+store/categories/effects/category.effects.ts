@@ -4,6 +4,8 @@ import { CategoriesService } from '../services/categories.service';
 import { CategoryActions } from '../actions/category.actions';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
+import { DialogActions } from '../../dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
 
 @Injectable()
 export class CategoryEffects {
@@ -77,6 +79,9 @@ export class CategoryEffects {
           mergeMap((category) => [
             CategoryActions.addCategorySuccess({ category }),
             CategoryActions.closeNewCategory(),
+            DialogActions.openDialog({
+              dialog: { title: '', dialogType: DialogTypeEnum.None },
+            }),
           ]),
           catchError(() => of(CategoryActions.addCategoryFailure())),
         ),

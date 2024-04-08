@@ -35,22 +35,6 @@
     color: $yellow;
   }
 
-  &__header-icon {
-    & svg {
-      & path {
-        fill: $yellow;
-      }
-    }
-
-    &:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
-    }
-  }
-
   &__close {
     border: none;
     border-radius: 12px;

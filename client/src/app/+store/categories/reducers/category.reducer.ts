@@ -3,9 +3,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CategoryActions } from '../actions/category.actions';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { UpdateStr } from '@ngrx/entity/src/models';
-import {
-  CurrentCategoryStatusInterface
-} from '../../../shared/models/interfaces/current-category-status.interface';
+import { CurrentCategoryStatusInterface } from '../../../shared/models/interfaces/current-category-status.interface';
 
 export const categoriesFeatureKey = 'categories';
 

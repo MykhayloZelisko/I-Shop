@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
-import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { State } from '../../../../../+store/reducers';
 import { Store } from '@ngrx/store';
@@ -25,13 +25,7 @@ import { CurrentCategoryStatusInterface } from '../../../../../shared/models/int
 @Component({
   selector: 'app-category-item',
   standalone: true,
-  imports: [
-    SvgIconComponent,
-    AsyncPipe,
-    NgTemplateOutlet,
-    SubCategoryDialogComponent,
-    NgClass,
-  ],
+  imports: [SvgIconComponent, AsyncPipe, SubCategoryDialogComponent, NgClass],
   templateUrl: './category-item.component.html',
   styleUrl: './category-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,7 +82,7 @@ export class CategoryItemComponent implements OnInit {
     );
   }
 
-  public addSubCategory(): void {
+  public openSubCategoryDialog(): void {
     this.store.dispatch(
       DialogActions.openDialog({
         dialog: {
@@ -102,5 +96,10 @@ export class CategoryItemComponent implements OnInit {
         categoryStatus: { id: this.category.id, isEditable: false },
       }),
     );
+    this.store.dispatch(CategoryActions.closeNewCategory());
+  }
+
+  public handleInput(event: KeyboardEvent): void {
+    event.stopPropagation();
   }
 }

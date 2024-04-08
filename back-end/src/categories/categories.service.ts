@@ -53,7 +53,10 @@ export class CategoriesService {
     createCategoryInput: CreateCategoryInput,
   ): Promise<CategoryGQL> {
     const category = await this.categoryModel.create(createCategoryInput);
-    return category.toObject();
+    return {
+      ...category.toObject(),
+      parentId: category.parentId ? category.parentId.toString() : null,
+    };
   }
 
   public async updateCategory(

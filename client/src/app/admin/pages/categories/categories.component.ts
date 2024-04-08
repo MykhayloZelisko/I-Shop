@@ -1,7 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import { map, Observable} from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { selectCategoriesTree } from '../../../+store/categories/selectors/category.selectors';
 import { TreeNode } from 'primeng/api';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';

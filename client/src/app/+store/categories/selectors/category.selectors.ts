@@ -1,4 +1,8 @@
-import { createFeature, createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  createFeature,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
 import {
   adapter,
   categoriesFeatureKey,
@@ -39,25 +43,18 @@ export const selectCategoriesTree = createSelector(
         type: 'default',
         children: [],
       }));
-    const maxLevel = Math.max(
-      ...categoriesWithChildren.map((category) => category.data!.level),
-    );
-    for (let level = maxLevel; level > 0; level--) {
-      const currentLevelCategories = categoriesWithChildren.filter(
-        (category) => category.data!.level === level,
-      );
-      currentLevelCategories.forEach((category) => {
-        const parentCategory = categoriesWithChildren.find(
-          (c) => c.data!.id === category.data!.parentId,
+
+    for (const item1 of categoriesWithChildren) {
+      if (item1.data!.parentId) {
+        const category = categoriesWithChildren.find(
+          (item) => item.data!.id === item1.data!.parentId,
         );
-        if (parentCategory) {
-          parentCategory.children!.push(category);
-        }
-      });
+        category!.children!.push(item1);
+      }
     }
 
     const result = categoriesWithChildren.filter(
-      (category) => category.data!.level === 1,
+      (category) => category.data!.parentId === null,
     );
     result.push(emptyChild);
 

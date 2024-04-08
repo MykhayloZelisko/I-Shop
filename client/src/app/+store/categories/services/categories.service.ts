@@ -20,7 +20,6 @@ export class CategoriesService {
               id
               categoryName
               parentId
-              level
             }
           }
         `,
@@ -53,7 +52,6 @@ export class CategoriesService {
               id
               categoryName
               parentId
-              level
             }
           }
         `,
@@ -86,7 +84,6 @@ export class CategoriesService {
               id
               categoryName
               parentId
-              level
             }
           }
         `,

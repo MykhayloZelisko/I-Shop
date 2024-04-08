@@ -50,7 +50,6 @@ export class NewCategoryComponent implements OnInit {
         category: {
           categoryName: this.newCategoryCtrl.getRawValue(),
           parentId: null,
-          level: 1,
         },
       }),
     );
@@ -58,5 +57,10 @@ export class NewCategoryComponent implements OnInit {
 
   public cancelAddCategory(): void {
     this.store.dispatch(CategoryActions.closeNewCategory());
+    this.newCategoryCtrl.setValue('');
+  }
+
+  public handleInput(event: KeyboardEvent): void {
+    event.stopPropagation();
   }
 }

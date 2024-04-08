@@ -1,7 +1,12 @@
 <div class="new-category">
   @if (isNewCategory$ | async) {
     <div class="new-category__input-wrapper">
-      <input class="new-category__input" type="text" [formControl]="newCategoryCtrl"/>
+      <input
+        class="new-category__input"
+        type="text"
+        [formControl]="newCategoryCtrl"
+        (keydown)="handleInput($event)"
+      />
       <div class="new-category__icon-buttons">
         <button class="new-category__icon-button" (click)="saveCategory()">
           <svg-icon

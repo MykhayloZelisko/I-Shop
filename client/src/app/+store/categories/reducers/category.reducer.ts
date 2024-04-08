@@ -43,7 +43,6 @@ export const reducer = createReducer(
   on(CategoryActions.loadCategoriesSuccess, (state, action) =>
     adapter.setAll(action.categories, state),
   ),
-  // on(CategoryActions.clearCategorys, (state) => adapter.removeAll(state)),
   on(CategoryActions.openNewCategory, (state) => ({
     ...state,
     isNewCategory: true,

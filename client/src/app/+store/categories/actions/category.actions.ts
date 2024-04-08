@@ -6,6 +6,7 @@ import { CurrentCategoryStatusInterface } from '../../../shared/models/interface
 export const CategoryActions = createActionGroup({
   source: 'Category/API',
   events: {
+    // Entity actions
     LoadCategories: emptyProps(),
     LoadCategoriesSuccess: props<{ categories: CategoryInterface[] }>(),
     LoadCategoriesFailure: emptyProps(),
@@ -19,7 +20,7 @@ export const CategoryActions = createActionGroup({
     DeleteCategorySuccess: props<{ ids: string[] }>(),
     DeleteCategoryFailure: emptyProps(),
     DeleteCategories: props<{ ids: string[] }>(),
-    // ClearCategories: emptyProps(),
+    // Other actions
     OpenNewCategory: emptyProps(),
     CloseNewCategory: emptyProps(),
     ChangeCurrentCategoryStatus: props<{

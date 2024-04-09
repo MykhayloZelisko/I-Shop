@@ -44,12 +44,12 @@ export const selectCategoriesTree = createSelector(
         children: [],
       }));
 
-    for (const item1 of categoriesWithChildren) {
-      if (item1.data!.parentId) {
+    for (const child of categoriesWithChildren) {
+      if (child.data!.parentId) {
         const category = categoriesWithChildren.find(
-          (item) => item.data!.id === item1.data!.parentId,
+          (parent) => parent.data!.id === child.data!.parentId,
         );
-        category!.children!.push(item1);
+        category!.children!.push(child);
       }
     }
 

@@ -1,21 +1,22 @@
 import { isDevMode } from '@angular/core';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
-import { userReducer } from '../user/reducers/user.reducer';
-import { UserInterface } from '../../shared/models/interfaces/user.interface';
-import { AuthDialogDataInterface } from '../../shared/models/interfaces/auth-dialog-data.interface';
-import { authDialogReducer } from '../auth-dialog/reducers/auth-dialog.reducer';
-import { mainMenuReducer } from '../main-menu/reducers/main-menu.reducer';
+import * as dialog from '../dialog/reducers/dialog.reducer';
+import * as mainMenu from '../main-menu/reducers/main-menu.reducer';
+import * as auth from '../auth/reducers/auth.reducer';
+import * as categories from '../categories/reducers/category.reducer';
 
 export interface State {
-  user: UserInterface | null;
-  authDialog: AuthDialogDataInterface;
-  isOpenMainMenu: boolean;
+  auth: auth.State;
+  dialog: dialog.State;
+  mainMenu: mainMenu.State;
+  categories: categories.State;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  user: userReducer,
-  authDialog: authDialogReducer,
-  isOpenMainMenu: mainMenuReducer,
+  auth: auth.reducer,
+  dialog: dialog.reducer,
+  mainMenu: mainMenu.reducer,
+  categories: categories.reducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];

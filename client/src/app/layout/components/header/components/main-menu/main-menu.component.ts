@@ -12,20 +12,17 @@ import { SvgIconComponent } from 'angular-svg-icon';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { MainMenuActions } from '../../../../../+store/main-menu/actions/main-menu.actions';
-import { MainMenuClickOutsideDirective } from './directives/main-menu-click-outside.directive';
-import { AuthDialogActions } from '../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../../../shared/models/enums/auth-dialog-type.enum';
-import { LogoutActions } from '../../../../../+store/user/actions/logout.actions';
+import { ClickOutsideDirective } from '../../../../../shared/directives/click-outside.directive';
+import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.enum';
+import { UserRouteNameEnum } from '../../../../../shared/models/enums/user-route-name.enum';
+import { LayoutRouteNameEnum } from '../../../../../shared/models/enums/layout-route-name.enum';
+import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 
 @Component({
   selector: 'app-main-menu',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    RouterLink,
-    SvgIconComponent,
-    MainMenuClickOutsideDirective,
-  ],
+  imports: [AsyncPipe, RouterLink, SvgIconComponent, ClickOutsideDirective],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,16 +41,16 @@ export class MainMenuComponent {
   }
 
   public goHome(): void {
-    this.router.navigateByUrl('');
+    this.router.navigateByUrl(UserRouteNameEnum.Home);
     this.closeMainMenu();
   }
 
   public login(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Вхід',
-          dialogType: AuthDialogTypeEnum.Login,
+          dialogType: DialogTypeEnum.Login,
         },
       }),
     );
@@ -62,10 +59,10 @@ export class MainMenuComponent {
 
   public registration(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Реєстрація',
-          dialogType: AuthDialogTypeEnum.Registration,
+          dialogType: DialogTypeEnum.Registration,
         },
       }),
     );
@@ -73,7 +70,12 @@ export class MainMenuComponent {
   }
 
   public logout(): void {
-    this.store.dispatch(LogoutActions.logout());
+    this.store.dispatch(AuthActions.logout());
+    this.closeMainMenu();
+  }
+
+  public goAdmin(): void {
+    this.router.navigateByUrl(LayoutRouteNameEnum.Admin);
     this.closeMainMenu();
   }
 }

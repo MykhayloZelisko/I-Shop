@@ -1,4 +1,4 @@
-<div class="main-menu__wrapper" appMainMenuClickOutside>
+<div class="main-menu__wrapper" appClickOutside>
   <div class="main-menu">
     <div class="main-menu__logo-wrapper">
       <div class="main-menu__logo" (click)="goHome()">
@@ -65,7 +65,7 @@
       </li>
       @if (isAdmin$ | async) {
         <li class="main-menu__list-item main-menu__list-item--underlined">
-          <button class="main-menu__list-button">
+          <button class="main-menu__list-button" (click)="goAdmin()">
             <svg-icon
               class="main-menu__list-button-icon"
               src="assets/images/crown-icon.svg"

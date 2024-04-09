@@ -1,0 +1,78 @@
+@import "variables";
+
+.categories {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__buttons {
+    display: flex;
+    gap: 18px;
+  }
+
+  &__button {
+    font-family: $source;
+    padding: 8px 24px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: $yellow;
+    background-color: $brown-1;
+    font-size: 16px;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: $brown-2;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-treenode-children {
+    margin-left: 15px;
+  }
+
+  .p-treenode-content {
+    padding: 5px;
+  }
+
+  .p-treenode {
+    padding: 0;
+
+    &:focus {
+      & .p-treenode-content {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .p-tree {
+    padding: 5px;
+  }
+
+  .p-treenode-label {
+    width: 100%;
+  }
+}
+
+@media screen and (width <= 768px) {
+  .categories {
+    &__buttons {
+      justify-content: center;
+    }
+  }
+}
+
+@media screen and (width <= 400px) {
+  .categories {
+    padding: 6px;
+    gap: 6px;
+
+    &__buttons {
+      justify-content: space-evenly;
+      //padding: 5px 0;
+      gap: 0;
+    }
+  }
+}

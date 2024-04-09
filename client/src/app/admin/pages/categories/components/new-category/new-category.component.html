@@ -1,0 +1,30 @@
+<div class="new-category">
+  @if (isNewCategory$ | async) {
+    <div class="new-category__input-wrapper">
+      <input
+        class="new-category__input"
+        type="text"
+        [formControl]="newCategoryCtrl"
+        (keydown)="handleInput($event)"
+      />
+      <div class="new-category__icon-buttons">
+        <button class="new-category__icon-button" (click)="saveCategory()">
+          <svg-icon
+            class="new-category__icon new-category__icon--save"
+            src="assets/images/save-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="new-category__icon-button" (click)="cancelAddCategory()">
+          <svg-icon
+            class="new-category__icon new-category__icon--cancel"
+            src="assets/images/close-round-line-icon.svg"
+          ></svg-icon>
+        </button>
+      </div>
+    </div>
+  } @else {
+    <button class="new-category__button" (click)="addCategory()">
+      Нова категорія
+    </button>
+  }
+</div>

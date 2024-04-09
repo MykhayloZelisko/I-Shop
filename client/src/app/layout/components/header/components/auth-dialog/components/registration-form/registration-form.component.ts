@@ -9,12 +9,12 @@ import {
   requiredValidator,
   showErrorMessage,
 } from '../../../../../../../shared/utils/validators';
-import { AuthDialogActions } from '../../../../../../../+store/auth-dialog/actions/auth-dialog.actions';
-import { AuthDialogTypeEnum } from '../../../../../../../shared/models/enums/auth-dialog-type.enum';
+import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
+import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
 import { NgxMaskDirective } from 'ngx-mask';
-import { RegistrationActions } from '../../../../../../../+store/user/actions/registration.actions';
+import { AuthActions } from '../../../../../../../+store/auth/actions/auth.actions';
 
 @Component({
   selector: 'app-registration-form',
@@ -76,10 +76,10 @@ export class RegistrationFormComponent {
 
   public login(): void {
     this.store.dispatch(
-      AuthDialogActions.authDialog({
+      DialogActions.openDialog({
         dialog: {
           title: 'Вхід',
-          dialogType: AuthDialogTypeEnum.Login,
+          dialogType: DialogTypeEnum.Login,
         },
       }),
     );
@@ -88,7 +88,7 @@ export class RegistrationFormComponent {
   public registration(): void {
     const registrationData = this.registrationForm.getRawValue();
     this.store.dispatch(
-      RegistrationActions.registration({ registration: registrationData }),
+      AuthActions.registration({ registration: registrationData }),
     );
   }
 }

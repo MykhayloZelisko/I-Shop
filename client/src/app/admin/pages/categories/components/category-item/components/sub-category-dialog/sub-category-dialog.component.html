@@ -1,0 +1,30 @@
+<div class="sub-category-dialog__wrapper" appClickOutside>
+  <div class="sub-category-dialog">
+    <div class="sub-category-dialog__header">
+      <h3 class="sub-category-dialog__title">{{ dialog.title }}</h3>
+      <button class="sub-category-dialog__close" (click)="closeDialog()">
+        <svg-icon
+          class="sub-category-dialog__icon"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+    <div class="sub-category-dialog__body">
+      <label class="sub-category-dialog__label" for="sub-category"
+        >Нова субкатегорія:
+      </label>
+      <div class="sub-category-dialog__field">
+        <input
+          id="sub-category"
+          class="sub-category-dialog__input"
+          [formControl]="subCategoryCtrl"
+          type="text"
+          (keydown)="handleInput($event)"
+        />
+        <button class="sub-category-dialog__button" (click)="addSubCategory()">
+          Зберегти
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

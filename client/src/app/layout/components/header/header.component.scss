@@ -206,3 +206,14 @@
     }
   }
 }
+
+@media screen and (width <= 400px) {
+  .header {
+    &__button {
+      &--small-scr-btn {
+        display: none;
+      }
+    }
+  }
+}
+

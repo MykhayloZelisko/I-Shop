@@ -20,6 +20,7 @@
     color: $yellow;
     background-color: $brown-1;
     font-size: 16px;
+    white-space: nowrap;
 
     &:hover {
       background-color: $brown-2;
@@ -52,5 +53,26 @@
 
   .p-treenode-label {
     width: 100%;
+  }
+}
+
+@media screen and (width <= 768px) {
+  .categories {
+    &__buttons {
+      justify-content: center;
+    }
+  }
+}
+
+@media screen and (width <= 400px) {
+  .categories {
+    padding: 6px;
+    gap: 6px;
+
+    &__buttons {
+      justify-content: space-evenly;
+      //padding: 5px 0;
+      gap: 0;
+    }
   }
 }

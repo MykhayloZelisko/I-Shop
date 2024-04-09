@@ -10,4 +10,21 @@
       border-bottom-color: $brown-1;
     }
   }
+
+  .p-menuitem-text {
+    font-size: 18px;
+    font-family: $source;
+  }
+}
+
+@media screen and (width <= 768px) {
+  :host ::ng-deep {
+    .p-menuitem-link {
+      padding: 10px;
+    }
+
+    .p-menuitem-text {
+      font-size: 16px;
+    }
+  }
 }

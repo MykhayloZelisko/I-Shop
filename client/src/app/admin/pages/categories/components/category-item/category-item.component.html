@@ -7,13 +7,15 @@
     }"
   >
     <p
-      #categoryItem
+      #categoryName
       class="category-item__name"
       [ngClass]="{
         'category-item__name--editable':
           currentCategory.isEditable && currentCategory.id === category.id
       }"
-      [contentEditable]="currentCategory.isEditable"
+      [contentEditable]="
+        currentCategory.isEditable && currentCategory.id === category.id
+      "
       (keydown)="handleInput($event)"
     >
       {{ category.categoryName }}

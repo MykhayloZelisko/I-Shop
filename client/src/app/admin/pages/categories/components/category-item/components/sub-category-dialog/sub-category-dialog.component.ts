@@ -15,6 +15,8 @@ import { CategoryActions } from '../../../../../../../+store/categories/actions/
 import { CategoryInterface } from '../../../../../../../shared/models/interfaces/category.interface';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { map, Observable, of } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -24,6 +26,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     SvgIconComponent,
     PaginatorModule,
     ReactiveFormsModule,
+    AsyncPipe,
   ],
   templateUrl: './sub-category-dialog.component.html',
   styleUrl: './sub-category-dialog.component.scss',
@@ -35,6 +38,8 @@ export class SubCategoryDialogComponent {
   @Input({ required: true }) public category!: CategoryInterface;
 
   public subCategoryCtrl: FormControl = new FormControl();
+
+  public isDisabled$: Observable<boolean> = of(true);
 
   private store = inject(Store<State>);
 
@@ -62,7 +67,7 @@ export class SubCategoryDialogComponent {
       CategoryActions.addCategory({
         category: {
           parentId: this.category.id,
-          categoryName: this.subCategoryCtrl.getRawValue(),
+          categoryName: this.subCategoryCtrl.getRawValue().trim(),
         },
       }),
     );
@@ -70,5 +75,8 @@ export class SubCategoryDialogComponent {
 
   public handleInput(event: KeyboardEvent): void {
     event.stopPropagation();
+    this.isDisabled$ = this.subCategoryCtrl.valueChanges.pipe(
+      map((value) => !value.trim() || !value),
+    );
   }
 }

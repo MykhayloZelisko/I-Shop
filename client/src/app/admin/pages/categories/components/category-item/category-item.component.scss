@@ -87,17 +87,3 @@
     display: flex;
   }
 }
-
-@media screen and (width <= 400px) {
-  .category-item {
-    &__buttons {
-      &--editable {
-        display: none;
-      }
-    }
-
-    &:hover &__buttons {
-      display: none;
-    }
-  }
-}

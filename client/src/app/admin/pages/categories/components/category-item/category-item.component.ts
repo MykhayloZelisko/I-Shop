@@ -33,8 +33,8 @@ import { CurrentCategoryStatusInterface } from '../../../../../shared/models/int
 export class CategoryItemComponent implements OnInit {
   @Input({ required: true }) public category!: CategoryInterface;
 
-  @ViewChild('categoryItem')
-  public categoryItem!: ElementRef;
+  @ViewChild('categoryName')
+  public categoryName!: ElementRef;
 
   public readonly dialogEnum = DialogTypeEnum;
 
@@ -73,7 +73,7 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public saveCategory(): void {
-    const newCategoryName = this.categoryItem.nativeElement.innerHTML.trim();
+    const newCategoryName = this.categoryName.nativeElement.innerHTML.trim();
     this.store.dispatch(
       CategoryActions.updateCategory({
         id: this.category.id,

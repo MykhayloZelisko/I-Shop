@@ -128,6 +128,13 @@
     &:hover {
       background-color: $brown-2;
     }
+
+    &:disabled,
+    &:disabled:hover {
+      color: $gray-5;
+      background-color: $gray-4;
+      cursor: default;
+    }
   }
 }
 

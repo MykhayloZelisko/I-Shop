@@ -21,7 +21,7 @@
           type="text"
           (keydown)="handleInput($event)"
         />
-        <button class="sub-category-dialog__button" (click)="addSubCategory()">
+        <button class="sub-category-dialog__button" (click)="addSubCategory()" [disabled]='isDisabled$ | async'>
           Зберегти
         </button>
       </div>

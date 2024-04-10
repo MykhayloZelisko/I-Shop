@@ -18,7 +18,6 @@ export const adapter: EntityAdapter<CategoryInterface> =
 export const initialState: State = adapter.getInitialState({
   currentCategory: {
     id: null,
-    isEditable: false,
   },
   isNewCategory: false,
 });

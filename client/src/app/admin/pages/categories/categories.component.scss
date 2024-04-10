@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 .categories {
   padding: 12px;
@@ -64,14 +64,13 @@
   }
 }
 
-@media screen and (width <= 400px) {
+@media screen and (width <= 480px) {
   .categories {
     padding: 6px;
     gap: 6px;
 
     &__buttons {
       justify-content: space-evenly;
-      //padding: 5px 0;
       gap: 0;
     }
   }

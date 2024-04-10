@@ -48,10 +48,7 @@ export class CategoryEffects {
             mergeMap((category) => [
               CategoryActions.updateCategorySuccess({ category }),
               CategoryActions.changeCurrentCategoryStatus({
-                categoryStatus: {
-                  id: null,
-                  isEditable: false,
-                },
+                categoryStatus: { id: null },
               }),
             ]),
             catchError(() => of(CategoryActions.updateCategoryFailure())),

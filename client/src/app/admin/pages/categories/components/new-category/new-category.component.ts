@@ -36,10 +36,7 @@ export class NewCategoryComponent implements OnInit {
     this.store.dispatch(CategoryActions.openNewCategory());
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: {
-          id: null,
-          isEditable: false,
-        },
+        categoryStatus: { id: null },
       }),
     );
   }

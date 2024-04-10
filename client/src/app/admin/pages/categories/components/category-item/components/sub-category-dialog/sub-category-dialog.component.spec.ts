@@ -8,10 +8,9 @@ describe('SubCategoryDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubCategoryDialogComponent]
-    })
-    .compileComponents();
-    
+      imports: [SubCategoryDialogComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SubCategoryDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

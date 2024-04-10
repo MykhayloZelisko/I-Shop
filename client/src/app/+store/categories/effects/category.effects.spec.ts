@@ -5,15 +5,12 @@ import { Observable } from 'rxjs';
 import { CategoryEffects } from './category.effects';
 
 describe('CategoryEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: CategoryEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CategoryEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [CategoryEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(CategoryEffects);

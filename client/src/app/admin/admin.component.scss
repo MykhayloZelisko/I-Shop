@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 :host ::ng-deep {
   .p-menuitem-link:not(.p-menuitem-link-active) {
@@ -17,7 +17,7 @@
   }
 }
 
-@media screen and (width <= 768px) {
+@media screen and (width <= 480px) {
   :host ::ng-deep {
     .p-menuitem-link {
       padding: 10px;

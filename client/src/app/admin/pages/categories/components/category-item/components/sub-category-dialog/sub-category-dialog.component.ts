@@ -54,10 +54,7 @@ export class SubCategoryDialogComponent {
     );
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: {
-          id: null,
-          isEditable: false,
-        },
+        categoryStatus: { id: null },
       }),
     );
   }

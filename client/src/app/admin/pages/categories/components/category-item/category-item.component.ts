@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { State } from '../../../../../+store/reducers';
 import { Store } from '@ngrx/store';
@@ -25,7 +25,7 @@ import { CurrentCategoryStatusInterface } from '../../../../../shared/models/int
 @Component({
   selector: 'app-category-item',
   standalone: true,
-  imports: [SvgIconComponent, AsyncPipe, SubCategoryDialogComponent, NgClass],
+  imports: [SvgIconComponent, AsyncPipe, SubCategoryDialogComponent],
   templateUrl: './category-item.component.html',
   styleUrl: './category-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +58,7 @@ export class CategoryItemComponent implements OnInit {
   public editCategory(): void {
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: true },
+        categoryStatus: { id: this.category.id },
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());
@@ -67,7 +67,7 @@ export class CategoryItemComponent implements OnInit {
   public cancelEditCategory(): void {
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
+        categoryStatus: { id: null },
       }),
     );
   }
@@ -93,7 +93,7 @@ export class CategoryItemComponent implements OnInit {
     );
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: false },
+        categoryStatus: { id: this.category.id },
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());

@@ -6,14 +6,19 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { selectCategoriesTree } from '../../../+store/categories/selectors/category.selectors';
 import { TreeNode } from 'primeng/api';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
-import { TreeModule } from 'primeng/tree';
+import {
+  TreeModule,
+  TreeNodeCollapseEvent,
+  TreeNodeExpandEvent,
+} from 'primeng/tree';
 import { AsyncPipe } from '@angular/common';
 import { CategoryItemComponent } from './components/category-item/category-item.component';
 import { NewCategoryComponent } from './components/new-category/new-category.component';
+import { CategoryActions } from '../../../+store/categories/actions/category.actions';
 
 @Component({
   selector: 'app-categories',
@@ -33,33 +38,26 @@ export class CategoriesComponent implements OnInit {
   }
 
   public expandAll(): void {
-    this.categories$ = this.categories$.pipe(
-      map((nodes) => {
-        return nodes.map((node) => {
-          this.expandRecursive(node, true);
-          return node;
-        });
-      }),
-    );
+    this.store.dispatch(CategoryActions.updateCategories({ expanded: true }));
   }
 
   public collapseAll(): void {
-    this.categories$ = this.categories$.pipe(
-      map((nodes) => {
-        return nodes.map((node) => {
-          this.expandRecursive(node, false);
-          return node;
-        });
+    this.store.dispatch(CategoryActions.updateCategories({ expanded: false }));
+  }
+
+  public nodeExpand(event: TreeNodeExpandEvent): void {
+    this.store.dispatch(
+      CategoryActions.updateCategorySuccess({
+        category: { ...event.node.data, expanded: true },
       }),
     );
   }
 
-  private expandRecursive(node: TreeNode, isExpand: boolean): void {
-    node.expanded = isExpand;
-    if (node.children) {
-      node.children.forEach((childNode) => {
-        this.expandRecursive(childNode, isExpand);
-      });
-    }
+  public nodeCollapse(event: TreeNodeCollapseEvent): void {
+    this.store.dispatch(
+      CategoryActions.updateCategorySuccess({
+        category: { ...event.node.data, expanded: false },
+      }),
+    );
   }
 }

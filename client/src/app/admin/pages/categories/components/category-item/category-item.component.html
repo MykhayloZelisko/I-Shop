@@ -1,5 +1,5 @@
 @if (currentCategory$ | async; as currentCategory) {
-  @if (currentCategory.id === category.id) {
+  @if (currentCategory.id === category.id && currentCategory.isEditable) {
     <div class="category-item category-item--editable">
       <p
         #categoryName

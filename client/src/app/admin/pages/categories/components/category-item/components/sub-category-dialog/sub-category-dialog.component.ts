@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   Input,
+  OnInit,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -14,9 +15,14 @@ import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-
 import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
 import { CategoryInterface } from '../../../../../../../shared/models/interfaces/category.interface';
 import { PaginatorModule } from 'primeng/paginator';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { map, Observable, of } from 'rxjs';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
+import { requiredValidator } from '../../../../../../../shared/utils/validators';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -32,16 +38,41 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './sub-category-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubCategoryDialogComponent {
+export class SubCategoryDialogComponent implements OnInit {
   @Input({ required: true }) public dialog!: DialogDataInterface;
 
   @Input({ required: true }) public category!: CategoryInterface;
 
-  public subCategoryCtrl: FormControl = new FormControl();
-
-  public isDisabled$: Observable<boolean> = of(true);
+  public subCategoriesForm!: FormGroup;
 
   private store = inject(Store<State>);
+
+  private fb = inject(FormBuilder);
+
+  public ngOnInit(): void {
+    this.initSubCategoriesForm();
+  }
+
+  public getCategories(): FormArray {
+    return this.subCategoriesForm.get('categories') as FormArray;
+  }
+
+  public newCategory(): FormGroup {
+    return this.fb.group({
+      subCategoryName: ['', [requiredValidator()]],
+    });
+  }
+
+  public addCategory(): void {
+    this.getCategories().push(this.newCategory());
+  }
+
+  public initSubCategoriesForm(): void {
+    this.subCategoriesForm = this.fb.group({
+      categories: this.fb.array([]),
+    });
+    this.addCategory();
+  }
 
   public closeDialog(): void {
     this.store.dispatch(
@@ -54,26 +85,26 @@ export class SubCategoryDialogComponent {
     );
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null },
+        categoryStatus: { id: null, isEditable: false },
       }),
     );
   }
 
+  public deleteCategory(catIndex: number): void {
+    this.getCategories().removeAt(catIndex);
+  }
+
   public addSubCategory(): void {
-    this.store.dispatch(
-      CategoryActions.addCategory({
-        category: {
-          parentId: this.category.id,
-          categoryName: this.subCategoryCtrl.getRawValue().trim(),
-        },
-      }),
-    );
+    const categories = this.subCategoriesForm
+      .getRawValue()
+      .categories.map((item: { subCategoryName: string }) => ({
+        categoryName: item.subCategoryName,
+        parentId: this.category.id,
+      }));
+    this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
   public handleInput(event: KeyboardEvent): void {
     event.stopPropagation();
-    this.isDisabled$ = this.subCategoryCtrl.valueChanges.pipe(
-      map((value) => !value.trim() || !value),
-    );
   }
 }

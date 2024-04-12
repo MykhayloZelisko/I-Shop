@@ -58,7 +58,7 @@ export class CategoryItemComponent implements OnInit {
   public editCategory(): void {
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id },
+        categoryStatus: { id: this.category.id, isEditable: true },
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());
@@ -67,7 +67,7 @@ export class CategoryItemComponent implements OnInit {
   public cancelEditCategory(): void {
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null },
+        categoryStatus: { id: null, isEditable: false },
       }),
     );
   }
@@ -86,14 +86,14 @@ export class CategoryItemComponent implements OnInit {
     this.store.dispatch(
       DialogActions.openDialog({
         dialog: {
-          title: 'Субкатегорія',
+          title: 'Субкатегорії',
           dialogType: DialogTypeEnum.SubCategory,
         },
       }),
     );
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id },
+        categoryStatus: { id: this.category.id, isEditable: false },
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());

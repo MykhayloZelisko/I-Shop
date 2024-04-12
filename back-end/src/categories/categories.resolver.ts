@@ -25,6 +25,16 @@ export class CategoriesResolver {
     return this.categoriesService.createCategory(createCategoryInput);
   }
 
+  @Mutation(() => [Category])
+  @UseGuards(GqlAdminGuard)
+  @UsePipes(ValidationPipe)
+  public async addSubCategories(
+    @Args('createCategoryInputs', { type: () => [CreateCategoryInput] })
+    createCategoryInputs: CreateCategoryInput[],
+  ): Promise<Category[]> {
+    return this.categoriesService.addSubCategories(createCategoryInputs);
+  }
+
   @Mutation(() => Category)
   @UseGuards(GqlAdminGuard)
   public async updateCategory(

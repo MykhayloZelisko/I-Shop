@@ -9,7 +9,11 @@
   </div>
   @if (categories$ | async; as categories) {
     <div class="categories__tree">
-      <p-tree [value]="categories" class="w-full md:w-30rem">
+      <p-tree
+        [value]="categories"
+        (onNodeExpand)="nodeExpand($event)"
+        (onNodeCollapse)="nodeCollapse($event)"
+      >
         <ng-template let-node pTemplate="default">
           @if (node.data) {
             <app-category-item [category]="node.data"></app-category-item>

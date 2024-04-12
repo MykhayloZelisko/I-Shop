@@ -48,7 +48,7 @@ export class CategoryEffects {
             mergeMap((category) => [
               CategoryActions.updateCategorySuccess({ category }),
               CategoryActions.changeCurrentCategoryStatus({
-                categoryStatus: { id: null },
+                categoryStatus: { id: null, isEditable: false },
               }),
             ]),
             catchError(() => of(CategoryActions.updateCategoryFailure())),
@@ -76,14 +76,50 @@ export class CategoryEffects {
           mergeMap((category) => [
             CategoryActions.addCategorySuccess({ category }),
             CategoryActions.closeNewCategory(),
-            DialogActions.openDialog({
-              dialog: { title: '', dialogType: DialogTypeEnum.None },
-            }),
           ]),
           catchError(() => of(CategoryActions.addCategoryFailure())),
         ),
       ),
     ),
+  );
+
+  public addCategoryFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.addCategoryFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public addCategories$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.addCategories),
+      switchMap((action) =>
+        this.categoriesService.addSubCategories(action.categories).pipe(
+          mergeMap((categories) => [
+            CategoryActions.addCategoriesSuccess({ categories }),
+            DialogActions.openDialog({
+              dialog: { title: '', dialogType: DialogTypeEnum.None },
+            }),
+          ]),
+          catchError(() => of(CategoryActions.addCategoriesFailure())),
+        ),
+      ),
+    ),
+  );
+
+  public addCategoriesFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.addCategoriesFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
   );
 
   public deleteCategory$ = createEffect(() =>

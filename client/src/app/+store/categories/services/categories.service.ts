@@ -101,6 +101,37 @@ export class CategoriesService {
       );
   }
 
+  public addSubCategories(
+    data: CreateCategoryType[],
+  ): Observable<CategoryInterface[]> {
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation AddSubCategories(
+            $createCategoryInputs: [CreateCategoryInput!]!
+          ) {
+            addSubCategories(createCategoryInputs: $createCategoryInputs) {
+              id
+              categoryName
+              parentId
+            }
+          }
+        `,
+        variables: { createCategoryInputs: data },
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return response.data.addSubCategories;
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
+  }
+
   public deleteCategory(id: string): Observable<string[]> {
     return this.apollo
       .use('withCredentials')

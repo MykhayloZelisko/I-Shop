@@ -42,6 +42,7 @@ export const selectCategoriesTree = createSelector(
         data: category,
         type: 'default',
         children: [],
+        expanded: category.expanded ?? false,
       }));
 
     for (const child of categoriesWithChildren) {

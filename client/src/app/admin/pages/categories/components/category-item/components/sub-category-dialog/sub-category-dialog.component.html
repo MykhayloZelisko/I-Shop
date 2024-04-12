@@ -2,33 +2,54 @@
   <div class="sub-category-dialog">
     <div class="sub-category-dialog__header">
       <h3 class="sub-category-dialog__title">{{ dialog.title }}</h3>
-      <button class="sub-category-dialog__close" (click)="closeDialog()">
+      <button
+        class="sub-category-dialog__icon-button sub-category-dialog__icon-button--close"
+        (click)="closeDialog()"
+      >
         <svg-icon
-          class="sub-category-dialog__icon"
+          class="sub-category-dialog__icon sub-category-dialog__icon--close"
           src="assets/images/close-round-line-icon.svg"
         ></svg-icon>
       </button>
     </div>
     <div class="sub-category-dialog__body">
-      <label class="sub-category-dialog__label" for="sub-category"
-        >Нова субкатегорія:
-      </label>
-      <div class="sub-category-dialog__field">
-        <input
-          id="sub-category"
-          class="sub-category-dialog__input"
-          [formControl]="subCategoryCtrl"
-          type="text"
-          (keydown)="handleInput($event)"
-        />
-        <button
-          class="sub-category-dialog__button"
-          (click)="addSubCategory()"
-          [disabled]="isDisabled$ | async"
-        >
-          Зберегти
-        </button>
+      <div [formGroup]="subCategoriesForm" class="sub-category-dialog__form">
+        <ng-container formArrayName="categories">
+          @for (_ of getCategories().controls; track $index) {
+            <div [formGroupName]="$index" class="sub-category-dialog__field">
+              <input
+                class="sub-category-dialog__input"
+                formControlName="subCategoryName"
+                type="text"
+                (keydown)="handleInput($event)"
+              />
+              <button
+                class="sub-category-dialog__icon-button sub-category-dialog__icon-button--delete"
+                [disabled]="!$index"
+                (click)="deleteCategory($index)"
+              >
+                <svg-icon
+                  class="sub-category-dialog__icon sub-category-dialog__icon--delete"
+                  src="assets/images/trash-bin-icon.svg"
+                ></svg-icon>
+              </button>
+            </div>
+          }
+        </ng-container>
       </div>
+      <button
+        class="sub-category-dialog__button sub-category-dialog__button--add"
+        (click)="addCategory()"
+      >
+        Додати
+      </button>
+      <button
+        class="sub-category-dialog__button sub-category-dialog__button--save"
+        (click)="addSubCategory()"
+        [disabled]="subCategoriesForm.invalid"
+      >
+        Зберегти
+      </button>
     </div>
   </div>
 </div>

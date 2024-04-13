@@ -10,11 +10,12 @@ import { Store } from '@ngrx/store';
 import { State } from './+store/reducers';
 import { AuthActions } from './+store/auth/actions/auth.actions';
 import { CategoryActions } from './+store/categories/actions/category.actions';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, LoadingSpinnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

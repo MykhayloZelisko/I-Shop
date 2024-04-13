@@ -6,6 +6,9 @@ import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { DialogActions } from '../../dialog/actions/dialog.actions';
 import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
+import { LoaderActions } from '../../loader/actions/loader.actions';
+import { State } from '../../reducers';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class CategoryEffects {
@@ -13,17 +16,21 @@ export class CategoryEffects {
 
   private categoriesService = inject(CategoriesService);
 
+  private store = inject(Store<State>);
+
   public loadCategories$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CategoryActions.loadCategories),
-      switchMap(() =>
-        this.categoriesService.getAllCategories().pipe(
-          map((categories: CategoryInterface[]) =>
-            CategoryActions.loadCategoriesSuccess({ categories }),
-          ),
-          catchError(() => of(CategoryActions.loadCategoriesFailure())),
-        ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap(() => this.categoriesService.getAllCategories()),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      map((categories: CategoryInterface[]) =>
+        CategoryActions.loadCategoriesSuccess({ categories }),
       ),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(CategoryActions.loadCategoriesFailure());
+      }),
     ),
   );
 
@@ -41,19 +48,21 @@ export class CategoryEffects {
   public updateCategory$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CategoryActions.updateCategory),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService
-          .updateCategory(action.id, action.categoryName)
-          .pipe(
-            mergeMap((category) => [
-              CategoryActions.updateCategorySuccess({ category }),
-              CategoryActions.changeCurrentCategoryStatus({
-                categoryStatus: { id: null, isEditable: false },
-              }),
-            ]),
-            catchError(() => of(CategoryActions.updateCategoryFailure())),
-          ),
+        this.categoriesService.updateCategory(action.id, action.categoryName),
       ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      mergeMap((category) => [
+        CategoryActions.updateCategorySuccess({ category }),
+        CategoryActions.changeCurrentCategoryStatus({
+          categoryStatus: { id: null, isEditable: false },
+        }),
+      ]),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(CategoryActions.updateCategoryFailure());
+      }),
     ),
   );
 
@@ -71,15 +80,19 @@ export class CategoryEffects {
   public addCategory$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CategoryActions.addCategory),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.createCategory(action.category).pipe(
-          mergeMap((category) => [
-            CategoryActions.addCategorySuccess({ category }),
-            CategoryActions.closeNewCategory(),
-          ]),
-          catchError(() => of(CategoryActions.addCategoryFailure())),
-        ),
+        this.categoriesService.createCategory(action.category),
       ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      mergeMap((category) => [
+        CategoryActions.addCategorySuccess({ category }),
+        CategoryActions.closeNewCategory(),
+      ]),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(CategoryActions.addCategoryFailure());
+      }),
     ),
   );
 
@@ -97,17 +110,21 @@ export class CategoryEffects {
   public addCategories$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CategoryActions.addCategories),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.addSubCategories(action.categories).pipe(
-          mergeMap((categories) => [
-            CategoryActions.addCategoriesSuccess({ categories }),
-            DialogActions.openDialog({
-              dialog: { title: '', dialogType: DialogTypeEnum.None },
-            }),
-          ]),
-          catchError(() => of(CategoryActions.addCategoriesFailure())),
-        ),
+        this.categoriesService.addSubCategories(action.categories),
       ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      mergeMap((categories) => [
+        CategoryActions.addCategoriesSuccess({ categories }),
+        DialogActions.openDialog({
+          dialog: { title: '', dialogType: DialogTypeEnum.None },
+        }),
+      ]),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(CategoryActions.addCategoriesFailure());
+      }),
     ),
   );
 
@@ -125,15 +142,17 @@ export class CategoryEffects {
   public deleteCategory$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CategoryActions.deleteCategory),
-      switchMap((action) =>
-        this.categoriesService.deleteCategory(action.id).pipe(
-          mergeMap((ids) => [
-            CategoryActions.deleteCategorySuccess({ ids }),
-            CategoryActions.deleteCategories({ ids }),
-          ]),
-          catchError(() => of(CategoryActions.deleteCategoryFailure())),
-        ),
-      ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) => this.categoriesService.deleteCategory(action.id)),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      mergeMap((ids) => [
+        CategoryActions.deleteCategorySuccess({ ids }),
+        CategoryActions.deleteCategories({ ids }),
+      ]),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(CategoryActions.deleteCategoryFailure());
+      }),
     ),
   );
 

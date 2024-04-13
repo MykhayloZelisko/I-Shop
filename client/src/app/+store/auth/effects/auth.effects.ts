@@ -9,6 +9,9 @@ import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-n
 import { UserRouteNameEnum } from '../../../shared/models/enums/user-route-name.enum';
 import { Router } from '@angular/router';
 import { AuthActions } from '../actions/auth.actions';
+import { State } from '../../reducers';
+import { Store } from '@ngrx/store';
+import { LoaderActions } from '../../loader/actions/loader.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -18,16 +21,20 @@ export class AuthEffects {
 
   private router = inject(Router);
 
+  private store = inject(Store<State>);
+
   // GetMe
   public getMe$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.getMe),
-      switchMap(() =>
-        this.authService.getCurrentUser().pipe(
-          map((user: UserInterface) => AuthActions.getMeSuccess({ user })),
-          catchError(() => of(AuthActions.getMeFailure())),
-        ),
-      ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap(() => this.authService.getCurrentUser()),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      map((user: UserInterface) => AuthActions.getMeSuccess({ user })),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(AuthActions.getMeFailure());
+      }),
     ),
   );
 
@@ -35,20 +42,22 @@ export class AuthEffects {
   public login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
-      switchMap((action) =>
-        this.authService.login(action.login).pipe(
-          mergeMap((user: UserInterface) => [
-            AuthActions.loginSuccess({ user }),
-            DialogActions.openDialog({
-              dialog: {
-                title: '',
-                dialogType: DialogTypeEnum.None,
-              },
-            }),
-          ]),
-          catchError(() => of(AuthActions.loginFailure())),
-        ),
-      ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) => this.authService.login(action.login)),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      mergeMap((user: UserInterface) => [
+        AuthActions.loginSuccess({ user }),
+        DialogActions.openDialog({
+          dialog: {
+            title: '',
+            dialogType: DialogTypeEnum.None,
+          },
+        }),
+      ]),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(AuthActions.loginFailure());
+      }),
     ),
   );
 
@@ -67,12 +76,14 @@ export class AuthEffects {
   public logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logout),
-      switchMap(() =>
-        this.authService.logout().pipe(
-          map(() => AuthActions.logoutSuccess()),
-          catchError(() => of(AuthActions.logoutFailure())),
-        ),
-      ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap(() => this.authService.logout()),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      map(() => AuthActions.logoutSuccess()),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(AuthActions.logoutFailure());
+      }),
     ),
   );
 
@@ -104,12 +115,14 @@ export class AuthEffects {
   public registration$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.registration),
-      switchMap((action) =>
-        this.authService.registration(action.registration).pipe(
-          map(() => AuthActions.registrationSuccess()),
-          catchError(() => of(AuthActions.registrationFailure())),
-        ),
-      ),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) => this.authService.registration(action.registration)),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      map(() => AuthActions.registrationSuccess()),
+      catchError(() => {
+        this.store.dispatch(LoaderActions.toggleLoader());
+        return of(AuthActions.registrationFailure());
+      }),
     ),
   );
 

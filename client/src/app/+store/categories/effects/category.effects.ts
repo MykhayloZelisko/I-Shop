@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CategoriesService } from '../services/categories.service';
 import { CategoryActions } from '../actions/category.actions';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { DialogActions } from '../../dialog/actions/dialog.actions';
 import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
@@ -23,10 +23,10 @@ export class CategoryEffects {
       ofType(CategoryActions.loadCategories),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap(() => this.categoriesService.getAllCategories()),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      map((categories: CategoryInterface[]) =>
+      mergeMap((categories: CategoryInterface[]) => [
+        LoaderActions.toggleLoader(),
         CategoryActions.loadCategoriesSuccess({ categories }),
-      ),
+      ]),
       catchError(() => {
         this.store.dispatch(LoaderActions.toggleLoader());
         return of(CategoryActions.loadCategoriesFailure());
@@ -52,8 +52,8 @@ export class CategoryEffects {
       switchMap((action) =>
         this.categoriesService.updateCategory(action.id, action.categoryName),
       ),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       mergeMap((category) => [
+        LoaderActions.toggleLoader(),
         CategoryActions.updateCategorySuccess({ category }),
         CategoryActions.changeCurrentCategoryStatus({
           categoryStatus: { id: null, isEditable: false },
@@ -84,8 +84,8 @@ export class CategoryEffects {
       switchMap((action) =>
         this.categoriesService.createCategory(action.category),
       ),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       mergeMap((category) => [
+        LoaderActions.toggleLoader(),
         CategoryActions.addCategorySuccess({ category }),
         CategoryActions.closeNewCategory(),
       ]),
@@ -114,8 +114,8 @@ export class CategoryEffects {
       switchMap((action) =>
         this.categoriesService.addSubCategories(action.categories),
       ),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       mergeMap((categories) => [
+        LoaderActions.toggleLoader(),
         CategoryActions.addCategoriesSuccess({ categories }),
         DialogActions.openDialog({
           dialog: { title: '', dialogType: DialogTypeEnum.None },
@@ -144,8 +144,8 @@ export class CategoryEffects {
       ofType(CategoryActions.deleteCategory),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) => this.categoriesService.deleteCategory(action.id)),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       mergeMap((ids) => [
+        LoaderActions.toggleLoader(),
         CategoryActions.deleteCategorySuccess({ ids }),
         CategoryActions.deleteCategories({ ids }),
       ]),

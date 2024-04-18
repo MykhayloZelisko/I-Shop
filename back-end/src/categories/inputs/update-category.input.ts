@@ -1,7 +1,7 @@
 import { CreateCategoryInput } from './create-category.input';
-import { InputType, PickType } from '@nestjs/graphql';
+import { InputType, OmitType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateCategoryInput extends PickType(CreateCategoryInput, [
-  'categoryName',
+export class UpdateCategoryInput extends OmitType(CreateCategoryInput, [
+  'parentId',
 ]) {}

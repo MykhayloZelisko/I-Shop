@@ -4,12 +4,14 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import * as process from 'process';
-import { join } from 'path';
+import * as path from 'path';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { CategoriesModule } from './categories/categories.module';
+import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -22,13 +24,17 @@ import { CategoriesModule } from './categories/categories.module';
     ),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: path.join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
     UsersModule,
     RolesModule,
     AuthModule,
     CategoriesModule,
+    FilesModule,
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
+    }),
   ],
 })
 export class AppModule {}

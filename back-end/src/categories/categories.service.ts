@@ -1,15 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './schemas/category.schema';
 import { Category as CategoryGQL } from './models/category.model';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { CreateCategoryInput } from './inputs/create-category.input';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class CategoriesService {
   public constructor(
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
+    private filesService: FilesService,
   ) {}
 
   public async getAllCategories(): Promise<CategoryGQL[]> {
@@ -27,9 +33,13 @@ export class CategoriesService {
     }
     const subCategoriesIds = await this.findSubCategoriesIds(categoryId);
     // TODO: check subcategories. If a category cannot be deleted you should throw ForbiddenException
-    await this.categoryModel
-      .deleteMany({ _id: { $in: subCategoriesIds } })
-      .exec();
+    for (const id of subCategoriesIds) {
+      const deletedCategory = await this.categoryModel.findById(id).exec();
+      if (deletedCategory && deletedCategory.image) {
+        await this.filesService.removeImageFile(deletedCategory.image);
+      }
+      await this.categoryModel.findByIdAndDelete(id).exec();
+    }
     return subCategoriesIds;
   }
 
@@ -52,30 +62,109 @@ export class CategoriesService {
   public async createCategory(
     createCategoryInput: CreateCategoryInput,
   ): Promise<CategoryGQL> {
-    const category = await this.categoryModel.create(createCategoryInput);
-    return category.toObject();
+    if (createCategoryInput.image && createCategoryInput.parentId) {
+      const { createReadStream, filename, mimetype } =
+        await createCategoryInput.image;
+
+      if (!mimetype.includes('image')) {
+        throw new BadRequestException('Only JPEG and PNG images are allowed');
+      }
+
+      const filePath = this.filesService.createFilePath(filename);
+      const fileStream = createReadStream();
+      await this.filesService.createFileStream(
+        filePath,
+        1024 * 1024,
+        fileStream,
+      );
+      const category = await this.categoryModel.create({
+        ...createCategoryInput,
+        image: filePath,
+      });
+      return {
+        ...category.toObject(),
+        parentId: category.parentId ? category.parentId.toString() : null,
+      };
+    } else if (!createCategoryInput.image && !createCategoryInput.parentId) {
+      const category = await this.categoryModel.create(createCategoryInput);
+      return category.toObject();
+    } else {
+      throw new BadRequestException('Bad Request');
+    }
   }
 
   public async addSubCategories(
     createCategoryInputs: CreateCategoryInput[],
   ): Promise<CategoryGQL[]> {
-    const categories = await this.categoryModel.create(createCategoryInputs);
-    return categories.map((category) => ({
-      ...category.toObject(),
-      parentId: category.parentId ? category.parentId.toString() : null,
-    }));
+    const categories: CategoryGQL[] = [];
+    for (const input of createCategoryInputs) {
+      const category = await this.createCategory(input);
+      categories.push(category);
+    }
+    return categories;
   }
 
   public async updateCategory(
     id: string,
     updateCategoryInput: UpdateCategoryInput,
   ): Promise<CategoryGQL> {
-    const category = await this.categoryModel
-      .findByIdAndUpdate(id, updateCategoryInput, { new: true })
-      .exec();
-    if (!category) {
+    const existedCategory = await this.categoryModel.findById(id).exec();
+
+    if (!existedCategory) {
       throw new NotFoundException('Category not found');
     }
-    return category.toObject();
+
+    if (updateCategoryInput.image && existedCategory.parentId) {
+      const { createReadStream, filename, mimetype } =
+        await updateCategoryInput.image;
+
+      if (!mimetype.includes('image')) {
+        throw new BadRequestException('Only JPEG and PNG images are allowed');
+      }
+
+      const filePath = this.filesService.createFilePath(filename);
+      const fileStream = createReadStream();
+      await this.filesService.createFileStream(
+        filePath,
+        1024 * 1024,
+        fileStream,
+      );
+      if (existedCategory.image) {
+        const oldImagePath = existedCategory.image;
+        await this.filesService.removeImageFile(oldImagePath);
+      }
+      const updatedCategory = await this.categoryModel
+        .findByIdAndUpdate(
+          id,
+          { ...updateCategoryInput, image: filePath },
+          { new: true },
+        )
+        .exec();
+
+      if (!updatedCategory) {
+        throw new NotFoundException('Category not found');
+      }
+
+      return {
+        ...updatedCategory.toObject(),
+        parentId: updatedCategory.parentId
+          ? updatedCategory.parentId.toString()
+          : null,
+      };
+    } else if (!updateCategoryInput.image) {
+      const updatedCategory = await this.categoryModel
+        .findByIdAndUpdate(
+          id,
+          { ...updateCategoryInput, image: existedCategory.image },
+          { new: true },
+        )
+        .exec();
+      if (!updatedCategory) {
+        throw new NotFoundException('Category not found');
+      }
+      return updatedCategory.toObject();
+    } else {
+      throw new BadRequestException('Bad Request');
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 
 @InputType()
 export class CreateCategoryInput {
@@ -13,4 +14,11 @@ export class CreateCategoryInput {
   @Matches(/^[0-9a-fA-F]{24}$/)
   @IsOptional()
   public parentId: string | null;
+
+  @Field(() => GraphQLUpload, {
+    nullable: true,
+    description: 'Category picture',
+  })
+  @IsOptional()
+  public image: Promise<FileUpload> | null;
 }

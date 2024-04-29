@@ -3,7 +3,9 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { ApolloQueryResult } from '@apollo/client';
-import { CreateCategoryType } from '../../../shared/models/types/create-category.type';
+import { environment } from '../../../../environments/environment';
+import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
+import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,7 @@ export class CategoriesService {
               id
               categoryName
               parentId
+              image
             }
           }
         `,
@@ -29,7 +32,12 @@ export class CategoriesService {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return response.data.catalog;
+            return response.data.catalog.map((category: CategoryInterface) => ({
+              ...category,
+              image: category.image
+                ? `${environment.baseUrl}/${category.image}`
+                : null,
+            }));
           }
         }),
         catchError((error) => throwError(() => error)),
@@ -38,42 +46,93 @@ export class CategoriesService {
 
   public updateCategory(
     id: string,
-    categoryName: string,
+    data: UpdateCategoryInterface,
   ): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation UpdateCategory(
-            $id: String!
-            $updateCategoryInput: UpdateCategoryInput!
-          ) {
-            updateCategory(id: $id, updateCategoryInput: $updateCategoryInput) {
-              id
-              categoryName
-              parentId
+    if (data.image instanceof FormData) {
+      return this.apollo
+        .use('withCredentials')
+        .mutate({
+          mutation: gql`
+            mutation UpdateCategoryWithFile(
+              $id: String!
+              $updateCategoryInput: UpdateCategoryWithImageFileInput!
+            ) {
+              updateCategoryWithFile(
+                id: $id
+                updateCategoryInput: $updateCategoryInput
+              ) {
+                id
+                categoryName
+                parentId
+                image
+              }
             }
-          }
-        `,
-        variables: {
-          id: id,
-          updateCategoryInput: { categoryName },
-        },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return response.data.updateCategory;
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
+          `,
+          variables: {
+            id: id,
+            updateCategoryInput: data,
+          },
+        })
+        .pipe(
+          map((response: MutationResult) => {
+            if (response.errors) {
+              throw response.errors[0];
+            } else {
+              return {
+                ...response.data.updateCategory,
+                image: response.data.updateCategory.image
+                  ? `${environment.baseUrl}/${response.data.updateCategory.image}`
+                  : null,
+              };
+            }
+          }),
+          catchError((error) => throwError(() => error)),
+        );
+    } else {
+      return this.apollo
+        .use('withCredentials')
+        .mutate({
+          mutation: gql`
+            mutation UpdateCategoryWithUrl(
+              $id: String!
+              $updateCategoryInput: UpdateCategoryWithImageUrlInput!
+            ) {
+              updateCategoryWithUrl(
+                id: $id
+                updateCategoryInput: $updateCategoryInput
+              ) {
+                id
+                categoryName
+                parentId
+                image
+              }
+            }
+          `,
+          variables: {
+            id: id,
+            updateCategoryInput: data,
+          },
+        })
+        .pipe(
+          map((response: MutationResult) => {
+            if (response.errors) {
+              throw response.errors[0];
+            } else {
+              return {
+                ...response.data.updateCategory,
+                image: response.data.updateCategory.image
+                  ? `${environment.baseUrl}/${response.data.updateCategory.image}`
+                  : null,
+              };
+            }
+          }),
+          catchError((error) => throwError(() => error)),
+        );
+    }
   }
 
   public createCategory(
-    data: CreateCategoryType,
+    data: CreateCategoryInterface,
   ): Observable<CategoryInterface> {
     return this.apollo
       .use('withCredentials')
@@ -84,6 +143,7 @@ export class CategoriesService {
               id
               categoryName
               parentId
+              image
             }
           }
         `,
@@ -102,7 +162,7 @@ export class CategoriesService {
   }
 
   public addSubCategories(
-    data: CreateCategoryType[],
+    data: CreateCategoryInterface[],
   ): Observable<CategoryInterface[]> {
     return this.apollo
       .use('withCredentials')
@@ -115,6 +175,7 @@ export class CategoriesService {
               id
               categoryName
               parentId
+              image
             }
           }
         `,
@@ -125,7 +186,12 @@ export class CategoriesService {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return response.data.addSubCategories;
+            return {
+              ...response.data.addSubCategories,
+              image: response.data.addSubCategories.image
+                ? `${environment.baseUrl}/${response.data.addSubCategories.image}`
+                : null,
+            };
           }
         }),
         catchError((error) => throwError(() => error)),

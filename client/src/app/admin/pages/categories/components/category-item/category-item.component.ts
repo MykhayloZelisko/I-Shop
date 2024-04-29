@@ -56,12 +56,12 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public editCategory(): void {
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: true },
-      }),
-    );
-    this.store.dispatch(CategoryActions.closeNewCategory());
+    // this.store.dispatch(
+    //   CategoryActions.changeCurrentCategoryStatus({
+    //     categoryStatus: { id: this.category.id, isEditable: true },
+    //   }),
+    // );
+    // this.store.dispatch(CategoryActions.closeNewCategory());
   }
 
   public cancelEditCategory(): void {
@@ -73,13 +73,13 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public saveCategory(): void {
-    const newCategoryName = this.categoryName.nativeElement.innerHTML.trim();
-    this.store.dispatch(
-      CategoryActions.updateCategory({
-        id: this.category.id,
-        categoryName: newCategoryName,
-      }),
-    );
+    // const newCategoryName = this.categoryName.nativeElement.innerHTML.trim();
+    // this.store.dispatch(
+    //   CategoryActions.updateCategory({
+    //     id: this.category.id,
+    //     categoryName: newCategoryName,
+    //   }),
+    // );
   }
 
   public openSubCategoryDialog(): void {

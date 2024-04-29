@@ -7,9 +7,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './schemas/category.schema';
 import { Category as CategoryGQL } from './models/category.model';
-import { UpdateCategoryInput } from './inputs/update-category.input';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { FilesService } from '../files/files.service';
+import { UpdateCategoryWithImageUrlInput } from './inputs/update-category-with-image-url.input';
+import { UpdateCategoryWithImageFileInput } from './inputs/update-category-with-image-file.input';
 
 @Injectable()
 export class CategoriesService {
@@ -104,9 +105,9 @@ export class CategoriesService {
     return categories;
   }
 
-  public async updateCategory(
+  public async updateCategoryWithUrl(
     id: string,
-    updateCategoryInput: UpdateCategoryInput,
+    updateCategoryInput: UpdateCategoryWithImageUrlInput,
   ): Promise<CategoryGQL> {
     const existedCategory = await this.categoryModel.findById(id).exec();
 
@@ -114,57 +115,67 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
 
-    if (updateCategoryInput.image && existedCategory.parentId) {
-      const { createReadStream, filename, mimetype } =
-        await updateCategoryInput.image;
+    const updatedCategory = await this.categoryModel
+      .findByIdAndUpdate(
+        id,
+        {
+          categoryName: updateCategoryInput.categoryName,
+          image: existedCategory.image,
+        },
+        { new: true },
+      )
+      .exec();
 
-      if (!mimetype.includes('image')) {
-        throw new BadRequestException('Only JPEG and PNG images are allowed');
-      }
-
-      const filePath = this.filesService.createFilePath(filename);
-      const fileStream = createReadStream();
-      await this.filesService.createFileStream(
-        filePath,
-        1024 * 1024,
-        fileStream,
-      );
-      if (existedCategory.image) {
-        const oldImagePath = existedCategory.image;
-        await this.filesService.removeImageFile(oldImagePath);
-      }
-      const updatedCategory = await this.categoryModel
-        .findByIdAndUpdate(
-          id,
-          { ...updateCategoryInput, image: filePath },
-          { new: true },
-        )
-        .exec();
-
-      if (!updatedCategory) {
-        throw new NotFoundException('Category not found');
-      }
-
-      return {
-        ...updatedCategory.toObject(),
-        parentId: updatedCategory.parentId
-          ? updatedCategory.parentId.toString()
-          : null,
-      };
-    } else if (!updateCategoryInput.image) {
-      const updatedCategory = await this.categoryModel
-        .findByIdAndUpdate(
-          id,
-          { ...updateCategoryInput, image: existedCategory.image },
-          { new: true },
-        )
-        .exec();
-      if (!updatedCategory) {
-        throw new NotFoundException('Category not found');
-      }
-      return updatedCategory.toObject();
-    } else {
-      throw new BadRequestException('Bad Request');
+    if (!updatedCategory) {
+      throw new NotFoundException('Category not found');
     }
+
+    return updatedCategory.toObject();
+  }
+
+  public async updateCategoryWithFile(
+    id: string,
+    updateCategoryInput: UpdateCategoryWithImageFileInput,
+  ): Promise<CategoryGQL> {
+    const existedCategory = await this.categoryModel.findById(id).exec();
+
+    if (!existedCategory) {
+      throw new NotFoundException('Category not found');
+    }
+
+    if (!existedCategory) {
+      throw new NotFoundException('Category not found');
+    }
+
+    const { createReadStream, filename, mimetype } =
+      await updateCategoryInput.image;
+
+    if (!mimetype.includes('image')) {
+      throw new BadRequestException('Only JPEG and PNG images are allowed');
+    }
+
+    const filePath = this.filesService.createFilePath(filename);
+    const fileStream = createReadStream();
+    await this.filesService.createFileStream(filePath, 1024 * 1024, fileStream);
+    const oldImagePath = existedCategory.image as string;
+    await this.filesService.removeImageFile(oldImagePath);
+    const updatedCategory = await this.categoryModel
+      .findByIdAndUpdate(
+        id,
+        { ...updateCategoryInput, image: filePath },
+        { new: true },
+      )
+      .exec();
+
+    if (!updatedCategory) {
+      throw new NotFoundException('Category not found');
+    }
+
+    return {
+      ...updatedCategory.toObject(),
+      parentId: updatedCategory.parentId
+        ? updatedCategory.parentId.toString()
+        : null,
+    };
   }
 }

@@ -37,6 +37,7 @@ export const reducer = createReducer(
       id: action.category.id,
       changes: {
         categoryName: action.category.categoryName,
+        image: action.category.image,
         expanded: action.category.expanded,
       },
     };

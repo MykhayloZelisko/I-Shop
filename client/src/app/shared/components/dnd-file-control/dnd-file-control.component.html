@@ -1,0 +1,33 @@
+<div class="dnd-file-control">
+  <div
+    class="dnd-file-control__skeleton"
+    [ngClass]="{ 'dnd-file-control__skeleton--empty': !fileUrl }"
+  >
+    @if (fileUrl) {
+      <img
+        class="dnd-file-control__image"
+        [src]="fileUrl"
+        [ngStyle]="getImageStyle()"
+        [alt]="fileUrl"
+        title="Видалити"
+        (load)="onImageLoad($event)"
+        (click)="deleteImage()"
+      />
+    }
+  </div>
+  <div
+    class="dnd-file-control__control"
+    appDnd
+    (click)="fileUpload.click()"
+    (fileDropped)="setInputFile($event)"
+  >
+    <input
+      id="file-input"
+      class="dnd-file-control__input"
+      type="file"
+      #fileUpload
+      accept="image/*"
+    />
+    Перетягніть сюди файл або кікніть тут для вибору файла
+  </div>
+</div>

@@ -1,5 +1,9 @@
 @import 'variables';
 
+.drag-over {
+  background-color: $white;
+}
+
 .sub-category-dialog {
   position: relative;
   top: 20px;
@@ -89,6 +93,7 @@
 
   &__field {
     display: flex;
+    align-items: flex-end;
     gap: 12px;
   }
 
@@ -144,6 +149,10 @@
     &.ng-invalid.ng-touched {
       border-color: $red;
     }
+  }
+
+  &__file {
+    display: none;
   }
 
   &__icon {
@@ -204,6 +213,13 @@
       }
     }
   }
+
+  &__dnd-wrapper {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
 @media screen and (width <= 480px) {
@@ -225,6 +241,10 @@
 
     &__input {
       min-width: auto;
+    }
+
+    &__dnd-wrapper {
+      width: 100%;
     }
   }
 }

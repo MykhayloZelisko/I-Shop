@@ -1,9 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   Input,
   OnInit,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -14,15 +17,20 @@ import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog
 import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
 import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
 import { CategoryInterface } from '../../../../../../../shared/models/interfaces/category.interface';
-import { PaginatorModule } from 'primeng/paginator';
 import {
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgStyle } from '@angular/common';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
+import { DndDirective } from '../../../../../../../shared/directives/dnd.directive';
+import {
+  SubCategoriesFormInterface,
+  SubCategoryFormInterface,
+} from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
+import { DndFileControlComponent } from '../../../../../../../shared/components/dnd-file-control/dnd-file-control.component';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -30,9 +38,11 @@ import { requiredValidator } from '../../../../../../../shared/utils/validators'
   imports: [
     ClickOutsideDirective,
     SvgIconComponent,
-    PaginatorModule,
     ReactiveFormsModule,
     AsyncPipe,
+    NgStyle,
+    DndDirective,
+    DndFileControlComponent,
   ],
   templateUrl: './sub-category-dialog.component.html',
   styleUrl: './sub-category-dialog.component.scss',
@@ -43,7 +53,11 @@ export class SubCategoryDialogComponent implements OnInit {
 
   @Input({ required: true }) public category!: CategoryInterface;
 
-  public subCategoriesForm!: FormGroup;
+  @ViewChildren('fileUpload') public fileUploads!: QueryList<
+    ElementRef<HTMLInputElement>
+  >;
+
+  public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
 
   private store = inject(Store<State>);
 
@@ -53,13 +67,17 @@ export class SubCategoryDialogComponent implements OnInit {
     this.initSubCategoriesForm();
   }
 
-  public getCategories(): FormArray {
-    return this.subCategoriesForm.get('categories') as FormArray;
+  public getCategories(): FormArray<FormGroup<SubCategoryFormInterface>> {
+    return this.subCategoriesForm.get('categories') as FormArray<
+      FormGroup<SubCategoryFormInterface>
+    >;
   }
 
   public newCategory(): FormGroup {
     return this.fb.group({
       subCategoryName: ['', [requiredValidator()]],
+      image: [null, []],
+      parentId: [this.category.id],
     });
   }
 
@@ -68,8 +86,8 @@ export class SubCategoryDialogComponent implements OnInit {
   }
 
   public initSubCategoriesForm(): void {
-    this.subCategoriesForm = this.fb.group({
-      categories: this.fb.array([]),
+    this.subCategoriesForm = this.fb.group<SubCategoriesFormInterface>({
+      categories: this.fb.array<FormGroup<SubCategoryFormInterface>>([]),
     });
     this.addCategory();
   }
@@ -95,13 +113,13 @@ export class SubCategoryDialogComponent implements OnInit {
   }
 
   public addSubCategory(): void {
-    const categories = this.subCategoriesForm
-      .getRawValue()
-      .categories.map((item: { subCategoryName: string }) => ({
-        categoryName: item.subCategoryName,
-        parentId: this.category.id,
-      }));
-    this.store.dispatch(CategoryActions.addCategories({ categories }));
+    // const categories = this.subCategoriesForm
+    //   .getRawValue()
+    //   .categories.map((item: { subCategoryName: string }) => ({
+    //     categoryName: item.subCategoryName,
+    //     parentId: this.category.id,
+    //   }));
+    // this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
   public handleInput(event: KeyboardEvent): void {

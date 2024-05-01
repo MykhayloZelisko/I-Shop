@@ -31,6 +31,7 @@ import {
   SubCategoryFormInterface,
 } from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
 import { DndFileControlComponent } from '../../../../../../../shared/components/dnd-file-control/dnd-file-control.component';
+import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -75,7 +76,7 @@ export class SubCategoryDialogComponent implements OnInit {
 
   public newCategory(): FormGroup {
     return this.fb.group({
-      subCategoryName: ['', [requiredValidator()]],
+      categoryName: ['', [requiredValidator()]],
       image: [null, []],
       parentId: [this.category.id],
     });
@@ -113,13 +114,14 @@ export class SubCategoryDialogComponent implements OnInit {
   }
 
   public addSubCategory(): void {
-    // const categories = this.subCategoriesForm
-    //   .getRawValue()
-    //   .categories.map((item: { subCategoryName: string }) => ({
-    //     categoryName: item.subCategoryName,
-    //     parentId: this.category.id,
-    //   }));
-    // this.store.dispatch(CategoryActions.addCategories({ categories }));
+    const categories: CreateCategoryInterface[] = this.subCategoriesForm
+      .getRawValue()
+      .categories.map((item) => ({
+        categoryName: item.categoryName,
+        parentId: item.parentId,
+        image: item.image[0],
+      }));
+    this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
   public handleInput(event: KeyboardEvent): void {

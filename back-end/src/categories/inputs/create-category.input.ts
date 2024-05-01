@@ -1,13 +1,14 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
 import {
+  IsBase64,
   IsNotEmpty,
   IsOptional,
   IsString,
   Matches,
   ValidateIf,
-  ValidatePromise,
 } from 'class-validator';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { IsImage } from '../../common/validators/is-image.validator';
+import { MaxFileSize } from '../../common/validators/max-file-size.validator';
 
 @InputType()
 export class CreateCategoryInput {
@@ -25,14 +26,19 @@ export class CreateCategoryInput {
   @IsOptional()
   public parentId: string | null;
 
-  @Field(() => GraphQLUpload, {
+  @Field(() => String, {
     nullable: true,
-    description: 'Category picture',
+    description: 'Category picture in base64 string format',
   })
   @IsOptional()
-  @ValidatePromise()
+  @IsBase64(
+    { urlSafe: true },
+    { message: 'Must be an image file in base64 string format' },
+  )
   @ValidateIf((object) => object.parentId !== null && object.image !== null, {
     message: 'ParentId and image must be both present or both absent',
   })
-  public image: Promise<FileUpload> | null;
+  @IsImage()
+  @MaxFileSize(1024 * 1024)
+  public image: string | null;
 }

@@ -164,6 +164,15 @@ export class CategoriesService {
   public addSubCategories(
     data: CreateCategoryInterface[],
   ): Observable<CategoryInterface[]> {
+    const formDataArray: FormData[] = data.map(
+      (dataItem: CreateCategoryInterface) => {
+        const formData = new FormData();
+        formData.append('categoryName', dataItem.categoryName);
+        formData.append('parentId', dataItem.parentId as string);
+        formData.append('image', dataItem.image as File, dataItem.image?.name);
+        return formData;
+      },
+    );
     return this.apollo
       .use('withCredentials')
       .mutate({
@@ -179,7 +188,13 @@ export class CategoriesService {
             }
           }
         `,
-        variables: { createCategoryInputs: data },
+        variables: { createCategoryInputs: formDataArray },
+        context: {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          useMultipart: true,
+        },
       })
       .pipe(
         map((response: MutationResult) => {

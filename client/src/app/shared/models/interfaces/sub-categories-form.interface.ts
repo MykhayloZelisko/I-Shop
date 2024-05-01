@@ -6,6 +6,6 @@ export interface SubCategoriesFormInterface {
 
 export interface SubCategoryFormInterface {
   categoryName: FormControl<string>;
-  image: FormControl<File>;
+  image: FormControl<File[]>;
   parentId: FormControl<string | null>;
 }

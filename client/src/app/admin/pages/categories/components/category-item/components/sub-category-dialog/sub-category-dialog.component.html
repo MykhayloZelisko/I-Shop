@@ -23,11 +23,12 @@
             <div [formGroupName]="index" class="sub-category-dialog__field">
               <div class="sub-category-dialog__dnd-wrapper">
                 <app-dnd-file-control
+                  [form]="control"
                   formControlName="image"
                 ></app-dnd-file-control>
                 <input
                   class="sub-category-dialog__input"
-                  formControlName="subCategoryName"
+                  formControlName="categoryName"
                   type="text"
                   (keydown)="handleInput($event)"
                 />
@@ -49,6 +50,7 @@
       <button
         class="sub-category-dialog__button sub-category-dialog__button--add"
         (click)="addCategory()"
+        [disabled]="getCategories().length === 10"
       >
         Додати
       </button>

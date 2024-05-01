@@ -17,9 +17,8 @@
     padding: 10px;
     display: flex;
     text-align: center;
+    justify-content: center;
     align-items: center;
-    font-family: $source;
-    font-size: 14px;
   }
 
   &__skeleton {
@@ -40,5 +39,15 @@
 
   &__image {
     cursor: pointer;
+  }
+
+  &__text {
+    font-family: $source;
+    font-size: 14px;
+    color: $brown-1;
+
+    &--error {
+      color: $red;
+    }
   }
 }

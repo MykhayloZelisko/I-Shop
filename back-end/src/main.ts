@@ -5,7 +5,6 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { TransformIdInterceptor } from './common/interceptors/transform-id/transform-id.interceptor';
 import * as passport from 'passport';
-import { graphqlUploadExpress } from 'graphql-upload-ts';
 
 async function bootstrap(): Promise<void> {
   const PORT = Number(process.env.PORT) ?? 3000;
@@ -30,7 +29,6 @@ async function bootstrap(): Promise<void> {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(graphqlUploadExpress({ maxFileSize: 1024 * 1024, maxFiles: 10 }));
 
   app.useGlobalInterceptors(new TransformIdInterceptor());
 

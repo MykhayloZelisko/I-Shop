@@ -4,10 +4,12 @@ import {
   Component,
   HostListener,
   inject,
+  Input,
 } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
+  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -16,6 +18,8 @@ import {
 import { DndDirective } from '../../directives/dnd.directive';
 import { NgClass, NgStyle } from '@angular/common';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { SubCategoryFormInterface } from '../../models/interfaces/sub-categories-form.interface';
+import { showErrorMessage } from '../../utils/validators';
 
 @Component({
   selector: 'app-dnd-file-control',
@@ -40,6 +44,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
 export class DndFileControlComponent
   implements ControlValueAccessor, Validator
 {
+  @Input({ required: true }) public form!: FormGroup<SubCategoryFormInterface>;
+
   @HostListener('change', ['$event.target.files'])
   private emitFiles(event: FileList): void {
     const files: File[] | null = event ? [] : null;
@@ -55,6 +61,8 @@ export class DndFileControlComponent
   }
 
   public fileUrl = '';
+
+  public fileName = '';
 
   public imageWidth = 0;
 
@@ -99,7 +107,7 @@ export class DndFileControlComponent
         return { file: 'Дані не є файлом або файл пошкодженний' };
       } else if (files[0].size > 1024 * 1024) {
         return {
-          fileSize: `Розмір файлу не повинен перевищувати ${1024 * 1024}`,
+          fileSize: `Розмір файлу не повинен перевищувати 1кБ`,
         };
       } else if (!files[0].type.startsWith('image')) {
         return { fileType: `Завантажувати можна лише зображення` };
@@ -118,6 +126,7 @@ export class DndFileControlComponent
       files[0] instanceof File &&
       files[0].type.startsWith('image')
     ) {
+      this.fileName = files[0].name;
       const reader = new FileReader();
       reader.onload = (): void => {
         this.fileUrl = reader.result as string;
@@ -142,5 +151,9 @@ export class DndFileControlComponent
   public deleteImage(): void {
     this.fileUrl = '';
     this.onChange(null);
+  }
+
+  public showMessage(control: AbstractControl): string {
+    return showErrorMessage(control);
   }
 }

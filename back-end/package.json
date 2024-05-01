@@ -38,13 +38,11 @@
     "cross-env": "^7.0.3",
     "express-session": "^1.18.0",
     "graphql": "^16.8.1",
-    "graphql-upload-ts": "^2.1.2",
     "mongoose": "^8.1.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "stream": "^0.0.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

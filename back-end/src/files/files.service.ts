@@ -1,26 +1,39 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
-import path from 'path';
-import fs from 'fs';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import * as path from 'path';
+import * as fs from 'fs';
 import { v4 as uuidV4 } from 'uuid';
-import { ReadStream } from 'graphql-upload-ts';
-import { pipeline } from 'stream';
-import { promisify } from 'util';
-
-const pipeLine = promisify(pipeline);
 
 @Injectable()
 export class FilesService {
-  public createFilePath(fileName: string): string {
-    const newFileName = uuidV4() + path.extname(fileName);
-    return path.resolve(__dirname, '..', 'static', newFileName);
+  public createFileName(base64String: string): string {
+    const prefix = 'data:image/';
+    const startIndex = base64String.indexOf(prefix);
+    const endIndex = base64String.indexOf(';base64,');
+    const extension = base64String.substring(
+      startIndex + prefix.length,
+      endIndex,
+    );
+    return uuidV4() + '.' + extension;
   }
 
-  public async removeImageFile(filePath: string): Promise<void> {
+  public async createImageFile(base64String: string): Promise<string> {
+    try {
+      const fileName = this.createFileName(base64String);
+      const filePath = path.resolve(__dirname, '..', '..', 'static');
+      const base64Data = base64String.split(';base64,').pop() as string;
+      const decodedData = Buffer.from(base64Data, 'base64');
+      if (!fs.existsSync(filePath)) {
+        await fs.promises.mkdir(filePath, { recursive: true });
+      }
+      await fs.promises.writeFile(path.join(filePath, fileName), decodedData);
+      return fileName;
+    } catch (e) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+  }
+
+  public async removeImageFile(fileName: string): Promise<void> {
+    const filePath = path.resolve(__dirname, '..', '..', 'static', fileName);
     fs.unlink(filePath, (err) => {
       if (err) {
         throw new InternalServerErrorException('File is not removed');
@@ -28,44 +41,5 @@ export class FilesService {
         return;
       }
     });
-  }
-
-  public async createFileStream(
-    filePath: string,
-    fileSize: number,
-    stream: ReadStream,
-  ): Promise<void> {
-    const writeStream = fs.createWriteStream(filePath);
-    let size = 0;
-
-    const onData = (chunk: Buffer): void => {
-      size += chunk.length;
-      if (size > fileSize) {
-        stream.destroy();
-        fs.unlinkSync(filePath);
-        throw new BadRequestException('File size exceeds the limit of 1MB');
-      }
-    };
-
-    const onReadError = (): void => {
-      new BadRequestException('File size exceeds the limit of 1MB');
-    };
-
-    const onWriteError = (): void => {
-      new InternalServerErrorException('Could not save image');
-    };
-
-    stream.on('data', onData);
-    stream.on('error', onReadError);
-    writeStream.on('error', onWriteError);
-
-    try {
-      await pipeLine(stream, writeStream);
-    } catch (error) {
-      if (error.statusCode === HttpStatus.BAD_REQUEST) {
-        throw new BadRequestException('File size exceeds the limit of 1MB');
-      }
-      throw new InternalServerErrorException('Could not save image');
-    }
   }
 }

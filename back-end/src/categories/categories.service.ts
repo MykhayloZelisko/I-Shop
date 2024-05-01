@@ -64,23 +64,12 @@ export class CategoriesService {
     createCategoryInput: CreateCategoryInput,
   ): Promise<CategoryGQL> {
     if (createCategoryInput.image && createCategoryInput.parentId) {
-      const { createReadStream, filename, mimetype } =
-        await createCategoryInput.image;
-
-      if (!mimetype.includes('image')) {
-        throw new BadRequestException('Only JPEG and PNG images are allowed');
-      }
-
-      const filePath = this.filesService.createFilePath(filename);
-      const fileStream = createReadStream();
-      await this.filesService.createFileStream(
-        filePath,
-        1024 * 1024,
-        fileStream,
+      const fileName = await this.filesService.createImageFile(
+        createCategoryInput.image,
       );
       const category = await this.categoryModel.create({
         ...createCategoryInput,
-        image: filePath,
+        image: fileName,
       });
       return {
         ...category.toObject(),
@@ -143,26 +132,15 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
 
-    if (!existedCategory) {
-      throw new NotFoundException('Category not found');
-    }
-
-    const { createReadStream, filename, mimetype } =
-      await updateCategoryInput.image;
-
-    if (!mimetype.includes('image')) {
-      throw new BadRequestException('Only JPEG and PNG images are allowed');
-    }
-
-    const filePath = this.filesService.createFilePath(filename);
-    const fileStream = createReadStream();
-    await this.filesService.createFileStream(filePath, 1024 * 1024, fileStream);
-    const oldImagePath = existedCategory.image as string;
-    await this.filesService.removeImageFile(oldImagePath);
+    const fileName = await this.filesService.createImageFile(
+      updateCategoryInput.image,
+    );
+    const oldImageName = existedCategory.image as string;
+    await this.filesService.removeImageFile(oldImageName);
     const updatedCategory = await this.categoryModel
       .findByIdAndUpdate(
         id,
-        { ...updateCategoryInput, image: filePath },
+        { ...updateCategoryInput, image: fileName },
         { new: true },
       )
       .exec();

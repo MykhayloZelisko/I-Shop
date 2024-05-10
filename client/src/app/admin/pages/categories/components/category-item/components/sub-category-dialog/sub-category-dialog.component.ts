@@ -13,7 +13,6 @@ import { State } from '../../../../../../../+store/reducers';
 import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
 import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
 import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
-import { CategoryInterface } from '../../../../../../../shared/models/interfaces/category.interface';
 import {
   FormArray,
   FormBuilder,
@@ -27,9 +26,7 @@ import {
 } from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
 import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
-import {
-  CategoryFormDataInterface
-} from '../../../../../../../shared/models/interfaces/category-form-data.interface';
+import { CategoryFormDataInterface } from '../../../../../../../shared/models/interfaces/category-form-data.interface';
 
 @Component({
   selector: 'app-sub-category-dialog',

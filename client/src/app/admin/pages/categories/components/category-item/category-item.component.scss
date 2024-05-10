@@ -46,10 +46,15 @@
 
     &:disabled {
       cursor: default;
-      & .category-item__icon--save {
-        & svg {
-          & path {
-            fill: $gray-5;
+
+      & .category-item {
+        &__icon {
+          &--save {
+            & svg {
+              & path {
+                fill: $gray-5;
+              }
+            }
           }
         }
       }

@@ -1,43 +1,25 @@
-<div class="dnd-file-control">
-  <div
-    class="dnd-file-control__skeleton"
-    [ngClass]="{ 'dnd-file-control__skeleton--empty': !fileUrl }"
-  >
-    @if (fileUrl) {
-      <img
-        class="dnd-file-control__image"
-        [src]="fileUrl"
-        [ngStyle]="getImageStyle()"
-        [alt]="fileUrl"
-        title="Видалити"
-        (load)="onImageLoad($event)"
-        (click)="deleteImage()"
-      />
-    }
-  </div>
-  <div
-    class="dnd-file-control__control"
-    appDnd
-    (click)="fileUpload.click()"
-    (fileDropped)="setInputFile($event)"
-  >
-    <input
-      id="file-input"
-      class="dnd-file-control__input"
-      type="file"
-      #fileUpload
-      accept="image/*"
-    />
-    @if (form.controls.image.errors && form.controls.image.dirty) {
-      <span class="dnd-file-control__text dnd-file-control__text--error">{{
-        showMessage(form.controls.image)
-      }}</span>
-    } @else if (fileName) {
-      <span class="dnd-file-control__text">{{ fileName }}</span>
-    } @else {
-      <span class="dnd-file-control__text"
-        >Перетягніть сюди файл або клікніть тут для вибору файла</span
-      >
-    }
-  </div>
+<div
+  class="dnd-file-control"
+  appDnd
+  (click)="fileUpload.click()"
+  (fileDropped)="setInputFile($event)"
+>
+  <input
+    id="file-input"
+    class="dnd-file-control__input"
+    type="file"
+    #fileUpload
+    accept="image/*"
+  />
+  @if (form.controls.image.errors && form.controls.image.dirty) {
+    <span class="dnd-file-control__text dnd-file-control__text--error">{{
+      showMessage(form.controls.image)
+    }}</span>
+  } @else if (fileName) {
+    <span class="dnd-file-control__text">{{ fileName }}</span>
+  } @else {
+    <span class="dnd-file-control__text"
+      >Перетягніть сюди файл або клікніть тут для вибору файла</span
+    >
+  }
 </div>

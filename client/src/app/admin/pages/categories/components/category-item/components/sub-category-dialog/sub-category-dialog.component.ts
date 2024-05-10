@@ -1,12 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   inject,
   Input,
   OnInit,
-  QueryList,
-  ViewChildren,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -23,15 +20,16 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AsyncPipe, NgStyle } from '@angular/common';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
-import { DndDirective } from '../../../../../../../shared/directives/dnd.directive';
 import {
   SubCategoriesFormInterface,
   SubCategoryFormInterface,
 } from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
-import { DndFileControlComponent } from '../../../../../../../shared/components/dnd-file-control/dnd-file-control.component';
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
+import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
+import {
+  CategoryFormDataInterface
+} from '../../../../../../../shared/models/interfaces/category-form-data.interface';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -40,10 +38,7 @@ import { CreateCategoryInterface } from '../../../../../../../shared/models/inte
     ClickOutsideDirective,
     SvgIconComponent,
     ReactiveFormsModule,
-    AsyncPipe,
-    NgStyle,
-    DndDirective,
-    DndFileControlComponent,
+    EditCategoryItemComponent,
   ],
   templateUrl: './sub-category-dialog.component.html',
   styleUrl: './sub-category-dialog.component.scss',
@@ -52,13 +47,11 @@ import { CreateCategoryInterface } from '../../../../../../../shared/models/inte
 export class SubCategoryDialogComponent implements OnInit {
   @Input({ required: true }) public dialog!: DialogDataInterface;
 
-  @Input({ required: true }) public category!: CategoryInterface;
-
-  @ViewChildren('fileUpload') public fileUploads!: QueryList<
-    ElementRef<HTMLInputElement>
-  >;
+  @Input({ required: true }) public parentId!: string;
 
   public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
+
+  public categoryData!: CategoryFormDataInterface;
 
   private store = inject(Store<State>);
 
@@ -66,6 +59,12 @@ export class SubCategoryDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initSubCategoriesForm();
+    this.categoryData = {
+      base64image: null,
+      categoryName: '',
+      image: [],
+      parentId: this.parentId,
+    };
   }
 
   public getCategories(): FormArray<FormGroup<SubCategoryFormInterface>> {
@@ -74,11 +73,12 @@ export class SubCategoryDialogComponent implements OnInit {
     >;
   }
 
-  public newCategory(): FormGroup {
-    return this.fb.group({
-      categoryName: ['', [requiredValidator()]],
-      image: [null, []],
-      parentId: [this.category.id],
+  public newCategory(): FormGroup<SubCategoryFormInterface> {
+    return this.fb.group<SubCategoryFormInterface>({
+      categoryName: this.fb.nonNullable.control('', [requiredValidator()]),
+      image: this.fb.nonNullable.control<File[]>([]),
+      parentId: this.fb.control(this.parentId, [requiredValidator()]),
+      base64image: this.fb.control(null, [requiredValidator()]),
     });
   }
 
@@ -119,12 +119,12 @@ export class SubCategoryDialogComponent implements OnInit {
       .categories.map((item) => ({
         categoryName: item.categoryName,
         parentId: item.parentId,
-        image: item.image[0],
+        image: item.base64image,
       }));
     this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
+  public setFormValue(index: number, value: CategoryFormDataInterface): void {
+    this.getCategories().at(index).setValue(value);
   }
 }

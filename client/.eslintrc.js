@@ -75,7 +75,7 @@ module.exports = {
         quotes: ['warn', 'single', { 'allowTemplateLiterals': true }],
         curly: 'warn',
         eqeqeq: ['warn', 'smart'],
-        'no-magic-numbers': ['warn', { 'ignore': [-1, 0, 1, 3, 8, 32, 1024]}],
+        'no-magic-numbers': ['warn', { 'ignore': [-1, 0, 1, 3, 8, 32, 1024, 100]}],
       }
     },
     {

@@ -1,10 +1,10 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  EventEmitter,
   HostListener,
-  inject,
   Input,
+  Output,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -16,15 +16,14 @@ import {
   Validator,
 } from '@angular/forms';
 import { DndDirective } from '../../directives/dnd.directive';
-import { NgClass, NgStyle } from '@angular/common';
-import { SvgIconComponent } from 'angular-svg-icon';
 import { SubCategoryFormInterface } from '../../models/interfaces/sub-categories-form.interface';
 import { showErrorMessage } from '../../utils/validators';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-dnd-file-control',
   standalone: true,
-  imports: [DndDirective, NgStyle, NgClass, SvgIconComponent],
+  imports: [DndDirective, JsonPipe],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -46,6 +45,14 @@ export class DndFileControlComponent
 {
   @Input({ required: true }) public form!: FormGroup<SubCategoryFormInterface>;
 
+  @Input({ required: true }) public imageUrl: string | null = null;
+
+  @Input({ required: true }) public parentId: string | null = null;
+
+  @Output() public changeImage: EventEmitter<string | null> = new EventEmitter<
+    string | null
+  >();
+
   @HostListener('change', ['$event.target.files'])
   private emitFiles(event: FileList): void {
     const files: File[] | null = event ? [] : null;
@@ -60,15 +67,7 @@ export class DndFileControlComponent
     }
   }
 
-  public fileUrl = '';
-
   public fileName = '';
-
-  public imageWidth = 0;
-
-  public imageHeight = 0;
-
-  private cdr = inject(ChangeDetectorRef);
 
   public onChange = (_: File[] | null): void => {};
 
@@ -96,9 +95,23 @@ export class DndFileControlComponent
     this.onChange(filesArray);
   }
 
-  public validate(control: AbstractControl): ValidationErrors | null {
+  public validate(
+    control: AbstractControl<File[], File[]>,
+  ): ValidationErrors | null {
     const files = control.value;
-    if (files) {
+    if (this.imageUrl) {
+      if (files.length > 1) {
+        return { oneFile: 'Завантажувати можна лише один файл' };
+      } else if (files[0] && !(files[0] instanceof File)) {
+        return { file: 'Дані не є файлом або файл пошкодженний' };
+      } else if (files[0] && files[0].size > 1024 * 1024) {
+        return {
+          fileSize: `Розмір файлу не повинен перевищувати 1МБ`,
+        };
+      } else if (files[0] && !files[0].type.startsWith('image')) {
+        return { fileType: `Завантажувати можна лише зображення` };
+      }
+    } else if (this.parentId) {
       if (!files.length) {
         return { required: `Зображення є обов'язковим` };
       } else if (files.length > 1) {
@@ -107,19 +120,17 @@ export class DndFileControlComponent
         return { file: 'Дані не є файлом або файл пошкодженний' };
       } else if (files[0].size > 1024 * 1024) {
         return {
-          fileSize: `Розмір файлу не повинен перевищувати 1кБ`,
+          fileSize: `Розмір файлу не повинен перевищувати 1МБ`,
         };
       } else if (!files[0].type.startsWith('image')) {
         return { fileType: `Завантажувати можна лише зображення` };
       }
-    } else {
-      return { required: `Зображення є обов'язковим` };
     }
     return null;
   }
 
   public setImageUrl(files: File[]): void {
-    this.fileUrl = '';
+    let fileUrl: string | null = null;
     if (
       files &&
       files.length === 1 &&
@@ -129,28 +140,19 @@ export class DndFileControlComponent
       this.fileName = files[0].name;
       const reader = new FileReader();
       reader.onload = (): void => {
-        this.fileUrl = reader.result as string;
-        this.cdr.detectChanges();
+        fileUrl = reader.result as string;
+        this.changeImage.emit(fileUrl);
       };
       reader.readAsDataURL(files[0]);
+    } else {
+      this.changeImage.emit(fileUrl);
     }
   }
 
-  public onImageLoad(event: Event): void {
-    const imgElement = event.target as HTMLImageElement;
-    this.imageWidth = imgElement.width;
-    this.imageHeight = imgElement.height;
-  }
-
-  public getImageStyle(): Record<string, string> {
-    return this.imageHeight > this.imageWidth
-      ? { height: '100%' }
-      : { width: '100%' };
-  }
-
   public deleteImage(): void {
-    this.fileUrl = '';
-    this.onChange(null);
+    this.onChange([]);
+    this.changeImage.emit(null);
+    this.fileName = '';
   }
 
   public showMessage(control: AbstractControl): string {

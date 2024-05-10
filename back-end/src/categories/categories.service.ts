@@ -9,8 +9,7 @@ import { Category, CategoryDocument } from './schemas/category.schema';
 import { Category as CategoryGQL } from './models/category.model';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { FilesService } from '../files/files.service';
-import { UpdateCategoryWithImageUrlInput } from './inputs/update-category-with-image-url.input';
-import { UpdateCategoryWithImageFileInput } from './inputs/update-category-with-image-file.input';
+import { UpdateCategoryInput } from './inputs/update-category.input';
 
 @Injectable()
 export class CategoriesService {
@@ -94,9 +93,9 @@ export class CategoriesService {
     return categories;
   }
 
-  public async updateCategoryWithUrl(
+  public async updateCategory(
     id: string,
-    updateCategoryInput: UpdateCategoryWithImageUrlInput,
+    updateCategoryInput: UpdateCategoryInput,
   ): Promise<CategoryGQL> {
     const existedCategory = await this.categoryModel.findById(id).exec();
 
@@ -104,56 +103,52 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
 
-    const updatedCategory = await this.categoryModel
-      .findByIdAndUpdate(
-        id,
-        {
-          categoryName: updateCategoryInput.categoryName,
-          image: existedCategory.image,
-        },
-        { new: true },
-      )
-      .exec();
+    if (updateCategoryInput.image) {
+      const fileName = await this.filesService.createImageFile(
+        updateCategoryInput.image,
+      );
+      const oldImageName = existedCategory.image as string;
+      await this.filesService.removeImageFile(oldImageName);
+      const updatedCategory = await this.categoryModel
+        .findByIdAndUpdate(
+          id,
+          { ...updateCategoryInput, image: fileName },
+          { new: true },
+        )
+        .exec();
 
-    if (!updatedCategory) {
-      throw new NotFoundException('Category not found');
+      if (!updatedCategory) {
+        throw new NotFoundException('Category not found');
+      }
+
+      return {
+        ...updatedCategory.toObject(),
+        parentId: updatedCategory.parentId
+          ? updatedCategory.parentId.toString()
+          : null,
+      };
+    } else {
+      const updatedCategory = await this.categoryModel
+        .findByIdAndUpdate(
+          id,
+          {
+            categoryName: updateCategoryInput.categoryName,
+            image: existedCategory.image,
+          },
+          { new: true },
+        )
+        .exec();
+
+      if (!updatedCategory) {
+        throw new NotFoundException('Category not found');
+      }
+
+      return {
+        ...updatedCategory.toObject(),
+        parentId: updatedCategory.parentId
+          ? updatedCategory.parentId.toString()
+          : null,
+      };
     }
-
-    return updatedCategory.toObject();
-  }
-
-  public async updateCategoryWithFile(
-    id: string,
-    updateCategoryInput: UpdateCategoryWithImageFileInput,
-  ): Promise<CategoryGQL> {
-    const existedCategory = await this.categoryModel.findById(id).exec();
-
-    if (!existedCategory) {
-      throw new NotFoundException('Category not found');
-    }
-
-    const fileName = await this.filesService.createImageFile(
-      updateCategoryInput.image,
-    );
-    const oldImageName = existedCategory.image as string;
-    await this.filesService.removeImageFile(oldImageName);
-    const updatedCategory = await this.categoryModel
-      .findByIdAndUpdate(
-        id,
-        { ...updateCategoryInput, image: fileName },
-        { new: true },
-      )
-      .exec();
-
-    if (!updatedCategory) {
-      throw new NotFoundException('Category not found');
-    }
-
-    return {
-      ...updatedCategory.toObject(),
-      parentId: updatedCategory.parentId
-        ? updatedCategory.parentId.toString()
-        : null,
-    };
   }
 }

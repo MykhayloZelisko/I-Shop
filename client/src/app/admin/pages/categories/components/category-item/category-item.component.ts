@@ -1,14 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   inject,
   Input,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass, NgStyle } from '@angular/common';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { State } from '../../../../../+store/reducers';
 import { Store } from '@ngrx/store';
@@ -21,11 +19,21 @@ import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.e
 import { SubCategoryDialogComponent } from './components/sub-category-dialog/sub-category-dialog.component';
 import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
 import { CurrentCategoryStatusInterface } from '../../../../../shared/models/interfaces/current-category-status.interface';
+import { EditCategoryItemComponent } from '../../../../../shared/components/edit-category-item/edit-category-item.component';
+import { CategoryFormDataInterface } from '../../../../../shared/models/interfaces/category-form-data.interface';
+import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
 
 @Component({
   selector: 'app-category-item',
   standalone: true,
-  imports: [SvgIconComponent, AsyncPipe, SubCategoryDialogComponent],
+  imports: [
+    SvgIconComponent,
+    AsyncPipe,
+    SubCategoryDialogComponent,
+    EditCategoryItemComponent,
+    NgClass,
+    NgStyle,
+  ],
   templateUrl: './category-item.component.html',
   styleUrl: './category-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,14 +41,20 @@ import { CurrentCategoryStatusInterface } from '../../../../../shared/models/int
 export class CategoryItemComponent implements OnInit {
   @Input({ required: true }) public category!: CategoryInterface;
 
-  @ViewChild('categoryName')
-  public categoryName!: ElementRef;
-
   public readonly dialogEnum = DialogTypeEnum;
 
   public currentCategory$!: Observable<CurrentCategoryStatusInterface>;
 
   public dialog$!: Observable<DialogDataInterface>;
+
+  public newCategoryData!: CategoryFormDataInterface;
+
+  public categoryData!: CategoryFormDataInterface;
+
+  public imageConfig: ImageConfigInterface = {
+    width: 0,
+    height: 0,
+  };
 
   private store = inject(Store<State>);
 
@@ -56,12 +70,18 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public editCategory(): void {
-    // this.store.dispatch(
-    //   CategoryActions.changeCurrentCategoryStatus({
-    //     categoryStatus: { id: this.category.id, isEditable: true },
-    //   }),
-    // );
-    // this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(
+      CategoryActions.changeCurrentCategoryStatus({
+        categoryStatus: { id: this.category.id, isEditable: true },
+      }),
+    );
+    this.store.dispatch(CategoryActions.closeNewCategory());
+    this.categoryData = {
+      parentId: this.category.parentId,
+      categoryName: this.category.categoryName,
+      image: [],
+      base64image: this.category.image,
+    };
   }
 
   public cancelEditCategory(): void {
@@ -73,13 +93,15 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public saveCategory(): void {
-    // const newCategoryName = this.categoryName.nativeElement.innerHTML.trim();
-    // this.store.dispatch(
-    //   CategoryActions.updateCategory({
-    //     id: this.category.id,
-    //     categoryName: newCategoryName,
-    //   }),
-    // );
+    this.store.dispatch(
+      CategoryActions.updateCategory({
+        id: this.category.id,
+        category: {
+          categoryName: this.newCategoryData.categoryName,
+          image: this.newCategoryData.base64image,
+        },
+      }),
+    );
   }
 
   public openSubCategoryDialog(): void {
@@ -99,7 +121,25 @@ export class CategoryItemComponent implements OnInit {
     this.store.dispatch(CategoryActions.closeNewCategory());
   }
 
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
+  public getImageStyle(): Record<string, string> {
+    return this.imageConfig.height > this.imageConfig.width
+      ? {
+          height: '100px',
+          width: `${(this.imageConfig.width / this.imageConfig.height) * 100}px`,
+        }
+      : {
+          width: '100px',
+          height: `${(this.imageConfig.height / this.imageConfig.width) * 100}px`,
+        };
+  }
+
+  public onImageLoad(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    this.imageConfig.width = imgElement.width;
+    this.imageConfig.height = imgElement.height;
+  }
+
+  public changeCategoryData(categoryData: CategoryFormDataInterface): void {
+    this.newCategoryData = categoryData;
   }
 }

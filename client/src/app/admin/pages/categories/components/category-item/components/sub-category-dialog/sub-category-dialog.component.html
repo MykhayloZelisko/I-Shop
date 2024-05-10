@@ -20,22 +20,15 @@
             let index = $index;
             track control
           ) {
-            <div [formGroupName]="index" class="sub-category-dialog__field">
-              <div class="sub-category-dialog__dnd-wrapper">
-                <app-dnd-file-control
-                  [form]="control"
-                  formControlName="image"
-                ></app-dnd-file-control>
-                <input
-                  class="sub-category-dialog__input"
-                  formControlName="categoryName"
-                  type="text"
-                  (keydown)="handleInput($event)"
-                />
-              </div>
+            <div class="sub-category-dialog__field">
+              <app-edit-category-item
+                [category]="categoryData"
+                [formGroupName]="index"
+                (changeFormValue)='setFormValue(index, $event)'
+              ></app-edit-category-item>
               <button
                 class="sub-category-dialog__icon-button sub-category-dialog__icon-button--delete"
-                [disabled]="!index"
+                [disabled]="getCategories().controls.length === 1"
                 (click)="deleteCategory(index)"
               >
                 <svg-icon

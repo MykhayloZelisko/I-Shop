@@ -48,87 +48,42 @@ export class CategoriesService {
     id: string,
     data: UpdateCategoryInterface,
   ): Observable<CategoryInterface> {
-    if (data.image instanceof FormData) {
-      return this.apollo
-        .use('withCredentials')
-        .mutate({
-          mutation: gql`
-            mutation UpdateCategoryWithFile(
-              $id: String!
-              $updateCategoryInput: UpdateCategoryWithImageFileInput!
-            ) {
-              updateCategoryWithFile(
-                id: $id
-                updateCategoryInput: $updateCategoryInput
-              ) {
-                id
-                categoryName
-                parentId
-                image
-              }
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation UpdateCategory(
+            $id: String!
+            $updateCategoryInput: UpdateCategoryInput!
+          ) {
+            updateCategory(id: $id, updateCategoryInput: $updateCategoryInput) {
+              id
+              categoryName
+              parentId
+              image
             }
-          `,
-          variables: {
-            id: id,
-            updateCategoryInput: data,
-          },
-        })
-        .pipe(
-          map((response: MutationResult) => {
-            if (response.errors) {
-              throw response.errors[0];
-            } else {
-              return {
-                ...response.data.updateCategory,
-                image: response.data.updateCategory.image
-                  ? `${environment.baseUrl}/${response.data.updateCategory.image}`
-                  : null,
-              };
-            }
-          }),
-          catchError((error) => throwError(() => error)),
-        );
-    } else {
-      return this.apollo
-        .use('withCredentials')
-        .mutate({
-          mutation: gql`
-            mutation UpdateCategoryWithUrl(
-              $id: String!
-              $updateCategoryInput: UpdateCategoryWithImageUrlInput!
-            ) {
-              updateCategoryWithUrl(
-                id: $id
-                updateCategoryInput: $updateCategoryInput
-              ) {
-                id
-                categoryName
-                parentId
-                image
-              }
-            }
-          `,
-          variables: {
-            id: id,
-            updateCategoryInput: data,
-          },
-        })
-        .pipe(
-          map((response: MutationResult) => {
-            if (response.errors) {
-              throw response.errors[0];
-            } else {
-              return {
-                ...response.data.updateCategory,
-                image: response.data.updateCategory.image
-                  ? `${environment.baseUrl}/${response.data.updateCategory.image}`
-                  : null,
-              };
-            }
-          }),
-          catchError((error) => throwError(() => error)),
-        );
-    }
+          }
+        `,
+        variables: {
+          id: id,
+          updateCategoryInput: data,
+        },
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return {
+              ...response.data.updateCategory,
+              image: response.data.updateCategory.image
+                ? `${environment.baseUrl}/${response.data.updateCategory.image}`
+                : null,
+            };
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
   }
 
   public createCategory(
@@ -164,15 +119,6 @@ export class CategoriesService {
   public addSubCategories(
     data: CreateCategoryInterface[],
   ): Observable<CategoryInterface[]> {
-    const formDataArray: FormData[] = data.map(
-      (dataItem: CreateCategoryInterface) => {
-        const formData = new FormData();
-        formData.append('categoryName', dataItem.categoryName);
-        formData.append('parentId', dataItem.parentId as string);
-        formData.append('image', dataItem.image as File, dataItem.image?.name);
-        return formData;
-      },
-    );
     return this.apollo
       .use('withCredentials')
       .mutate({
@@ -188,25 +134,21 @@ export class CategoriesService {
             }
           }
         `,
-        variables: { createCategoryInputs: formDataArray },
-        context: {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          useMultipart: true,
-        },
+        variables: { createCategoryInputs: data },
       })
       .pipe(
         map((response: MutationResult) => {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return {
-              ...response.data.addSubCategories,
-              image: response.data.addSubCategories.image
-                ? `${environment.baseUrl}/${response.data.addSubCategories.image}`
-                : null,
-            };
+            return response.data.addSubCategories.map(
+              (category: CategoryInterface) => ({
+                ...category,
+                image: category.image
+                  ? `${environment.baseUrl}/${category.image}`
+                  : null,
+              }),
+            );
           }
         }),
         catchError((error) => throwError(() => error)),

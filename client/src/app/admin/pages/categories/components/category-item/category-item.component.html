@@ -1,15 +1,22 @@
 @if (currentCategory$ | async; as currentCategory) {
   @if (currentCategory.id === category.id && currentCategory.isEditable) {
-    <div class="category-item category-item--editable">
-      <p
-        #categoryName
-        class="category-item__name category-item__name--editable"
-        [contentEditable]="true"
-        (keydown)="handleInput($event)"
+    <div
+      class="category-item"
+      [ngClass]="{
+        'category-item--first': !category.parentId,
+        'category-item--not-first': category.parentId
+      }"
+    >
+      <app-edit-category-item
+        [category]="categoryData"
+        (changeFormValue)="changeCategoryData($event)"
+      ></app-edit-category-item>
+      <div
+        class="category-item__buttons--editable"
+        [ngClass]="{
+          'category-item__buttons--not-first': category.parentId
+        }"
       >
-        {{ category.categoryName }}
-      </p>
-      <div class="category-item__buttons--editable">
         <button class="category-item__button" (click)="saveCategory()">
           <svg-icon
             class="category-item__icon category-item__icon--save"
@@ -25,11 +32,34 @@
       </div>
     </div>
   } @else {
-    <div class="category-item">
-      <p class="category-item__name">
-        {{ category.categoryName }}
-      </p>
-      <div class="category-item__buttons">
+    <div
+      class="category-item"
+      [ngClass]="{
+        'category-item--first': !category.parentId,
+        'category-item--not-first': category.parentId
+      }"
+    >
+      <div class="category-item__content">
+        @if (category.image) {
+          <img
+            class="category-item__image"
+            [src]="category.image"
+            alt="image"
+            [ngStyle]="getImageStyle()"
+            [alt]="category.image"
+            (load)="onImageLoad($event)"
+          />
+        }
+        <p class="category-item__name">
+          {{ category.categoryName }}
+        </p>
+      </div>
+      <div
+        class="category-item__buttons"
+        [ngClass]="{
+          'category-item__buttons--not-first': category.parentId
+        }"
+      >
         <button class="category-item__button" (click)="openSubCategoryDialog()">
           <svg-icon
             class="category-item__icon category-item__icon--add"
@@ -59,7 +89,7 @@
     ) {
       <app-sub-category-dialog
         [dialog]="dialog"
-        [category]="category"
+        [parentId]="category.id"
       ></app-sub-category-dialog>
     }
   }

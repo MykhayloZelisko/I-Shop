@@ -5,8 +5,7 @@ import { UseGuards, UsePipes } from '@nestjs/common';
 import { GqlAdminGuard } from '../common/guards/gql-admin/gql-admin.guard';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCategoryInput } from './inputs/create-category.input';
-import { UpdateCategoryWithImageUrlInput } from './inputs/update-category-with-image-url.input';
-import { UpdateCategoryWithImageFileInput } from './inputs/update-category-with-image-file.input';
+import { UpdateCategoryInput } from './inputs/update-category.input';
 
 @Resolver()
 export class CategoriesResolver {
@@ -38,28 +37,12 @@ export class CategoriesResolver {
 
   @Mutation(() => Category)
   @UseGuards(GqlAdminGuard)
-  public async updateCategoryWithUrl(
+  public async updateCategory(
     @Args('id') id: string,
     @Args('updateCategoryInput', ValidationPipe)
-    updateCategoryInput: UpdateCategoryWithImageUrlInput,
+    updateCategoryInput: UpdateCategoryInput,
   ): Promise<Category> {
-    return this.categoriesService.updateCategoryWithUrl(
-      id,
-      updateCategoryInput,
-    );
-  }
-
-  @Mutation(() => Category)
-  @UseGuards(GqlAdminGuard)
-  public async updateCategoryWithFile(
-    @Args('id') id: string,
-    @Args('updateCategoryInput', ValidationPipe)
-    updateCategoryInput: UpdateCategoryWithImageFileInput,
-  ): Promise<Category> {
-    return this.categoriesService.updateCategoryWithFile(
-      id,
-      updateCategoryInput,
-    );
+    return this.categoriesService.updateCategory(id, updateCategoryInput);
   }
 
   @Mutation(() => [String])

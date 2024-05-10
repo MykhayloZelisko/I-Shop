@@ -47,6 +47,7 @@ export class NewCategoryComponent implements OnInit {
         category: {
           categoryName: this.newCategoryCtrl.getRawValue(),
           parentId: null,
+          image: null,
         },
       }),
     );

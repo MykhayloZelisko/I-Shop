@@ -15,18 +15,21 @@
     <div class="sub-category-dialog__body">
       <div [formGroup]="subCategoriesForm" class="sub-category-dialog__form">
         <ng-container formArrayName="categories">
-          @for (_ of getCategories().controls; track $index) {
-            <div [formGroupName]="$index" class="sub-category-dialog__field">
-              <input
-                class="sub-category-dialog__input"
-                formControlName="subCategoryName"
-                type="text"
-                (keydown)="handleInput($event)"
-              />
+          @for (
+            control of getCategories().controls;
+            let index = $index;
+            track control
+          ) {
+            <div class="sub-category-dialog__field">
+              <app-edit-category-item
+                [category]="categoryData"
+                [formGroupName]="index"
+                (changeFormValue)="setFormValue(index, $event)"
+              ></app-edit-category-item>
               <button
                 class="sub-category-dialog__icon-button sub-category-dialog__icon-button--delete"
-                [disabled]="!$index"
-                (click)="deleteCategory($index)"
+                [disabled]="getCategories().controls.length === 1"
+                (click)="deleteCategory(index)"
               >
                 <svg-icon
                   class="sub-category-dialog__icon sub-category-dialog__icon--delete"
@@ -40,6 +43,7 @@
       <button
         class="sub-category-dialog__button sub-category-dialog__button--add"
         (click)="addCategory()"
+        [disabled]="getCategories().length === 10"
       >
         Додати
       </button>

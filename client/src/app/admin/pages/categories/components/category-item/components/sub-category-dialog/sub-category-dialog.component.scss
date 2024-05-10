@@ -89,6 +89,7 @@
 
   &__field {
     display: flex;
+    align-items: flex-end;
     gap: 12px;
   }
 
@@ -115,34 +116,6 @@
       border-radius: 3px;
       border: 2px solid $white !important;
       background-color: $brown-1;
-    }
-  }
-
-  &__input {
-    padding: 9px 12px;
-    border-radius: 3px;
-    border: 1px solid $brown-5;
-    box-sizing: border-box;
-    min-width: 300px;
-    width: 100%;
-    font-size: 14px;
-    font-family: $source;
-
-    &:hover {
-      border-color: $brown-1;
-    }
-
-    &:focus {
-      border-color: $brown-2;
-      outline: none;
-    }
-
-    &:active {
-      border-color: $brown-2;
-    }
-
-    &.ng-invalid.ng-touched {
-      border-color: $red;
     }
   }
 
@@ -186,13 +159,6 @@
       &:hover {
         background-color: $brown-2;
       }
-
-      &:disabled,
-      &:disabled:hover {
-        color: $gray-5;
-        background-color: $gray-4;
-        cursor: default;
-      }
     }
 
     &--add {
@@ -202,6 +168,13 @@
       &:hover {
         background-color: $blue-2;
       }
+    }
+
+    &:disabled,
+    &:disabled:hover {
+      color: $gray-5;
+      background-color: $gray-4;
+      cursor: default;
     }
   }
 }

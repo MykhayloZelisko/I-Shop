@@ -50,7 +50,7 @@ export class CategoryEffects {
       ofType(CategoryActions.updateCategory),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.updateCategory(action.id, action.categoryName),
+        this.categoriesService.updateCategory(action.id, action.category),
       ),
       mergeMap((category) => [
         LoaderActions.toggleLoader(),

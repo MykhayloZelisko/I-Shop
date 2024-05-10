@@ -10,4 +10,7 @@ export class Category {
 
   @Field(() => ID, { description: 'Parent category id', nullable: true })
   public parentId: string | null;
+
+  @Field(() => String, { description: 'Category picture link', nullable: true })
+  public image: string | null;
 }

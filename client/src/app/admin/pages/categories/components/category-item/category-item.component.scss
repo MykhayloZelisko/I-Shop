@@ -7,20 +7,22 @@
 
 .category-item {
   display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: space-between;
   background-color: $brown-4;
   font-family: $source;
-  padding: 5px 10px;
   border-radius: 5px;
   color: $brown-1;
   font-size: 16px;
-  height: 40px;
 
-  &--editable {
-    background-color: $white;
-    box-shadow: inset 0 0 0 1px $brown-1;
-    outline: none;
+  &--first {
+    padding: 5px 10px;
+    min-height: 40px;
+  }
+
+  &--not-first {
+    padding: 10px;
   }
 
   &__name {
@@ -41,6 +43,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &:disabled {
+      cursor: default;
+
+      & .category-item {
+        &__icon {
+          &--save {
+            & svg {
+              & path {
+                fill: $gray-5;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   &__icon {
@@ -76,14 +94,25 @@
   }
 
   &__buttons {
-    display: none;
+    display: flex;
+    opacity: 0;
 
     &--editable {
       display: flex;
     }
+
+    &--not-first {
+      flex-direction: column;
+    }
   }
 
   &:hover &__buttons {
+    opacity: 1;
+  }
+
+  &__content {
     display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 }

@@ -13,16 +13,20 @@ import { State } from '../../../../../../../+store/reducers';
 import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
 import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
 import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
-import { CategoryInterface } from '../../../../../../../shared/models/interfaces/category.interface';
-import { PaginatorModule } from 'primeng/paginator';
 import {
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
+import {
+  SubCategoriesFormInterface,
+  SubCategoryFormInterface,
+} from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
+import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
+import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
+import { CategoryFormDataInterface } from '../../../../../../../shared/models/interfaces/category-form-data.interface';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -30,9 +34,8 @@ import { requiredValidator } from '../../../../../../../shared/utils/validators'
   imports: [
     ClickOutsideDirective,
     SvgIconComponent,
-    PaginatorModule,
     ReactiveFormsModule,
-    AsyncPipe,
+    EditCategoryItemComponent,
   ],
   templateUrl: './sub-category-dialog.component.html',
   styleUrl: './sub-category-dialog.component.scss',
@@ -41,9 +44,11 @@ import { requiredValidator } from '../../../../../../../shared/utils/validators'
 export class SubCategoryDialogComponent implements OnInit {
   @Input({ required: true }) public dialog!: DialogDataInterface;
 
-  @Input({ required: true }) public category!: CategoryInterface;
+  @Input({ required: true }) public parentId!: string;
 
-  public subCategoriesForm!: FormGroup;
+  public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
+
+  public categoryData!: CategoryFormDataInterface;
 
   private store = inject(Store<State>);
 
@@ -51,15 +56,26 @@ export class SubCategoryDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initSubCategoriesForm();
+    this.categoryData = {
+      base64image: null,
+      categoryName: '',
+      image: [],
+      parentId: this.parentId,
+    };
   }
 
-  public getCategories(): FormArray {
-    return this.subCategoriesForm.get('categories') as FormArray;
+  public getCategories(): FormArray<FormGroup<SubCategoryFormInterface>> {
+    return this.subCategoriesForm.get('categories') as FormArray<
+      FormGroup<SubCategoryFormInterface>
+    >;
   }
 
-  public newCategory(): FormGroup {
-    return this.fb.group({
-      subCategoryName: ['', [requiredValidator()]],
+  public newCategory(): FormGroup<SubCategoryFormInterface> {
+    return this.fb.group<SubCategoryFormInterface>({
+      categoryName: this.fb.nonNullable.control('', [requiredValidator()]),
+      image: this.fb.nonNullable.control<File[]>([]),
+      parentId: this.fb.control(this.parentId, [requiredValidator()]),
+      base64image: this.fb.control(null, [requiredValidator()]),
     });
   }
 
@@ -68,8 +84,8 @@ export class SubCategoryDialogComponent implements OnInit {
   }
 
   public initSubCategoriesForm(): void {
-    this.subCategoriesForm = this.fb.group({
-      categories: this.fb.array([]),
+    this.subCategoriesForm = this.fb.group<SubCategoriesFormInterface>({
+      categories: this.fb.array<FormGroup<SubCategoryFormInterface>>([]),
     });
     this.addCategory();
   }
@@ -95,16 +111,17 @@ export class SubCategoryDialogComponent implements OnInit {
   }
 
   public addSubCategory(): void {
-    const categories = this.subCategoriesForm
+    const categories: CreateCategoryInterface[] = this.subCategoriesForm
       .getRawValue()
-      .categories.map((item: { subCategoryName: string }) => ({
-        categoryName: item.subCategoryName,
-        parentId: this.category.id,
+      .categories.map((item) => ({
+        categoryName: item.categoryName,
+        parentId: item.parentId,
+        image: item.base64image,
       }));
     this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
+  public setFormValue(index: number, value: CategoryFormDataInterface): void {
+    this.getCategories().at(index).setValue(value);
   }
 }

@@ -10,6 +10,9 @@ export class Category {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, nullable: true })
   public parentId: string | null;
+
+  @Prop({ type: String, nullable: true })
+  public image: string | null;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

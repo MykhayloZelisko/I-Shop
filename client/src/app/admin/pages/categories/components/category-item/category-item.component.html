@@ -17,7 +17,11 @@
           'category-item__buttons--not-first': category.parentId
         }"
       >
-        <button class="category-item__button" (click)="saveCategory()">
+        <button
+          class="category-item__button"
+          [disabled]="isDisabled"
+          (click)="saveCategory()"
+        >
           <svg-icon
             class="category-item__icon category-item__icon--save"
             src="assets/images/save-icon.svg"

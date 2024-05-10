@@ -56,6 +56,8 @@ export class CategoryItemComponent implements OnInit {
     height: 0,
   };
 
+  public isDisabled = true;
+
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
@@ -141,5 +143,6 @@ export class CategoryItemComponent implements OnInit {
 
   public changeCategoryData(categoryData: CategoryFormDataInterface): void {
     this.newCategoryData = categoryData;
+    this.isDisabled = !categoryData.categoryName.trim();
   }
 }

@@ -43,6 +43,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &:disabled {
+      cursor: default;
+      & .category-item__icon--save {
+        & svg {
+          & path {
+            fill: $gray-5;
+          }
+        }
+      }
+    }
   }
 
   &__icon {

@@ -24,7 +24,7 @@
               <app-edit-category-item
                 [category]="categoryData"
                 [formGroupName]="index"
-                (changeFormValue)='setFormValue(index, $event)'
+                (changeFormValue)="setFormValue(index, $event)"
               ></app-edit-category-item>
               <button
                 class="sub-category-dialog__icon-button sub-category-dialog__icon-button--delete"

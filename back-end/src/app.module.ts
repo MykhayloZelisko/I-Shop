@@ -33,7 +33,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     CategoriesModule,
     FilesModule,
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, '..', 'static'),
+      rootPath: path.resolve(__dirname, 'static'),
     }),
   ],
 })

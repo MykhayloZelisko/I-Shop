@@ -5,6 +5,7 @@ import * as mainMenu from '../main-menu/reducers/main-menu.reducer';
 import * as auth from '../auth/reducers/auth.reducer';
 import * as categories from '../categories/reducers/category.reducer';
 import * as loader from '../loader/reducers/loader.reducer';
+import * as catalog from '../catalog/reducers/catalog.reducer';
 
 export interface State {
   auth: auth.State;
@@ -12,6 +13,7 @@ export interface State {
   mainMenu: mainMenu.State;
   categories: categories.State;
   loader: loader.State;
+  catalog: catalog.State;
 }
 
 export const reducers: ActionReducerMap<State> = {
@@ -20,6 +22,7 @@ export const reducers: ActionReducerMap<State> = {
   mainMenu: mainMenu.reducer,
   categories: categories.reducer,
   loader: loader.reducer,
+  catalog: catalog.reducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];

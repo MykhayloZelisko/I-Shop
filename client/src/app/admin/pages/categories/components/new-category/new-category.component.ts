@@ -11,7 +11,8 @@ import { State } from '../../../../../+store/reducers';
 import { Observable } from 'rxjs';
 import { selectNewCategory } from '../../../../../+store/categories/selectors/category.selectors';
 import { AsyncPipe } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { requiredValidator } from '../../../../../shared/utils/validators';
 
 @Component({
   selector: 'app-new-category',
@@ -24,12 +25,17 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class NewCategoryComponent implements OnInit {
   public isNewCategory$!: Observable<boolean>;
 
-  public newCategoryCtrl: FormControl = new FormControl('');
+  public newCategoryCtrl!: FormControl<string>;
 
   private store = inject(Store<State>);
 
+  private fb = inject(FormBuilder);
+
   public ngOnInit(): void {
     this.isNewCategory$ = this.store.select(selectNewCategory);
+    this.newCategoryCtrl = this.fb.nonNullable.control<string>('', [
+      requiredValidator(),
+    ]);
   }
 
   public addCategory(): void {

@@ -5,15 +5,15 @@ import {
   Input,
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.enum';
+import { PopupTypeEnum } from '../../../shared/models/enums/popup-type.enum';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { RestorePasswordFormComponent } from './components/restore-password-form/restore-password-form.component';
-import { DialogDataInterface } from '../../../../../shared/models/interfaces/dialog-data.interface';
+import { PopupDataInterface } from '../../../shared/models/interfaces/popup-data.interface';
 import { Store } from '@ngrx/store';
-import { State } from '../../../../../+store/reducers';
-import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
-import { ClickOutsideDirective } from '../../../../../shared/directives/click-outside.directive';
+import { State } from '../../../+store/reducers';
+import { ClickOutsideDirective } from '../../../shared/directives/click-outside.directive';
+import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-auth-dialog',
@@ -30,20 +30,13 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthDialogComponent {
-  @Input({ required: true }) public dialog!: DialogDataInterface;
+  @Input({ required: true }) public dialog!: PopupDataInterface;
 
-  public readonly dialogTypeEnum = DialogTypeEnum;
+  public readonly dialogTypeEnum = PopupTypeEnum;
 
   private store = inject(Store<State>);
 
   public closeDialog(): void {
-    this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
-          title: '',
-          dialogType: DialogTypeEnum.None,
-        },
-      }),
-    );
+    this.store.dispatch(PopupActions.closePopup());
   }
 }

@@ -1,9 +1,7 @@
 import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../../+store/reducers';
-import { DialogActions } from '../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../models/enums/dialog-type.enum';
-import { MainMenuActions } from '../../+store/main-menu/actions/main-menu.actions';
+import { PopupActions } from '../../+store/popup/actions/popup.actions';
 
 @Directive({
   selector: '[appClickOutside]',
@@ -22,15 +20,7 @@ export class ClickOutsideDirective {
       this.elementRef.nativeElement.contains(targetElement) &&
       this.elementRef.nativeElement === targetElement
     ) {
-      this.store.dispatch(
-        DialogActions.openDialog({
-          dialog: {
-            title: '',
-            dialogType: DialogTypeEnum.None,
-          },
-        }),
-      );
-      this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'close' }));
+      this.store.dispatch(PopupActions.closePopup());
     }
   }
 }

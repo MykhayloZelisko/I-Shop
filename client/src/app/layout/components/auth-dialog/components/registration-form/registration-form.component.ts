@@ -8,13 +8,13 @@ import {
   phoneNumberValidator,
   requiredValidator,
   showErrorMessage,
-} from '../../../../../../../shared/utils/validators';
-import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
+} from '../../../../../shared/utils/validators';
+import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
-import { State } from '../../../../../../../+store/reducers';
+import { State } from '../../../../../+store/reducers';
 import { NgxMaskDirective } from 'ngx-mask';
-import { AuthActions } from '../../../../../../../+store/auth/actions/auth.actions';
+import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
+import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-registration-form',
@@ -76,10 +76,10 @@ export class RegistrationFormComponent {
 
   public login(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Вхід',
-          dialogType: DialogTypeEnum.Login,
+          popupType: PopupTypeEnum.Login,
         },
       }),
     );

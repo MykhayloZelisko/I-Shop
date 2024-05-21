@@ -1,6 +1,19 @@
 <div class="layout">
-  <app-header></app-header>
+  <app-header [user$]="user$" [isAdmin$]="isAdmin$"></app-header>
   <div class="layout__container">
+    @if (popup$ | async; as popup) {
+      @if (
+        popup.popupType === popupEnum.Login ||
+        popup.popupType === popupEnum.Registration ||
+        popup.popupType === popupEnum.RestorePassword
+      ) {
+        <app-auth-dialog [dialog]="popup"></app-auth-dialog>
+      }
+      @if (popup.popupType === popupEnum.MainMenu) {
+        <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
+      }
+    }
+
     <router-outlet></router-outlet>
   </div>
 </div>

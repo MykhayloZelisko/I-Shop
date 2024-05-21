@@ -2,79 +2,56 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
+  Input,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import {
-  selectAdmin,
-  selectUser,
-} from '../../../+store/auth/selectors/auth.selectors';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { Router, RouterLink } from '@angular/router';
-import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { DialogDataInterface } from '../../../shared/models/interfaces/dialog-data.interface';
-import { selectDialog } from '../../../+store/dialog/selectors/dialog.selectors';
-import { DialogActions } from '../../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
-import { selectMainMenu } from '../../../+store/main-menu/selectors/main-menu.selectors';
-import { MainMenuActions } from '../../../+store/main-menu/actions/main-menu.actions';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { PopupTypeEnum } from '../../../shared/models/enums/popup-type.enum';
 import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
-import { MainMenuInterface } from '../../../shared/models/interfaces/main-menu.interface';
+import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    SvgIconComponent,
-    RouterLink,
-    AuthDialogComponent,
-    AsyncPipe,
-    MainMenuComponent,
-  ],
+  imports: [SvgIconComponent, RouterLink, AsyncPipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
-  public readonly dialogEnum = DialogTypeEnum;
+export class HeaderComponent {
+  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
 
-  public user$!: Observable<UserInterface | null>;
-
-  public isAdmin$!: Observable<boolean>;
-
-  public dialog$!: Observable<DialogDataInterface>;
-
-  public mainMenu$!: Observable<MainMenuInterface>;
+  @Input({ required: true }) public isAdmin$!: Observable<boolean>;
 
   private store = inject(Store<State>);
 
   private router = inject(Router);
 
-  public ngOnInit(): void {
-    this.user$ = this.store.select(selectUser);
-    this.isAdmin$ = this.store.select(selectAdmin);
-    this.dialog$ = this.store.select(selectDialog);
-    this.mainMenu$ = this.store.select(selectMainMenu);
-  }
-
   public openDialog(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Вхід',
-          dialogType: DialogTypeEnum.Login,
+          popupType: PopupTypeEnum.Login,
         },
       }),
     );
   }
 
   public openMainMenu(): void {
-    this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'open' }));
+    this.store.dispatch(
+      PopupActions.openPopup({
+        popup: {
+          title: '',
+          popupType: PopupTypeEnum.MainMenu,
+        },
+      }),
+    );
   }
 
   public goAdmin(): void {

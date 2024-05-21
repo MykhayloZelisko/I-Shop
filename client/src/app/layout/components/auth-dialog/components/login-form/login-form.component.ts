@@ -6,12 +6,12 @@ import {
   passwordPatternValidator,
   requiredValidator,
   showErrorMessage,
-} from '../../../../../../../shared/utils/validators';
+} from '../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
-import { State } from '../../../../../../../+store/reducers';
-import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
-import { AuthActions } from '../../../../../../../+store/auth/actions/auth.actions';
+import { State } from '../../../../../+store/reducers';
+import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
+import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
+import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-login-form',
@@ -51,10 +51,10 @@ export class LoginFormComponent {
 
   public registration(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Реєстрація',
-          dialogType: DialogTypeEnum.Registration,
+          popupType: PopupTypeEnum.Registration,
         },
       }),
     );
@@ -62,10 +62,10 @@ export class LoginFormComponent {
 
   public restorePassword(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Відновлення пароля',
-          dialogType: DialogTypeEnum.RestorePassword,
+          popupType: PopupTypeEnum.RestorePassword,
         },
       }),
     );

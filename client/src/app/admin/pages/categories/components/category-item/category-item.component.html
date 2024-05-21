@@ -88,7 +88,7 @@
 
   @if (dialog$ | async; as dialog) {
     @if (
-      dialog.dialogType === dialogEnum.SubCategory &&
+      dialog.popupType === dialogEnum.SubCategory &&
       currentCategory.id === category.id
     ) {
       <app-sub-category-dialog

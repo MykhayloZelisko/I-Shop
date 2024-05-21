@@ -13,15 +13,15 @@ import { Store } from '@ngrx/store';
 import { CategoryActions } from '../../../../../+store/categories/actions/category.actions';
 import { Observable } from 'rxjs';
 import { selectCurrentCategory } from '../../../../../+store/categories/selectors/category.selectors';
-import { DialogDataInterface } from '../../../../../shared/models/interfaces/dialog-data.interface';
-import { selectDialog } from '../../../../../+store/dialog/selectors/dialog.selectors';
-import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.enum';
+import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
+import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { SubCategoryDialogComponent } from './components/sub-category-dialog/sub-category-dialog.component';
-import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
 import { CurrentCategoryStatusInterface } from '../../../../../shared/models/interfaces/current-category-status.interface';
 import { EditCategoryItemComponent } from '../../../../../shared/components/edit-category-item/edit-category-item.component';
 import { CategoryFormDataInterface } from '../../../../../shared/models/interfaces/category-form-data.interface';
 import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
+import { selectPopup } from '../../../../../+store/popup/selectors/popup.selectors';
+import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-category-item',
@@ -41,11 +41,11 @@ import { ImageConfigInterface } from '../../../../../shared/models/interfaces/im
 export class CategoryItemComponent implements OnInit {
   @Input({ required: true }) public category!: CategoryInterface;
 
-  public readonly dialogEnum = DialogTypeEnum;
+  public readonly dialogEnum = PopupTypeEnum;
 
   public currentCategory$!: Observable<CurrentCategoryStatusInterface>;
 
-  public dialog$!: Observable<DialogDataInterface>;
+  public dialog$!: Observable<PopupDataInterface>;
 
   public newCategoryData!: CategoryFormDataInterface;
 
@@ -62,7 +62,7 @@ export class CategoryItemComponent implements OnInit {
 
   public ngOnInit(): void {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
-    this.dialog$ = this.store.select(selectDialog);
+    this.dialog$ = this.store.select(selectPopup);
   }
 
   public deleteCategory(): void {
@@ -108,10 +108,10 @@ export class CategoryItemComponent implements OnInit {
 
   public openSubCategoryDialog(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Субкатегорії',
-          dialogType: DialogTypeEnum.SubCategory,
+          popupType: PopupTypeEnum.SubCategory,
         },
       }),
     );

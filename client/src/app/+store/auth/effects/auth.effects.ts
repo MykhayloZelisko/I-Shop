@@ -3,8 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
-import { DialogActions } from '../../dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
+import { PopupTypeEnum } from '../../../shared/models/enums/popup-type.enum';
 import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
 import { UserRouteNameEnum } from '../../../shared/models/enums/user-route-name.enum';
 import { Router } from '@angular/router';
@@ -12,6 +11,7 @@ import { AuthActions } from '../actions/auth.actions';
 import { State } from '../../reducers';
 import { Store } from '@ngrx/store';
 import { LoaderActions } from '../../loader/actions/loader.actions';
+import { PopupActions } from '../../popup/actions/popup.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -49,12 +49,7 @@ export class AuthEffects {
       mergeMap((user: UserInterface) => [
         LoaderActions.toggleLoader(),
         AuthActions.loginSuccess({ user }),
-        DialogActions.openDialog({
-          dialog: {
-            title: '',
-            dialogType: DialogTypeEnum.None,
-          },
-        }),
+        PopupActions.closePopup(),
       ]),
       catchError(() => {
         this.store.dispatch(LoaderActions.toggleLoader());
@@ -136,10 +131,10 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.registrationSuccess),
       map(() =>
-        DialogActions.openDialog({
-          dialog: {
+        PopupActions.openPopup({
+          popup: {
             title: 'Вхід',
-            dialogType: DialogTypeEnum.Login,
+            popupType: PopupTypeEnum.Login,
           },
         }),
       ),

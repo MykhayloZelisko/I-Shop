@@ -4,11 +4,10 @@ import { CategoriesService } from '../services/categories.service';
 import { CategoryActions } from '../actions/category.actions';
 import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
-import { DialogActions } from '../../dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../shared/models/enums/dialog-type.enum';
 import { LoaderActions } from '../../loader/actions/loader.actions';
 import { State } from '../../reducers';
 import { Store } from '@ngrx/store';
+import { PopupActions } from '../../popup/actions/popup.actions';
 
 @Injectable()
 export class CategoryEffects {
@@ -117,9 +116,7 @@ export class CategoryEffects {
       mergeMap((categories) => [
         LoaderActions.toggleLoader(),
         CategoryActions.addCategoriesSuccess({ categories }),
-        DialogActions.openDialog({
-          dialog: { title: '', dialogType: DialogTypeEnum.None },
-        }),
+        PopupActions.closePopup(),
       ]),
       catchError(() => {
         this.store.dispatch(LoaderActions.toggleLoader());

@@ -74,19 +74,3 @@
     }
   </div>
 </div>
-
-@if (dialog$ | async; as dialog) {
-  @if (
-    dialog.dialogType === dialogEnum.Login ||
-    dialog.dialogType === dialogEnum.Registration ||
-    dialog.dialogType === dialogEnum.RestorePassword
-  ) {
-    <app-auth-dialog [dialog]="dialog"></app-auth-dialog>
-  }
-}
-
-@if (mainMenu$ | async; as mainMenu) {
-  @if (mainMenu.isOpen) {
-    <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
-  }
-}

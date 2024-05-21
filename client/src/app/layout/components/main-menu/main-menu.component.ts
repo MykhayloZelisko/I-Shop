@@ -5,19 +5,18 @@ import {
   Input,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserInterface } from '../../../../../shared/models/interfaces/user.interface';
+import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { AsyncPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { Store } from '@ngrx/store';
-import { State } from '../../../../../+store/reducers';
-import { MainMenuActions } from '../../../../../+store/main-menu/actions/main-menu.actions';
-import { ClickOutsideDirective } from '../../../../../shared/directives/click-outside.directive';
-import { DialogActions } from '../../../../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../../../shared/models/enums/dialog-type.enum';
-import { UserRouteNameEnum } from '../../../../../shared/models/enums/user-route-name.enum';
-import { LayoutRouteNameEnum } from '../../../../../shared/models/enums/layout-route-name.enum';
-import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
+import { State } from '../../../+store/reducers';
+import { ClickOutsideDirective } from '../../../shared/directives/click-outside.directive';
+import { PopupTypeEnum } from '../../../shared/models/enums/popup-type.enum';
+import { UserRouteNameEnum } from '../../../shared/models/enums/user-route-name.enum';
+import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
+import { AuthActions } from '../../../+store/auth/actions/auth.actions';
+import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-main-menu',
@@ -37,7 +36,7 @@ export class MainMenuComponent {
   private router = inject(Router);
 
   public closeMainMenu(): void {
-    this.store.dispatch(MainMenuActions.toggleMainMenu({ toggle: 'close' }));
+    this.store.dispatch(PopupActions.closePopup());
   }
 
   public goHome(): void {
@@ -47,26 +46,24 @@ export class MainMenuComponent {
 
   public login(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Вхід',
-          dialogType: DialogTypeEnum.Login,
+          popupType: PopupTypeEnum.Login,
         },
       }),
     );
-    this.closeMainMenu();
   }
 
   public registration(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Реєстрація',
-          dialogType: DialogTypeEnum.Registration,
+          popupType: PopupTypeEnum.Registration,
         },
       }),
     );
-    this.closeMainMenu();
   }
 
   public logout(): void {

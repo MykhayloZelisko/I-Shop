@@ -4,11 +4,11 @@ import {
   emailPatternValidator,
   requiredValidator,
   showErrorMessage,
-} from '../../../../../../../shared/utils/validators';
+} from '../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
-import { State } from '../../../../../../../+store/reducers';
-import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
+import { State } from '../../../../../+store/reducers';
+import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
+import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-restore-password-form',
@@ -37,10 +37,10 @@ export class RestorePasswordFormComponent {
 
   public login(): void {
     this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
+      PopupActions.openPopup({
+        popup: {
           title: 'Вхід',
-          dialogType: DialogTypeEnum.Login,
+          popupType: PopupTypeEnum.Login,
         },
       }),
     );

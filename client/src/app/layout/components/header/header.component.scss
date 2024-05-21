@@ -16,6 +16,9 @@
   background-color: $brown-1;
   font-family: $source;
   padding: 0 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
   &__inner {
     max-width: 1600px;

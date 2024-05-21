@@ -7,11 +7,10 @@ import {
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { DialogDataInterface } from '../../../../../../../shared/models/interfaces/dialog-data.interface';
+import { PopupDataInterface } from '../../../../../../../shared/models/interfaces/popup-data.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
-import { DialogActions } from '../../../../../../../+store/dialog/actions/dialog.actions';
-import { DialogTypeEnum } from '../../../../../../../shared/models/enums/dialog-type.enum';
+import { PopupTypeEnum } from '../../../../../../../shared/models/enums/popup-type.enum';
 import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
 import {
   FormArray,
@@ -27,6 +26,7 @@ import {
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
 import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
 import { CategoryFormDataInterface } from '../../../../../../../shared/models/interfaces/category-form-data.interface';
+import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-sub-category-dialog',
@@ -42,7 +42,7 @@ import { CategoryFormDataInterface } from '../../../../../../../shared/models/in
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubCategoryDialogComponent implements OnInit {
-  @Input({ required: true }) public dialog!: DialogDataInterface;
+  @Input({ required: true }) public dialog!: PopupDataInterface;
 
   @Input({ required: true }) public parentId!: string;
 
@@ -91,14 +91,7 @@ export class SubCategoryDialogComponent implements OnInit {
   }
 
   public closeDialog(): void {
-    this.store.dispatch(
-      DialogActions.openDialog({
-        dialog: {
-          title: '',
-          dialogType: DialogTypeEnum.None,
-        },
-      }),
-    );
+    this.store.dispatch(PopupActions.closePopup());
     this.store.dispatch(
       CategoryActions.changeCurrentCategoryStatus({
         categoryStatus: { id: null, isEditable: false },

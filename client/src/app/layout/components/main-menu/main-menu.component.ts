@@ -75,4 +75,15 @@ export class MainMenuComponent {
     this.router.navigateByUrl(LayoutRouteNameEnum.Admin);
     this.closeMainMenu();
   }
+
+  public openCatalog(): void {
+    this.store.dispatch(
+      PopupActions.openPopup({
+        popup: {
+          title: 'Каталог',
+          popupType: PopupTypeEnum.Catalog,
+        },
+      }),
+    );
+  }
 }

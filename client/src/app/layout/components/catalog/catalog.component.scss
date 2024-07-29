@@ -1,0 +1,57 @@
+@import 'variables';
+
+.catalog {
+  &--large {
+    background-color: $white;
+    border-radius: 0 0 10px 10px;
+    box-shadow:
+      0 1px 2px 0 $gray-1,
+      0 2px 10px 0 $gray-2;
+    max-width: 1520px;
+    width: calc(100% - 40px);
+    height: 600px;
+    position: relative;
+    top: 66px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &--small {
+    display: none;
+  }
+
+  &__wrapper {
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    background-color: $brown-3;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &__core-category {
+    &--active {
+      color: $blue-2;
+    }
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .catalog {
+    &__wrapper {
+      z-index: 1000;
+    }
+
+    &--large {
+      display: none;
+    }
+
+    &--small {
+      display: block;
+    }
+  }
+}

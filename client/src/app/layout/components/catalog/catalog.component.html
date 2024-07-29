@@ -1,0 +1,38 @@
+<div class="catalog__wrapper" appClickOutside>
+  <div class="catalog--large">
+    @if (categories$ | async; as categories) {
+      <div class="catalog__core-categories-wrapper">
+        <ul class="catalog__core-categories">
+          @for (category of categories; track category) {
+            <li
+              class="catalog__core-category"
+              [ngClass]="{
+                'catalog__core-category--active':
+                  category.data?.id === currentCategory.data?.id
+              }"
+              (mouseover)="onHover(category)"
+            >
+              {{ category.data?.categoryName }}
+            </li>
+          }
+        </ul>
+      </div>
+      <div>
+        <ul>
+          @for (category of currentCategory.children; track category) {
+            <li>
+              {{ category.data?.categoryName }}
+              <ul>
+                @for (childCategory of category.children; track childCategory) {
+                  <li>{{ childCategory.data?.categoryName }}</li>
+                }
+              </ul>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <div class="catalog--small">Small catalog</div>
+</div>

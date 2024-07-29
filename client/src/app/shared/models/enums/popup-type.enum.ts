@@ -5,5 +5,5 @@ export enum PopupTypeEnum {
   None = 'None',
   SubCategory = 'SubCategory',
   MainMenu = 'MainMenu',
-  LargeCatalog = 'LargeCatalog',
+  Catalog = 'Catalog',
 }

@@ -17,7 +17,11 @@ import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.compon
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { UserInterface } from '../shared/models/interfaces/user.interface';
 import { PopupTypeEnum } from '../shared/models/enums/popup-type.enum';
-import { selectAdmin, selectUser } from '../+store/auth/selectors/auth.selectors';
+import {
+  selectAdmin,
+  selectUser,
+} from '../+store/auth/selectors/auth.selectors';
+import { CatalogComponent } from './components/catalog/catalog.component';
 
 @Component({
   selector: 'app-layout',
@@ -29,6 +33,7 @@ import { selectAdmin, selectUser } from '../+store/auth/selectors/auth.selectors
     AsyncPipe,
     AuthDialogComponent,
     MainMenuComponent,
+    CatalogComponent,
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',

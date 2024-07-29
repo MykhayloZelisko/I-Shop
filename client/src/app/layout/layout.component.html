@@ -12,6 +12,9 @@
       @if (popup.popupType === popupEnum.MainMenu) {
         <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
       }
+      @if (popup.popupType === popupEnum.Catalog) {
+        <app-catalog></app-catalog>
+      }
     }
 
     <router-outlet></router-outlet>

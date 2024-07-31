@@ -39,10 +39,22 @@ export class CategoriesComponent implements OnInit {
 
   public expandAll(): void {
     this.store.dispatch(CategoryActions.updateCategories({ expanded: true }));
+    this.store.dispatch(
+      CategoryActions.changeCurrentCategoryStatus({
+        categoryStatus: { id: null, isEditable: false },
+      }),
+    );
+    this.store.dispatch(CategoryActions.closeNewCategory());
   }
 
   public collapseAll(): void {
     this.store.dispatch(CategoryActions.updateCategories({ expanded: false }));
+    this.store.dispatch(
+      CategoryActions.changeCurrentCategoryStatus({
+        categoryStatus: { id: null, isEditable: false },
+      }),
+    );
+    this.store.dispatch(CategoryActions.closeNewCategory());
   }
 
   public nodeExpand(event: TreeNodeExpandEvent): void {

@@ -12,11 +12,12 @@ import { State } from '../../../+store/reducers';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { selectCategoriesTree } from '../../../+store/categories/selectors/category.selectors';
 import { TreeNode } from 'primeng/api';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [ClickOutsideDirective, AsyncPipe, NgClass],
+  imports: [ClickOutsideDirective, AsyncPipe, NgClass, SvgIconComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

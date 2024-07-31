@@ -22,6 +22,6 @@ export const reducer = createReducer(
   })),
   on(PopupActions.closePopup, (state) => ({
     ...state,
-    popupType: PopupTypeEnum.None,
+    ...initialState,
   })),
 );

@@ -13,7 +13,7 @@
         <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
       }
       @if (popup.popupType === popupEnum.Catalog) {
-        <app-catalog></app-catalog>
+        <app-catalog [dialog]="popup"></app-catalog>
       }
     }
 

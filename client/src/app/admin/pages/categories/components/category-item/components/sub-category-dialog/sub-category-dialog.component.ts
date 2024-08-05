@@ -10,7 +10,6 @@ import { SvgIconComponent } from 'angular-svg-icon';
 import { PopupDataInterface } from '../../../../../../../shared/models/interfaces/popup-data.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
-import { PopupTypeEnum } from '../../../../../../../shared/models/enums/popup-type.enum';
 import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
 import {
   FormArray,

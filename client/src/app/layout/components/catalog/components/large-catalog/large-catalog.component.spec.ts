@@ -8,10 +8,9 @@ describe('LargeCatalogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LargeCatalogComponent]
-    })
-    .compileComponents();
-    
+      imports: [LargeCatalogComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(LargeCatalogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

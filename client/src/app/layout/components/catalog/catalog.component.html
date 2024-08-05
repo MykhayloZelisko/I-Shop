@@ -1,64 +1,13 @@
 <div class="catalog" appClickOutside>
   @if (categories$ | async; as categories) {
-    <app-large-catalog class="catalog__large" [categories]='categories'></app-large-catalog>
-    <app-small-catalog class="catalog__small"></app-small-catalog>
+    <app-large-catalog
+      class="catalog__large"
+      [categories]="categories"
+    ></app-large-catalog>
+    <app-small-catalog
+      class="catalog__small"
+      [categories]="categories"
+      [dialog]="dialog"
+    ></app-small-catalog>
   }
-<!---->
-<!--  <div class="catalog catalog&#45;&#45;small">-->
-<!--    <div class="catalog__header">-->
-<!--      <h3 class="catalog__title">{{ dialog.title }}</h3>-->
-<!--      <button class="catalog__close">-->
-<!--        <svg-icon-->
-<!--          class="catalog__icon catalog__icon&#45;&#45;header-icon"-->
-<!--          src="assets/images/close-round-line-icon.svg"-->
-<!--        ></svg-icon>-->
-<!--      </button>-->
-<!--    </div>-->
-<!--    <div class="catalog__body">-->
-<!--      @if (categories$ | async; as categories) {-->
-<!--        <ul class="catalog__core-categories">-->
-<!--          @for (category of categories; track category) {-->
-<!--            <li class="catalog__core-category" (mouseover)="onHover(category)">-->
-<!--              <button class="catalog__button">-->
-<!--                <div class="catalog__name-wrapper">-->
-<!--                  <svg-icon-->
-<!--                    class="catalog__icon"-->
-<!--                    src="assets/images/four-squares-icon.svg"-->
-<!--                  ></svg-icon>-->
-<!--                  <span-->
-<!--                    class="catalog__core-category-name"-->
-<!--                  >{{ category.data?.categoryName }}</span-->
-<!--                  >-->
-<!--                </div>-->
-<!--                @if (category.children?.length) {-->
-<!--                  <svg-icon-->
-<!--                    class="catalog__icon catalog__icon&#45;&#45;right"-->
-<!--                    src="assets/images/angle-right-icon.svg"-->
-<!--                  ></svg-icon>-->
-<!--                }-->
-<!--              </button>-->
-<!--            </li>-->
-<!--          }-->
-<!--        </ul>-->
-<!--&lt;!&ndash;        <ul class="catalog__sub-categories">&ndash;&gt;-->
-<!--&lt;!&ndash;          @for (category of currentCategory.children; track category) {&ndash;&gt;-->
-<!--&lt;!&ndash;            <li class="catalog__sub-category">&ndash;&gt;-->
-<!--&lt;!&ndash;              <a class="catalog__sub-link" href="#">{{&ndash;&gt;-->
-<!--&lt;!&ndash;                  category.data?.categoryName&ndash;&gt;-->
-<!--&lt;!&ndash;                }}</a>&ndash;&gt;-->
-<!--&lt;!&ndash;              <ul>&ndash;&gt;-->
-<!--&lt;!&ndash;                @for (childCategory of category.children; track childCategory) {&ndash;&gt;-->
-<!--&lt;!&ndash;                  <li class="catalog__sub-sub-category">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a class="catalog__sub-link" href="#">{{&ndash;&gt;-->
-<!--&lt;!&ndash;                        childCategory.data?.categoryName&ndash;&gt;-->
-<!--&lt;!&ndash;                      }}</a>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </li>&ndash;&gt;-->
-<!--&lt;!&ndash;                }&ndash;&gt;-->
-<!--&lt;!&ndash;              </ul>&ndash;&gt;-->
-<!--&lt;!&ndash;            </li>&ndash;&gt;-->
-<!--&lt;!&ndash;          }&ndash;&gt;-->
-<!--&lt;!&ndash;        </ul>&ndash;&gt;-->
-<!--      }-->
-<!--    </div>-->
-<!--  </div>-->
 </div>

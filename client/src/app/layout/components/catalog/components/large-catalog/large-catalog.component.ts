@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
 import { SvgIconComponent } from 'angular-svg-icon';

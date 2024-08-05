@@ -3,8 +3,8 @@
 .large-catalog {
   border-radius: 0 0 10px 10px;
   max-width: 1520px;
-  width: calc(100vw - 40px);
-  height: 600px;
+  width: calc(100vw - 50px);
+  max-height: calc(100vh - 100px);
   top: 66px;
   display: flex;
   flex-direction: row;
@@ -15,11 +15,31 @@
   position: relative;
 
   &__core-categories {
-    width: 300px;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     gap: 5px;
     padding: 10px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      appearance: none;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+      height: 0;
+    }
+
+    &::-webkit-scrollbar:vertical {
+      width: 7px;
+      background-color: $white;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      border: 2px solid $white !important;
+      background-color: $brown-1;
+    }
   }
 
   &__link {
@@ -59,7 +79,6 @@
       & svg {
         height: 10px;
         width: 10px;
-        top: 0;
       }
     }
 
@@ -83,18 +102,44 @@
 
   &__sub-categories {
     padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex-wrap: wrap;
+    column-count: 4;
+    column-gap: 20px;
+    width: 100%;
+  }
+
+  &__sub-categories-wrapper {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      appearance: none;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+      height: 0;
+    }
+
+    &::-webkit-scrollbar:vertical {
+      width: 7px;
+      background-color: $white;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      border: 2px solid $white !important;
+      background-color: $brown-1;
+    }
   }
 
   &__sub-category {
-    width: 300px;
     font-family: $source;
     font-size: 18px;
     line-height: 1.5;
     color: $blue-1;
+    break-inside: avoid;
+    margin-bottom: 8px;
 
     &:hover {
       color: $blue-2;
@@ -108,6 +153,14 @@
 
     &:hover {
       color: $blue-2;
+    }
+  }
+}
+
+@media screen and (width <= 1440px) {
+  .large-catalog {
+    &__sub-categories {
+      column-count: 3;
     }
   }
 }

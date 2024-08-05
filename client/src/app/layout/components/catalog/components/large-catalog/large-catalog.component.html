@@ -12,7 +12,8 @@
               }"
               src="assets/images/four-squares-icon.svg"
             ></svg-icon>
-            <span class="large-catalog__core-category-name"
+            <span
+              class="large-catalog__core-category-name"
               [ngClass]="{
                 'large-catalog__core-category-name--active':
                   category.data?.id === currentCategory.data?.id
@@ -22,7 +23,7 @@
           </div>
           @if (category.children?.length) {
             <svg-icon
-              class="large-catalog__icon catalog__icon--right"
+              class="large-catalog__icon large-catalog__icon--right"
               [ngClass]="{
                 'large-catalog__icon--active':
                   category.data?.id === currentCategory.data?.id
@@ -34,22 +35,24 @@
       </li>
     }
   </ul>
-  <ul class="large-catalog__sub-categories">
-    @for (category of currentCategory.children; track category) {
-      <li class="large-catalog__sub-category">
-        <a class="large-catalog__sub-link" href="#">{{
-          category.data?.categoryName
-        }}</a>
-        <ul>
-          @for (childCategory of category.children; track childCategory) {
-            <li class="large-catalog__sub-sub-category">
-              <a class="large-catalog__sub-link" href="#">{{
-                childCategory.data?.categoryName
-              }}</a>
-            </li>
-          }
-        </ul>
-      </li>
-    }
-  </ul>
+  <div class="large-catalog__sub-categories-wrapper">
+    <ul class="large-catalog__sub-categories">
+      @for (category of currentCategory.children; track category) {
+        <li class="large-catalog__sub-category">
+          <a class="large-catalog__sub-link" href="#">{{
+            category.data?.categoryName
+          }}</a>
+          <ul>
+            @for (childCategory of category.children; track childCategory) {
+              <li class="large-catalog__sub-sub-category">
+                <a class="large-catalog__sub-link" href="#">{{
+                  childCategory.data?.categoryName
+                }}</a>
+              </li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  </div>
 </div>

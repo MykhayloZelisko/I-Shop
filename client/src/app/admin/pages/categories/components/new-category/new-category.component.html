@@ -8,7 +8,11 @@
         (keydown)="handleInput($event)"
       />
       <div class="new-category__icon-buttons">
-        <button class="new-category__icon-button" (click)="saveCategory()">
+        <button
+          class="new-category__icon-button"
+          [disabled]="newCategoryCtrl.invalid"
+          (click)="saveCategory()"
+        >
           <svg-icon
             class="new-category__icon new-category__icon--save"
             src="assets/images/save-icon.svg"

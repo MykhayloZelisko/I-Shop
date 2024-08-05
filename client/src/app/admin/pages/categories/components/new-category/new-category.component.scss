@@ -58,6 +58,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &:disabled {
+      cursor: default;
+
+      & .new-category {
+        &__icon {
+          &--save {
+            & svg {
+              & path {
+                fill: $gray-5;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   &__icon {

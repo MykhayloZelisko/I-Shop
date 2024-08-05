@@ -1,8 +1,8 @@
-<div class="header">
+<div class="header" (click)="closeCatalog()">
   <div class="header__inner">
     <button
       class="header__button header__button--icon-btn"
-      (click)="openMainMenu()"
+      (click)="openMainMenu($event)"
     >
       <svg-icon
         class="header__icon"
@@ -16,13 +16,26 @@
       ></svg-icon>
       <span class="header__logo-text">I-SHOP</span>
     </a>
-    <button class="header__button header__button--catalog">
-      <svg-icon
-        class="header__icon header__icon--catalog"
-        src="assets/images/four-squares-icon.svg"
-      ></svg-icon>
-      <span class="header__button-text">Каталог</span>
-    </button>
+    @if (popup$ | async; as popup) {
+      <button
+        class="header__button header__button--catalog"
+        (click)="
+          popup.popupType === popupType.Catalog
+            ? closeCatalog()
+            : openCatalog($event)
+        "
+      >
+        <svg-icon
+          class="header__icon header__icon--catalog"
+          [src]="
+            popup.popupType === popupType.Catalog
+              ? 'assets/images/close-round-line-icon.svg'
+              : 'assets/images/four-squares-icon.svg'
+          "
+        ></svg-icon>
+        <span class="header__button-text">Каталог</span>
+      </button>
+    }
     <div class="header__search">
       <input class="header__input" type="text" />
       <button class="header__button header__button--search">
@@ -39,7 +52,7 @@
     @if ((user$ | async) === null) {
       <button
         class="header__button header__button--large-scr-btn header__button--icon-btn"
-        (click)="openDialog()"
+        (click)="login($event)"
       >
         <svg-icon
           class="header__icon"

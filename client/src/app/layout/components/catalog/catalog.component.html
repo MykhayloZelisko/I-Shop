@@ -1,0 +1,13 @@
+<div class="catalog" appClickOutside>
+  @if (categories$ | async; as categories) {
+    <app-large-catalog
+      class="catalog__large"
+      [categories]="categories"
+    ></app-large-catalog>
+    <app-small-catalog
+      class="catalog__small"
+      [categories]="categories"
+      [dialog]="dialog"
+    ></app-small-catalog>
+  }
+</div>

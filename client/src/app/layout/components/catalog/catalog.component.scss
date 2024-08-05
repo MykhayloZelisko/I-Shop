@@ -1,0 +1,36 @@
+@import 'variables';
+
+.catalog {
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  background-color: $brown-3;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  &__large {
+    display: block;
+  }
+
+  &__small {
+    display: none;
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .catalog {
+    z-index: 1000;
+
+    &__large {
+      display: none;
+    }
+
+    &__small {
+      display: block;
+    }
+  }
+}

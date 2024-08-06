@@ -9,22 +9,7 @@ export const userRoutes: Routes = [
   },
   {
     path: UserRouteNameEnum.Categories,
-    children: [
-      {
-        path: '',
-        loadComponent: () =>
-          import(
-            '../user/pages/dynamic-category/dynamic-category.component'
-          ).then((m) => m.DynamicCategoryComponent),
-        pathMatch: 'full',
-      },
-      {
-        path: ':id',
-        loadComponent: () =>
-          import(
-            '../user/pages/dynamic-category/dynamic-category.component'
-          ).then((m) => m.DynamicCategoryComponent),
-      },
-    ],
+    loadChildren: () =>
+      import('./categories.routes').then((m) => m.categoriesRoutes),
   },
 ];

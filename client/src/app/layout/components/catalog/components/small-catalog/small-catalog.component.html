@@ -33,7 +33,11 @@
                 ></svg-icon>
               </button>
             } @else {
-              <a class="small-catalog__link" href="#">
+              <a
+                class="small-catalog__link"
+                href="#"
+                (click)="changeCategory($event, category.data?.id)"
+              >
                 <svg-icon
                   class="small-catalog__icon"
                   src="assets/images/four-squares-icon.svg"
@@ -59,15 +63,21 @@
       <ul class="small-catalog__sub-categories">
         @for (category of currentCategory.children; track category) {
           <li class="small-catalog__sub-category">
-            <a class="small-catalog__sub-link" href="#">{{
-              category.data?.categoryName
-            }}</a>
+            <a
+              class="small-catalog__sub-link"
+              href="#"
+              (click)="changeCategory($event, category.data?.id)"
+              >{{ category.data?.categoryName }}</a
+            >
             <ul>
               @for (childCategory of category.children; track childCategory) {
                 <li class="small-catalog__sub-sub-category">
-                  <a class="small-catalog__sub-link" href="#">{{
-                    childCategory.data?.categoryName
-                  }}</a>
+                  <a
+                    class="small-catalog__sub-link"
+                    href="#"
+                    (click)="changeCategory($event, childCategory.data?.id)"
+                    >{{ childCategory.data?.categoryName }}</a
+                  >
                 </li>
               }
             </ul>

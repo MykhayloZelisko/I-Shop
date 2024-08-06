@@ -7,4 +7,9 @@ export const userRoutes: Routes = [
     loadComponent: () =>
       import('../user/pages/home/home.component').then((m) => m.HomeComponent),
   },
+  {
+    path: UserRouteNameEnum.Categories,
+    loadChildren: () =>
+      import('./categories.routes').then((m) => m.categoriesRoutes),
+  },
 ];

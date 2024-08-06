@@ -6,8 +6,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   imports: [],
   templateUrl: './sub-sub-category.component.html',
   styleUrl: './sub-sub-category.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubSubCategoryComponent {
-
-}
+export class SubSubCategoryComponent {}

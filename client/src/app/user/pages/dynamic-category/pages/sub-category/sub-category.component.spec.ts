@@ -8,10 +8,9 @@ describe('SubCategoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubCategoryComponent]
-    })
-    .compileComponents();
-    
+      imports: [SubCategoryComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SubCategoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

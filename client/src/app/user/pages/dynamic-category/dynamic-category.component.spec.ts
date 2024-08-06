@@ -8,10 +8,9 @@ describe('DynamicCategoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DynamicCategoryComponent]
-    })
-    .compileComponents();
-    
+      imports: [DynamicCategoryComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(DynamicCategoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

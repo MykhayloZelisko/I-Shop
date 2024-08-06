@@ -2,7 +2,11 @@
   <ul class="large-catalog__core-categories">
     @for (category of categories; track category) {
       <li class="large-catalog__core-category" (mouseover)="onHover(category)">
-        <a class="large-catalog__link" href="#">
+        <a
+          class="large-catalog__link"
+          href="#"
+          (click)="changeCategory($event, category.data?.id)"
+        >
           <div class="large-catalog__name-wrapper">
             <svg-icon
               class="large-catalog__icon"
@@ -39,15 +43,21 @@
     <ul class="large-catalog__sub-categories">
       @for (category of currentCategory.children; track category) {
         <li class="large-catalog__sub-category">
-          <a class="large-catalog__sub-link" href="#">{{
-            category.data?.categoryName
-          }}</a>
+          <a
+            class="large-catalog__sub-link"
+            href="#"
+            (click)="changeCategory($event, category.data?.id)"
+            >{{ category.data?.categoryName }}</a
+          >
           <ul>
             @for (childCategory of category.children; track childCategory) {
               <li class="large-catalog__sub-sub-category">
-                <a class="large-catalog__sub-link" href="#">{{
-                  childCategory.data?.categoryName
-                }}</a>
+                <a
+                  class="large-catalog__sub-link"
+                  href="#"
+                  (click)="changeCategory($event, childCategory.data?.id)"
+                  >{{ childCategory.data?.categoryName }}</a
+                >
               </li>
             }
           </ul>

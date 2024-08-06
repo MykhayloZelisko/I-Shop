@@ -2,6 +2,7 @@ import {
   createFeature,
   createFeatureSelector,
   createSelector,
+  MemoizedSelector,
 } from '@ngrx/store';
 import {
   adapter,
@@ -72,3 +73,46 @@ export const selectNewCategory = createSelector(
   selectCategoryState,
   (state: State) => state.isNewCategory,
 );
+
+export const selectCategoryById = (
+  categoryId: string,
+): MemoizedSelector<NonNullable<unknown>, CategoryInterface | undefined> =>
+  createSelector(selectAllCategories, (categories: CategoryInterface[]) =>
+    categories.find((category) => category.id === categoryId),
+  );
+
+export const selectCategoryLevel = (
+  categoryId: string,
+): MemoizedSelector<NonNullable<unknown>, 0 | 3 | 2 | 1> =>
+  createSelector(
+    selectCategoryById(categoryId),
+    selectAllCategories,
+    (category, allCategories) => {
+      if (!category) {
+        return 0;
+      }
+
+      const children = allCategories.filter(
+        (child: CategoryInterface) => child.parentId === category.id,
+      );
+
+      if (children.length === 0) {
+        return 3;
+      }
+
+      const areAllChildrenLevel3 = children.every(
+        (child: CategoryInterface) => {
+          const grandChildren = allCategories.filter(
+            (grandChild) => grandChild.parentId === child.id,
+          );
+          return grandChildren.length === 0;
+        },
+      );
+
+      if (areAllChildrenLevel3) {
+        return 2;
+      }
+
+      return 1;
+    },
+  );

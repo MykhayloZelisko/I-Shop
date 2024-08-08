@@ -13,8 +13,8 @@ export const categoriesRoutes: Routes = [
   {
     path: CategoriesRouteNameEnum.CategoryId,
     loadComponent: () =>
-      import('../user/pages/dynamic-category/dynamic-category.component').then(
-        (m) => m.DynamicCategoryComponent,
+      import('../user/pages/category/category.component').then(
+        (m) => m.CategoryComponent,
       ),
   },
 ];

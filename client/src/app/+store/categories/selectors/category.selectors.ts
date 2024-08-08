@@ -2,7 +2,6 @@ import {
   createFeature,
   createFeatureSelector,
   createSelector,
-  MemoizedSelector,
 } from '@ngrx/store';
 import {
   adapter,

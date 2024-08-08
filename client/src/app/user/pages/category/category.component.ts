@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-sub-category',
+  selector: 'app-category',
   standalone: true,
   imports: [],
-  templateUrl: './sub-category.component.html',
-  styleUrl: './sub-category.component.scss',
+  templateUrl: './category.component.html',
+  styleUrl: './category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubCategoryComponent {}
+export class CategoryComponent {}

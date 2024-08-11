@@ -3,4 +3,5 @@ export enum AdminRouteNameEnum {
   Categories = 'categories',
   NewProduct = 'new-product',
   Users = 'users',
+  Brands = 'brands',
 }

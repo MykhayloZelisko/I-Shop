@@ -14,4 +14,8 @@ export const ADMIN_MENU: MenuItem[] = [
     label: 'Користувачі',
     routerLink: AdminRouteNameEnum.Users,
   },
+  {
+    label: 'Бренди',
+    routerLink: AdminRouteNameEnum.Brands,
+  },
 ];

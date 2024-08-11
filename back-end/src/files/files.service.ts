@@ -19,7 +19,7 @@ export class FilesService {
   public async createImageFile(base64String: string): Promise<string> {
     try {
       const fileName = this.createFileName(base64String);
-      const filePath = path.resolve(__dirname, '..', 'static');
+      const filePath = path.resolve(__dirname, '..', '..', 'static');
       const base64Data = base64String.split(';base64,').pop() as string;
       const decodedData = Buffer.from(base64Data, 'base64');
       if (!fs.existsSync(filePath)) {
@@ -33,7 +33,7 @@ export class FilesService {
   }
 
   public async removeImageFile(fileName: string): Promise<void> {
-    const filePath = path.resolve(__dirname, '..', 'static', fileName);
+    const filePath = path.resolve(__dirname, '..', '..', 'static', fileName);
     fs.unlink(filePath, (err) => {
       if (err) {
         throw new InternalServerErrorException('File is not removed');

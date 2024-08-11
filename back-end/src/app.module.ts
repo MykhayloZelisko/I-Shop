@@ -12,6 +12,7 @@ import { PassportModule } from '@nestjs/passport';
 import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
   imports: [
@@ -33,8 +34,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     CategoriesModule,
     FilesModule,
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, 'static'),
+      rootPath: path.resolve(__dirname, '..', 'static'),
     }),
+    BrandsModule,
   ],
 })
 export class AppModule {}

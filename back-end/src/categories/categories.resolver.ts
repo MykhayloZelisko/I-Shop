@@ -6,6 +6,7 @@ import { GqlAdminGuard } from '../common/guards/gql-admin/gql-admin.guard';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { UpdateCategoryInput } from './inputs/update-category.input';
+import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 
 @Resolver()
 export class CategoriesResolver {
@@ -38,7 +39,7 @@ export class CategoriesResolver {
   @Mutation(() => Category)
   @UseGuards(GqlAdminGuard)
   public async updateCategory(
-    @Args('id') id: string,
+    @Args('id', ParseObjectIdPipe) id: string,
     @Args('updateCategoryInput', ValidationPipe)
     updateCategoryInput: UpdateCategoryInput,
   ): Promise<Category> {
@@ -47,7 +48,9 @@ export class CategoriesResolver {
 
   @Mutation(() => [String])
   @UseGuards(GqlAdminGuard)
-  public async deleteCategory(@Args('id') id: string): Promise<string[]> {
+  public async deleteCategory(
+    @Args('id', ParseObjectIdPipe) id: string,
+  ): Promise<string[]> {
     return this.categoriesService.deleteCategory(id);
   }
 }

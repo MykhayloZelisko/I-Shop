@@ -1,0 +1,20 @@
+<div class="new-brand">
+  <label class="new-brand__title" for="input"
+    >Введіть назву нового бренду</label
+  >
+  <div class="new-brand__field-wrapper">
+    <input
+      id="input"
+      class="new-brand__input"
+      type="text"
+      [formControl]="brandCtrl"
+    />
+    <button
+      class="new-brand__add-btn"
+      [disabled]="brandCtrl.invalid"
+      (click)="addBrand()"
+    >
+      Додати
+    </button>
+  </div>
+</div>

@@ -32,7 +32,7 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
     const subCategoriesIds = await this.findSubCategoriesIds(categoryId);
-    // TODO: check subcategories. If a category cannot be deleted you should throw ForbiddenException
+    // TODO: check subcategories and products. If a category cannot be deleted you should throw ForbiddenException
     for (const id of subCategoriesIds) {
       const deletedCategory = await this.categoryModel.findById(id).exec();
       if (deletedCategory && deletedCategory.image) {

@@ -29,6 +29,13 @@ export const adminRoutes: Routes = [
           ),
       },
       {
+        path: AdminRouteNameEnum.Brands,
+        loadComponent: () =>
+          import('../admin/pages/brands/brands.component').then(
+            (m) => m.BrandsComponent,
+          ),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: AdminRouteNameEnum.Categories,

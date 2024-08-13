@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { BrandInterface } from '../../../../../shared/models/interfaces/brand.interface';
 import { Store } from '@ngrx/store';

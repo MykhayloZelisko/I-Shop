@@ -1,7 +1,8 @@
 import {
   BadRequestException,
   ConflictException,
-  Injectable, NotFoundException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateBrandInput } from './inputs/create-brand.input';
 import { UpdateBrandInput } from './inputs/update-brand.input';

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { BrandsService } from './brands.service';
 import { Brand } from './models/brand.model';
 import { CreateBrandInput } from './inputs/create-brand.input';

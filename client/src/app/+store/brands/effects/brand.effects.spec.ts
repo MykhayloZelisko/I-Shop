@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { BrandEffects } from './brand.effects';
 
 describe('BrandEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: BrandEffects;
 
   beforeEach(() => {

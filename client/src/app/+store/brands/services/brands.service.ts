@@ -3,7 +3,6 @@ import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { BrandInterface } from '../../../shared/models/interfaces/brand.interface';
 import { ApolloQueryResult } from '@apollo/client';
-import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

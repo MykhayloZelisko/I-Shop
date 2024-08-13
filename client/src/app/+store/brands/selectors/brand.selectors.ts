@@ -1,4 +1,8 @@
-import { createFeature, createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  createFeature,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
 import {
   adapter,
   brandsFeatureKey,

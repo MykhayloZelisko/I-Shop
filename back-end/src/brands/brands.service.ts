@@ -44,20 +44,24 @@ export class BrandsService {
     if (brand) {
       throw new ConflictException('This brand already exists');
     }
-    const existedBrand = await this.brandModel
-      .findByIdAndUpdate(id, { brandName: updateBrandInput.brandName })
+    const updatedBrand = await this.brandModel
+      .findByIdAndUpdate(
+        id,
+        { brandName: updateBrandInput.brandName },
+        { new: true },
+      )
       .exec();
-    if (existedBrand) {
-      return existedBrand.toObject();
+    if (updatedBrand) {
+      return updatedBrand.toObject();
     }
     throw new BadRequestException('A brand is not updated');
   }
 
-  public async removeBrand(id: string): Promise<BrandGQL> {
+  public async deleteBrand(id: string): Promise<string> {
     // TODO: check products. If a brand cannot be deleted you should throw ForbiddenException
     const brand = await this.brandModel.findByIdAndDelete(id).exec();
     if (brand) {
-      return brand.toObject();
+      return brand.id;
     } else {
       throw new NotFoundException('A brand not found');
     }

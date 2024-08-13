@@ -1,0 +1,46 @@
+@if (brand.id === (currentId$ | async)) {
+  <div class="brand-item__input-wrapper">
+    <input
+      class="brand-item__input"
+      type="text"
+      [formControl]="brandCtrl"
+      (keydown)="handleInput($event)"
+    />
+    <div class="brand-item__buttons brand-item__buttons--editable">
+      <button
+        class="brand-item__button"
+        [disabled]="brandCtrl.invalid"
+        (click)="saveBrand()"
+      >
+        <svg-icon
+          class="brand-item__icon brand-item__icon--save"
+          src="assets/images/save-icon.svg"
+        ></svg-icon>
+      </button>
+      <button class="brand-item__button" (click)="cancelEditBrand()">
+        <svg-icon
+          class="brand-item__icon brand-item__icon--cancel"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+} @else {
+  <div class="brand-item">
+    <p class="brand-item__title">{{ brand.brandName }}</p>
+    <div class="brand-item__buttons">
+      <button class="brand-item__button" (click)="editBrand()">
+        <svg-icon
+          class="brand-item__icon brand-item__icon--edit"
+          src="assets/images/pencil-icon.svg"
+        ></svg-icon>
+      </button>
+      <button class="brand-item__button" (click)="deleteBrand()">
+        <svg-icon
+          class="brand-item__icon brand-item__icon--delete"
+          src="assets/images/trash-bin-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+}

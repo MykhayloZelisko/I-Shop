@@ -37,10 +37,10 @@ export class BrandsResolver {
     return this.brandsService.updateBrand(id, updateBrandInput);
   }
 
-  @Mutation(() => Brand)
-  public async removeBrand(
+  @Mutation(() => String)
+  public async deleteBrand(
     @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<Brand> {
-    return this.brandsService.removeBrand(id);
+  ): Promise<string> {
+    return this.brandsService.deleteBrand(id);
   }
 }

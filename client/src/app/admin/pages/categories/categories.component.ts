@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -28,13 +29,22 @@ import { CategoryActions } from '../../../+store/categories/actions/category.act
   styleUrl: './categories.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent implements OnInit, OnDestroy {
   public categories$!: Observable<TreeNode<CategoryInterface>[]>;
 
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
     this.categories$ = this.store.select(selectCategoriesTree);
+  }
+
+  public ngOnDestroy(): void {
+    this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(
+      CategoryActions.changeCurrentCategoryStatus({
+        categoryStatus: { isEditable: false, id: null },
+      }),
+    );
   }
 
   public expandAll(): void {

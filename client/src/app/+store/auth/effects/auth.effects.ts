@@ -45,16 +45,19 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.login),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      switchMap((action) => this.authService.login(action.login)),
-      mergeMap((user: UserInterface) => [
-        LoaderActions.toggleLoader(),
-        AuthActions.loginSuccess({ user }),
-        PopupActions.closePopup(),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(AuthActions.loginFailure());
-      }),
+      switchMap((action) =>
+        this.authService.login(action.login).pipe(
+          mergeMap((user: UserInterface) => [
+            LoaderActions.toggleLoader(),
+            AuthActions.loginSuccess({ user }),
+            PopupActions.closePopup(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(AuthActions.loginFailure());
+          }),
+        ),
+      ),
     ),
   );
 
@@ -74,15 +77,18 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.logout),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      switchMap(() => this.authService.logout()),
-      mergeMap(() => [
-        LoaderActions.toggleLoader(),
-        AuthActions.logoutSuccess(),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(AuthActions.logoutFailure());
-      }),
+      switchMap(() =>
+        this.authService.logout().pipe(
+          mergeMap(() => [
+            LoaderActions.toggleLoader(),
+            AuthActions.logoutSuccess(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(AuthActions.logoutFailure());
+          }),
+        ),
+      ),
     ),
   );
 
@@ -115,15 +121,18 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.registration),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      switchMap((action) => this.authService.registration(action.registration)),
-      mergeMap(() => [
-        LoaderActions.toggleLoader(),
-        AuthActions.registrationSuccess(),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(AuthActions.registrationFailure());
-      }),
+      switchMap((action) =>
+        this.authService.registration(action.registration).pipe(
+          mergeMap(() => [
+            LoaderActions.toggleLoader(),
+            AuthActions.registrationSuccess(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(AuthActions.registrationFailure());
+          }),
+        ),
+      ),
     ),
   );
 

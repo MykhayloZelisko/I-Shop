@@ -21,15 +21,18 @@ export class CategoryEffects {
     this.actions$.pipe(
       ofType(CategoryActions.loadCategories),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      switchMap(() => this.categoriesService.getAllCategories()),
-      mergeMap((categories: CategoryInterface[]) => [
-        LoaderActions.toggleLoader(),
-        CategoryActions.loadCategoriesSuccess({ categories }),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(CategoryActions.loadCategoriesFailure());
-      }),
+      switchMap(() =>
+        this.categoriesService.getAllCategories().pipe(
+          mergeMap((categories: CategoryInterface[]) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.loadCategoriesSuccess({ categories }),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.loadCategoriesFailure());
+          }),
+        ),
+      ),
     ),
   );
 
@@ -49,19 +52,20 @@ export class CategoryEffects {
       ofType(CategoryActions.updateCategory),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.updateCategory(action.id, action.category),
+        this.categoriesService.updateCategory(action.id, action.category).pipe(
+          mergeMap((category) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.updateCategorySuccess({ category }),
+            CategoryActions.changeCurrentCategoryStatus({
+              categoryStatus: { id: null, isEditable: false },
+            }),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.updateCategoryFailure());
+          }),
+        ),
       ),
-      mergeMap((category) => [
-        LoaderActions.toggleLoader(),
-        CategoryActions.updateCategorySuccess({ category }),
-        CategoryActions.changeCurrentCategoryStatus({
-          categoryStatus: { id: null, isEditable: false },
-        }),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(CategoryActions.updateCategoryFailure());
-      }),
     ),
   );
 
@@ -81,17 +85,18 @@ export class CategoryEffects {
       ofType(CategoryActions.addCategory),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.createCategory(action.category),
+        this.categoriesService.createCategory(action.category).pipe(
+          mergeMap((category) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.addCategorySuccess({ category }),
+            CategoryActions.closeNewCategory(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.addCategoryFailure());
+          }),
+        ),
       ),
-      mergeMap((category) => [
-        LoaderActions.toggleLoader(),
-        CategoryActions.addCategorySuccess({ category }),
-        CategoryActions.closeNewCategory(),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(CategoryActions.addCategoryFailure());
-      }),
     ),
   );
 
@@ -111,17 +116,18 @@ export class CategoryEffects {
       ofType(CategoryActions.addCategories),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.addSubCategories(action.categories),
+        this.categoriesService.addSubCategories(action.categories).pipe(
+          mergeMap((categories) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.addCategoriesSuccess({ categories }),
+            PopupActions.closePopup(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.addCategoriesFailure());
+          }),
+        ),
       ),
-      mergeMap((categories) => [
-        LoaderActions.toggleLoader(),
-        CategoryActions.addCategoriesSuccess({ categories }),
-        PopupActions.closePopup(),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(CategoryActions.addCategoriesFailure());
-      }),
     ),
   );
 
@@ -140,16 +146,19 @@ export class CategoryEffects {
     this.actions$.pipe(
       ofType(CategoryActions.deleteCategory),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      switchMap((action) => this.categoriesService.deleteCategory(action.id)),
-      mergeMap((ids) => [
-        LoaderActions.toggleLoader(),
-        CategoryActions.deleteCategorySuccess({ ids }),
-        CategoryActions.deleteCategories({ ids }),
-      ]),
-      catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
-        return of(CategoryActions.deleteCategoryFailure());
-      }),
+      switchMap((action) =>
+        this.categoriesService.deleteCategory(action.id).pipe(
+          mergeMap((ids) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.deleteCategorySuccess({ ids }),
+            CategoryActions.deleteCategories({ ids }),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.deleteCategoryFailure());
+          }),
+        ),
+      ),
     ),
   );
 

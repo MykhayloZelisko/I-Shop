@@ -59,6 +59,20 @@ export const reducer = createReducer(
   on(CategoryActions.loadCategoriesSuccess, (state, action) =>
     adapter.setAll(action.categories, state),
   ),
+  on(
+    CategoryActions.addCPropertiesSuccess,
+    CategoryActions.updateCPropertySuccess,
+    CategoryActions.deleteCPropertySuccess,
+    (state, action) => {
+      const update: UpdateStr<CategoryInterface> = {
+        id: action.category.id,
+        changes: {
+          properties: action.category.properties,
+        },
+      };
+      return adapter.updateOne(update, state);
+    },
+  ),
   // other actions
   on(CategoryActions.openNewCategory, (state) => ({
     ...state,

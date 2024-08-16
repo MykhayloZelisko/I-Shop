@@ -1,10 +1,8 @@
 import { CPropertyInterface } from './c-property.interface';
+import { CreateCategoryInterface } from './create-category.interface';
 
-export interface CategoryInterface {
+export interface CategoryInterface extends CreateCategoryInterface{
   id: string;
-  categoryName: string;
-  parentId: string | null;
-  image: string | null;
   expanded?: boolean;
   properties: CPropertyInterface[];
 }

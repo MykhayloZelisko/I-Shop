@@ -172,4 +172,99 @@ export class CategoryEffects {
       ),
     { dispatch: false },
   );
+
+  public addCProperties$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.addCProperties),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.categoriesService.addCProperties(action.properties).pipe(
+          mergeMap((category) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.addCPropertiesSuccess({ category }),
+            // PopupActions.closePopup(), // TODO: check
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.addCPropertiesFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public addCPropertiesFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.addCPropertiesFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public updateCProperty$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.updateCProperty),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.categoriesService
+          .updateCProperty(action.id, action.propertyName)
+          .pipe(
+            mergeMap((category) => [
+              LoaderActions.toggleLoader(),
+              CategoryActions.updateCPropertySuccess({ category }),
+              // PopupActions.closePopup(), // TODO: check
+            ]),
+            catchError(() => {
+              this.store.dispatch(LoaderActions.toggleLoader());
+              return of(CategoryActions.updateCPropertyFailure());
+            }),
+          ),
+      ),
+    ),
+  );
+
+  public updateCPropertyFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.updateCPropertyFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public deleteCProperty$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.deleteCProperty),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.categoriesService.deleteCProperty(action.id).pipe(
+          mergeMap((category) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.deleteCPropertySuccess({ category }),
+            // PopupActions.closePopup(), // TODO: check
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.deleteCPropertyFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public deleteCPropertyFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.deleteCPropertyFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
 }

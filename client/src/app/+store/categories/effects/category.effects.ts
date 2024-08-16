@@ -182,7 +182,7 @@ export class CategoryEffects {
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.addCPropertiesSuccess({ category }),
-            // PopupActions.closePopup(), // TODO: check
+            PopupActions.closePopup(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());
@@ -215,7 +215,6 @@ export class CategoryEffects {
             mergeMap((category) => [
               LoaderActions.toggleLoader(),
               CategoryActions.updateCPropertySuccess({ category }),
-              // PopupActions.closePopup(), // TODO: check
             ]),
             catchError(() => {
               this.store.dispatch(LoaderActions.toggleLoader());
@@ -246,7 +245,6 @@ export class CategoryEffects {
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.deleteCPropertySuccess({ category }),
-            // PopupActions.closePopup(), // TODO: check
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());

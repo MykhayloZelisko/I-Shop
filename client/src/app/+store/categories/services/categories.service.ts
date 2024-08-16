@@ -23,6 +23,11 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              properties {
+                id
+                categoryId
+                propertyName
+              }
             }
           }
         `,
@@ -61,6 +66,11 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              properties {
+                id
+                categoryId
+                propertyName
+              }
             }
           }
         `,
@@ -99,6 +109,11 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              properties {
+                id
+                categoryId
+                propertyName
+              }
             }
           }
         `,
@@ -131,6 +146,11 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              properties {
+                id
+                categoryId
+                propertyName
+              }
             }
           }
         `,

@@ -1,5 +1,5 @@
 import {
-  BadRequestException,
+  BadRequestException, ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,27 +10,61 @@ import { Category as CategoryGQL } from './models/category.model';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { FilesService } from '../files/files.service';
 import { UpdateCategoryInput } from './inputs/update-category.input';
+import { CPropertiesService } from '../c-properties/c-properties.service';
+import { CPropertyDocument } from '../c-properties/schemas/c-property.schema';
 
 @Injectable()
 export class CategoriesService {
   public constructor(
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
     private filesService: FilesService,
+    private cPropertiesService: CPropertiesService,
   ) {}
 
   public async getAllCategories(): Promise<CategoryGQL[]> {
-    const categories = await this.categoryModel.find().exec();
+    const categories = await this.categoryModel
+      .find()
+      .populate('properties')
+      .exec();
+
     return categories.map((category: CategoryDocument) => ({
-      ...category.toObject(),
+      id: category._id.toString(),
       parentId: category.parentId ? category.parentId.toString() : null,
+      properties: category.properties.map((property: CPropertyDocument) => ({
+        id: property._id.toString(),
+        categoryId: property.categoryId.toString(),
+        propertyName: property.propertyName,
+      })),
+      categoryName: category.categoryName,
+      image: category.image,
     }));
   }
 
-  public async deleteCategory(categoryId: string): Promise<string[]> {
-    const category = await this.categoryModel.findById(categoryId).exec();
+  public async getCategoryById(id: string): Promise<CategoryGQL> {
+    const category = await this.categoryModel
+      .findById(id)
+      .populate('properties')
+      .exec();
+
     if (!category) {
       throw new NotFoundException('Category not found');
     }
+
+    return {
+      id: category._id.toString(),
+      parentId: category.parentId ? category.parentId.toString() : null,
+      properties: category.properties.map((property: CPropertyDocument) => ({
+        id: property._id.toString(),
+        categoryId: property.categoryId.toString(),
+        propertyName: property.propertyName,
+      })),
+      categoryName: category.categoryName,
+      image: category.image,
+    };
+  }
+
+  public async deleteCategory(categoryId: string): Promise<string[]> {
+    const category = await this.getCategoryById(categoryId);
     const subCategoriesIds = await this.findSubCategoriesIds(categoryId);
     // TODO: check subcategories and products. If a category cannot be deleted you should throw ForbiddenException
     for (const id of subCategoriesIds) {
@@ -40,10 +74,11 @@ export class CategoriesService {
       }
       await this.categoryModel.findByIdAndDelete(id).exec();
     }
+    await this.cPropertiesService.deleteAllCPropertiesByCategoryId(category.id);
     return subCategoriesIds;
   }
 
-  private async findSubCategoriesIds(categoryId: string): Promise<string[]> {
+  public async findSubCategoriesIds(categoryId: string): Promise<string[]> {
     const subCategories = await this.categoryModel
       .find({ parentId: categoryId })
       .exec();
@@ -69,13 +104,17 @@ export class CategoriesService {
       const category = await this.categoryModel.create({
         ...createCategoryInput,
         image: fileName,
+        properties: [],
       });
       return {
         ...category.toObject(),
         parentId: category.parentId ? category.parentId.toString() : null,
       };
     } else if (!createCategoryInput.image && !createCategoryInput.parentId) {
-      const category = await this.categoryModel.create(createCategoryInput);
+      const category = await this.categoryModel.create({
+        ...createCategoryInput,
+        properties: [],
+      });
       return category.toObject();
     } else {
       throw new BadRequestException('Bad Request');
@@ -85,6 +124,15 @@ export class CategoriesService {
   public async addSubCategories(
     createCategoryInputs: CreateCategoryInput[],
   ): Promise<CategoryGQL[]> {
+    const propertiesIds =
+      await this.cPropertiesService.findCPropertiesIdsByCategoryId(
+        createCategoryInputs[0].parentId as string,
+      );
+    if (propertiesIds.length) {
+      throw new ConflictException(
+        'A category cannot include properties and subcategories',
+      );
+    }
     const categories: CategoryGQL[] = [];
     for (const input of createCategoryInputs) {
       const category = await this.createCategory(input);
@@ -97,11 +145,7 @@ export class CategoriesService {
     id: string,
     updateCategoryInput: UpdateCategoryInput,
   ): Promise<CategoryGQL> {
-    const existedCategory = await this.categoryModel.findById(id).exec();
-
-    if (!existedCategory) {
-      throw new NotFoundException('Category not found');
-    }
+    const existedCategory = await this.getCategoryById(id);
 
     if (updateCategoryInput.image) {
       const fileName = await this.filesService.createImageFile(
@@ -115,6 +159,7 @@ export class CategoriesService {
           { ...updateCategoryInput, image: fileName },
           { new: true },
         )
+        .populate('properties')
         .exec();
 
       if (!updatedCategory) {
@@ -122,10 +167,19 @@ export class CategoriesService {
       }
 
       return {
-        ...updatedCategory.toObject(),
+        id: updatedCategory._id.toString(),
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
+        properties: updatedCategory.properties.map(
+          (property: CPropertyDocument) => ({
+            id: property._id.toString(),
+            categoryId: property.categoryId.toString(),
+            propertyName: property.propertyName,
+          }),
+        ),
+        categoryName: updatedCategory.categoryName,
+        image: updatedCategory.image,
       };
     } else {
       const updatedCategory = await this.categoryModel
@@ -137,6 +191,7 @@ export class CategoriesService {
           },
           { new: true },
         )
+        .populate('properties')
         .exec();
 
       if (!updatedCategory) {
@@ -144,10 +199,19 @@ export class CategoriesService {
       }
 
       return {
-        ...updatedCategory.toObject(),
+        id: updatedCategory._id.toString(),
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
+        properties: updatedCategory.properties.map(
+          (property: CPropertyDocument) => ({
+            id: property._id.toString(),
+            categoryId: property.categoryId.toString(),
+            propertyName: property.propertyName,
+          }),
+        ),
+        categoryName: updatedCategory.categoryName,
+        image: updatedCategory.image,
       };
     }
   }

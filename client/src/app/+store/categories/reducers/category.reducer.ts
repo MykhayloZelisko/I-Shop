@@ -10,6 +10,7 @@ export const categoriesFeatureKey = 'categories';
 export interface State extends EntityState<CategoryInterface> {
   currentCategory: CurrentCategoryStatusInterface;
   isNewCategory: boolean;
+  currentPropertyId: string | null;
 }
 
 export const adapter: EntityAdapter<CategoryInterface> =
@@ -21,6 +22,7 @@ export const initialState: State = adapter.getInitialState({
     isEditable: false,
   },
   isNewCategory: false,
+  currentPropertyId: null,
 });
 
 export const reducer = createReducer(
@@ -85,5 +87,9 @@ export const reducer = createReducer(
   on(CategoryActions.changeCurrentCategoryStatus, (state, action) => ({
     ...state,
     currentCategory: action.categoryStatus,
+  })),
+  on(CategoryActions.changeCurrentPropertyId, (state, action) => ({
+    ...state,
+    currentPropertyId: action.id,
   })),
 );

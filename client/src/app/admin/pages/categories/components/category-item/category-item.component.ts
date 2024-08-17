@@ -12,7 +12,11 @@ import { State } from '../../../../../+store/reducers';
 import { Store } from '@ngrx/store';
 import { CategoryActions } from '../../../../../+store/categories/actions/category.actions';
 import { Observable } from 'rxjs';
-import { selectCurrentCategory } from '../../../../../+store/categories/selectors/category.selectors';
+import {
+  selectCurrentCategory,
+  selectHasChildren,
+  selectHasProperties,
+} from '../../../../../+store/categories/selectors/category.selectors';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { SubCategoriesDialogComponent } from './components/sub-categories-dialog/sub-categories-dialog.component';
@@ -47,6 +51,10 @@ export class CategoryItemComponent implements OnInit {
 
   public currentCategory$!: Observable<CurrentCategoryStatusInterface>;
 
+  public hasChildren$!: Observable<boolean>;
+
+  public hasProperties$!: Observable<boolean>;
+
   public dialog$!: Observable<PopupDataInterface>;
 
   public newCategoryData!: CategoryFormDataInterface;
@@ -65,6 +73,10 @@ export class CategoryItemComponent implements OnInit {
   public ngOnInit(): void {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
     this.dialog$ = this.store.select(selectPopup);
+    this.hasChildren$ = this.store.select(selectHasChildren(this.category.id));
+    this.hasProperties$ = this.store.select(
+      selectHasProperties(this.category.id),
+    );
   }
 
   public deleteCategory(): void {
@@ -80,6 +92,7 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
     this.categoryData = {
       parentId: this.category.parentId,
       categoryName: this.category.categoryName,
@@ -123,6 +136,7 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
   }
 
   public getImageStyle(): Record<string, string> {
@@ -163,5 +177,6 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
   }
 }

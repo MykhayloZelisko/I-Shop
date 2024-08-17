@@ -64,7 +64,11 @@
           'category-item__buttons--not-first': category.parentId
         }"
       >
-        <button class="category-item__button" (click)="openPropertiesDialog()">
+        <button
+          class="category-item__button"
+          (click)="openPropertiesDialog()"
+          [disabled]="hasChildren$ | async"
+        >
           <svg-icon
             class="category-item__icon category-item__icon--add"
             src="assets/images/plus-round-line-icon.svg"
@@ -73,6 +77,7 @@
         <button
           class="category-item__button"
           (click)="openSubCategoriesDialog()"
+          [disabled]="hasProperties$ | async"
         >
           <svg-icon
             class="category-item__icon category-item__icon--add"

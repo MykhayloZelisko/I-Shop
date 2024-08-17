@@ -215,6 +215,7 @@ export class CategoryEffects {
             mergeMap((category) => [
               LoaderActions.toggleLoader(),
               CategoryActions.updateCPropertySuccess({ category }),
+              CategoryActions.changeCurrentPropertyId({ id: null }),
             ]),
             catchError(() => {
               this.store.dispatch(LoaderActions.toggleLoader());

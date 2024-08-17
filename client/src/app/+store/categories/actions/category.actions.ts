@@ -41,5 +41,6 @@ export const CategoryActions = createActionGroup({
     ChangeCurrentCategoryStatus: props<{
       categoryStatus: CurrentCategoryStatusInterface;
     }>(),
+    ChangeCurrentPropertyId: props<{ id: string | null }>(),
   },
 });

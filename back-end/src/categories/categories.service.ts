@@ -1,6 +1,8 @@
 import {
-  BadRequestException, ConflictException,
+  BadRequestException,
+  ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -214,5 +216,35 @@ export class CategoriesService {
         image: updatedCategory.image,
       };
     }
+  }
+
+  public async addPropertiesToCategory(
+    categoryId: string,
+    propertyIds: string[],
+  ): Promise<CategoryGQL> {
+    const category = await this.categoryModel
+      .findByIdAndUpdate(
+        categoryId,
+        { $push: { properties: { $each: propertyIds } } },
+        { new: true },
+      )
+      .populate('properties')
+      .exec();
+    if (!category) {
+      throw new InternalServerErrorException(
+        'Properties are not added to a category',
+      );
+    }
+    return {
+      id: category._id.toString(),
+      parentId: category.parentId ? category.parentId.toString() : null,
+      properties: category.properties.map((property: CPropertyDocument) => ({
+        id: property._id.toString(),
+        categoryId: property.categoryId.toString(),
+        propertyName: property.propertyName,
+      })),
+      categoryName: category.categoryName,
+      image: category.image,
+    };
   }
 }

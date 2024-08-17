@@ -64,10 +64,16 @@
           'category-item__buttons--not-first': category.parentId
         }"
       >
-        <button class="category-item__button" (click)="openSubCategoryDialog()">
+        <button class="category-item__button" (click)="openPropertiesDialog()">
           <svg-icon
             class="category-item__icon category-item__icon--add"
             src="assets/images/plus-round-line-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="category-item__button" (click)="openSubCategoriesDialog()">
+          <svg-icon
+            class="category-item__icon category-item__icon--add"
+            src="assets/images/add-category-icon.svg"
           ></svg-icon>
         </button>
         <button class="category-item__button" (click)="editCategory()">
@@ -88,13 +94,23 @@
 
   @if (dialog$ | async; as dialog) {
     @if (
-      dialog.popupType === dialogEnum.SubCategory &&
+      dialog.popupType === dialogEnum.SubCategories &&
       currentCategory.id === category.id
     ) {
       <app-sub-category-dialog
         [dialog]="dialog"
         [parentId]="category.id"
       ></app-sub-category-dialog>
+    }
+
+    @if (
+      dialog.popupType === dialogEnum.CProperties &&
+      currentCategory.id === category.id
+    ) {
+      <app-c-properties-dialog
+        [dialog]="dialog"
+        [parentId]="category.id"
+      ></app-c-properties-dialog>
     }
   }
 }

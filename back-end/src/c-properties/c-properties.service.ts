@@ -12,7 +12,6 @@ import { UpdateCPropertyInput } from './inputs/update-c-property.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CProperty, CPropertyDocument } from './schemas/c-property.schema';
-import { CProperty as CPropertyGQL } from './models/c-property.model';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/models/category.model';
 import { DeleteResult } from 'mongodb';
@@ -26,36 +25,27 @@ export class CPropertiesService {
     private categoriesService: CategoriesService,
   ) {}
 
-  public async createCProperty(
-    createCPropertyInput: CreateCPropertyInput,
-  ): Promise<CPropertyGQL> {
-    const property = await this.cPropertyModel
-      .findOne({ propertyName: createCPropertyInput.propertyName })
-      .exec();
-    if (property) {
-      throw new ConflictException('This property already exists');
-    }
-    const newProperty = await this.cPropertyModel.create(createCPropertyInput);
-    return newProperty.toObject();
-  }
-
   public async createCProperties(
     createCPropertyInputs: CreateCPropertyInput[],
   ): Promise<Category> {
-    const subcategoriesIds = await this.categoriesService.findSubCategoriesIds(
-      createCPropertyInputs[0].categoryId,
-    );
-    if (subcategoriesIds.length) {
+    const categoryId = createCPropertyInputs[0].categoryId;
+    const subcategoriesIds =
+      await this.categoriesService.findSubCategoriesIds(categoryId);
+    if (subcategoriesIds.length > 1) {
       throw new ConflictException(
         'A category cannot include properties and subcategories',
       );
     }
-    const properties: CPropertyGQL[] = [];
-    for (const input of createCPropertyInputs) {
-      const property = await this.createCProperty(input);
-      properties.push(property);
-    }
-    return this.categoriesService.getCategoryById(properties[0].categoryId);
+    const createdProperties = await this.cPropertyModel.insertMany(
+      createCPropertyInputs,
+    );
+    const propertyIds = createdProperties.map((property: CPropertyDocument) =>
+      property._id.toString(),
+    );
+    return this.categoriesService.addPropertiesToCategory(
+      categoryId,
+      propertyIds,
+    );
   }
 
   public async updateCProperty(
@@ -105,8 +95,6 @@ export class CPropertiesService {
     categoryId: string,
   ): Promise<string[]> {
     const properties = await this.cPropertyModel.find({ categoryId }).exec();
-    return properties.map((property: CPropertyDocument) =>
-      property._id.toString(),
-    );
+    return properties.map((property) => property._id.toString());
   }
 }

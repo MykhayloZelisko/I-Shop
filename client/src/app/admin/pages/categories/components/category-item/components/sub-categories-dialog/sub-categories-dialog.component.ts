@@ -36,11 +36,11 @@ import { PopupActions } from '../../../../../../../+store/popup/actions/popup.ac
     ReactiveFormsModule,
     EditCategoryItemComponent,
   ],
-  templateUrl: './sub-category-dialog.component.html',
-  styleUrl: './sub-category-dialog.component.scss',
+  templateUrl: './sub-categories-dialog.component.html',
+  styleUrl: './sub-categories-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubCategoryDialogComponent implements OnInit {
+export class SubCategoriesDialogComponent implements OnInit {
   @Input({ required: true }) public dialog!: PopupDataInterface;
 
   @Input({ required: true }) public parentId!: string;
@@ -102,7 +102,7 @@ export class SubCategoryDialogComponent implements OnInit {
     this.getCategories().removeAt(catIndex);
   }
 
-  public addSubCategory(): void {
+  public saveSubCategories(): void {
     const categories: CreateCategoryInterface[] = this.subCategoriesForm
       .getRawValue()
       .categories.map((item) => ({

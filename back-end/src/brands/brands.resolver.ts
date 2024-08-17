@@ -9,11 +9,11 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 
 @Resolver(() => Brand)
+@UseGuards(GqlAdminGuard)
 export class BrandsResolver {
   public constructor(private brandsService: BrandsService) {}
 
   @Mutation(() => Brand)
-  @UseGuards(GqlAdminGuard)
   @UsePipes(ValidationPipe)
   public async createBrand(
     @Args('createBrandInput') createBrandInput: CreateBrandInput,
@@ -22,13 +22,11 @@ export class BrandsResolver {
   }
 
   @Query(() => [Brand], { name: 'brands' })
-  @UseGuards(GqlAdminGuard)
   public async getAllBrands(): Promise<Brand[]> {
     return this.brandsService.getAllBrands();
   }
 
   @Mutation(() => Brand)
-  @UseGuards(GqlAdminGuard)
   public async updateBrand(
     @Args('id', ParseObjectIdPipe) id: string,
     @Args('updateBrandInput', ValidationPipe)

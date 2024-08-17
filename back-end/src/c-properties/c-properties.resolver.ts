@@ -10,11 +10,11 @@ import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-
 import { Category } from '../categories/models/category.model';
 
 @Resolver(() => CProperty)
+@UseGuards(GqlAdminGuard)
 export class CPropertiesResolver {
   public constructor(private cPropertiesService: CPropertiesService) {}
 
   @Mutation(() => Category)
-  @UseGuards(GqlAdminGuard)
   @UsePipes(ValidationPipe)
   public async createCProperties(
     @Args('createCPropertyInputs', { type: () => [CreateCPropertyInput] })
@@ -24,7 +24,6 @@ export class CPropertiesResolver {
   }
 
   @Mutation(() => Category)
-  @UseGuards(GqlAdminGuard)
   public async updateCProperty(
     @Args('id', ParseObjectIdPipe) id: string,
     @Args('updateCPropertyInput', ValidationPipe)
@@ -34,7 +33,6 @@ export class CPropertiesResolver {
   }
 
   @Mutation(() => Category)
-  @UseGuards(GqlAdminGuard)
   public async deleteCProperty(
     @Args('id', ParseObjectIdPipe) id: string,
   ): Promise<Category> {

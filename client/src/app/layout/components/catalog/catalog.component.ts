@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../shared/directives/click-outside.directive';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
@@ -38,12 +38,6 @@ export class CatalogComponent implements OnInit {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.categories$ = this.store
-      .select(selectCategoriesTree)
-      .pipe(
-        map((categories: TreeNode<CategoryInterface>[]) =>
-          categories.slice(0, -1),
-        ),
-      );
+    this.categories$ = this.store.select(selectCategoriesTree);
   }
 }

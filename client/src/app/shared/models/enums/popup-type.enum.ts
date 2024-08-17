@@ -3,7 +3,8 @@ export enum PopupTypeEnum {
   Login = 'Login',
   RestorePassword = 'Password',
   None = 'None',
-  SubCategory = 'SubCategory',
+  SubCategories = 'SubCategories',
   MainMenu = 'MainMenu',
   Catalog = 'Catalog',
+  CProperties = 'C-properties',
 }

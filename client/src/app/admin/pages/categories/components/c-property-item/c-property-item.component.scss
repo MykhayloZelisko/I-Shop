@@ -1,32 +1,24 @@
 @import 'variables';
 
-.category-item {
+.c-property-item {
   display: flex;
   gap: 12px;
   align-items: center;
   justify-content: space-between;
-  background-color: $brown-4;
+  background-color: $blue-3;
   font-family: $source;
   border-radius: 5px;
   color: $brown-1;
   font-size: 16px;
+  padding: 5px 10px;
+  min-height: 40px;
 
-  &--first {
-    padding: 5px 10px;
-    min-height: 40px;
-  }
-
-  &--not-first {
-    padding: 10px;
+  &--editable {
+    position: relative;
   }
 
   &__name {
     font-size: 16px;
-
-    &--editable {
-      width: 100%;
-      outline: none;
-    }
   }
 
   &__button {
@@ -42,16 +34,35 @@
     &:disabled {
       cursor: default;
 
-      & .category-item {
+      & .c-property-item {
         &__icon {
-          & svg {
-            & path {
-              fill: $gray-5;
+          &--save {
+            & svg {
+              & path {
+                fill: $gray-5;
+              }
             }
           }
         }
       }
     }
+  }
+
+  &__buttons {
+    display: flex;
+    opacity: 0;
+
+    &--editable {
+      position: absolute;
+      display: flex;
+      top: 5px;
+      right: 10px;
+      opacity: 1;
+    }
+  }
+
+  &:hover &__buttons {
+    opacity: 1;
   }
 
   &__icon {
@@ -66,7 +77,6 @@
       }
     }
 
-    &--add:hover,
     &--save:hover,
     &--edit:hover {
       & svg {
@@ -86,26 +96,28 @@
     }
   }
 
-  &__buttons {
-    display: flex;
-    opacity: 0;
+  &__input {
+    display: block;
+    width: 100%;
+    height: 40px;
+    font-family: $source;
+    padding: 0 77px 0 12px;
+    border-radius: 3px;
+    border: 1px solid $brown-4;
+    box-sizing: border-box;
+    font-size: 16px;
 
-    &--editable {
-      display: flex;
+    &:hover {
+      border-color: $brown-1;
     }
 
-    &--not-first {
-      flex-direction: column;
+    &:focus {
+      border-color: $brown-2;
+      outline: none;
     }
-  }
 
-  &:hover &__buttons {
-    opacity: 1;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    &:active {
+      border-color: $brown-2;
+    }
   }
 }

@@ -46,6 +46,7 @@ export class NewCategoryComponent implements OnInit {
         categoryStatus: { id: null, isEditable: false },
       }),
     );
+    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
   }
 
   public saveCategory(): void {

@@ -14,12 +14,14 @@
         (onNodeExpand)="nodeExpand($event)"
         (onNodeCollapse)="nodeCollapse($event)"
       >
-        <ng-template let-node pTemplate="default">
-          @if (node.data) {
-            <app-category-item [category]="node.data"></app-category-item>
-          } @else {
-            <app-new-category></app-new-category>
-          }
+        <ng-template let-node pTemplate="category">
+          <app-category-item [category]="node.data"></app-category-item>
+        </ng-template>
+        <ng-template pTemplate="default">
+          <app-new-category></app-new-category>
+        </ng-template>
+        <ng-template let-node pTemplate="property">
+          <app-c-property-item [property]="node.data"></app-c-property-item>
         </ng-template>
       </p-tree>
     </div>

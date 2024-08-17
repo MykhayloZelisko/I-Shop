@@ -1,7 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  inject, OnDestroy,
+  inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { Observable } from 'rxjs';

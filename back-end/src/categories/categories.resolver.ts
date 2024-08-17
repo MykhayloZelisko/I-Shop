@@ -1,4 +1,11 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CategoriesService } from './categories.service';
 import { Category } from './models/category.model';
 import { UseGuards, UsePipes } from '@nestjs/common';
@@ -7,8 +14,9 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
+import { CProperty } from '../c-properties/models/c-property.model';
 
-@Resolver()
+@Resolver(() => Category)
 export class CategoriesResolver {
   public constructor(private categoriesService: CategoriesService) {}
 
@@ -52,5 +60,10 @@ export class CategoriesResolver {
     @Args('id', ParseObjectIdPipe) id: string,
   ): Promise<string[]> {
     return this.categoriesService.deleteCategory(id);
+  }
+
+  @ResolveField(() => [CProperty])
+  public async properties(@Parent() category: Category): Promise<CProperty[]> {
+    return category.properties;
   }
 }

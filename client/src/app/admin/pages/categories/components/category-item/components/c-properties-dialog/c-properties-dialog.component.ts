@@ -23,9 +23,7 @@ import {
   CPropertyFormInterface,
 } from '../../../../../../../shared/models/interfaces/c-properties-form.interface';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
-import {
-  CreateCPropertyInterface
-} from '../../../../../../../shared/models/interfaces/create-c-property.interface';
+import { CreateCPropertyInterface } from '../../../../../../../shared/models/interfaces/create-c-property.interface';
 
 @Component({
   selector: 'app-c-properties-dialog',

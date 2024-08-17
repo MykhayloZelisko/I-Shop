@@ -8,10 +8,9 @@ describe('CPropertiesDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CPropertiesDialogComponent]
-    })
-    .compileComponents();
-    
+      imports: [CPropertiesDialogComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CPropertiesDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -43,10 +43,6 @@ export class CPropertyItemComponent implements OnInit {
     );
   }
 
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
-  }
-
   public editProperty(): void {
     this.store.dispatch(
       CategoryActions.updateCPState({

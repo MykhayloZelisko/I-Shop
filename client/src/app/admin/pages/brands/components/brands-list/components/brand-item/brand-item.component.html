@@ -1,11 +1,6 @@
 @if (brand.id === (currentId$ | async)) {
   <div class="brand-item__input-wrapper">
-    <input
-      class="brand-item__input"
-      type="text"
-      [formControl]="brandCtrl"
-      (keydown)="handleInput($event)"
-    />
+    <input class="brand-item__input" type="text" [formControl]="brandCtrl" />
     <div class="brand-item__buttons brand-item__buttons--editable">
       <button
         class="brand-item__button"

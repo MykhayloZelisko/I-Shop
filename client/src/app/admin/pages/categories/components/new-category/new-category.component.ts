@@ -67,8 +67,4 @@ export class NewCategoryComponent implements OnInit {
     this.store.dispatch(CategoryActions.clearCPState());
     this.newCategoryCtrl.setValue('');
   }
-
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
-  }
 }

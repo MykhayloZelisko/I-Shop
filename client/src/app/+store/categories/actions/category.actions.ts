@@ -1,6 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
-import { CurrentCategoryStatusInterface } from '../../../shared/models/interfaces/current-category-status.interface';
 import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
 import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
 import { CreateCPropertyInterface } from '../../../shared/models/interfaces/create-c-property.interface';

@@ -19,3 +19,32 @@ $red: #f84147;
 
 // fonts
 $source: 'Source Sans Pro', sans-serif;
+
+// mixins
+@mixin input-style($padding-right, $padding-left: $padding-right) {
+  width: 100%;
+  font-family: $source;
+  border-radius: 3px;
+  border: 1px solid $brown-5;
+  box-sizing: border-box;
+  font-size: 16px;
+
+  @if ($padding-right == $padding-left) {
+    padding: 9px $padding-right;
+  } @else {
+    padding: 9px $padding-right 9px $padding-left;
+  }
+
+  &:hover {
+    border-color: $brown-1;
+  }
+
+  &:focus {
+    border-color: $brown-2;
+    outline: none;
+  }
+
+  &:active {
+    border-color: $brown-2;
+  }
+}

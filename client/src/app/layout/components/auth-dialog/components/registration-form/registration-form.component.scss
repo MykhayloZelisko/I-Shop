@@ -18,30 +18,12 @@
   }
 
   &__input {
+    @include input-style(12px, 12px);
+
     margin-top: 8px;
-    padding: 9px 12px;
-    border-radius: 3px;
-    border: 1px solid $brown-5;
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 14px;
-    font-family: $source;
 
     &.ng-invalid.ng-touched {
       border-color: $red;
-    }
-
-    &:hover {
-      border-color: $brown-1;
-    }
-
-    &:focus {
-      border-color: $brown-2;
-      outline: none;
-    }
-
-    &:active {
-      border-color: $brown-2;
     }
   }
 

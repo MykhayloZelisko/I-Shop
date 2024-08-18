@@ -25,27 +25,9 @@
   }
 
   &__input {
-    padding: 9px 12px;
-    border-radius: 3px;
-    border: 1px solid $brown-5;
-    box-sizing: border-box;
+    @include input-style(12px, 12px);
+
     min-width: 300px;
-    width: 100%;
-    font-size: 14px;
-    font-family: $source;
-
-    &:hover {
-      border-color: $brown-1;
-    }
-
-    &:focus {
-      border-color: $brown-2;
-      outline: none;
-    }
-
-    &:active {
-      border-color: $brown-2;
-    }
 
     &.ng-invalid.ng-touched {
       border-color: $red;

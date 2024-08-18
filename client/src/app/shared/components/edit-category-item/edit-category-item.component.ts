@@ -107,10 +107,6 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
-  }
-
   public setImageUrl(value: string | null): void {
     this.categoryForm.controls.base64image.setValue(value);
   }

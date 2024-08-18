@@ -94,7 +94,7 @@
   }
 
   &__input {
-    @include input-style(12px, 12px);
+    @include input-style(12px);
 
     min-width: 300px;
 

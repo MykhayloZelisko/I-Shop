@@ -87,12 +87,14 @@ export class CategoryItemComponent implements OnInit {
 
   public editCategory(): void {
     this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: true },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: false,
+          currentCategory: { id: this.category.id, isEditable: true },
+        },
       }),
     );
-    this.store.dispatch(CategoryActions.closeNewCategory());
-    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
     this.categoryData = {
       parentId: this.category.parentId,
       categoryName: this.category.categoryName,
@@ -102,11 +104,7 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public cancelEditCategory(): void {
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
-      }),
-    );
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public saveCategory(): void {
@@ -131,12 +129,14 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: false },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: false,
+          currentCategory: { id: this.category.id, isEditable: false },
+        },
       }),
     );
-    this.store.dispatch(CategoryActions.closeNewCategory());
-    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
   }
 
   public getImageStyle(): Record<string, string> {
@@ -172,11 +172,13 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: false },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: false,
+          currentCategory: { id: this.category.id, isEditable: false },
+        },
       }),
     );
-    this.store.dispatch(CategoryActions.closeNewCategory());
-    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
   }
 }

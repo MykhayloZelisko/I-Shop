@@ -76,11 +76,7 @@ export class CPropertiesDialogComponent implements OnInit {
 
   public closeDialog(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
-      }),
-    );
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public deleteProperty(propIndex: number): void {

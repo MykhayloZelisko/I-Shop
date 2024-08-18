@@ -46,33 +46,17 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.store.dispatch(CategoryActions.closeNewCategory());
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { isEditable: false, id: null },
-      }),
-    );
-    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public expandAll(): void {
     this.store.dispatch(CategoryActions.updateCategories({ expanded: true }));
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
-      }),
-    );
-    this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public collapseAll(): void {
     this.store.dispatch(CategoryActions.updateCategories({ expanded: false }));
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
-      }),
-    );
-    this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public nodeExpand(event: TreeNodeExpandEvent): void {
@@ -81,6 +65,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         category: { ...event.node.data, expanded: true },
       }),
     );
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public nodeCollapse(event: TreeNodeCollapseEvent): void {
@@ -89,5 +74,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         category: { ...event.node.data, expanded: false },
       }),
     );
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 }

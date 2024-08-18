@@ -49,12 +49,12 @@ export class CPropertyItemComponent implements OnInit {
 
   public editProperty(): void {
     this.store.dispatch(
-      CategoryActions.changeCurrentPropertyId({ id: this.property.id }),
-    );
-    this.store.dispatch(CategoryActions.closeNewCategory());
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: this.property.id,
+          isNewCategory: false,
+          currentCategory: { id: null, isEditable: false },
+        },
       }),
     );
   }
@@ -67,7 +67,13 @@ export class CPropertyItemComponent implements OnInit {
   }
 
   public cancelEditProperty(): void {
-    this.store.dispatch(CategoryActions.changeCurrentPropertyId({ id: null }));
+    this.store.dispatch(CategoryActions.clearCPState());
     this.propertyCtrl.setValue(this.property.propertyName);
+  }
+
+  public deleteProperty(): void {
+    this.store.dispatch(
+      CategoryActions.deleteCProperty({ id: this.property.id }),
+    );
   }
 }

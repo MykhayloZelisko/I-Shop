@@ -17,6 +17,7 @@ import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-n
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { PopupDataInterface } from '../../../shared/models/interfaces/popup-data.interface';
 import { selectPopup } from '../../../+store/popup/selectors/popup.selectors';
+import { CategoryActions } from '../../../+store/categories/actions/category.actions';
 
 @Component({
   selector: 'app-header',
@@ -65,6 +66,7 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
+    this.clearCategoriesState();
   }
 
   public goAdmin(): void {
@@ -85,5 +87,15 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
+    this.clearCategoriesState();
+  }
+
+  public clearCategoriesState(): void {
+    this.store.dispatch(CategoryActions.clearCPState());
+  }
+
+  public clearState(): void {
+    this.closeCatalog();
+    this.clearCategoriesState();
   }
 }

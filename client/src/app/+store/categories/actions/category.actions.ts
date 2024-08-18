@@ -4,6 +4,7 @@ import { CurrentCategoryStatusInterface } from '../../../shared/models/interface
 import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
 import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
 import { CreateCPropertyInterface } from '../../../shared/models/interfaces/create-c-property.interface';
+import { CPStateInterface } from '../../../shared/models/interfaces/c-p-state.interface';
 
 export const CategoryActions = createActionGroup({
   source: 'Category/API',
@@ -36,11 +37,7 @@ export const CategoryActions = createActionGroup({
     UpdateCPropertySuccess: props<{ category: CategoryInterface }>(),
     UpdateCPropertyFailure: emptyProps(),
     // Other actions
-    OpenNewCategory: emptyProps(),
-    CloseNewCategory: emptyProps(),
-    ChangeCurrentCategoryStatus: props<{
-      categoryStatus: CurrentCategoryStatusInterface;
-    }>(),
-    ChangeCurrentPropertyId: props<{ id: string | null }>(),
+    UpdateCPState: props<{ payload: CPStateInterface }>(),
+    ClearCPState: emptyProps(),
   },
 });

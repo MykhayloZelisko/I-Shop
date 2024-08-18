@@ -56,9 +56,7 @@ export class CategoryEffects {
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.updateCategorySuccess({ category }),
-            CategoryActions.changeCurrentCategoryStatus({
-              categoryStatus: { id: null, isEditable: false },
-            }),
+            CategoryActions.clearCPState(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());
@@ -89,7 +87,7 @@ export class CategoryEffects {
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.addCategorySuccess({ category }),
-            CategoryActions.closeNewCategory(),
+            CategoryActions.clearCPState(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());
@@ -215,7 +213,7 @@ export class CategoryEffects {
             mergeMap((category) => [
               LoaderActions.toggleLoader(),
               CategoryActions.updateCPropertySuccess({ category }),
-              CategoryActions.changeCurrentPropertyId({ id: null }),
+              CategoryActions.clearCPState(),
             ]),
             catchError(() => {
               this.store.dispatch(LoaderActions.toggleLoader());

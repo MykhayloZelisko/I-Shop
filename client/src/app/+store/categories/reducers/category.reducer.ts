@@ -76,20 +76,16 @@ export const reducer = createReducer(
     },
   ),
   // other actions
-  on(CategoryActions.openNewCategory, (state) => ({
+  on(CategoryActions.updateCPState, (state, action) => ({
     ...state,
-    isNewCategory: true,
+    currentPropertyId: action.payload.currentPropertyId,
+    isNewCategory: action.payload.isNewCategory,
+    currentCategory: { ...action.payload.currentCategory },
   })),
-  on(CategoryActions.closeNewCategory, (state) => ({
+  on(CategoryActions.clearCPState, (state) => ({
     ...state,
+    currentPropertyId: null,
     isNewCategory: false,
-  })),
-  on(CategoryActions.changeCurrentCategoryStatus, (state, action) => ({
-    ...state,
-    currentCategory: action.categoryStatus,
-  })),
-  on(CategoryActions.changeCurrentPropertyId, (state, action) => ({
-    ...state,
-    currentPropertyId: action.id,
+    currentCategory: { id: null, isEditable: false },
   })),
 );

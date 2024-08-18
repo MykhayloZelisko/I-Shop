@@ -37,4 +37,8 @@ export class NewBrandComponent implements OnInit {
     const brandName = this.brandCtrl.getRawValue();
     this.store.dispatch(BrandActions.addBrand({ brandName }));
   }
+
+  public clearBrandId(): void {
+    this.store.dispatch(BrandActions.clearCurrentBrandId());
+  }
 }

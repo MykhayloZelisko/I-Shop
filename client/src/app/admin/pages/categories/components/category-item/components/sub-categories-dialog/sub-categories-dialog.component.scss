@@ -60,20 +60,18 @@
       &:disabled:hover {
         cursor: auto;
 
-        & svg {
-          & path {
-            fill: $gray-5;
+        & .sub-categories-dialog {
+          &__icon {
+            &--delete {
+              @include icon-style($gray-5);
+            }
           }
         }
       }
     }
 
     &:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 
@@ -120,27 +118,14 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-    }
+    @include icon-style($size: 24px);
 
     &--close {
-      & svg {
-        & path {
-          fill: $yellow;
-        }
-      }
+      @include icon-style($yellow);
     }
 
     &--delete {
-      & svg {
-        & path {
-          fill: $brown-1;
-        }
-      }
+      @include icon-style($brown-1);
     }
   }
 

@@ -68,24 +68,14 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-    }
+    @include icon-style($size: 24px);
 
     &--right {
-      & svg {
-        height: 10px;
-        width: 10px;
-      }
+      @include icon-style($size: 10px, $lift: false);
     }
 
     &--active {
-      & svg {
-        fill: $blue-2;
-      }
+      @include icon-style($blue-2, $lift: false);
     }
   }
 

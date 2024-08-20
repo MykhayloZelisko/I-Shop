@@ -24,9 +24,11 @@
     cursor: pointer;
 
     &:hover {
-      & svg {
-        & path {
-          fill: $red;
+      .small-catalog {
+        &__icon {
+          &--header-icon {
+            @include icon-style($red);
+          }
         }
       }
     }
@@ -49,25 +51,15 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-    }
+    @include icon-style($size: 24px);
 
     &--right {
-      & svg {
-        height: 10px;
-        width: 10px;
-        position: relative;
-        top: 1px;
-      }
+      @include icon-style($size: 10px, $lift: false);
     }
 
     &--header-icon {
       & svg {
-        fill: $yellow;
+        @include icon-style($yellow);
       }
     }
   }
@@ -132,9 +124,7 @@
 
       .small-catalog {
         &__icon {
-          & svg {
-            fill: $blue-2;
-          }
+          @include icon-style($blue-2);
         }
       }
     }
@@ -160,9 +150,7 @@
 
       .small-catalog {
         &__icon {
-          & svg {
-            fill: $blue-2;
-          }
+          @include icon-style($blue-2);
         }
       }
     }

@@ -48,11 +48,7 @@
     cursor: pointer;
 
     &:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 
@@ -87,19 +83,10 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-    }
+    @include icon-style($size: 24px);
 
     &--header-icon {
-      & svg {
-        & path {
-          fill: $yellow;
-        }
-      }
+      @include icon-style($yellow);
     }
   }
 

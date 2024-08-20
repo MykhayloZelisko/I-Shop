@@ -60,20 +60,18 @@
       &:disabled:hover {
         cursor: auto;
 
-        & svg {
-          & path {
-            fill: $gray-5;
+        & .c-properties-dialog{
+          &__icon {
+            &--delete {
+              @include icon-style($gray-5);
+            }
           }
         }
       }
     }
 
     &:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 
@@ -94,13 +92,7 @@
   }
 
   &__input {
-    @include input-style(12px);
-
-    min-width: 300px;
-
-    &.ng-invalid.ng-touched {
-      border-color: $red;
-    }
+    @include input-style(9px 12px, $min-width: 300px);
   }
 
   &__form {
@@ -130,27 +122,14 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-    }
+    @include icon-style($size: 24px);
 
     &--close {
-      & svg {
-        & path {
-          fill: $yellow;
-        }
-      }
+      @include icon-style($yellow);
     }
 
     &--delete {
-      & svg {
-        & path {
-          fill: $brown-1;
-        }
-      }
+      @include icon-style($brown-1);
     }
   }
 

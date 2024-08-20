@@ -44,45 +44,24 @@
 
       & .category-item {
         &__icon {
-          & svg {
-            & path {
-              fill: $gray-5;
-            }
-          }
+          @include icon-style($gray-5);
         }
       }
     }
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-
-      & path {
-        fill: $brown-1;
-      }
-    }
+    @include icon-style($brown-1, 24px);
 
     &--add:hover,
     &--save:hover,
     &--edit:hover {
-      & svg {
-        & path {
-          fill: $blue-1;
-        }
-      }
+      @include icon-style($blue-1);
     }
 
     &--cancel:hover,
     &--delete:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 

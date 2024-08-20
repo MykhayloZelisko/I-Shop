@@ -21,38 +21,70 @@ $red: #f84147;
 $source: 'Source Sans Pro', sans-serif;
 
 // mixins
-@mixin input-style($padding-right, $padding-left: $padding-right) {
-  @include min-input-style($padding-right, $padding-left: $padding-right);
-
-  border-radius: 3px;
-  border: 1px solid $brown-5;
+@mixin input-style($padding, $border: true, $radius: 3px, $max-width: null, $min-width: null, $invalid: true) {
+  width: 100%;
+  font-family: $source;
+  padding: $padding;
+  border-radius: $radius;
   box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
 
-  &:hover {
-    border-color: $brown-1;
+  @if $max-width != null {
+    max-width: $max-width;
   }
 
-  &:focus {
-    border-color: $brown-2;
+  @if $min-width != null {
+    min-width: $min-width;
   }
 
-  &:active {
-    border-color: $brown-2;
+  @if $border {
+    border: 1px solid $brown-5;
+
+    &:hover {
+      border-color: $brown-1;
+    }
+
+    &:focus {
+      border-color: $brown-2;
+    }
+
+    &:active {
+      border-color: $brown-2;
+    }
+
+    @if $invalid {
+      &.ng-invalid.ng-touched {
+        border-color: $red;
+      }
+    }
   }
 }
 
-@mixin min-input-style($padding-right, $padding-left: $padding-right) {
-  width: 100%;
-  font-family: $source;
-  font-size: 16px;
+@mixin icon-style($color: null, $size: null, $lift: true) {
+  & svg {
+    @if $size != null {
+      height: $size;
+      width: $size;
+    }
 
-  @if ($padding-right == $padding-left) {
-    padding: 9px $padding-right;
-  } @else {
-    padding: 9px $padding-right 9px $padding-left;
-  }
+    @if $color != null {
+      fill: $color;
 
-  &:focus {
-    outline: none;
+      rect,
+      circle,
+      ellipse,
+      line,
+      polygon,
+      polyline,
+      path {
+        fill: $color;
+      }
+    }
+
+    @if $lift {
+      position: relative;
+      top: 2px;
+    }
   }
 }

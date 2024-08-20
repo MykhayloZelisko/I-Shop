@@ -25,13 +25,7 @@
   }
 
   &__input {
-    @include input-style(12px);
-
-    min-width: 300px;
-
-    &.ng-invalid.ng-touched {
-      border-color: $red;
-    }
+    @include input-style(9px 12px, $min-width: 300px);
   }
 }
 

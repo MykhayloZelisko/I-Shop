@@ -31,33 +31,16 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-
-      & path {
-        fill: $yellow;
-      }
-    }
+    @include icon-style($yellow, 24px);
 
     &--search {
-      display: none;
+      @include icon-style($white);
 
-      & svg {
-        & path {
-          fill: $white;
-        }
-      }
+      display: none;
     }
 
     &--catalog {
-      & svg {
-        & path {
-          fill: $white;
-        }
-      }
+      @include icon-style($white);
     }
   }
 
@@ -95,12 +78,7 @@
   }
 
   &__logo-icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 40px;
-      width: 40px;
-    }
+    @include icon-style($size: 40px);
   }
 
   &__logo {
@@ -135,7 +113,7 @@
   }
 
   &__input {
-    @include min-input-style(16px);
+    @include input-style(9px 16px, false, 5px 0 0 5px, $invalid: false);
 
     border: none;
     border-radius: 5px 0 0 5px;

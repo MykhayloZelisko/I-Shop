@@ -9,9 +9,7 @@
   }
 
   &__input {
-    @include input-style(12px);
-
-    max-width: 500px;
+    @include input-style(9px 12px, $max-width: 500px, $invalid: false);
   }
 
   &__add-btn {

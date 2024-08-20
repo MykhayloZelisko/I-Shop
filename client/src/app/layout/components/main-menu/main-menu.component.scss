@@ -19,12 +19,7 @@
   }
 
   &__logo-icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 30px;
-      width: 30px;
-    }
+    @include icon-style($size: 30px);
   }
 
   &__logo {
@@ -67,23 +62,10 @@
   }
 
   &__close-icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-
-      & path {
-        fill: $yellow;
-      }
-    }
+    @include icon-style($yellow, 24px);
 
     &:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 
@@ -143,14 +125,7 @@
   }
 
   &__user-icon {
-    & svg {
-      height: 24px;
-      width: 24px;
-
-      & path {
-        fill: $brown-1;
-      }
-    }
+    @include icon-style($brown-1, 24px, false);
   }
 
   &__user-first-letter {

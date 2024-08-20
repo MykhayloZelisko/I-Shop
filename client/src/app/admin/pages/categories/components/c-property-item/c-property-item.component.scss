@@ -37,11 +37,7 @@
       & .c-property-item {
         &__icon {
           &--save {
-            & svg {
-              & path {
-                fill: $gray-5;
-              }
-            }
+            @include icon-style($gray-5);
           }
         }
       }
@@ -66,37 +62,20 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-
-      & path {
-        fill: $brown-1;
-      }
-    }
+    @include icon-style($brown-1, 24px);
 
     &--save:hover,
     &--edit:hover {
-      & svg {
-        & path {
-          fill: $blue-1;
-        }
-      }
+      @include icon-style($blue-1);
     }
 
     &--cancel:hover,
     &--delete:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 
   &__input {
-    @include input-style(77px, 12px);
+    @include input-style(9px 77px 9px 12px, $invalid: false);
   }
 }

@@ -114,9 +114,6 @@
 
   &__input {
     @include input-style(9px 16px, false, 5px 0 0 5px, $invalid: false);
-
-    border: none;
-    border-radius: 5px 0 0 5px;
   }
 }
 

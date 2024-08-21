@@ -38,9 +38,7 @@
 
       & .brand-item {
         &__icon {
-          &--save {
-            @include icon-style($gray-5);
-          }
+          @include icon-style($gray-5);
         }
       }
     }

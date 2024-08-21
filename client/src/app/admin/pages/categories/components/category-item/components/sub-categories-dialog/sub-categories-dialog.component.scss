@@ -55,23 +55,21 @@
     &--delete {
       min-width: 40px;
       height: 40px;
-
-      &:disabled,
-      &:disabled:hover {
-        cursor: auto;
-
-        & .sub-categories-dialog {
-          &__icon {
-            &--delete {
-              @include icon-style($gray-5);
-            }
-          }
-        }
-      }
     }
 
     &:hover {
       @include icon-style($red);
+    }
+
+    &:disabled,
+    &:disabled:hover {
+      cursor: auto;
+
+      & .sub-categories-dialog {
+        &__icon {
+          @include icon-style($gray-5);
+        }
+      }
     }
   }
 

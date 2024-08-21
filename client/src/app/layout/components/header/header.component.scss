@@ -113,7 +113,7 @@
   }
 
   &__input {
-    @include input-style(9px 16px, false, 5px 0 0 5px, $invalid: false);
+    @include input-style(9px 16px, false, $radius: 5px 0 0 5px, $invalid: false);
   }
 }
 

@@ -1,7 +1,7 @@
 <div class="header" (click)="clearState()">
   <div class="header__inner">
     <button
-      class="header__button header__button--icon-btn"
+      class="header__icon-btn"
       (click)="openMainMenu($event)"
     >
       <svg-icon
@@ -51,7 +51,7 @@
     <div class="header__language">UA</div>
     @if ((user$ | async) === null) {
       <button
-        class="header__button header__button--large-scr-btn header__button--icon-btn"
+        class="header__icon-btn"
         (click)="login($event)"
       >
         <svg-icon
@@ -61,14 +61,14 @@
       </button>
     }
     <button
-      class="header__button header__button--large-scr-btn header__button--icon-btn"
+      class="header__icon-btn"
     >
       <svg-icon
         class="header__icon"
         src="assets/images/scale-icon.svg"
       ></svg-icon>
     </button>
-    <button class="header__button header__button--icon-btn">
+    <button class="header__icon-btn">
       <svg-icon
         class="header__icon"
         src="assets/images/cart-black-icon.svg"
@@ -76,7 +76,7 @@
     </button>
     @if (isAdmin$ | async) {
       <button
-        class="header__button header__button--small-scr-btn header__button--icon-btn"
+        class="header__icon-btn"
         (click)="goAdmin()"
       >
         <svg-icon

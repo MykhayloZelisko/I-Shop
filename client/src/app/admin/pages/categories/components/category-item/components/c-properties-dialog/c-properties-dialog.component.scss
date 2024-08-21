@@ -1,4 +1,5 @@
 @import 'variables';
+@import "mixins";
 
 .c-properties-dialog {
   position: relative;
@@ -39,22 +40,10 @@
   }
 
   &__icon-button {
-    border: none;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    @include icon-button-style(40px, $disabled: transparent);
 
     &--close {
-      border-radius: 12px;
-      min-width: 24px;
-      height: 24px;
-    }
-
-    &--delete {
-      min-width: 40px;
-      height: 40px;
+      @include icon-button-style(24px, $border-radius: 12px);
     }
 
     &:hover {
@@ -63,8 +52,6 @@
 
     &:disabled,
     &:disabled:hover {
-      cursor: auto;
-
       & .c-properties-dialog{
         &__icon {
           @include icon-style($gray-5);

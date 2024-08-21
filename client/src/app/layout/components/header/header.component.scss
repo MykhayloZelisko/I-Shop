@@ -1,16 +1,5 @@
 @import 'variables';
-
-@mixin button {
-  font-family: $source;
-  font-size: 16px;
-  padding: 0 18px;
-  background-color: $blue-1;
-  color: $white;
-
-  &:hover {
-    background-color: $blue-2;
-  }
-}
+@import 'mixins';
 
 .header {
   background-color: $brown-1;
@@ -44,38 +33,51 @@
     }
   }
 
-  &__button {
-    color: $yellow;
-    cursor: pointer;
-    border-radius: 5px;
-    border: none;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-    &--icon-btn {
-      background: transparent;
-      min-width: 40px;
-
-      &:hover {
-        background-color: $brown-2;
-      }
-    }
-
-    &--catalog {
-      @include button;
-
-      flex-wrap: nowrap;
-      gap: 12px;
-    }
-
-    &--search {
-      @include button;
-
-      border-radius: 0 5px 5px 0;
-    }
+  &__icon-btn {
+    @include icon-button-style(40px, transparent, 5px, $brown-2);
   }
+
+//  &__button {
+//    color: $yellow;
+//    cursor: pointer;
+//    border-radius: 5px;
+//    border: none;
+//    height: 40px;
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+
+//    &--catalog {
+//      font-family: $source;
+//      font-size: 16px;
+//      padding: 0 18px;
+//      background-color: $blue-1;
+//      color: $white;
+//
+//      &:hover {
+//        background-color: $blue-2;
+//      }
+//
+//      flex-wrap: nowrap;
+//      gap: 12px;
+//    }
+//
+//    &--search {
+//      font-family: $source;
+//      font-size: 16px;
+//      padding: 0 18px;
+//      background-color: $blue-1;
+//      color: $white;
+//
+//      &:hover {
+//        background-color: $blue-2;
+//      }
+//
+//
+//      border-radius: 0 5px 5px 0;
+//    }
+//  }
 
   &__logo-icon {
     @include icon-style($size: 40px);
@@ -133,11 +135,11 @@
       padding: 5px 0;
     }
 
-    &__button {
-      &--catalog {
-        display: none;
-      }
-    }
+//    &__button {
+//      &--catalog {
+//        display: none;
+//      }
+//    }
 
     &__language {
       display: none;
@@ -161,32 +163,32 @@
       margin-left: 6px;
     }
 
-    &__button-text {
-      &--search {
-        display: none;
-      }
-    }
-
-    &__button {
-      &--search {
-        padding: 0;
-        min-width: 40px;
-        border-radius: 0 5px 5px 0;
-      }
-
-      &--large-scr-btn {
-        display: none;
-      }
-    }
+    //&__button-text {
+//      &--search {
+//        display: none;
+//      }
+//    }
+//
+//    &__button {
+//      &--search {
+//        padding: 0;
+//        min-width: 40px;
+//        border-radius: 0 5px 5px 0;
+//      }
+//
+//      &--large-scr-btn {
+//        display: none;
+//      }
+//    }
   }
 }
 
 @media screen and (width <= 400px) {
   .header {
-    &__button {
-      &--small-scr-btn {
-        display: none;
-      }
-    }
+//    &__button {
+//      &--small-scr-btn {
+//        display: none;
+//      }
+//    }
   }
 }

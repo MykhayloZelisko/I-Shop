@@ -27,7 +27,7 @@
                 (changeFormValue)="setFormValue(index, $event)"
               ></app-edit-category-item>
               <button
-                class="sub-categories-dialog__icon-button sub-categories-dialog__icon-button--delete"
+                class="sub-categories-dialog__icon-button"
                 [disabled]="getCategories().controls.length === 1"
                 (click)="deleteCategory(index)"
               >

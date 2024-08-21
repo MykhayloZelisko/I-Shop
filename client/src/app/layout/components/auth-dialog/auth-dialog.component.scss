@@ -1,4 +1,5 @@
 @import 'variables';
+@import "mixins";
 
 .auth-dialog {
   background-color: $white;
@@ -37,15 +38,7 @@
   }
 
   &__close {
-    border: none;
-    border-radius: 12px;
-    width: 24px;
-    height: 24px;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    @include icon-button-style(24px, transparent, 12px);
 
     &:hover {
       @include icon-style($red);

@@ -1,5 +1,5 @@
 @import 'variables';
-@import "mixins";
+@import 'mixins';
 
 .edit-category-item {
   width: 300px;
@@ -30,7 +30,7 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (width <= 480px) {
   .edit-category-item {
     width: 100%;
 

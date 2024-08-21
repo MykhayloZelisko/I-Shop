@@ -1,5 +1,5 @@
 @import 'variables';
-@import "mixins";
+@import 'mixins';
 
 .small-catalog {
   top: 25px;
@@ -183,7 +183,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .small-catalog {
     width: 100vw;
     height: 100vh;

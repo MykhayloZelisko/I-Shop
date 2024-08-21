@@ -31,7 +31,6 @@
     }
   }
 
-
   &__icon-btn {
     @include icon-button-style(40px, transparent, 5px, $brown-2);
   }
@@ -47,7 +46,13 @@
     height: 40px;
 
     &--search {
-      @include button-style($blue-1, $white, 0 18px, $blue-2, $border-radius: 0 5px 5px 0);
+      @include button-style(
+        $blue-1,
+        $white,
+        0 18px,
+        $blue-2,
+        $border-radius: 0 5px 5px 0
+      );
     }
   }
 
@@ -87,11 +92,16 @@
   }
 
   &__input {
-    @include input-style(10px 16px, false, $radius: 5px 0 0 5px, $invalid: false);
+    @include input-style(
+      10px 16px,
+      false,
+      $radius: 5px 0 0 5px,
+      $invalid: false
+    );
   }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (width <= 1280px) {
   .header {
     &__logo-text {
       display: none;
@@ -99,7 +109,7 @@
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (width <= 1024px) {
   .header {
     padding: 0 5px;
 
@@ -119,7 +129,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .header {
     &__icon {
       &--search {
@@ -159,7 +169,7 @@
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (width <= 400px) {
   .header {
     &__icon-btn {
       &--small-scr-btn {

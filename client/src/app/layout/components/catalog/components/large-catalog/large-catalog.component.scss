@@ -1,5 +1,5 @@
 @import 'variables';
-@import "mixins";
+@import 'mixins';
 
 .large-catalog {
   border-radius: 0 0 10px 10px;
@@ -148,7 +148,7 @@
   }
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (width <= 1440px) {
   .large-catalog {
     &__sub-categories {
       column-count: 3;

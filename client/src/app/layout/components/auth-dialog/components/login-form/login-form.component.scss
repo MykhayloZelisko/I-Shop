@@ -32,33 +32,10 @@
   }
 
   &__button {
-    color: $yellow;
-    background-color: $brown-1;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: $source;
-    padding: 8px 24px;
-
-    &:hover {
-      background-color: $brown-2;
-    }
-
-    &:disabled,
-    &:disabled:hover {
-      color: $gray-5;
-      background-color: $gray-4;
-      cursor: default;
-    }
+    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
 
     &--registration {
-      background-color: $blue-1;
-      color: $white;
-
-      &:hover {
-        background-color: $blue-2;
-      }
+      @include button-style($blue-1, $white, 8px 24px, $blue-2);
     }
   }
 

@@ -148,7 +148,7 @@
   }
 }
 
-@media screen and (width <= 1440px) {
+@media screen and (max-width: 1440px) {
   .large-catalog {
     &__sub-categories {
       column-count: 3;

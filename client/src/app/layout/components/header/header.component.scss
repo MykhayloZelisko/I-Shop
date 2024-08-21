@@ -23,8 +23,6 @@
     @include icon-style($yellow, 24px);
 
     &--search {
-      @include icon-style($white);
-
       display: none;
     }
 
@@ -38,46 +36,20 @@
     @include icon-button-style(40px, transparent, 5px, $brown-2);
   }
 
-//  &__button {
-//    color: $yellow;
-//    cursor: pointer;
-//    border-radius: 5px;
-//    border: none;
-//    height: 40px;
-//    display: flex;
-//    align-items: center;
-//    justify-content: center;
+  &__button {
+    @include button-style($blue-1, $white, 0 18px, $blue-2);
 
-//    &--catalog {
-//      font-family: $source;
-//      font-size: 16px;
-//      padding: 0 18px;
-//      background-color: $blue-1;
-//      color: $white;
-//
-//      &:hover {
-//        background-color: $blue-2;
-//      }
-//
-//      flex-wrap: nowrap;
-//      gap: 12px;
-//    }
-//
-//    &--search {
-//      font-family: $source;
-//      font-size: 16px;
-//      padding: 0 18px;
-//      background-color: $blue-1;
-//      color: $white;
-//
-//      &:hover {
-//        background-color: $blue-2;
-//      }
-//
-//
-//      border-radius: 0 5px 5px 0;
-//    }
-//  }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+    height: 40px;
+
+    &--search {
+      @include button-style($blue-1, $white, 0 18px, $blue-2, $border-radius: 0 5px 5px 0);
+    }
+  }
 
   &__logo-icon {
     @include icon-style($size: 40px);
@@ -115,11 +87,11 @@
   }
 
   &__input {
-    @include input-style(9px 16px, false, $radius: 5px 0 0 5px, $invalid: false);
+    @include input-style(10px 16px, false, $radius: 5px 0 0 5px, $invalid: false);
   }
 }
 
-@media screen and (width <= 1280px) {
+@media screen and (max-width: 1280px) {
   .header {
     &__logo-text {
       display: none;
@@ -127,7 +99,7 @@
   }
 }
 
-@media screen and (width <= 1024px) {
+@media screen and (max-width: 1024px) {
   .header {
     padding: 0 5px;
 
@@ -135,11 +107,11 @@
       padding: 5px 0;
     }
 
-//    &__button {
-//      &--catalog {
-//        display: none;
-//      }
-//    }
+    &__button {
+      &--catalog {
+        display: none;
+      }
+    }
 
     &__language {
       display: none;
@@ -147,10 +119,12 @@
   }
 }
 
-@media screen and (width <= 768px) {
+@media screen and (max-width: 768px) {
   .header {
     &__icon {
       &--search {
+        @include icon-style($white);
+
         display: block;
       }
     }
@@ -163,32 +137,34 @@
       margin-left: 6px;
     }
 
-    //&__button-text {
-//      &--search {
-//        display: none;
-//      }
-//    }
-//
-//    &__button {
-//      &--search {
-//        padding: 0;
-//        min-width: 40px;
-//        border-radius: 0 5px 5px 0;
-//      }
-//
-//      &--large-scr-btn {
-//        display: none;
-//      }
-//    }
+    &__button-text {
+      &--search {
+        display: none;
+      }
+    }
+
+    &__button {
+      &--search {
+        padding: 0;
+        min-width: 40px;
+        border-radius: 0 5px 5px 0;
+      }
+    }
+
+    &__icon-btn {
+      &--large-scr-btn {
+        display: none;
+      }
+    }
   }
 }
 
-@media screen and (width <= 400px) {
+@media screen and (max-width: 400px) {
   .header {
-//    &__button {
-//      &--small-scr-btn {
-//        display: none;
-//      }
-//    }
+    &__icon-btn {
+      &--small-scr-btn {
+        display: none;
+      }
+    }
   }
 }

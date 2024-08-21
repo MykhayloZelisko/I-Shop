@@ -14,25 +14,7 @@
   }
 
   &__add-btn {
-    background-color: $brown-1;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    font-family: $source;
-    font-size: 16px;
-    padding: 8px 24px;
-    color: $yellow;
-
-    &:hover {
-      background-color: $brown-2;
-    }
-
-    &:disabled,
-    &:disabled:hover {
-      background-color: $gray-2;
-      color: $gray-3;
-      cursor: default;
-    }
+    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
   }
 
   &__field-wrapper {

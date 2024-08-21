@@ -31,7 +31,7 @@
   }
 
   &__button {
-    @include icon-button-style(30px, transparent, $disabled: transparent);
+    @include icon-button-style(30px, transparent, $disabled: true);
 
     &:disabled {
       & .category-item {

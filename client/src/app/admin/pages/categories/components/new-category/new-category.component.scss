@@ -3,21 +3,9 @@
 
 .new-category {
   &__button {
-    display: block;
-    font-family: $source;
-    font-size: 16px;
-    padding: 0 18px;
-    background-color: $blue-1;
-    color: $white;
-    cursor: pointer;
-    border-radius: 5px;
-    border: none;
-    height: 40px;
-    width: 100%;
+    @include button-style($blue-1, $white, 10px 18px, $blue-2);
 
-    &:hover {
-      background-color: $blue-2;
-    }
+    width: 100%;
   }
 
   &__input {
@@ -25,7 +13,7 @@
   }
 
   &__icon-button {
-    @include icon-button-style(30px, transparent, $disabled: transparent);
+    @include icon-button-style(30px, transparent, $disabled: true);
 
     &:disabled {
       & .new-category {

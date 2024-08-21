@@ -70,7 +70,7 @@
   }
 }
 
-@mixin icon-button-style($size, $background: null, $border-radius: 0, $hover: null, $disabled: null) {
+@mixin icon-button-style($size, $background: null, $border-radius: 0, $hover: null, $disabled: false) {
   cursor: pointer;
   border: none;
   min-width: $size;
@@ -82,16 +82,40 @@
   border-radius: $border-radius;
   background: $background;
 
-  @if $disabled != null {
+  @if $disabled {
     &:disabled {
       cursor: default;
-      background-color: $disabled;
+      background-color: transparent;
     }
   }
 
   @if $hover != null {
     &:hover {
       background-color: $hover;
+    }
+  }
+}
+
+@mixin button-style($background-color, $color, $padding, $hover, $disabled: false, $border-radius: 5px, $font-size: 16px) {
+  background-color: $background-color;
+  cursor: pointer;
+  border: none;
+  border-radius: $border-radius;
+  font-family: $source;
+  font-size: $font-size;
+  padding: $padding;
+  color: $color;
+
+  &:hover {
+    background-color: $hover;
+  }
+
+  @if $disabled {
+    &:disabled,
+    &:disabled:hover {
+      background-color: $gray-2;
+      color: $gray-3;
+      cursor: default;
     }
   }
 }

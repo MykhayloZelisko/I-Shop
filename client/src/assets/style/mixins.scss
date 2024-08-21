@@ -1,0 +1,121 @@
+@import "variables";
+
+@mixin input-style($padding, $border: true, $radius: 3px, $max-width: null, $min-width: null, $invalid: true) {
+  width: 100%;
+  font-family: $source;
+  padding: $padding;
+  border-radius: $radius;
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
+
+  @if $max-width != null {
+    max-width: $max-width;
+  }
+
+  @if $min-width != null {
+    min-width: $min-width;
+  }
+
+  @if $border {
+    border: 1px solid $brown-5;
+
+    &:hover {
+      border-color: $brown-1;
+    }
+
+    &:focus {
+      border-color: $brown-2;
+    }
+
+    &:active {
+      border-color: $brown-2;
+    }
+
+    @if $invalid {
+      &.ng-invalid.ng-touched {
+        border-color: $red;
+      }
+    }
+  } @else {
+    border: none;
+  }
+}
+
+@mixin icon-style($color: null, $size: null, $lift: true) {
+  & svg {
+    @if $size != null {
+      height: $size;
+      width: $size;
+    }
+
+    @if $color != null {
+      fill: $color;
+
+      rect,
+      circle,
+      ellipse,
+      line,
+      polygon,
+      polyline,
+      path {
+        fill: $color;
+      }
+    }
+
+    @if $lift {
+      position: relative;
+      top: 2px;
+    }
+  }
+}
+
+@mixin icon-button-style($size, $background: null, $border-radius: 0, $hover: null, $disabled: false) {
+  cursor: pointer;
+  border: none;
+  min-width: $size;
+  width: $size;
+  height: $size;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: $border-radius;
+  background: $background;
+
+  @if $disabled {
+    &:disabled {
+      cursor: default;
+      background-color: transparent;
+    }
+  }
+
+  @if $hover != null {
+    &:hover {
+      background-color: $hover;
+    }
+  }
+}
+
+@mixin button-style($background-color, $color, $padding, $hover, $disabled: false, $border-radius: 5px, $font-size: 16px) {
+  background-color: $background-color;
+  cursor: pointer;
+  border: none;
+  border-radius: $border-radius;
+  font-family: $source;
+  font-size: $font-size;
+  padding: $padding;
+  color: $color;
+
+  &:hover {
+    background-color: $hover;
+  }
+
+  @if $disabled {
+    &:disabled,
+    &:disabled:hover {
+      background-color: $gray-2;
+      color: $gray-3;
+      cursor: default;
+    }
+  }
+}

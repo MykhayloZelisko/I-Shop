@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubCategoryDialogComponent } from './sub-category-dialog.component';
+import { SubCategoriesDialogComponent } from './sub-categories-dialog.component';
 
 describe('SubCategoryDialogComponent', () => {
-  let component: SubCategoryDialogComponent;
-  let fixture: ComponentFixture<SubCategoryDialogComponent>;
+  let component: SubCategoriesDialogComponent;
+  let fixture: ComponentFixture<SubCategoriesDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubCategoryDialogComponent],
+      imports: [SubCategoriesDialogComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SubCategoryDialogComponent);
+    fixture = TestBed.createComponent(SubCategoriesDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

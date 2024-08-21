@@ -1,4 +1,5 @@
 @import 'variables';
+@import "mixins";
 
 .auth-dialog {
   background-color: $white;
@@ -37,22 +38,10 @@
   }
 
   &__close {
-    border: none;
-    border-radius: 12px;
-    width: 24px;
-    height: 24px;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    @include icon-button-style(24px, transparent, 12px);
 
     &:hover {
-      & svg {
-        & path {
-          fill: $red;
-        }
-      }
+      @include icon-style($red);
     }
   }
 
@@ -87,43 +76,24 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-    }
+    @include icon-style($size: 24px);
 
     &--header-icon {
-      & svg {
-        & path {
-          fill: $yellow;
-        }
-      }
+      @include icon-style($yellow);
     }
   }
 
   &__button {
-    background-color: $brown-1;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    font-family: $source;
-    font-size: 16px;
-    padding: 8px 24px;
-    color: $yellow;
+    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
+
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-
-    &:hover {
-      background-color: $brown-2;
-    }
   }
 }
 
-@media screen and (width <= 768px) {
+@media screen and (max-width: 768px) {
   .auth-dialog {
     width: 100%;
     height: 100%;

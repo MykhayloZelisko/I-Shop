@@ -1,8 +1,9 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
-import { CurrentCategoryStatusInterface } from '../../../shared/models/interfaces/current-category-status.interface';
 import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
 import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
+import { CreateCPropertyInterface } from '../../../shared/models/interfaces/create-c-property.interface';
+import { CPStateInterface } from '../../../shared/models/interfaces/c-p-state.interface';
 
 export const CategoryActions = createActionGroup({
   source: 'Category/API',
@@ -25,11 +26,17 @@ export const CategoryActions = createActionGroup({
     DeleteCategorySuccess: props<{ ids: string[] }>(),
     DeleteCategoryFailure: emptyProps(),
     DeleteCategories: props<{ ids: string[] }>(),
+    AddCProperties: props<{ properties: CreateCPropertyInterface[] }>(),
+    AddCPropertiesSuccess: props<{ category: CategoryInterface }>(),
+    AddCPropertiesFailure: emptyProps(),
+    DeleteCProperty: props<{ id: string }>(),
+    DeleteCPropertySuccess: props<{ category: CategoryInterface }>(),
+    DeleteCPropertyFailure: emptyProps(),
+    UpdateCProperty: props<{ id: string; propertyName: string }>(),
+    UpdateCPropertySuccess: props<{ category: CategoryInterface }>(),
+    UpdateCPropertyFailure: emptyProps(),
     // Other actions
-    OpenNewCategory: emptyProps(),
-    CloseNewCategory: emptyProps(),
-    ChangeCurrentCategoryStatus: props<{
-      categoryStatus: CurrentCategoryStatusInterface;
-    }>(),
+    UpdateCPState: props<{ payload: CPStateInterface }>(),
+    ClearCPState: emptyProps(),
   },
 });

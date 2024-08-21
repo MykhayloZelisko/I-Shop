@@ -43,10 +43,6 @@ export class BrandItemComponent implements OnInit {
     ]);
   }
 
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
-  }
-
   public editBrand(): void {
     this.store.dispatch(
       BrandActions.setCurrentBrandId({ currentId: this.brand.id }),

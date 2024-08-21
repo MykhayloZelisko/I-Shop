@@ -1,16 +1,5 @@
 @import 'variables';
-
-@mixin button {
-  font-family: $source;
-  font-size: 16px;
-  padding: 0 18px;
-  background-color: $blue-1;
-  color: $white;
-
-  &:hover {
-    background-color: $blue-2;
-  }
-}
+@import 'mixins';
 
 .header {
   background-color: $brown-1;
@@ -31,76 +20,39 @@
   }
 
   &__icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 24px;
-      width: 24px;
-
-      & path {
-        fill: $yellow;
-      }
-    }
+    @include icon-style($yellow, 24px);
 
     &--search {
       display: none;
-
-      & svg {
-        & path {
-          fill: $white;
-        }
-      }
     }
 
     &--catalog {
-      & svg {
-        & path {
-          fill: $white;
-        }
-      }
+      @include icon-style($white);
     }
   }
 
+
+  &__icon-btn {
+    @include icon-button-style(40px, transparent, 5px, $brown-2);
+  }
+
   &__button {
-    color: $yellow;
-    cursor: pointer;
-    border-radius: 5px;
-    border: none;
-    height: 40px;
+    @include button-style($blue-1, $white, 0 18px, $blue-2);
+
     display: flex;
     align-items: center;
     justify-content: center;
-
-    &--icon-btn {
-      background: transparent;
-      min-width: 40px;
-
-      &:hover {
-        background-color: $brown-2;
-      }
-    }
-
-    &--catalog {
-      @include button;
-
-      flex-wrap: nowrap;
-      gap: 12px;
-    }
+    flex-wrap: nowrap;
+    gap: 12px;
+    height: 40px;
 
     &--search {
-      @include button;
-
-      border-radius: 0 5px 5px 0;
+      @include button-style($blue-1, $white, 0 18px, $blue-2, $border-radius: 0 5px 5px 0);
     }
   }
 
   &__logo-icon {
-    & svg {
-      position: relative;
-      top: 2px;
-      height: 40px;
-      width: 40px;
-    }
+    @include icon-style($size: 40px);
   }
 
   &__logo {
@@ -135,18 +87,11 @@
   }
 
   &__input {
-    width: 100%;
-    height: 40px;
-    border: none;
-    outline: none;
-    font-family: $source;
-    font-size: 16px;
-    padding: 0 16px;
-    border-radius: 5px 0 0 5px;
+    @include input-style(10px 16px, false, $radius: 5px 0 0 5px, $invalid: false);
   }
 }
 
-@media screen and (width <= 1280px) {
+@media screen and (max-width: 1280px) {
   .header {
     &__logo-text {
       display: none;
@@ -154,7 +99,7 @@
   }
 }
 
-@media screen and (width <= 1024px) {
+@media screen and (max-width: 1024px) {
   .header {
     padding: 0 5px;
 
@@ -174,10 +119,12 @@
   }
 }
 
-@media screen and (width <= 768px) {
+@media screen and (max-width: 768px) {
   .header {
     &__icon {
       &--search {
+        @include icon-style($white);
+
         display: block;
       }
     }
@@ -202,7 +149,9 @@
         min-width: 40px;
         border-radius: 0 5px 5px 0;
       }
+    }
 
+    &__icon-btn {
       &--large-scr-btn {
         display: none;
       }
@@ -210,9 +159,9 @@
   }
 }
 
-@media screen and (width <= 400px) {
+@media screen and (max-width: 400px) {
   .header {
-    &__button {
+    &__icon-btn {
       &--small-scr-btn {
         display: none;
       }

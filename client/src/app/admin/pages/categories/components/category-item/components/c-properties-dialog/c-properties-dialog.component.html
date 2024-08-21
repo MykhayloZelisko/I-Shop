@@ -1,0 +1,59 @@
+<div class="c-properties-dialog__wrapper" appClickOutside>
+  <div class="c-properties-dialog">
+    <div class="c-properties-dialog__header">
+      <h3 class="c-properties-dialog__title">{{ dialog.title }}</h3>
+      <button
+        class="c-properties-dialog__icon-button c-properties-dialog__icon-button--close"
+        (click)="closeDialog()"
+      >
+        <svg-icon
+          class="c-properties-dialog__icon c-properties-dialog__icon--close"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+    <div class="c-properties-dialog__body">
+      <div [formGroup]="cPropertiesForm" class="c-properties-dialog__form">
+        <ng-container formArrayName="properties">
+          @for (
+            control of getProperties().controls;
+            let index = $index;
+            track control
+          ) {
+            <div class="c-properties-dialog__field" [formGroupName]="index">
+              <input
+                class="c-properties-dialog__input"
+                type="text"
+                formControlName="propertyName"
+              />
+              <button
+                class="c-properties-dialog__icon-button"
+                [disabled]="getProperties().controls.length === 1"
+                (click)="deleteProperty(index)"
+              >
+                <svg-icon
+                  class="c-properties-dialog__icon c-properties-dialog__icon--delete"
+                  src="assets/images/trash-bin-icon.svg"
+                ></svg-icon>
+              </button>
+            </div>
+          }
+        </ng-container>
+      </div>
+      <button
+        class="c-properties-dialog__button"
+        (click)="addProperty()"
+        [disabled]="getProperties().length === 10"
+      >
+        Додати
+      </button>
+      <button
+        class="c-properties-dialog__button--save"
+        (click)="saveProperties()"
+        [disabled]="cPropertiesForm.invalid"
+      >
+        Зберегти
+      </button>
+    </div>
+  </div>
+</div>

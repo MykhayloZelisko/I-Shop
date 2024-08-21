@@ -1,38 +1,38 @@
-<div class="sub-category-dialog__wrapper" appClickOutside>
-  <div class="sub-category-dialog">
-    <div class="sub-category-dialog__header">
-      <h3 class="sub-category-dialog__title">{{ dialog.title }}</h3>
+<div class="sub-categories-dialog__wrapper" appClickOutside>
+  <div class="sub-categories-dialog">
+    <div class="sub-categories-dialog__header">
+      <h3 class="sub-categories-dialog__title">{{ dialog.title }}</h3>
       <button
-        class="sub-category-dialog__icon-button sub-category-dialog__icon-button--close"
+        class="sub-categories-dialog__icon-button sub-categories-dialog__icon-button--close"
         (click)="closeDialog()"
       >
         <svg-icon
-          class="sub-category-dialog__icon sub-category-dialog__icon--close"
+          class="sub-categories-dialog__icon sub-categories-dialog__icon--close"
           src="assets/images/close-round-line-icon.svg"
         ></svg-icon>
       </button>
     </div>
-    <div class="sub-category-dialog__body">
-      <div [formGroup]="subCategoriesForm" class="sub-category-dialog__form">
+    <div class="sub-categories-dialog__body">
+      <div [formGroup]="subCategoriesForm" class="sub-categories-dialog__form">
         <ng-container formArrayName="categories">
           @for (
             control of getCategories().controls;
             let index = $index;
             track control
           ) {
-            <div class="sub-category-dialog__field">
+            <div class="sub-categories-dialog__field">
               <app-edit-category-item
                 [category]="categoryData"
                 [formGroupName]="index"
                 (changeFormValue)="setFormValue(index, $event)"
               ></app-edit-category-item>
               <button
-                class="sub-category-dialog__icon-button sub-category-dialog__icon-button--delete"
+                class="sub-categories-dialog__icon-button"
                 [disabled]="getCategories().controls.length === 1"
                 (click)="deleteCategory(index)"
               >
                 <svg-icon
-                  class="sub-category-dialog__icon sub-category-dialog__icon--delete"
+                  class="sub-categories-dialog__icon sub-categories-dialog__icon--delete"
                   src="assets/images/trash-bin-icon.svg"
                 ></svg-icon>
               </button>
@@ -41,15 +41,15 @@
         </ng-container>
       </div>
       <button
-        class="sub-category-dialog__button sub-category-dialog__button--add"
+        class="sub-categories-dialog__button sub-categories-dialog__button"
         (click)="addCategory()"
         [disabled]="getCategories().length === 10"
       >
         Додати
       </button>
       <button
-        class="sub-category-dialog__button sub-category-dialog__button--save"
-        (click)="addSubCategory()"
+        class="sub-categories-dialog__button sub-categories-dialog__button--save"
+        (click)="saveSubCategories()"
         [disabled]="subCategoriesForm.invalid"
       >
         Зберегти

@@ -14,7 +14,7 @@
   }
 }
 
-@media screen and (width <= 768px) {
+@media screen and (max-width: 768px) {
   .footer {
     &__inner {
       text-align: center;

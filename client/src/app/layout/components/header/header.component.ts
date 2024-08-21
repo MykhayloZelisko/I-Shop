@@ -17,6 +17,8 @@ import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-n
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { PopupDataInterface } from '../../../shared/models/interfaces/popup-data.interface';
 import { selectPopup } from '../../../+store/popup/selectors/popup.selectors';
+import { CategoryActions } from '../../../+store/categories/actions/category.actions';
+import { BrandActions } from '../../../+store/brands/actions/brand.actions';
 
 @Component({
   selector: 'app-header',
@@ -65,6 +67,8 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
+    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 
   public goAdmin(): void {
@@ -85,5 +89,13 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
+    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(BrandActions.clearCurrentBrandId());
+  }
+
+  public clearState(): void {
+    this.store.dispatch(PopupActions.closePopup());
+    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 }

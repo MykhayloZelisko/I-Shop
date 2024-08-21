@@ -40,10 +40,13 @@ export class NewCategoryComponent implements OnInit {
 
   public addCategory(): void {
     this.newCategoryCtrl.setValue('');
-    this.store.dispatch(CategoryActions.openNewCategory());
     this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: true,
+          currentCategory: { id: null, isEditable: false },
+        },
       }),
     );
   }
@@ -61,11 +64,7 @@ export class NewCategoryComponent implements OnInit {
   }
 
   public cancelAddCategory(): void {
-    this.store.dispatch(CategoryActions.closeNewCategory());
+    this.store.dispatch(CategoryActions.clearCPState());
     this.newCategoryCtrl.setValue('');
-  }
-
-  public handleInput(event: KeyboardEvent): void {
-    event.stopPropagation();
   }
 }

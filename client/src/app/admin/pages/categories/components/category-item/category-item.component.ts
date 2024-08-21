@@ -12,16 +12,21 @@ import { State } from '../../../../../+store/reducers';
 import { Store } from '@ngrx/store';
 import { CategoryActions } from '../../../../../+store/categories/actions/category.actions';
 import { Observable } from 'rxjs';
-import { selectCurrentCategory } from '../../../../../+store/categories/selectors/category.selectors';
+import {
+  selectCurrentCategory,
+  selectHasChildren,
+  selectHasProperties,
+} from '../../../../../+store/categories/selectors/category.selectors';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
-import { SubCategoryDialogComponent } from './components/sub-category-dialog/sub-category-dialog.component';
+import { SubCategoriesDialogComponent } from './components/sub-categories-dialog/sub-categories-dialog.component';
 import { CurrentCategoryStatusInterface } from '../../../../../shared/models/interfaces/current-category-status.interface';
 import { EditCategoryItemComponent } from '../../../../../shared/components/edit-category-item/edit-category-item.component';
 import { CategoryFormDataInterface } from '../../../../../shared/models/interfaces/category-form-data.interface';
 import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
 import { selectPopup } from '../../../../../+store/popup/selectors/popup.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
+import { CPropertiesDialogComponent } from './components/c-properties-dialog/c-properties-dialog.component';
 
 @Component({
   selector: 'app-category-item',
@@ -29,10 +34,11 @@ import { PopupActions } from '../../../../../+store/popup/actions/popup.actions'
   imports: [
     SvgIconComponent,
     AsyncPipe,
-    SubCategoryDialogComponent,
+    SubCategoriesDialogComponent,
     EditCategoryItemComponent,
     NgClass,
     NgStyle,
+    CPropertiesDialogComponent,
   ],
   templateUrl: './category-item.component.html',
   styleUrl: './category-item.component.scss',
@@ -44,6 +50,10 @@ export class CategoryItemComponent implements OnInit {
   public readonly dialogEnum = PopupTypeEnum;
 
   public currentCategory$!: Observable<CurrentCategoryStatusInterface>;
+
+  public hasChildren$!: Observable<boolean>;
+
+  public hasProperties$!: Observable<boolean>;
 
   public dialog$!: Observable<PopupDataInterface>;
 
@@ -63,6 +73,10 @@ export class CategoryItemComponent implements OnInit {
   public ngOnInit(): void {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
     this.dialog$ = this.store.select(selectPopup);
+    this.hasChildren$ = this.store.select(selectHasChildren(this.category.id));
+    this.hasProperties$ = this.store.select(
+      selectHasProperties(this.category.id),
+    );
   }
 
   public deleteCategory(): void {
@@ -73,11 +87,14 @@ export class CategoryItemComponent implements OnInit {
 
   public editCategory(): void {
     this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: true },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: false,
+          currentCategory: { id: this.category.id, isEditable: true },
+        },
       }),
     );
-    this.store.dispatch(CategoryActions.closeNewCategory());
     this.categoryData = {
       parentId: this.category.parentId,
       categoryName: this.category.categoryName,
@@ -87,11 +104,7 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public cancelEditCategory(): void {
-    this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: null, isEditable: false },
-      }),
-    );
+    this.store.dispatch(CategoryActions.clearCPState());
   }
 
   public saveCategory(): void {
@@ -106,21 +119,24 @@ export class CategoryItemComponent implements OnInit {
     );
   }
 
-  public openSubCategoryDialog(): void {
+  public openSubCategoriesDialog(): void {
     this.store.dispatch(
       PopupActions.openPopup({
         popup: {
           title: 'Субкатегорії',
-          popupType: PopupTypeEnum.SubCategory,
+          popupType: PopupTypeEnum.SubCategories,
         },
       }),
     );
     this.store.dispatch(
-      CategoryActions.changeCurrentCategoryStatus({
-        categoryStatus: { id: this.category.id, isEditable: false },
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: false,
+          currentCategory: { id: this.category.id, isEditable: false },
+        },
       }),
     );
-    this.store.dispatch(CategoryActions.closeNewCategory());
   }
 
   public getImageStyle(): Record<string, string> {
@@ -144,5 +160,25 @@ export class CategoryItemComponent implements OnInit {
   public changeCategoryData(categoryData: CategoryFormDataInterface): void {
     this.newCategoryData = categoryData;
     this.isDisabled = !categoryData.categoryName.trim();
+  }
+
+  public openPropertiesDialog(): void {
+    this.store.dispatch(
+      PopupActions.openPopup({
+        popup: {
+          title: 'Характеристики',
+          popupType: PopupTypeEnum.CProperties,
+        },
+      }),
+    );
+    this.store.dispatch(
+      CategoryActions.updateCPState({
+        payload: {
+          currentPropertyId: null,
+          isNewCategory: false,
+          currentCategory: { id: this.category.id, isEditable: false },
+        },
+      }),
+    );
   }
 }

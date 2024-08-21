@@ -1,0 +1,47 @@
+@if ((currentPropertyId$ | async) === property.id) {
+  <div class="c-property-item--editable">
+    <input
+      class="c-property-item__input"
+      [formControl]="propertyCtrl"
+      type="text"
+    />
+    <div class="c-property-item__buttons c-property-item__buttons--editable">
+      <button
+        class="c-property-item__button"
+        [disabled]="propertyCtrl.invalid"
+        (click)="saveProperty()"
+      >
+        <svg-icon
+          class="c-property-item__icon c-property-item__icon--save"
+          src="assets/images/save-icon.svg"
+        ></svg-icon>
+      </button>
+      <button class="c-property-item__button" (click)="cancelEditProperty()">
+        <svg-icon
+          class="c-property-item__icon c-property-item__icon--cancel"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+} @else {
+  <div class="c-property-item">
+    <p class="c-property-item__name">
+      {{ property.propertyName }}
+    </p>
+    <div class="c-property-item__buttons">
+      <button class="c-property-item__button" (click)="editProperty()">
+        <svg-icon
+          class="c-property-item__icon c-property-item__icon--edit"
+          src="assets/images/pencil-icon.svg"
+        ></svg-icon>
+      </button>
+      <button class="c-property-item__button" (click)="deleteProperty()">
+        <svg-icon
+          class="c-property-item__icon c-property-item__icon--delete"
+          src="assets/images/trash-bin-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+}

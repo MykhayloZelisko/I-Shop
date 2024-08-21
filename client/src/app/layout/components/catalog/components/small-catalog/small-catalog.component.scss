@@ -51,9 +51,7 @@
     }
 
     &--header-icon {
-      & svg {
-        @include icon-style($yellow);
-      }
+      @include icon-style($yellow);
     }
   }
 

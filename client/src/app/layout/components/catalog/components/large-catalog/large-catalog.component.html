@@ -40,29 +40,31 @@
     }
   </ul>
   <div class="large-catalog__sub-categories-wrapper">
-    <ul class="large-catalog__sub-categories">
-      @for (category of currentCategory.children; track category) {
-        <li class="large-catalog__sub-category">
-          <a
-            class="large-catalog__sub-link"
-            href="#"
-            (click)="changeCategory($event, category.data?.id)"
-            >{{ category.data?.categoryName }}</a
-          >
-          <ul>
-            @for (childCategory of category.children; track childCategory) {
-              <li class="large-catalog__sub-sub-category">
-                <a
-                  class="large-catalog__sub-link"
-                  href="#"
-                  (click)="changeCategory($event, childCategory.data?.id)"
-                  >{{ childCategory.data?.categoryName }}</a
-                >
-              </li>
-            }
-          </ul>
-        </li>
-      }
-    </ul>
+    @if (currentCategory) {
+      <ul class="large-catalog__sub-categories">
+        @for (category of currentCategory.children; track category) {
+          <li class="large-catalog__sub-category">
+            <a
+              class="large-catalog__sub-link"
+              href="#"
+              (click)="changeCategory($event, category.data?.id)"
+              >{{ category.data?.categoryName }}</a
+            >
+            <ul>
+              @for (childCategory of category.children; track childCategory) {
+                <li class="large-catalog__sub-sub-category">
+                  <a
+                    class="large-catalog__sub-link"
+                    href="#"
+                    (click)="changeCategory($event, childCategory.data?.id)"
+                    >{{ childCategory.data?.categoryName }}</a
+                  >
+                </li>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+    }
   </div>
 </div>

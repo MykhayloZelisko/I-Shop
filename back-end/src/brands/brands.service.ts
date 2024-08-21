@@ -42,7 +42,7 @@ export class BrandsService {
     const brand = await this.brandModel
       .findOne({ brandName: updateBrandInput.brandName })
       .exec();
-    if (brand) {
+    if (brand && brand.id !== id) {
       throw new ConflictException('This brand already exists');
     }
     const updatedBrand = await this.brandModel

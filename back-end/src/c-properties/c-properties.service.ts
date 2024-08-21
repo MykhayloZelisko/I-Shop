@@ -55,7 +55,7 @@ export class CPropertiesService {
     const property = await this.cPropertyModel
       .findOne({ propertyName: updateCPropertyInput.propertyName })
       .exec();
-    if (property) {
+    if (property && property.id !== id) {
       throw new ConflictException('This property already exists');
     }
     const updatedProperty = await this.cPropertyModel

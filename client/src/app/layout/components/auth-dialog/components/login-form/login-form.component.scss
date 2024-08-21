@@ -1,4 +1,5 @@
 @import 'variables';
+@import "mixins";
 
 .login-form {
   display: flex;
@@ -18,31 +19,9 @@
   }
 
   &__input {
+    @include input-style(9px 12px);
+
     margin-top: 8px;
-    padding: 9px 12px;
-    border-radius: 3px;
-    border: 1px solid $brown-5;
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 14px;
-    font-family: $source;
-
-    &.ng-invalid.ng-touched {
-      border-color: $red;
-    }
-
-    &:hover {
-      border-color: $brown-1;
-    }
-
-    &:focus {
-      border-color: $brown-2;
-      outline: none;
-    }
-
-    &:active {
-      border-color: $brown-2;
-    }
   }
 
   &__error {
@@ -53,33 +32,10 @@
   }
 
   &__button {
-    color: $yellow;
-    background-color: $brown-1;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: $source;
-    padding: 8px 24px;
-
-    &:hover {
-      background-color: $brown-2;
-    }
-
-    &:disabled,
-    &:disabled:hover {
-      color: $gray-5;
-      background-color: $gray-4;
-      cursor: default;
-    }
+    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
 
     &--registration {
-      background-color: $blue-1;
-      color: $white;
-
-      &:hover {
-        background-color: $blue-2;
-      }
+      @include button-style($blue-1, $white, 8px 24px, $blue-2);
     }
   }
 

@@ -1,7 +1,7 @@
 <div class="header" (click)="clearState()">
   <div class="header__inner">
     <button
-      class="header__button header__button--icon-btn"
+      class="header__icon-btn"
       (click)="openMainMenu($event)"
     >
       <svg-icon
@@ -18,7 +18,7 @@
     </a>
     @if (popup$ | async; as popup) {
       <button
-        class="header__button header__button--catalog"
+        class="header__button"
         (click)="
           popup.popupType === popupType.Catalog
             ? closeCatalog()
@@ -38,7 +38,7 @@
     }
     <div class="header__search">
       <input class="header__input" type="text" />
-      <button class="header__button header__button--search">
+      <button class="header__button--search">
         <svg-icon
           class="header__icon header__icon--search"
           src="assets/images/search-icon.svg"
@@ -51,7 +51,7 @@
     <div class="header__language">UA</div>
     @if ((user$ | async) === null) {
       <button
-        class="header__button header__button--large-scr-btn header__button--icon-btn"
+        class="header__icon-btn header__icon-btn--large-scr-btn"
         (click)="login($event)"
       >
         <svg-icon
@@ -61,14 +61,14 @@
       </button>
     }
     <button
-      class="header__button header__button--large-scr-btn header__button--icon-btn"
+      class="header__icon-btn header__icon-btn--large-scr-btn"
     >
       <svg-icon
         class="header__icon"
         src="assets/images/scale-icon.svg"
       ></svg-icon>
     </button>
-    <button class="header__button header__button--icon-btn">
+    <button class="header__icon-btn">
       <svg-icon
         class="header__icon"
         src="assets/images/cart-black-icon.svg"
@@ -76,7 +76,7 @@
     </button>
     @if (isAdmin$ | async) {
       <button
-        class="header__button header__button--small-scr-btn header__button--icon-btn"
+        class="header__icon-btn header__icon-btn--small-scr-btn"
         (click)="goAdmin()"
       >
         <svg-icon

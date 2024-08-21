@@ -27,7 +27,7 @@
                 formControlName="propertyName"
               />
               <button
-                class="c-properties-dialog__icon-button c-properties-dialog__icon-button--delete"
+                class="c-properties-dialog__icon-button"
                 [disabled]="getProperties().controls.length === 1"
                 (click)="deleteProperty(index)"
               >
@@ -41,14 +41,14 @@
         </ng-container>
       </div>
       <button
-        class="c-properties-dialog__button c-properties-dialog__button--add"
+        class="c-properties-dialog__button"
         (click)="addProperty()"
         [disabled]="getProperties().length === 10"
       >
         Додати
       </button>
       <button
-        class="c-properties-dialog__button c-properties-dialog__button--save"
+        class="c-properties-dialog__button--save"
         (click)="saveProperties()"
         [disabled]="cPropertiesForm.invalid"
       >

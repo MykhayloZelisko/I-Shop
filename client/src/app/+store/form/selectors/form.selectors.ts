@@ -3,7 +3,7 @@ import { formFeatureKey, State } from '../reducers/form.reducer';
 
 export const selectFormState = createFeatureSelector<State>(formFeatureKey);
 
-export const isFormCleared = createSelector(
+export const selectFormCleared = createSelector(
   selectFormState,
   (state: State) => state.isCleared,
-)
+);

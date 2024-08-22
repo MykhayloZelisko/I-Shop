@@ -13,11 +13,11 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(FormActions.clearFormsOn, (state) => ({
+  on(FormActions.clearFormOn, (state) => ({
     ...state,
     isCleared: true,
   })),
-  on(FormActions.clearFormsOff, (state) => ({
+  on(FormActions.clearFormOff, (state) => ({
     ...state,
     isCleared: false,
   })),

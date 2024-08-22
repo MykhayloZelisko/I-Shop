@@ -99,6 +99,25 @@ export class CategoriesService {
   public async createCategory(
     createCategoryInput: CreateCategoryInput,
   ): Promise<CategoryGQL> {
+    const existedCategory = await this.categoryModel
+      .findOne({
+        parentId: createCategoryInput.parentId,
+        categoryName: createCategoryInput.categoryName,
+      })
+      .exec();
+
+    if (existedCategory) {
+      if (existedCategory.parentId) {
+        throw new ConflictException(
+          'A category cannot have two child categories with the same name',
+        );
+      } else {
+        throw new ConflictException(
+          'A category with the same name already exists',
+        );
+      }
+    }
+
     if (createCategoryInput.image && createCategoryInput.parentId) {
       const fileName = await this.filesService.createImageFile(
         createCategoryInput.image,
@@ -135,6 +154,19 @@ export class CategoriesService {
         'A category cannot include properties and subcategories',
       );
     }
+
+    const categoryNames = createCategoryInputs.map(
+      (input) => input.categoryName,
+    );
+
+    const hasDuplicates = new Set(categoryNames).size !== categoryNames.length;
+
+    if (hasDuplicates) {
+      throw new ConflictException(
+        'A category cannot have two child categories with the same name',
+      );
+    }
+
     const categories: CategoryGQL[] = [];
     for (const input of createCategoryInputs) {
       const category = await this.createCategory(input);
@@ -148,6 +180,24 @@ export class CategoriesService {
     updateCategoryInput: UpdateCategoryInput,
   ): Promise<CategoryGQL> {
     const existedCategory = await this.getCategoryById(id);
+
+    const foundCategory = await this.categoryModel
+      .findOne({
+        parentId: existedCategory.parentId,
+        categoryName: updateCategoryInput.categoryName,
+      })
+      .exec();
+    if (foundCategory && foundCategory.id !== id) {
+      if (existedCategory.parentId) {
+        throw new ConflictException(
+          'A category cannot have two child categories with the same name',
+        );
+      } else {
+        throw new ConflictException(
+          'A category with the same name already exists',
+        );
+      }
+    }
 
     if (updateCategoryInput.image) {
       const fileName = await this.filesService.createImageFile(

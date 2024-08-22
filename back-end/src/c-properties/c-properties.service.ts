@@ -36,6 +36,26 @@ export class CPropertiesService {
         'A category cannot include properties and subcategories',
       );
     }
+
+    const propertyNames = createCPropertyInputs.map(
+      (input) => input.propertyName,
+    );
+
+    const hasDuplicates = new Set(propertyNames).size !== propertyNames.length;
+
+    const existedProperties = await this.cPropertyModel
+      .find({
+        categoryId,
+        propertyName: { $in: propertyNames },
+      })
+      .exec();
+
+    if (existedProperties.length || hasDuplicates) {
+      throw new ConflictException(
+        'A category cannot have two properties with the same name',
+      );
+    }
+
     const createdProperties = await this.cPropertyModel.insertMany(
       createCPropertyInputs,
     );
@@ -56,7 +76,9 @@ export class CPropertiesService {
       .findOne({ propertyName: updateCPropertyInput.propertyName })
       .exec();
     if (property && property.id !== id) {
-      throw new ConflictException('This property already exists');
+      throw new ConflictException(
+        'A category cannot have two properties with the same name',
+      );
     }
     const updatedProperty = await this.cPropertyModel
       .findByIdAndUpdate(

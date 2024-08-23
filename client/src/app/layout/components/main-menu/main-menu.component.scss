@@ -1,5 +1,5 @@
 @import 'variables';
-@import "mixins";
+@import 'mixins';
 
 .main-menu {
   background-color: $white;
@@ -84,7 +84,13 @@
   }
 
   &__login-button {
-    @include button-style($brown-1, $yellow, 1px 6px, $brown-2, $font-size: 14px);
+    @include button-style(
+      $brown-1,
+      $yellow,
+      1px 6px,
+      $brown-2,
+      $font-size: 14px
+    );
   }
 
   &__login-text {
@@ -133,7 +139,14 @@
   }
 
   &__list-button {
-    @include button-style(transparent, $brown-1, 9px 18px, $brown-2, $border-radius: 10px, $font-size: 14px);
+    @include button-style(
+      transparent,
+      $brown-1,
+      9px 18px,
+      $brown-2,
+      $border-radius: 10px,
+      $font-size: 14px
+    );
 
     width: 100%;
     display: flex;
@@ -150,7 +163,7 @@
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (width <= 400px) {
   .main-menu {
     width: 100vw;
   }

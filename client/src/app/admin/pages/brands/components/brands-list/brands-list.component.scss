@@ -4,19 +4,19 @@
   gap: 12px 24px;
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (width <= 1280px) {
   .brands-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .brands-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (width <= 480px) {
   .brands-list {
     grid-template-columns: repeat(1, 1fr);
   }

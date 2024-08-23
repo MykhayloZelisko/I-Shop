@@ -1,6 +1,13 @@
-@import "variables";
+@import 'variables';
 
-@mixin input-style($padding, $border: true, $radius: 3px, $max-width: null, $min-width: null, $invalid: true) {
+@mixin input-style(
+  $padding,
+  $border: true,
+  $radius: 3px,
+  $max-width: null,
+  $min-width: null,
+  $invalid: true
+) {
   width: 100%;
   font-family: $source;
   padding: $padding;
@@ -9,11 +16,11 @@
   font-size: 16px;
   outline: none;
 
-  @if $max-width != null {
+  @if $max-width {
     max-width: $max-width;
   }
 
-  @if $min-width != null {
+  @if $min-width {
     min-width: $min-width;
   }
 
@@ -44,12 +51,12 @@
 
 @mixin icon-style($color: null, $size: null, $lift: true) {
   & svg {
-    @if $size != null {
+    @if $size {
       height: $size;
       width: $size;
     }
 
-    @if $color != null {
+    @if $color {
       fill: $color;
 
       rect,
@@ -70,7 +77,13 @@
   }
 }
 
-@mixin icon-button-style($size, $background: null, $border-radius: 0, $hover: null, $disabled: false) {
+@mixin icon-button-style(
+  $size,
+  $background: null,
+  $border-radius: 0,
+  $hover: null,
+  $disabled: false
+) {
   cursor: pointer;
   border: none;
   min-width: $size;
@@ -89,14 +102,22 @@
     }
   }
 
-  @if $hover != null {
+  @if $hover {
     &:hover {
       background-color: $hover;
     }
   }
 }
 
-@mixin button-style($background-color, $color, $padding, $hover, $disabled: false, $border-radius: 5px, $font-size: 16px) {
+@mixin button-style(
+  $background-color,
+  $color,
+  $padding,
+  $hover,
+  $disabled: false,
+  $border-radius: 5px,
+  $font-size: 16px
+) {
   background-color: $background-color;
   cursor: pointer;
   border: none;

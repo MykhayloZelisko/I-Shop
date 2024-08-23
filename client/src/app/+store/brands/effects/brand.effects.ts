@@ -7,6 +7,7 @@ import { LoaderActions } from '../../loader/actions/loader.actions';
 import { BrandsService } from '../services/brands.service';
 import { BrandActions } from '../actions/brand.actions';
 import { BrandInterface } from '../../../shared/models/interfaces/brand.interface';
+import { FormActions } from '../../form/actions/form.actions';
 
 @Injectable()
 export class BrandEffects {
@@ -55,6 +56,7 @@ export class BrandEffects {
           mergeMap((brand) => [
             LoaderActions.toggleLoader(),
             BrandActions.addBrandSuccess({ brand }),
+            FormActions.clearFormOn(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());

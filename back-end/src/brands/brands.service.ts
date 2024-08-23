@@ -67,4 +67,12 @@ export class BrandsService {
       throw new NotFoundException('A brand not found');
     }
   }
+
+  public async getBrandById(id: string): Promise<BrandGQL> {
+    const brand = await this.brandModel.findById(id).exec();
+    if (!brand) {
+      throw new NotFoundException('Brand not found');
+    }
+    return brand.toObject();
+  }
 }

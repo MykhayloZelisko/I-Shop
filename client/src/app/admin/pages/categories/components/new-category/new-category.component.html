@@ -5,6 +5,7 @@
         class="new-category__input"
         type="text"
         [formControl]="newCategoryCtrl"
+        (keydown.space)="$event.stopPropagation()"
       />
       <div class="new-category__icon-buttons">
         <button

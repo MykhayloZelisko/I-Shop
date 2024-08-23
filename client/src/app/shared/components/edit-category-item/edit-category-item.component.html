@@ -35,5 +35,6 @@
     class="edit-category-item__input"
     formControlName="categoryName"
     type="text"
+    (keydown.space)="$event.stopPropagation()"
   />
 </div>

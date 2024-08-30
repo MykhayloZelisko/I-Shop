@@ -22,12 +22,12 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 export class DevicesResolver {
   public constructor(private devicesService: DevicesService) {}
 
-  @Mutation(() => Device)
+  @Mutation(() => Boolean)
   @UseGuards(GqlAdminGuard)
   @UsePipes(ValidationPipe)
   public async createDevice(
     @Args('createDeviceInput') createDeviceInput: CreateDeviceInput,
-  ): Promise<Device> {
+  ): Promise<boolean> {
     return this.devicesService.createDevice(createDeviceInput);
   }
 
@@ -51,15 +51,15 @@ export class DevicesResolver {
     return this.devicesService.getDeviceById(id);
   }
 
-  @Mutation(() => Device)
-  @UseGuards(GqlAdminGuard)
-  @UsePipes(ValidationPipe)
-  public async updateDevice(
-    @Args('id', ParseObjectIdPipe) id: string,
-    @Args('updateDeviceInput') updateDeviceInput: UpdateDeviceInput,
-  ): Promise<Device> {
-    return this.devicesService.updateDevice(id, updateDeviceInput);
-  }
+  // @Mutation(() => Device)
+  // @UseGuards(GqlAdminGuard)
+  // @UsePipes(ValidationPipe)
+  // public async updateDevice(
+  //   @Args('id', ParseObjectIdPipe) id: string,
+  //   @Args('updateDeviceInput') updateDeviceInput: UpdateDeviceInput,
+  // ): Promise<Device> {
+  //   return this.devicesService.updateDevice(id, updateDeviceInput);
+  // }
 
   @Mutation(() => String)
   public async deleteDevice(
@@ -71,6 +71,11 @@ export class DevicesResolver {
   @ResolveField(() => Category)
   public async category(@Parent() device: Device): Promise<Category> {
     return device.category;
+  }
+
+  @ResolveField(() => Category)
+  public async categories(@Parent() device: Device): Promise<Category[]> {
+    return device.categories;
   }
 
   @ResolveField(() => Brand)

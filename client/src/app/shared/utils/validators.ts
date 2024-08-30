@@ -1,9 +1,13 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, ValidatorFn } from '@angular/forms';
 
 export function requiredValidator(): ValidatorFn {
   return (control: AbstractControl) => {
     const value = control.value;
-    if (!value || !value.trim()) {
+    if (
+      value === null ||
+      value === undefined ||
+      value.toString().trim() === ''
+    ) {
       return {
         required: `Поле обов'язкове для заповнення`,
       };
@@ -99,6 +103,15 @@ export function phoneNumberValidator(str: RegExp): ValidatorFn {
       return {
         pattern: `Не валідний номер телефону`,
       };
+    }
+    return null;
+  };
+}
+
+export function nonEmptyArrayValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    if (control instanceof FormArray && control.length === 0) {
+      return { nonEmptyArray: true };
     }
     return null;
   };

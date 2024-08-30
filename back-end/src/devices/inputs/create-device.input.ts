@@ -1,8 +1,8 @@
-import { InputType, Field, Float } from '@nestjs/graphql';
+import { InputType, Field, Float, Int } from '@nestjs/graphql';
 import {
   ArrayMaxSize,
   ArrayNotEmpty,
-  IsArray,
+  IsArray, IsInt,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -25,9 +25,14 @@ export class CreateDeviceInput {
   public deviceName: string;
 
   @Field(() => Float, { description: 'Device price' })
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Must be an integer number' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Must be a number' })
   @IsPositive({ message: 'Must be a positive number' })
   public price: number;
+
+  @Field(() => Int, { description: 'Devices count' })
+  @IsInt({ message: 'Must be an integer number' })
+  @IsPositive({ message: 'Must be a positive number' })
+  public count: number;
 
   @Field(() => [String], { description: 'Device pictures links' })
   @IsArray({ message: 'Must be an array' })

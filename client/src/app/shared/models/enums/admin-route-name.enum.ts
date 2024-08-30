@@ -1,7 +1,7 @@
 export enum AdminRouteNameEnum {
   AdminPanel = '',
   Categories = 'categories',
-  NewProduct = 'new-product',
+  NewDevice = 'new-device',
   Users = 'users',
   Brands = 'brands',
 }

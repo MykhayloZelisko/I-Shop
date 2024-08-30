@@ -14,6 +14,8 @@ import { CategoryInterface } from '../../../shared/models/interfaces/category.in
 import { TreeNode } from 'primeng/api';
 import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.type';
 import { Dictionary } from '@ngrx/entity';
+import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
+import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
 
 const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 
@@ -38,6 +40,8 @@ export const selectCategoriesTree = createSelector(
   (categories: CategoryInterface[]) => {
     const categoriesWithChildren: TreeNode<CategoryInterface>[] =
       categories.map((category) => ({
+        label: category.categoryName,
+        key: category.id,
         data: category,
         type: 'category',
         children: [],
@@ -53,11 +57,9 @@ export const selectCategoriesTree = createSelector(
       }
     }
 
-    const result = categoriesWithChildren.filter(
+    return categoriesWithChildren.filter(
       (category) => category.data!.parentId === null,
     );
-
-    return result;
   },
 );
 
@@ -165,5 +167,41 @@ export const selectHasProperties = (
     (entities: Dictionary<CategoryInterface>) => {
       const entity = entities[id];
       return !!entity && !!entity.properties.length;
+    },
+  );
+
+export const selectCascadeCategories = createSelector(
+  selectAllCategories,
+  (categories: CategoryInterface[]) => {
+    const categoriesWithChildren: CascadeCategoryInterface[] = categories.map(
+      (category) => ({
+        ...category,
+        children: [],
+      }),
+    );
+
+    for (const child of categoriesWithChildren) {
+      if (child.parentId) {
+        const category = categoriesWithChildren.find(
+          (parent) => parent.id === child.parentId,
+        );
+        category!.children.push(child);
+      }
+    }
+
+    return categoriesWithChildren.filter(
+      (category) => category.parentId === null,
+    );
+  },
+);
+
+export const selectProperties = (
+  id: string,
+): MemoizedSelector<NonNullable<unknown>, CPropertyInterface[]> =>
+  createSelector(
+    selectEntitiesCategories,
+    (entities: Dictionary<CategoryInterface>) => {
+      const entity = entities[id];
+      return entity ? entity.properties : [];
     },
   );

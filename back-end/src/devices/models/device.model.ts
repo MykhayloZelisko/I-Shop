@@ -14,6 +14,9 @@ export class Device {
   @Field(() => Float, { description: 'Device price' })
   public price: number;
 
+  @Field(() => Int, { description: 'Devices count' })
+  public count: number;
+
   @Field(() => Float, { description: 'Device rating' })
   public rating: number;
 
@@ -25,6 +28,9 @@ export class Device {
 
   @Field(() => Category, { description: 'Device category' })
   public category: Category;
+
+  @Field(() => [Category], { description: 'Device parent categories' })
+  public categories: Category[];
 
   @Field(() => Brand, { description: 'Device brand' })
   public brand: Brand;

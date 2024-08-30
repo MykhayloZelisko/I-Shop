@@ -14,6 +14,9 @@ export class Device {
   @Prop()
   public price: number;
 
+  @Prop()
+  public count: number;
+
   @Prop({ default: 0 })
   public rating: number;
 
@@ -23,10 +26,13 @@ export class Device {
   @Prop({ type: [String] })
   public images: string[];
 
-  @Prop({ type: { type: MongooseSchema.Types.ObjectId, ref: 'Category' } })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category' })
   public category: Category;
 
-  @Prop({ type: { type: MongooseSchema.Types.ObjectId, ref: 'Brand' } })
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Category' }] })
+  public categories: Category[];
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Brand' })
   public brand: Brand;
 
   @Prop({ type: [DProperty] })

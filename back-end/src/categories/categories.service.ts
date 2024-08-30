@@ -96,6 +96,17 @@ export class CategoriesService {
     return result;
   }
 
+  public async findParentCategoriesIds(categoryId: string): Promise<string[]> {
+    const result: string[] = [];
+    let id: string | null = categoryId;
+    do {
+      const category = await this.getCategoryById(id);
+      result.push(id);
+      id = category.parentId;
+    } while (id);
+    return result;
+  }
+
   public async createCategory(
     createCategoryInput: CreateCategoryInput,
   ): Promise<CategoryGQL> {

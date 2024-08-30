@@ -16,10 +16,6 @@
     @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
 
     white-space: nowrap;
-
-    &:hover {
-      background-color: $brown-2;
-    }
   }
 }
 

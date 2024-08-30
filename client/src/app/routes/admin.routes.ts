@@ -15,10 +15,10 @@ export const adminRoutes: Routes = [
           ),
       },
       {
-        path: AdminRouteNameEnum.NewProduct,
+        path: AdminRouteNameEnum.NewDevice,
         loadComponent: () =>
-          import('../admin/pages/new-product/new-product.component').then(
-            (m) => m.NewProductComponent,
+          import('../admin/pages/new-device/new-device.component').then(
+            (m) => m.NewDeviceComponent,
           ),
       },
       {

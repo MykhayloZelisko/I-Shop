@@ -4,8 +4,6 @@ import {
   inject,
   Input,
 } from '@angular/core';
-import { TreeNode } from 'primeng/api';
-import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
@@ -13,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Router } from '@angular/router';
+import { CascadeCategoryInterface } from '../../../../../shared/models/interfaces/cascade-category.interface';
 
 @Component({
   selector: 'app-small-catalog',
@@ -23,25 +22,25 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmallCatalogComponent {
-  @Input({ required: true }) public categories!: TreeNode<CategoryInterface>[];
+  @Input({ required: true }) public categories!: CascadeCategoryInterface[];
 
   @Input({ required: true }) public dialog!: PopupDataInterface;
 
   public isCoreList = true;
 
-  public currentCategory!: TreeNode<CategoryInterface>;
+  public currentCategory!: CascadeCategoryInterface;
 
   private router = inject(Router);
 
   private store = inject(Store<State>);
 
-  public showSubCategories(category: TreeNode<CategoryInterface>): void {
+  public showSubCategories(category: CascadeCategoryInterface): void {
     this.isCoreList = false;
     this.currentCategory = category;
     this.store.dispatch(
       PopupActions.openPopup({
         popup: {
-          title: category.data ? category.data.categoryName : '',
+          title: category.categoryName,
           popupType: PopupTypeEnum.Catalog,
         },
       }),

@@ -35,34 +35,6 @@ export const selectIdsCategories = categoriesFeature.selectIds;
 
 export const selectTotalCategories = categoriesFeature.selectTotal;
 
-export const selectCategoriesTree = createSelector(
-  selectAllCategories,
-  (categories: CategoryInterface[]) => {
-    const categoriesWithChildren: TreeNode<CategoryInterface>[] =
-      categories.map((category) => ({
-        label: category.categoryName,
-        key: category.id,
-        data: category,
-        type: 'category',
-        children: [],
-        expanded: category.expanded ?? false,
-      }));
-
-    for (const child of categoriesWithChildren) {
-      if (child.data!.parentId) {
-        const category = categoriesWithChildren.find(
-          (parent) => parent.data!.id === child.data!.parentId,
-        );
-        category!.children!.push(child);
-      }
-    }
-
-    return categoriesWithChildren.filter(
-      (category) => category.data!.parentId === null,
-    );
-  },
-);
-
 export const selectCategoriesWithPropertiesTree = createSelector(
   selectAllCategories,
   (categories: CategoryInterface[]) => {

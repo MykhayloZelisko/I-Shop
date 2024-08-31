@@ -13,7 +13,7 @@
       <ul class="small-catalog__core-categories">
         @for (category of categories; track category) {
           <li class="small-catalog__core-category">
-            @if (category.children?.length) {
+            @if (category.children.length) {
               <button
                 class="small-catalog__button"
                 (click)="showSubCategories(category)"
@@ -24,7 +24,7 @@
                     src="assets/images/four-squares-icon.svg"
                   ></svg-icon>
                   <span class="small-catalog__core-category-name">{{
-                    category.data?.categoryName
+                    category.categoryName
                   }}</span>
                 </div>
                 <svg-icon
@@ -36,14 +36,14 @@
               <a
                 class="small-catalog__link"
                 href="#"
-                (click)="changeCategory($event, category.data?.id)"
+                (click)="changeCategory($event, category.id)"
               >
                 <svg-icon
                   class="small-catalog__icon"
                   src="assets/images/four-squares-icon.svg"
                 ></svg-icon>
                 <span class="small-catalog__core-category-name">{{
-                  category.data?.categoryName
+                  category.categoryName
                 }}</span>
               </a>
             }
@@ -66,8 +66,8 @@
             <a
               class="small-catalog__sub-link"
               href="#"
-              (click)="changeCategory($event, category.data?.id)"
-              >{{ category.data?.categoryName }}</a
+              (click)="changeCategory($event, category.id)"
+              >{{ category.categoryName }}</a
             >
             <ul>
               @for (childCategory of category.children; track childCategory) {
@@ -75,8 +75,8 @@
                   <a
                     class="small-catalog__sub-link"
                     href="#"
-                    (click)="changeCategory($event, childCategory.data?.id)"
-                    >{{ childCategory.data?.categoryName }}</a
+                    (click)="changeCategory($event, childCategory.id)"
+                    >{{ childCategory.categoryName }}</a
                   >
                 </li>
               }

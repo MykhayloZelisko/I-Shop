@@ -35,7 +35,7 @@ export class AuthService {
         user.password,
       );
       if (passwordEquals) {
-        return user.toObject();
+        return user;
       }
     }
     throw new UnauthorizedException('Email or password is incorrect');

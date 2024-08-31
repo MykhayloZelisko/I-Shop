@@ -10,3 +10,11 @@ export class Role {
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
+
+RoleSchema.set('toObject', {
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString();
+    delete ret._id;
+    return ret;
+  },
+});

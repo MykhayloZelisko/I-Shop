@@ -18,13 +18,17 @@ export class UsersService {
 
     const newUser = await this.userModel.create({
       ...createUserInput,
-      roles: [userRole._id],
+      roles: [userRole.id],
     });
     await newUser.populate('roles');
     return newUser.toObject();
   }
 
-  public async getUserByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).populate('roles').exec();
+  public async getUserByEmail(email: string): Promise<UserGQL | null> {
+    const user = await this.userModel
+      .findOne({ email })
+      .populate('roles')
+      .exec();
+    return user ? user.toObject() : null;
   }
 }

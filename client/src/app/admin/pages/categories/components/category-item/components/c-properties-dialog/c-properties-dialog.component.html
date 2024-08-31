@@ -25,6 +25,7 @@
                 class="c-properties-dialog__input"
                 type="text"
                 formControlName="propertyName"
+                (keydown.space)="$event.stopPropagation()"
               />
               <button
                 class="c-properties-dialog__icon-button"

@@ -8,7 +8,7 @@ export const ADMIN_MENU: MenuItem[] = [
   },
   {
     label: 'Новий товар',
-    routerLink: AdminRouteNameEnum.NewProduct,
+    routerLink: AdminRouteNameEnum.NewDevice,
   },
   {
     label: 'Користувачі',

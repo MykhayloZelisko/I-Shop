@@ -1,0 +1,199 @@
+<div class="new-device">
+  <div class="new-device__form" [formGroup]="newDeviceForm">
+    <div class="new-device__field">
+      <label class="new-device__label" for="device-name">Назва товару</label>
+      <input
+        id="device-name"
+        class="new-device__input"
+        formControlName="deviceName"
+        type="text"
+        placeholder="Введіть назву товару"
+      />
+      @if (
+        newDeviceForm.controls.deviceName.invalid &&
+        (newDeviceForm.controls.deviceName.dirty ||
+          newDeviceForm.controls.deviceName.touched)
+      ) {
+        <p class="new-device__error">{{ showMessage('deviceName') }}</p>
+      }
+    </div>
+    <div class="new-device__field">
+      <label class="new-device__label" for="price">Ціна в гривнях</label>
+      <input
+        id="price"
+        mask="separator.2"
+        thousandSeparator=""
+        [dropSpecialCharacters]="false"
+        decimalMarker="."
+        class="new-device__input"
+        formControlName="price"
+        type="text"
+        placeholder="Ціна в гривнях"
+      />
+      @if (
+        newDeviceForm.controls.price.invalid &&
+        (newDeviceForm.controls.price.dirty ||
+          newDeviceForm.controls.price.touched)
+      ) {
+        <p class="new-device__error">{{ showMessage('price') }}</p>
+      }
+    </div>
+    <div class="new-device__field">
+      <label class="new-device__label" for="count">Кількість</label>
+      <input
+        id="count"
+        mask="0*"
+        thousandSeparator=""
+        class="new-device__input"
+        formControlName="count"
+        type="text"
+        placeholder="Кількість"
+      />
+      @if (
+        newDeviceForm.controls.count.invalid &&
+        (newDeviceForm.controls.count.dirty ||
+          newDeviceForm.controls.count.touched)
+      ) {
+        <p class="new-device__error">{{ showMessage('count') }}</p>
+      }
+    </div>
+    @if (brands$ | async; as brands) {
+      <div class="new-device__field">
+        <label class="new-device__label" for="brand-id">Бренд</label>
+        <p-dropdown
+          [ngClass]="{
+            'invalid-dropdown': newDeviceForm.controls.brandId.invalid
+          }"
+          id="brand-id"
+          [options]="brands"
+          optionLabel="brandName"
+          optionValue="id"
+          placeholder="Виберіть бренд"
+          formControlName="brandId"
+        ></p-dropdown>
+        @if (
+          newDeviceForm.controls.brandId.invalid &&
+          (newDeviceForm.controls.brandId.dirty ||
+            newDeviceForm.controls.brandId.touched)
+        ) {
+          <p class="new-device__error">{{ showMessage('brandId') }}</p>
+        }
+      </div>
+    }
+    @if (categories$ | async; as categories) {
+      <div class="new-device__field">
+        <label class="new-device__label" for="category-id">Категорія</label>
+        <p-cascadeSelect
+          [ngClass]="{
+            'invalid-dropdown': newDeviceForm.controls.categoryId.invalid
+          }"
+          id="category-id"
+          [options]="categories"
+          optionLabel="categoryName"
+          optionValue="id"
+          optionGroupLabel="categoryName"
+          [optionGroupChildren]="['children', 'children']"
+          placeholder="Виберіть категорію"
+          formControlName="categoryId"
+          (onChange)="changeValue($event)"
+        >
+        </p-cascadeSelect>
+        @if (
+          newDeviceForm.controls.categoryId.invalid &&
+          (newDeviceForm.controls.categoryId.dirty ||
+            newDeviceForm.controls.categoryId.touched)
+        ) {
+          <p class="new-device__error">{{ showMessage('categoryId') }}</p>
+        }
+      </div>
+    }
+    <div>
+      <label class="new-device__label">Зображення</label>
+      <input
+        #input
+        type="file"
+        accept="image/*"
+        multiple
+        class="new-device__input--file"
+        (change)="uploadFiles($event)"
+      />
+      <button class="new-device__upload-button" (click)="input.click()">
+        Завантажити зображення
+      </button>
+      <div formArrayName="images" class="new-device__files">
+        @for (file of files; track file; let index = $index) {
+          <div class="new-device__file-wrapper">
+            <div
+              class="new-device__file"
+              [ngClass]="{
+                'new-device__file--invalid': getImagesCtrl().at(index).invalid
+              }"
+            >
+              <app-file-control
+                [file]="file"
+                [control]="getImagesCtrl().at(index)"
+                [formControlName]="index"
+                (uploadFile)="setBase64Image($event, index)"
+              ></app-file-control>
+              <button
+                class="new-device__delete-button"
+                (click)="deleteImageCtrl(index)"
+              >
+                <svg-icon
+                  class="new-device__icon"
+                  src="assets/images/trash-bin-icon.svg"
+                ></svg-icon>
+              </button>
+            </div>
+            @if (getImagesCtrl().at(index).invalid) {
+              <p class="new-device__error">
+                {{ showMessageArray('images', index) }}
+              </p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    @if (properties$ | async; as properties) {
+      @if (properties.length) {
+        <h3 class="new-device__title">Характеристики</h3>
+      }
+      <ng-container formArrayName="properties">
+        @for (property of properties; track property; let index = $index) {
+          <div class="new-device__field" [formGroupName]="index">
+            <label class="new-device__label" [for]="property.propertyName">{{
+              property.propertyName
+            }}</label>
+            <input
+              [id]="property.propertyName"
+              class="new-device__input"
+              formControlName="value"
+              type="text"
+            />
+            @if (
+              getPropertyValueCtrl(index).invalid &&
+              (getPropertyValueCtrl(index).dirty ||
+                getPropertyValueCtrl(index).touched)
+            ) {
+              <p class="new-device__error">
+                {{ showMessageArray('properties', index) }}
+              </p>
+            }
+          </div>
+        }
+      </ng-container>
+    }
+  </div>
+  <div class="new-device__buttons">
+    <button
+      class="new-device__save-button"
+      [disabled]="newDeviceForm.invalid"
+      (click)="saveDevice()"
+    >
+      Зберегти
+    </button>
+    <button class="new-device__cancel-button" (click)="cancelDevice()">
+      Відмінити
+    </button>
+  </div>
+</div>

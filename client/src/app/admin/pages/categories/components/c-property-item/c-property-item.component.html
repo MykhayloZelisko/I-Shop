@@ -4,6 +4,7 @@
       class="c-property-item__input"
       [formControl]="propertyCtrl"
       type="text"
+      (keydown.space)="$event.stopPropagation()"
     />
     <div class="c-property-item__buttons c-property-item__buttons--editable">
       <button

@@ -7,15 +7,14 @@ import {
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../shared/directives/click-outside.directive';
 import { Observable } from 'rxjs';
-import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { AsyncPipe } from '@angular/common';
-import { selectCategoriesTree } from '../../../+store/categories/selectors/category.selectors';
-import { TreeNode } from 'primeng/api';
 import { PopupDataInterface } from '../../../shared/models/interfaces/popup-data.interface';
 import { LargeCatalogComponent } from './components/large-catalog/large-catalog.component';
 import { SmallCatalogComponent } from './components/small-catalog/small-catalog.component';
+import { selectCascadeCategories } from '../../../+store/categories/selectors/category.selectors';
+import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 
 @Component({
   selector: 'app-catalog',
@@ -33,11 +32,11 @@ import { SmallCatalogComponent } from './components/small-catalog/small-catalog.
 export class CatalogComponent implements OnInit {
   @Input({ required: true }) public dialog!: PopupDataInterface;
 
-  public categories$!: Observable<TreeNode<CategoryInterface>[]>;
+  public categories$!: Observable<CascadeCategoryInterface[]>;
 
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.categories$ = this.store.select(selectCategoriesTree);
+    this.categories$ = this.store.select(selectCascadeCategories);
   }
 }

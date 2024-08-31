@@ -5,14 +5,14 @@
         <a
           class="large-catalog__link"
           href="#"
-          (click)="changeCategory($event, category.data?.id)"
+          (click)="changeCategory($event, category.id)"
         >
           <div class="large-catalog__name-wrapper">
             <svg-icon
               class="large-catalog__icon"
               [ngClass]="{
                 'large-catalog__icon--active':
-                  category.data?.id === currentCategory.data?.id
+                  category.id === currentCategory.id
               }"
               src="assets/images/four-squares-icon.svg"
             ></svg-icon>
@@ -20,17 +20,17 @@
               class="large-catalog__core-category-name"
               [ngClass]="{
                 'large-catalog__core-category-name--active':
-                  category.data?.id === currentCategory.data?.id
+                  category.id === currentCategory.id
               }"
-              >{{ category.data?.categoryName }}</span
+              >{{ category.categoryName }}</span
             >
           </div>
-          @if (category.children?.length) {
+          @if (category.children.length) {
             <svg-icon
               class="large-catalog__icon--right"
               [ngClass]="{
                 'large-catalog__icon--active':
-                  category.data?.id === currentCategory.data?.id
+                  category.id === currentCategory.id
               }"
               src="assets/images/angle-right-icon.svg"
             ></svg-icon>
@@ -47,8 +47,8 @@
             <a
               class="large-catalog__sub-link"
               href="#"
-              (click)="changeCategory($event, category.data?.id)"
-              >{{ category.data?.categoryName }}</a
+              (click)="changeCategory($event, category.id)"
+              >{{ category.categoryName }}</a
             >
             <ul>
               @for (childCategory of category.children; track childCategory) {
@@ -56,8 +56,8 @@
                   <a
                     class="large-catalog__sub-link"
                     href="#"
-                    (click)="changeCategory($event, childCategory.data?.id)"
-                    >{{ childCategory.data?.categoryName }}</a
+                    (click)="changeCategory($event, childCategory.id)"
+                    >{{ childCategory.categoryName }}</a
                   >
                 </li>
               }

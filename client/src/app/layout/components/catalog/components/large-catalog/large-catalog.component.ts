@@ -5,14 +5,13 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { TreeNode } from 'primeng/api';
-import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
+import { CascadeCategoryInterface } from '../../../../../shared/models/interfaces/cascade-category.interface';
 
 @Component({
   selector: 'app-large-catalog',
@@ -23,9 +22,9 @@ import { PopupActions } from '../../../../../+store/popup/actions/popup.actions'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LargeCatalogComponent implements OnInit {
-  @Input({ required: true }) public categories!: TreeNode<CategoryInterface>[];
+  @Input({ required: true }) public categories!: CascadeCategoryInterface[];
 
-  public currentCategory!: TreeNode<CategoryInterface>;
+  public currentCategory!: CascadeCategoryInterface;
 
   private router = inject(Router);
 
@@ -35,7 +34,7 @@ export class LargeCatalogComponent implements OnInit {
     this.currentCategory = this.categories[0];
   }
 
-  public onHover(category: TreeNode<CategoryInterface>): void {
+  public onHover(category: CascadeCategoryInterface): void {
     this.currentCategory = category;
   }
 

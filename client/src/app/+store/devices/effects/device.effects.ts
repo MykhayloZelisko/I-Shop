@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DevicesService } from '../services/devices.service';
-import { BrandActions } from '../../brands/actions/brand.actions';
 import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
 import { LoaderActions } from '../../loader/actions/loader.actions';
 import { FormActions } from '../../form/actions/form.actions';

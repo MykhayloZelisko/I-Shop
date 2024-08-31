@@ -3,23 +3,13 @@
 
 .new-device {
   padding: 12px;
-  //display: flex;
-  //flex-direction: column;
-  //gap: 12px;
-
-  &__form {
-    //display: flex;
-  //  align-items: stretch;
-  //  flex-direction: column;
-  //  gap: 12px;
-  }
 
   &__file {
     display: flex;
     justify-content: space-between;
     align-items: center;
     filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-    drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
     border: 1px solid $white;
     border-radius: 4px;
     padding: 10px;
@@ -153,7 +143,7 @@
   }
 
   .p-dropdown:not(.p-disabled).p-focus,
-  .p-cascadeselect:not(.p-disabled).p-focus, {
+  .p-cascadeselect:not(.p-disabled).p-focus {
     box-shadow: none;
   }
 
@@ -200,7 +190,7 @@
 
   .p-cascadeselect-panel {
     filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-    drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
     border-radius: 4px;
 
     & .p-cascadeselect-items {

@@ -2,13 +2,15 @@ import { InputType, Field, Float, Int } from '@nestjs/graphql';
 import {
   ArrayMaxSize,
   ArrayNotEmpty,
-  IsArray, IsInt,
+  IsArray,
+  IsInt,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsPositive,
   IsString,
-  MinLength, ValidateNested,
+  MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { IsBase64 } from '../../common/validators/is-base64.validator';
 import { IsImage } from '../../common/validators/is-image.validator';

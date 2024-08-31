@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   inject,
   OnDestroy,

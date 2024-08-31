@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateDeviceInput } from './inputs/create-device.input';
 import { Device as DeviceGQL } from './models/device.model';
 import { InjectModel } from '@nestjs/mongoose';

@@ -1,12 +1,15 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateDeviceInput } from './inputs/create-device.input';
-import { UpdateDeviceInput } from './inputs/update-device.input';
 import { Device as DeviceGQL } from './models/device.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Device, DeviceDocument } from './schemas/device.schema';
 import { Model } from 'mongoose';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriesService } from '../categories/categories.service';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class DevicesService {
@@ -14,6 +17,7 @@ export class DevicesService {
     @InjectModel(Device.name) private deviceModel: Model<DeviceDocument>,
     private brandsService: BrandsService,
     private categoriesService: CategoriesService,
+    private filesService: FilesService,
   ) {}
 
   public async createDevice(
@@ -31,13 +35,19 @@ export class DevicesService {
     );
 
     try {
+      const fileNames: string[] = [];
+      for (const image of createDeviceInput.images) {
+        const fileName = await this.filesService.createImageFile(image);
+        fileNames.push(fileName);
+      }
+
       await this.deviceModel.create({
         deviceName: createDeviceInput.deviceName,
         price: createDeviceInput.price,
-        images: createDeviceInput.images,
+        images: fileNames,
         category: category.id,
         categories: categoriesIds,
-        brand: brand._id,
+        brand: brand.id,
         properties: createDeviceInput.properties,
       });
     } catch {
@@ -60,55 +70,5 @@ export class DevicesService {
       .exec();
 
     return devices.map((device: DeviceDocument) => device.toObject());
-  }
-
-  public async getDeviceById(id: string): Promise<DeviceGQL> {
-    const device = await this.deviceModel
-      .findById(id)
-      .populate(['category', 'brand', 'categories'])
-      .exec();
-    if (!device) {
-      throw new NotFoundException('Device not found');
-    }
-    return device.toObject();
-  }
-
-  // public async updateDevice(
-  //   id: string,
-  //   updateDeviceInput: UpdateDeviceInput,
-  // ): Promise<DeviceGQL> {
-  //   const brand = await this.brandsService.getBrandById(
-  //     updateDeviceInput.brandId,
-  //   );
-  //   const category = await this.categoriesService.getCategoryById(
-  //     updateDeviceInput.categoryId,
-  //   );
-  //
-  //   const updatedDevice = await this.deviceModel
-  //     .findByIdAndUpdate(id, {
-  //       deviceName: updateDeviceInput.deviceName,
-  //       price: updateDeviceInput.price,
-  //       images: updateDeviceInput.images,
-  //       category: category.id,
-  //       brand: brand.id,
-  //       properties: updateDeviceInput.properties,
-  //     })
-  //     .populate(['category', 'brand', 'categories'])
-  //     .exec();
-  //
-  //   if (!updatedDevice) {
-  //     throw new NotFoundException('Device not found');
-  //   }
-  //
-  //   return updatedDevice.toObject();
-  // }
-
-  public async deleteDevice(id: string): Promise<string> {
-    const device = await this.deviceModel.findByIdAndDelete(id).exec();
-    if (device) {
-      return device.id;
-    } else {
-      throw new NotFoundException('A device not found');
-    }
   }
 }

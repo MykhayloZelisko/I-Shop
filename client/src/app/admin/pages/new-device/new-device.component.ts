@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
@@ -19,6 +19,7 @@ import {
 } from '../../../shared/models/interfaces/new-device-form.interface';
 import {
   nonEmptyArrayValidator,
+  positiveNumberValidator,
   requiredValidator,
   showErrorMessage,
 } from '../../../shared/utils/validators';
@@ -98,8 +99,14 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   public initDeviceForm(): void {
     this.newDeviceForm = this.fb.group<NewDeviceFormInterface>({
       deviceName: this.fb.nonNullable.control('', [requiredValidator()]),
-      price: this.fb.nonNullable.control(0, [requiredValidator()]),
-      count: this.fb.nonNullable.control(0, [requiredValidator()]),
+      price: this.fb.control(null, [
+        requiredValidator(),
+        positiveNumberValidator(),
+      ]),
+      count: this.fb.control(null, [
+        requiredValidator(),
+        positiveNumberValidator(),
+      ]),
       images: this.fb.array<FormControl<File>>([], [nonEmptyArrayValidator()]),
       base64images: this.fb.array<FormControl<string>>(
         [],
@@ -207,12 +214,20 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     this.getPropertiesCtrl().clear();
   }
 
+  public clearBase64Ctrl(): void {
+    this.getBase64Ctrl().clear();
+  }
+
+  public clearImagesCtrl(): void {
+    this.getImagesCtrl().clear();
+  }
+
   public saveDevice(): void {
     const formData = this.newDeviceForm.getRawValue();
     const device: CreateDeviceInterface = {
       brandId: formData.brandId,
       categoryId: formData.categoryId,
-      count: formData.count,
+      count: Number(formData.count),
       deviceName: formData.deviceName,
       images: formData.base64images,
       price: Number(formData.price),
@@ -238,6 +253,9 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         if (isFormCleared) {
           this.files = [];
           this.newDeviceForm.reset();
+          this.clearBase64Ctrl();
+          this.clearImagesCtrl();
+          this.clearPropertiesCtrl();
           this.newDeviceForm.markAsPristine();
           this.store.dispatch(FormActions.clearFormOff());
         }

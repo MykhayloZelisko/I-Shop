@@ -117,6 +117,18 @@ export function nonEmptyArrayValidator(): ValidatorFn {
   };
 }
 
+export function positiveNumberValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    const value = Number(control.value);
+    if (!value || value <= 0) {
+      return {
+        pattern: `Значення повинно бути більше нуля`,
+      };
+    }
+    return null;
+  };
+}
+
 export function showErrorMessage(control: AbstractControl): string {
   return control.errors ? Object.values(control.errors)[0] : null;
 }

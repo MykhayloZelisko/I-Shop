@@ -9,7 +9,6 @@ import {
 import { DevicesService } from './devices.service';
 import { Device } from './models/device.model';
 import { CreateDeviceInput } from './inputs/create-device.input';
-import { UpdateDeviceInput } from './inputs/update-device.input';
 import { Category } from '../categories/models/category.model';
 import { Brand } from '../brands/models/brand.model';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
@@ -42,30 +41,6 @@ export class DevicesResolver {
       page,
       size,
     );
-  }
-
-  @Query(() => Device, { name: 'device' })
-  public async getDeviceById(
-    @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<Device> {
-    return this.devicesService.getDeviceById(id);
-  }
-
-  // @Mutation(() => Device)
-  // @UseGuards(GqlAdminGuard)
-  // @UsePipes(ValidationPipe)
-  // public async updateDevice(
-  //   @Args('id', ParseObjectIdPipe) id: string,
-  //   @Args('updateDeviceInput') updateDeviceInput: UpdateDeviceInput,
-  // ): Promise<Device> {
-  //   return this.devicesService.updateDevice(id, updateDeviceInput);
-  // }
-
-  @Mutation(() => String)
-  public async deleteDevice(
-    @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<string> {
-    return this.devicesService.deleteDevice(id);
   }
 
   @ResolveField(() => Category)

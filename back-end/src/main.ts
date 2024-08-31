@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import * as process from 'process';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
-import { TransformIdInterceptor } from './common/interceptors/transform-id/transform-id.interceptor';
 import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 
@@ -32,8 +31,6 @@ async function bootstrap(): Promise<void> {
   app.use(passport.session());
   app.use(bodyParser.json({ limit: '20mb' }));
   app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
-
-  app.useGlobalInterceptors(new TransformIdInterceptor());
 
   await app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);

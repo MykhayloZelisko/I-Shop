@@ -30,10 +30,10 @@ export class CategoriesService {
       .exec();
 
     return categories.map((category: CategoryDocument) => ({
-      id: category._id.toString(),
+      id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
       properties: category.properties.map((property: CPropertyDocument) => ({
-        id: property._id.toString(),
+        id: property.id,
         categoryId: property.categoryId.toString(),
         propertyName: property.propertyName,
       })),
@@ -53,10 +53,10 @@ export class CategoriesService {
     }
 
     return {
-      id: category._id.toString(),
+      id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
       properties: category.properties.map((property: CPropertyDocument) => ({
-        id: property._id.toString(),
+        id: property.id,
         categoryId: property.categoryId.toString(),
         propertyName: property.propertyName,
       })),
@@ -87,9 +87,7 @@ export class CategoriesService {
     let result: string[] = [categoryId];
 
     for (const category of subCategories) {
-      const subSubCategoriesIds = await this.findSubCategoriesIds(
-        category._id.toString(),
-      );
+      const subSubCategoriesIds = await this.findSubCategoriesIds(category.id);
       result = result.concat(subSubCategoriesIds);
     }
 
@@ -230,13 +228,13 @@ export class CategoriesService {
       }
 
       return {
-        id: updatedCategory._id.toString(),
+        id: updatedCategory.id,
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
         properties: updatedCategory.properties.map(
           (property: CPropertyDocument) => ({
-            id: property._id.toString(),
+            id: property.id,
             categoryId: property.categoryId.toString(),
             propertyName: property.propertyName,
           }),
@@ -262,13 +260,13 @@ export class CategoriesService {
       }
 
       return {
-        id: updatedCategory._id.toString(),
+        id: updatedCategory.id,
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
         properties: updatedCategory.properties.map(
           (property: CPropertyDocument) => ({
-            id: property._id.toString(),
+            id: property.id,
             categoryId: property.categoryId.toString(),
             propertyName: property.propertyName,
           }),
@@ -297,10 +295,10 @@ export class CategoriesService {
       );
     }
     return {
-      id: category._id.toString(),
+      id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
       properties: category.properties.map((property: CPropertyDocument) => ({
-        id: property._id.toString(),
+        id: property.id,
         categoryId: property.categoryId.toString(),
         propertyName: property.propertyName,
       })),

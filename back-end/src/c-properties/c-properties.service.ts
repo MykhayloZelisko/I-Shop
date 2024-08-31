@@ -59,8 +59,8 @@ export class CPropertiesService {
     const createdProperties = await this.cPropertyModel.insertMany(
       createCPropertyInputs,
     );
-    const propertyIds = createdProperties.map((property: CPropertyDocument) =>
-      property._id.toString(),
+    const propertyIds = createdProperties.map(
+      (property: CPropertyDocument) => property.id,
     );
     return this.categoriesService.addPropertiesToCategory(
       categoryId,
@@ -117,6 +117,6 @@ export class CPropertiesService {
     categoryId: string,
   ): Promise<string[]> {
     const properties = await this.cPropertyModel.find({ categoryId }).exec();
-    return properties.map((property) => property._id.toString());
+    return properties.map((property) => property.id);
   }
 }

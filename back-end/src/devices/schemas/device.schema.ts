@@ -40,3 +40,11 @@ export class Device {
 }
 
 export const DeviceSchema = SchemaFactory.createForClass(Device);
+
+DeviceSchema.set('toObject', {
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString();
+    delete ret._id;
+    return ret;
+  },
+});

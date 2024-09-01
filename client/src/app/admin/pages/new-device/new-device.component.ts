@@ -98,12 +98,14 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public initDeviceForm(): void {
     this.newDeviceForm = this.fb.group<NewDeviceFormInterface>({
-      deviceName: this.fb.nonNullable.control('', [requiredValidator()]),
-      price: this.fb.control(null, [
+      deviceName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+      ]),
+      price: this.fb.nonNullable.control<number>(NaN, [
         requiredValidator(),
         positiveNumberValidator(),
       ]),
-      count: this.fb.control(null, [
+      count: this.fb.nonNullable.control<number>(NaN, [
         requiredValidator(),
         positiveNumberValidator(),
       ]),
@@ -112,8 +114,10 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         [],
         [nonEmptyArrayValidator()],
       ),
-      categoryId: this.fb.nonNullable.control('', [requiredValidator()]),
-      brandId: this.fb.nonNullable.control('', [requiredValidator()]),
+      categoryId: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+      ]),
+      brandId: this.fb.nonNullable.control<string>('', [requiredValidator()]),
       properties: this.fb.array<FormGroup<DPropertyFormInterface>>(
         [],
         [nonEmptyArrayValidator()],
@@ -156,8 +160,10 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public addPropertyForm(propertyName: string): void {
     const propertyForm = this.fb.group<DPropertyFormInterface>({
-      propertyName: this.fb.nonNullable.control(propertyName),
-      value: this.fb.nonNullable.control('', [requiredValidator()]),
+      propertyName: this.fb.nonNullable.control<string>(propertyName, [
+        requiredValidator(),
+      ]),
+      value: this.fb.nonNullable.control<string>('', [requiredValidator()]),
     });
     this.getPropertiesCtrl().push(propertyForm);
   }

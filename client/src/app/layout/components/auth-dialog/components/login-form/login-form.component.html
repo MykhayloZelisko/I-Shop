@@ -1,5 +1,5 @@
 <div class="login-form">
-  <form [formGroup]="loginForm" class="login-form__form">
+  <div [formGroup]="loginForm" class="login-form__form">
     <div class="login-form__field">
       <label class="login-form__label" for="email">Електронна пошта: </label>
       <input
@@ -34,7 +34,7 @@
         <p class="login-form__error">{{ showMessage('password') }}</p>
       }
     </div>
-  </form>
+  </div>
   <p class="login-form__password" (click)="restorePassword()">
     <span class="login-form__link">Забули пароль?</span>
   </p>

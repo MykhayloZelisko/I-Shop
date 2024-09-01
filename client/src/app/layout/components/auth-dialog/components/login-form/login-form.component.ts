@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   emailPatternValidator,
   minMaxLengthValidator,
@@ -12,6 +22,8 @@ import { State } from '../../../../../+store/reducers';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
+import { LoginFormInterface } from '../../../../../shared/models/interfaces/login-form.interface';
+import { LoginInterface } from '../../../../../shared/models/interfaces/login.interface';
 
 @Component({
   selector: 'app-login-form',
@@ -21,31 +33,39 @@ import { PopupActions } from '../../../../../+store/popup/actions/popup.actions'
   styleUrl: './login-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit {
   private regEmail =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
   private regPassword =
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,.?\/~_+\-=|\\]).{8,32}$/;
 
-  private fb = inject(FormBuilder);
+  public loginForm!: FormGroup<LoginFormInterface>;
 
-  public loginForm: FormGroup = this.fb.group({
-    email: [null, [requiredValidator(), emailPatternValidator(this.regEmail)]],
-    password: [
-      null,
-      [
-        requiredValidator(),
-        minMaxLengthValidator(8, 32),
-        passwordPatternValidator(this.regPassword),
-      ],
-    ],
-  });
+  private fb = inject(FormBuilder);
 
   private store = inject(Store<State>);
 
+  public ngOnInit(): void {
+    this.initLoginForm();
+  }
+
+  public initLoginForm(): void {
+    this.loginForm = this.fb.group<LoginFormInterface>({
+      email: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        emailPatternValidator(this.regEmail),
+      ]),
+      password: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        minMaxLengthValidator(8, 32),
+        passwordPatternValidator(this.regPassword),
+      ]),
+    });
+  }
+
   public showMessage(controlName: string): string {
-    const control = this.loginForm.controls[controlName];
+    const control = this.loginForm.get(controlName) as FormControl;
     return showErrorMessage(control);
   }
 
@@ -72,7 +92,7 @@ export class LoginFormComponent {
   }
 
   public login(): void {
-    const loginData = this.loginForm.getRawValue();
+    const loginData: LoginInterface = this.loginForm.getRawValue();
     this.store.dispatch(AuthActions.login({ login: loginData }));
   }
 }

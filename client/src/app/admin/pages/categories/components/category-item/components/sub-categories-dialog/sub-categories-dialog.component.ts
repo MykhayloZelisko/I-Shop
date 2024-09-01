@@ -71,10 +71,14 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   public newCategory(): FormGroup<SubCategoryFormInterface> {
     return this.fb.group<SubCategoryFormInterface>({
-      categoryName: this.fb.nonNullable.control('', [requiredValidator()]),
+      categoryName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+      ]),
       image: this.fb.nonNullable.control<File[]>([]),
-      parentId: this.fb.control(this.parentId, [requiredValidator()]),
-      base64image: this.fb.control(null, [requiredValidator()]),
+      parentId: this.fb.control<string | null>(this.parentId, [
+        requiredValidator(),
+      ]),
+      base64image: this.fb.control<string | null>(null, [requiredValidator()]),
     });
   }
 

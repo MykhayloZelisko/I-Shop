@@ -1,0 +1,28 @@
+@import 'variables';
+@import 'mixins';
+
+.input {
+  &__field {
+    height: 78px;
+  }
+
+  &__label {
+    font-size: 14px;
+    display: block;
+    font-family: $source;
+    font-weight: 600;
+  }
+
+  &__input {
+    @include input-style(9px 12px);
+
+    margin-top: 8px;
+  }
+
+  &__error {
+    font-family: $source;
+    font-size: 12px;
+    color: $red;
+    font-weight: 700;
+  }
+}

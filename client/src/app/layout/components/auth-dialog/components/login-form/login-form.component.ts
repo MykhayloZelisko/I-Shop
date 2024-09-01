@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   emailPatternValidator,
   minMaxLengthValidator,

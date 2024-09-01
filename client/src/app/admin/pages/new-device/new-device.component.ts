@@ -89,7 +89,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     this.isFormCleared$ = this.store.select(selectFormCleared);
     this.initDeviceForm();
     this.clearForm();
-    console.log(this.newDeviceForm);
   }
 
   public ngOnDestroy(): void {

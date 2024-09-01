@@ -67,8 +67,10 @@ export class CPropertiesDialogComponent implements OnInit {
 
   public newProperty(): FormGroup<CPropertyFormInterface> {
     return this.fb.group<CPropertyFormInterface>({
-      propertyName: this.fb.nonNullable.control('', [requiredValidator()]),
-      categoryId: this.fb.nonNullable.control(this.parentId, [
+      propertyName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+      ]),
+      categoryId: this.fb.nonNullable.control<string>(this.parentId, [
         requiredValidator(),
       ]),
     });

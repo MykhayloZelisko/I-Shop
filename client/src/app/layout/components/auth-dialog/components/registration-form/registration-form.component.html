@@ -1,5 +1,5 @@
 <div class="registration-form">
-  <form [formGroup]="registrationForm" class="registration-form__form">
+  <div [formGroup]="registrationForm" class="registration-form__form">
     <div class="registration-form__field">
       <label class="registration-form__label" for="email"
         >Електронна пошта:
@@ -91,7 +91,7 @@
         <p class="registration-form__error">{{ showMessage('password') }}</p>
       }
     </div>
-  </form>
+  </div>
   <button
     class="registration-form__button"
     [disabled]="registrationForm.invalid"

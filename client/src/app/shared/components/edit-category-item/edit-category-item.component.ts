@@ -69,12 +69,15 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
 
   public initForm(): void {
     this.categoryForm = this.fb.group<SubCategoryFormInterface>({
-      categoryName: this.fb.nonNullable.control(this.category.categoryName, [
+      categoryName: this.fb.nonNullable.control<string>(
+        this.category.categoryName,
+        [requiredValidator()],
+      ),
+      image: this.fb.nonNullable.control<File[]>(this.category.image),
+      parentId: this.fb.control<string | null>(this.category.parentId, [
         requiredValidator(),
       ]),
-      image: this.fb.nonNullable.control<File[]>(this.category.image),
-      parentId: this.fb.control(this.category.parentId, [requiredValidator()]),
-      base64image: this.fb.control(null, [requiredValidator()]),
+      base64image: this.fb.control<string | null>(null, [requiredValidator()]),
     });
   }
 

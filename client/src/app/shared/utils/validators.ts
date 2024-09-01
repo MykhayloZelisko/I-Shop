@@ -3,11 +3,7 @@ import { AbstractControl, FormArray, ValidatorFn } from '@angular/forms';
 export function requiredValidator(): ValidatorFn {
   return (control: AbstractControl) => {
     const value = control.value;
-    if (
-      value === null ||
-      value === undefined ||
-      value.toString().trim() === ''
-    ) {
+    if (!value || !value.trim()) {
       return {
         required: `Поле обов'язкове для заповнення`,
       };

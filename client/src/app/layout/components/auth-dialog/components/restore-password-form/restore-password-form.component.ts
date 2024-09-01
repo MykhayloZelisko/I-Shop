@@ -1,5 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   emailPatternValidator,
   requiredValidator,
@@ -18,21 +23,25 @@ import { PopupActions } from '../../../../../+store/popup/actions/popup.actions'
   styleUrl: './restore-password-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RestorePasswordFormComponent {
+export class RestorePasswordFormComponent implements OnInit {
   private regEmail =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  private fb = inject(FormBuilder);
+  public restorePasswordCtrl!: FormControl<string>;
 
-  public restorePasswordForm: FormGroup = this.fb.group({
-    email: [null, [requiredValidator(), emailPatternValidator(this.regEmail)]],
-  });
+  private fb = inject(FormBuilder);
 
   private store = inject(Store<State>);
 
-  public showMessage(controlName: string): string {
-    const control = this.restorePasswordForm.controls[controlName];
-    return showErrorMessage(control);
+  public ngOnInit(): void {
+    this.restorePasswordCtrl = this.fb.nonNullable.control<string>('', [
+      requiredValidator(),
+      emailPatternValidator(this.regEmail),
+    ]);
+  }
+
+  public showMessage(): string {
+    return showErrorMessage(this.restorePasswordCtrl);
   }
 
   public login(): void {

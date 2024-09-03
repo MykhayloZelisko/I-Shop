@@ -8,7 +8,7 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  ReactiveFormsModule,
+  ReactiveFormsModule, ValidatorFn,
 } from '@angular/forms';
 import {
   emailPatternValidator,
@@ -24,11 +24,12 @@ import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import { LoginFormInterface } from '../../../../../shared/models/interfaces/login-form.interface';
 import { LoginInterface } from '../../../../../shared/models/interfaces/login.interface';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +43,17 @@ export class LoginFormComponent implements OnInit {
 
   public loginForm!: FormGroup<LoginFormInterface>;
 
+  protected readonly emailValidators: ValidatorFn[] = [
+    requiredValidator(),
+    emailPatternValidator(this.regEmail),
+  ];
+
+  protected readonly passwordValidators: ValidatorFn[] = [
+    requiredValidator(),
+    minMaxLengthValidator(8, 32),
+    passwordPatternValidator(this.regPassword),
+  ];
+
   private fb = inject(FormBuilder);
 
   private store = inject(Store<State>);
@@ -52,15 +64,8 @@ export class LoginFormComponent implements OnInit {
 
   public initLoginForm(): void {
     this.loginForm = this.fb.group<LoginFormInterface>({
-      email: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        emailPatternValidator(this.regEmail),
-      ]),
-      password: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        minMaxLengthValidator(8, 32),
-        passwordPatternValidator(this.regPassword),
-      ]),
+      email: this.fb.nonNullable.control<string>('', []),
+      password: this.fb.nonNullable.control<string>('', []),
     });
   }
 

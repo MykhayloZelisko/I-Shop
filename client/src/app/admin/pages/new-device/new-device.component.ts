@@ -182,7 +182,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       propertyName: this.fb.nonNullable.control<string>(propertyName, [
         requiredValidator(),
       ]),
-      value: this.fb.nonNullable.control<string>('', [requiredValidator()]),
+      value: this.fb.nonNullable.control<string>('', []),
     });
     this.getPropertiesCtrl().push(propertyForm);
   }

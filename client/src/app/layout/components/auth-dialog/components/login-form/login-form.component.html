@@ -1,39 +1,19 @@
 <div class="login-form">
   <div [formGroup]="loginForm" class="login-form__form">
-    <div class="login-form__field">
-      <label class="login-form__label" for="email">Електронна пошта: </label>
-      <input
-        id="email"
-        class="login-form__input"
-        formControlName="email"
-        type="email"
-        placeholder="Введіть електронну пошту"
-      />
-      @if (
-        loginForm.controls['email'].invalid &&
-        (loginForm.controls['email'].dirty ||
-          loginForm.controls['email'].touched)
-      ) {
-        <p class="login-form__error">{{ showMessage('email') }}</p>
-      }
-    </div>
-    <div class="login-form__field">
-      <label class="login-form__label" for="password">Пароль: </label>
-      <input
-        id="password"
-        class="login-form__input"
-        formControlName="password"
-        type="password"
-        placeholder="Введіть пароль"
-      />
-      @if (
-        loginForm.controls['password'].invalid &&
-        (loginForm.controls['password'].dirty ||
-          loginForm.controls['password'].touched)
-      ) {
-        <p class="login-form__error">{{ showMessage('password') }}</p>
-      }
-    </div>
+    <app-input
+      [label]="'Електронна пошта'"
+      [placeholder]="'Введіть електронну пошту'"
+      [validators]="emailValidators"
+      [inputType]="'email'"
+      formControlName="email"
+    ></app-input>
+    <app-input
+      [label]="'Пароль'"
+      [placeholder]="'Введіть пароль'"
+      [validators]="passwordValidators"
+      [inputType]="'password'"
+      formControlName="password"
+    ></app-input>
   </div>
   <p class="login-form__password" (click)="restorePassword()">
     <span class="login-form__link">Забули пароль?</span>

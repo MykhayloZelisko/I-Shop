@@ -12,6 +12,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   DPropertyFormInterface,
@@ -45,6 +46,8 @@ import { CreateDeviceInterface } from '../../../shared/models/interfaces/create-
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
 import { FormActions } from '../../../+store/form/actions/form.actions';
 import { selectFormCleared } from '../../../+store/form/selectors/form.selectors';
+import { InputComponent } from '../../../shared/components/input/input.component';
+import { MaskConfigInterface } from '../../../shared/models/interfaces/mask-config.interface';
 
 @Component({
   selector: 'app-new-device',
@@ -58,12 +61,36 @@ import { selectFormCleared } from '../../../+store/form/selectors/form.selectors
     CascadeSelectModule,
     FileControlComponent,
     SvgIconComponent,
+    InputComponent,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewDeviceComponent implements OnInit, OnDestroy {
+  protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
+
+  protected readonly priceCountValidators: ValidatorFn[] = [
+    requiredValidator(),
+    positiveNumberValidator(),
+  ];
+
+  protected readonly priceMaskConfig: MaskConfigInterface = {
+    mask: 'separator.2',
+    options: {
+      thousandSeparator: '',
+      dropSpecialCharacters: false,
+      decimalMarker: '.',
+    },
+  };
+
+  protected readonly countMaskConfig: MaskConfigInterface = {
+    mask: '0*',
+    options: {
+      thousandSeparator: '',
+    },
+  };
+
   public newDeviceForm!: FormGroup<NewDeviceFormInterface>;
 
   public brands$!: Observable<BrandInterface[]>;
@@ -98,17 +125,9 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public initDeviceForm(): void {
     this.newDeviceForm = this.fb.group<NewDeviceFormInterface>({
-      deviceName: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-      ]),
-      price: this.fb.nonNullable.control<number>(NaN, [
-        requiredValidator(),
-        positiveNumberValidator(),
-      ]),
-      count: this.fb.nonNullable.control<number>(NaN, [
-        requiredValidator(),
-        positiveNumberValidator(),
-      ]),
+      deviceName: this.fb.nonNullable.control<string>('', []),
+      price: this.fb.nonNullable.control<number>(NaN, []),
+      count: this.fb.nonNullable.control<number>(NaN, []),
       images: this.fb.array<FormControl<File>>([], [nonEmptyArrayValidator()]),
       base64images: this.fb.array<FormControl<string>>(
         [],
@@ -263,6 +282,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           this.clearImagesCtrl();
           this.clearPropertiesCtrl();
           this.newDeviceForm.markAsPristine();
+          this.newDeviceForm.markAsUntouched();
           this.store.dispatch(FormActions.clearFormOff());
         }
       });

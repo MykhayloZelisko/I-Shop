@@ -1,62 +1,25 @@
 <div class="new-device">
   <div class="new-device__form" [formGroup]="newDeviceForm">
-    <div class="new-device__field">
-      <label class="new-device__label" for="device-name">Назва товару</label>
-      <input
-        id="device-name"
-        class="new-device__input"
-        formControlName="deviceName"
-        type="text"
-        placeholder="Введіть назву товару"
-      />
-      @if (
-        newDeviceForm.controls.deviceName.invalid &&
-        (newDeviceForm.controls.deviceName.dirty ||
-          newDeviceForm.controls.deviceName.touched)
-      ) {
-        <p class="new-device__error">{{ showMessage('deviceName') }}</p>
-      }
-    </div>
-    <div class="new-device__field">
-      <label class="new-device__label" for="price">Ціна в гривнях</label>
-      <input
-        id="price"
-        mask="separator.2"
-        thousandSeparator=""
-        [dropSpecialCharacters]="false"
-        decimalMarker="."
-        class="new-device__input"
-        formControlName="price"
-        type="text"
-        placeholder="Ціна в гривнях"
-      />
-      @if (
-        newDeviceForm.controls.price.invalid &&
-        (newDeviceForm.controls.price.dirty ||
-          newDeviceForm.controls.price.touched)
-      ) {
-        <p class="new-device__error">{{ showMessage('price') }}</p>
-      }
-    </div>
-    <div class="new-device__field">
-      <label class="new-device__label" for="count">Кількість</label>
-      <input
-        id="count"
-        mask="0*"
-        thousandSeparator=""
-        class="new-device__input"
-        formControlName="count"
-        type="text"
-        placeholder="Кількість"
-      />
-      @if (
-        newDeviceForm.controls.count.invalid &&
-        (newDeviceForm.controls.count.dirty ||
-          newDeviceForm.controls.count.touched)
-      ) {
-        <p class="new-device__error">{{ showMessage('count') }}</p>
-      }
-    </div>
+    <app-input
+      [label]="'Назва товару'"
+      [placeholder]="'Введіть назву товару'"
+      [validators]="requiredValidators"
+      formControlName="deviceName"
+    ></app-input>
+    <app-input
+      [label]="'Ціна в гривнях'"
+      [placeholder]="'Ціна в гривнях'"
+      [validators]="priceCountValidators"
+      [maskConfig]="priceMaskConfig"
+      formControlName="price"
+    ></app-input>
+    <app-input
+      [label]="'Кількість'"
+      [placeholder]="'Кількість'"
+      [validators]="priceCountValidators"
+      [maskConfig]="countMaskConfig"
+      formControlName="count"
+    ></app-input>
     @if (brands$ | async; as brands) {
       <div class="new-device__field">
         <label class="new-device__label" for="brand-id">Бренд</label>
@@ -160,26 +123,13 @@
       }
       <ng-container formArrayName="properties">
         @for (property of properties; track property; let index = $index) {
-          <div class="new-device__field" [formGroupName]="index">
-            <label class="new-device__label" [for]="property.propertyName">{{
-              property.propertyName
-            }}</label>
-            <input
-              [id]="property.propertyName"
-              class="new-device__input"
+          <ng-container [formGroupName]="index">
+            <app-input
+              [label]="property.propertyName"
+              [validators]="requiredValidators"
               formControlName="value"
-              type="text"
-            />
-            @if (
-              getPropertyValueCtrl(index).invalid &&
-              (getPropertyValueCtrl(index).dirty ||
-                getPropertyValueCtrl(index).touched)
-            ) {
-              <p class="new-device__error">
-                {{ showMessageArray('properties', index) }}
-              </p>
-            }
-          </div>
+            ></app-input>
+          </ng-container>
         }
       </ng-container>
     }

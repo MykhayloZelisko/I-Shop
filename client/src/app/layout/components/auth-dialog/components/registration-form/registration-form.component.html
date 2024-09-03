@@ -19,13 +19,26 @@
       [validators]="nameValidators"
       formControlName="lastName"
     ></app-input>
-    <app-input
-      [label]="'Номер телефону'"
-      [placeholder]="'+380 (XX) XXX - XX - XX'"
-      [maskConfig]="phoneMaskConfig"
-      [validators]="phoneValidators"
-      formControlName="phone"
-    ></app-input>
+    <div class="registration-form__field">
+      <label class="registration-form__label" for="phone">Номер телефону</label>
+      <input
+        id="phone"
+        class="registration-form__input"
+        formControlName="phone"
+        type="text"
+        placeholder="+380(XX)XXX-XX-XX"
+        mask="(00) 000-00-00"
+        prefix="+380 "
+        [showMaskTyped]="true"
+      />
+      @if (
+        registrationForm.controls['phone'].invalid &&
+        (registrationForm.controls['phone'].dirty ||
+          registrationForm.controls['phone'].touched)
+      ) {
+        <p class="registration-form__error">{{ showMessage('phone') }}</p>
+      }
+    </div>
     <app-input
       [label]="'Пароль'"
       [placeholder]="'Введіть пароль'"

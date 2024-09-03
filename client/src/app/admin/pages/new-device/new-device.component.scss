@@ -44,7 +44,13 @@
   }
 
   &__input {
-    display: none;
+    @include input-style(9px 12px);
+
+    margin-top: 8px;
+
+    &--file {
+      display: none;
+    }
   }
 
   &__error {

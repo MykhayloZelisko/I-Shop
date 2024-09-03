@@ -6,20 +6,46 @@
       [validators]="requiredValidators"
       formControlName="deviceName"
     ></app-input>
-    <app-input
-      [label]="'Ціна в гривнях'"
-      [placeholder]="'Ціна в гривнях'"
-      [validators]="priceCountValidators"
-      [maskConfig]="priceMaskConfig"
-      formControlName="price"
-    ></app-input>
-    <app-input
-      [label]="'Кількість'"
-      [placeholder]="'Кількість'"
-      [validators]="priceCountValidators"
-      [maskConfig]="countMaskConfig"
-      formControlName="count"
-    ></app-input>
+    <div class="new-device__field">
+      <label class="new-device__label" for="price">Ціна в гривнях</label>
+      <input
+        id="price"
+        mask="separator.2"
+        thousandSeparator=""
+        [dropSpecialCharacters]="false"
+        decimalMarker="."
+        class="new-device__input"
+        formControlName="price"
+        type="text"
+        placeholder="Ціна в гривнях"
+      />
+      @if (
+        newDeviceForm.controls.price.invalid &&
+        (newDeviceForm.controls.price.dirty ||
+          newDeviceForm.controls.price.touched)
+      ) {
+        <p class="new-device__error">{{ showMessage('price') }}</p>
+      }
+    </div>
+    <div class="new-device__field">
+      <label class="new-device__label" for="count">Кількість</label>
+      <input
+        id="count"
+        mask="0*"
+        thousandSeparator=""
+        class="new-device__input"
+        formControlName="count"
+        type="text"
+        placeholder="Кількість"
+      />
+      @if (
+        newDeviceForm.controls.count.invalid &&
+        (newDeviceForm.controls.count.dirty ||
+          newDeviceForm.controls.count.touched)
+      ) {
+        <p class="new-device__error">{{ showMessage('count') }}</p>
+      }
+    </div>
     @if (brands$ | async; as brands) {
       <div class="new-device__field">
         <label class="new-device__label" for="brand-id">Бренд</label>
@@ -77,7 +103,7 @@
         type="file"
         accept="image/*"
         multiple
-        class="new-device__input"
+        class="new-device__input--file"
         (change)="uploadFiles($event)"
       />
       <button class="new-device__upload-button" (click)="input.click()">

@@ -26,20 +26,17 @@ import {
 import { Subject, takeUntil, tap } from 'rxjs';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass } from '@angular/common';
-import { MaskConfigInterface } from '../../models/interfaces/mask-config.interface';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgxMaskDirective],
+  imports: [ReactiveFormsModule, NgClass],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: InputComponent,
       multi: true,
     },
-    provideNgxMask(),
   ],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
@@ -55,8 +52,6 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true }) public label!: string;
 
   @Input() public validators: ValidatorFn[] = [];
-
-  @Input() public maskConfig!: MaskConfigInterface;
 
   @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
 

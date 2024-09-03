@@ -33,12 +33,12 @@ import {
   REG_PHONE,
 } from '../../../../../shared/models/constants/reg-exp-patterns';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
-import { MaskConfigInterface } from '../../../../../shared/models/interfaces/mask-config.interface';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-registration-form',
   standalone: true,
-  imports: [ReactiveFormsModule, InputComponent],
+  imports: [ReactiveFormsModule, InputComponent, NgxMaskDirective],
   templateUrl: './registration-form.component.html',
   styleUrl: './registration-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,20 +61,6 @@ export class RegistrationFormComponent implements OnInit {
     namePatternValidator(REG_NAME),
   ];
 
-  protected readonly phoneValidators: ValidatorFn[] = [
-    requiredValidator(),
-    phoneNumberValidator(REG_PHONE),
-  ];
-
-  protected readonly phoneMaskConfig: MaskConfigInterface = {
-    mask: '(00) 000 - 00 - 00',
-    options: {
-      prefix: '+380 ',
-      showMaskTyped: true,
-      dropSpecialCharacters: false,
-    },
-  };
-
   public registrationForm!: FormGroup<RegistrationFormInterface>;
 
   private fb = inject(FormBuilder);
@@ -90,7 +76,10 @@ export class RegistrationFormComponent implements OnInit {
       email: this.fb.nonNullable.control<string>('', []),
       firstName: this.fb.nonNullable.control<string>('', []),
       lastName: this.fb.nonNullable.control<string>('', []),
-      phone: this.fb.nonNullable.control<string>('', []),
+      phone: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        phoneNumberValidator(REG_PHONE),
+      ]),
       password: this.fb.nonNullable.control<string>('', []),
     });
   }

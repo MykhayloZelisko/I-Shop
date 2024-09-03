@@ -1,40 +1,17 @@
 <div class="input">
   <label class="input__label">{{ label }}</label>
-  @if (maskConfig) {
-    <input
-      #input
-      class="input__input"
-      [ngClass]="{
-        'input__input--invalid': isInvalid()
-      }"
-      [type]="inputType"
-      [placeholder]="placeholder"
-      [mask]="maskConfig.mask || ''"
-      [showMaskTyped]="maskConfig.options.showMaskTyped || false"
-      [prefix]="maskConfig.options.prefix || ''"
-      [decimalMarker]="maskConfig.options.decimalMarker || '.'"
-      [thousandSeparator]="maskConfig.options.thousandSeparator || ''"
-      [dropSpecialCharacters]="
-        maskConfig.options.dropSpecialCharacters || false
-      "
-      (input)="changeValue($event)"
-      (blur)="onBlur()"
-      (focus)="onFocus()"
-    />
-  } @else {
-    <input
-      #input
-      class="input__input"
-      [ngClass]="{
-        'input__input--invalid': isInvalid()
-      }"
-      [type]="inputType"
-      [placeholder]="placeholder"
-      (input)="changeValue($event)"
-      (blur)="onBlur()"
-      (focus)="onFocus()"
-    />
-  }
+  <input
+    #input
+    class="input__input"
+    [ngClass]="{
+      'input__input--invalid': isInvalid()
+    }"
+    [type]="inputType"
+    [placeholder]="placeholder"
+    (input)="changeValue($event)"
+    (blur)="onBlur()"
+    (focus)="onFocus()"
+  />
   @if (isInvalid()) {
     <p class="input__error">{{ showMessage() }}</p>
   }

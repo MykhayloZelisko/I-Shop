@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { NgxMaskDirective } from 'ngx-mask';
 import {
   FormArray,
   FormBuilder,
@@ -46,12 +47,12 @@ import { DeviceActions } from '../../../+store/devices/actions/device.actions';
 import { FormActions } from '../../../+store/form/actions/form.actions';
 import { selectFormCleared } from '../../../+store/form/selectors/form.selectors';
 import { InputComponent } from '../../../shared/components/input/input.component';
-import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-new-device',
   standalone: true,
   imports: [
+    NgxMaskDirective,
     ReactiveFormsModule,
     DropdownModule,
     AsyncPipe,
@@ -60,7 +61,6 @@ import { NgxMaskDirective } from 'ngx-mask';
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
-    NgxMaskDirective,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',

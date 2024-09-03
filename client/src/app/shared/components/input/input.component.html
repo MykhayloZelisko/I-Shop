@@ -10,6 +10,8 @@
       [type]="inputType"
       [placeholder]="placeholder"
       [mask]="maskConfig.mask || ''"
+      [showMaskTyped]="maskConfig.options.showMaskTyped || false"
+      [prefix]="maskConfig.options.prefix || ''"
       [decimalMarker]="maskConfig.options.decimalMarker || '.'"
       [thousandSeparator]="maskConfig.options.thousandSeparator || ''"
       [dropSpecialCharacters]="

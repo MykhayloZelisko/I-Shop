@@ -6,16 +6,15 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
-  ReactiveFormsModule, ValidatorFn,
+  ReactiveFormsModule,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   emailPatternValidator,
   minMaxLengthValidator,
   passwordPatternValidator,
   requiredValidator,
-  showErrorMessage,
 } from '../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
@@ -25,6 +24,10 @@ import { PopupActions } from '../../../../../+store/popup/actions/popup.actions'
 import { LoginFormInterface } from '../../../../../shared/models/interfaces/login-form.interface';
 import { LoginInterface } from '../../../../../shared/models/interfaces/login.interface';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
+import {
+  REG_EMAIL,
+  REG_PASSWORD,
+} from '../../../../../shared/models/constants/reg-exp-patterns';
 
 @Component({
   selector: 'app-login-form',
@@ -35,24 +38,18 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnInit {
-  private regEmail =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-  private regPassword =
-    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,.?\/~_+\-=|\\]).{8,32}$/;
-
-  public loginForm!: FormGroup<LoginFormInterface>;
-
   protected readonly emailValidators: ValidatorFn[] = [
     requiredValidator(),
-    emailPatternValidator(this.regEmail),
+    emailPatternValidator(REG_EMAIL),
   ];
 
   protected readonly passwordValidators: ValidatorFn[] = [
     requiredValidator(),
     minMaxLengthValidator(8, 32),
-    passwordPatternValidator(this.regPassword),
+    passwordPatternValidator(REG_PASSWORD),
   ];
+
+  public loginForm!: FormGroup<LoginFormInterface>;
 
   private fb = inject(FormBuilder);
 
@@ -67,11 +64,6 @@ export class LoginFormComponent implements OnInit {
       email: this.fb.nonNullable.control<string>('', []),
       password: this.fb.nonNullable.control<string>('', []),
     });
-  }
-
-  public showMessage(controlName: string): string {
-    const control = this.loginForm.get(controlName) as FormControl;
-    return showErrorMessage(control);
   }
 
   public registration(): void {

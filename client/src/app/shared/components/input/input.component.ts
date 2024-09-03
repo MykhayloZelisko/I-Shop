@@ -2,11 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef, EventEmitter,
+  ElementRef,
+  EventEmitter,
   inject,
   Injector,
   Input,
-  OnInit, Output,
+  OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -25,7 +27,7 @@ import { Subject, takeUntil, tap } from 'rxjs';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass } from '@angular/common';
 import { MaskConfigInterface } from '../../models/interfaces/mask-config.interface';
-import { NgxMaskDirective } from 'ngx-mask';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-input',
@@ -37,6 +39,7 @@ import { NgxMaskDirective } from 'ngx-mask';
       useExisting: InputComponent,
       multi: true,
     },
+    provideNgxMask(),
   ],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
@@ -136,8 +139,6 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   public isInvalid(): boolean {
     return this.control.invalid && (this.control.dirty || this.control.touched);
   }
-
-  protected readonly onfocus = onfocus;
 
   public onFocus(): void {
     this.focusEvent.emit();

@@ -5,7 +5,6 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { NgxMaskDirective } from 'ngx-mask';
 import {
   FormArray,
   FormBuilder,
@@ -53,7 +52,6 @@ import { MaskConfigInterface } from '../../../shared/models/interfaces/mask-conf
   selector: 'app-new-device',
   standalone: true,
   imports: [
-    NgxMaskDirective,
     ReactiveFormsModule,
     DropdownModule,
     AsyncPipe,
@@ -263,12 +261,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public setBase64Image(image: string, index: number): void {
     this.getBase64Ctrl().at(index).setValue(image);
-  }
-
-  public getPropertyValueCtrl(index: number): FormControl<string> {
-    return this.getPropertiesCtrl()
-      .at(index)
-      .get('value') as FormControl<string>;
   }
 
   public clearForm(): void {

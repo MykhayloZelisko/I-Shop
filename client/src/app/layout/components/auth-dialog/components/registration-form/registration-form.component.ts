@@ -9,6 +9,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   emailPatternValidator,
@@ -22,30 +23,57 @@ import {
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
-import { NgxMaskDirective } from 'ngx-mask';
 import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import { RegistrationFormInterface } from '../../../../../shared/models/interfaces/registration-form.interface';
+import {
+  REG_EMAIL,
+  REG_NAME,
+  REG_PASSWORD,
+  REG_PHONE,
+} from '../../../../../shared/models/constants/reg-exp-patterns';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { MaskConfigInterface } from '../../../../../shared/models/interfaces/mask-config.interface';
 
 @Component({
   selector: 'app-registration-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgxMaskDirective],
+  imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './registration-form.component.html',
   styleUrl: './registration-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationFormComponent implements OnInit {
-  private regPassword =
-    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,.?\/~_+\-=|\\]).{8,32}$/;
+  protected readonly emailValidators: ValidatorFn[] = [
+    requiredValidator(),
+    emailPatternValidator(REG_EMAIL),
+  ];
 
-  private regEmail =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  protected readonly passwordValidators: ValidatorFn[] = [
+    requiredValidator(),
+    minMaxLengthValidator(8, 32),
+    passwordPatternValidator(REG_PASSWORD),
+  ];
 
-  private regName = /^([A-Z]{1}[a-z-]+|[А-Я]{1}[а-я-]+)$/;
+  protected readonly nameValidators: ValidatorFn[] = [
+    requiredValidator(),
+    minMaxLengthValidator(3, null),
+    namePatternValidator(REG_NAME),
+  ];
 
-  private regPhone =
-    /^(39|50|63|66|67|68|73|75|77|91|92|93|94|95|96|97|98|99)\d{7}$/;
+  protected readonly phoneValidators: ValidatorFn[] = [
+    requiredValidator(),
+    phoneNumberValidator(REG_PHONE),
+  ];
+
+  protected readonly phoneMaskConfig: MaskConfigInterface = {
+    mask: '(00) 000 - 00 - 00',
+    options: {
+      prefix: '+380 ',
+      showMaskTyped: true,
+      dropSpecialCharacters: false,
+    },
+  };
 
   public registrationForm!: FormGroup<RegistrationFormInterface>;
 
@@ -59,29 +87,11 @@ export class RegistrationFormComponent implements OnInit {
 
   public initRegistrationForm(): void {
     this.registrationForm = this.fb.group<RegistrationFormInterface>({
-      email: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        emailPatternValidator(this.regEmail),
-      ]),
-      firstName: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        minMaxLengthValidator(3, null),
-        namePatternValidator(this.regName),
-      ]),
-      lastName: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        minMaxLengthValidator(3, null),
-        namePatternValidator(this.regName),
-      ]),
-      phone: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        phoneNumberValidator(this.regPhone),
-      ]),
-      password: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        minMaxLengthValidator(8, 32),
-        passwordPatternValidator(this.regPassword),
-      ]),
+      email: this.fb.nonNullable.control<string>('', []),
+      firstName: this.fb.nonNullable.control<string>('', []),
+      lastName: this.fb.nonNullable.control<string>('', []),
+      phone: this.fb.nonNullable.control<string>('', []),
+      password: this.fb.nonNullable.control<string>('', []),
     });
   }
 

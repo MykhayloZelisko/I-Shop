@@ -5,7 +5,12 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+  ValidatorFn,
+} from '@angular/forms';
 import { requiredValidator } from '../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
@@ -13,16 +18,19 @@ import { BrandActions } from '../../../../../+store/brands/actions/brand.actions
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectFormCleared } from '../../../../../+store/form/selectors/form.selectors';
 import { FormActions } from '../../../../../+store/form/actions/form.actions';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
 
 @Component({
   selector: 'app-new-brand',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './new-brand.component.html',
   styleUrl: './new-brand.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewBrandComponent implements OnInit, OnDestroy {
+  protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
+
   public brandCtrl!: FormControl<string>;
 
   public isFormCleared$!: Observable<boolean>;

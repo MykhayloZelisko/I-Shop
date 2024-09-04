@@ -1,70 +1,38 @@
 <div class="registration-form">
   <div [formGroup]="registrationForm" class="registration-form__form">
+    <app-input
+      label="Електронна пошта"
+      placeholder="Введіть електронну пошту"
+      [validators]="emailValidators"
+      [inputType]="'email'"
+      formControlName="email"
+      [withErrors]="true"
+    ></app-input>
+    <app-input
+      label="Ім'я"
+      placeholder="Введіть ім'я"
+      [validators]="nameValidators"
+      formControlName="firstName"
+      [withErrors]="true"
+    ></app-input>
+    <app-input
+      label="Прізвище"
+      placeholder="Введіть прізвище"
+      [validators]="nameValidators"
+      formControlName="lastName"
+      [withErrors]="true"
+    ></app-input>
     <div class="registration-form__field">
-      <label class="registration-form__label" for="email"
-        >Електронна пошта:
-      </label>
-      <input
-        id="email"
-        class="registration-form__input"
-        formControlName="email"
-        type="email"
-        placeholder="Введіть електронну пошту"
-      />
-      @if (
-        registrationForm.controls['email'].invalid &&
-        (registrationForm.controls['email'].dirty ||
-          registrationForm.controls['email'].touched)
-      ) {
-        <p class="registration-form__error">{{ showMessage('email') }}</p>
-      }
-    </div>
-    <div class="registration-form__field">
-      <label class="registration-form__label" for="firstName">Ім'я: </label>
-      <input
-        id="firstName"
-        class="registration-form__input"
-        formControlName="firstName"
-        type="text"
-        placeholder="Введіть ім'я"
-      />
-      @if (
-        registrationForm.controls['firstName'].invalid &&
-        (registrationForm.controls['firstName'].dirty ||
-          registrationForm.controls['firstName'].touched)
-      ) {
-        <p class="registration-form__error">{{ showMessage('firstName') }}</p>
-      }
-    </div>
-    <div class="registration-form__field">
-      <label class="registration-form__label" for="lastName">Прізвище:</label>
-      <input
-        id="lastName"
-        class="registration-form__input"
-        formControlName="lastName"
-        type="text"
-        placeholder="Введіть прізвище"
-      />
-      @if (
-        registrationForm.controls['lastName'].invalid &&
-        (registrationForm.controls['lastName'].dirty ||
-          registrationForm.controls['lastName'].touched)
-      ) {
-        <p class="registration-form__error">{{ showMessage('lastName') }}</p>
-      }
-    </div>
-    <div class="registration-form__field">
-      <label class="registration-form__label" for="phone"
-        >Номер телефону:
-      </label>
+      <label class="registration-form__label" for="phone">Номер телефону</label>
       <input
         id="phone"
         class="registration-form__input"
         formControlName="phone"
         type="text"
-        placeholder="+380 (XX) XXX - XX - XX"
-        mask="(XX) XXX - XX - XX"
+        placeholder="+380(XX)XXX-XX-XX"
+        mask="(00) 000-00-00"
         prefix="+380 "
+        [showMaskTyped]="true"
       />
       @if (
         registrationForm.controls['phone'].invalid &&
@@ -74,23 +42,14 @@
         <p class="registration-form__error">{{ showMessage('phone') }}</p>
       }
     </div>
-    <div class="registration-form__field">
-      <label class="registration-form__label" for="password">Пароль: </label>
-      <input
-        id="password"
-        class="registration-form__input"
-        formControlName="password"
-        type="password"
-        placeholder="Введіть пароль"
-      />
-      @if (
-        registrationForm.controls['password'].invalid &&
-        (registrationForm.controls['password'].dirty ||
-          registrationForm.controls['password'].touched)
-      ) {
-        <p class="registration-form__error">{{ showMessage('password') }}</p>
-      }
-    </div>
+    <app-input
+      label="Пароль"
+      placeholder="Введіть пароль"
+      [validators]="passwordValidators"
+      [inputType]="'password'"
+      formControlName="password"
+      [withErrors]="true"
+    ></app-input>
   </div>
   <button
     class="registration-form__button"

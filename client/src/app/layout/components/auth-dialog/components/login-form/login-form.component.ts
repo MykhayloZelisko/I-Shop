@@ -6,16 +6,15 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   emailPatternValidator,
   minMaxLengthValidator,
   passwordPatternValidator,
   requiredValidator,
-  showErrorMessage,
 } from '../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
@@ -24,21 +23,31 @@ import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import { LoginFormInterface } from '../../../../../shared/models/interfaces/login-form.interface';
 import { LoginInterface } from '../../../../../shared/models/interfaces/login.interface';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import {
+  REG_EMAIL,
+  REG_PASSWORD,
+} from '../../../../../shared/models/constants/reg-exp-patterns';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnInit {
-  private regEmail =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  protected readonly emailValidators: ValidatorFn[] = [
+    requiredValidator(),
+    emailPatternValidator(REG_EMAIL),
+  ];
 
-  private regPassword =
-    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,.?\/~_+\-=|\\]).{8,32}$/;
+  protected readonly passwordValidators: ValidatorFn[] = [
+    requiredValidator(),
+    minMaxLengthValidator(8, 32),
+    passwordPatternValidator(REG_PASSWORD),
+  ];
 
   public loginForm!: FormGroup<LoginFormInterface>;
 
@@ -52,21 +61,9 @@ export class LoginFormComponent implements OnInit {
 
   public initLoginForm(): void {
     this.loginForm = this.fb.group<LoginFormInterface>({
-      email: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        emailPatternValidator(this.regEmail),
-      ]),
-      password: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-        minMaxLengthValidator(8, 32),
-        passwordPatternValidator(this.regPassword),
-      ]),
+      email: this.fb.nonNullable.control<string>('', []),
+      password: this.fb.nonNullable.control<string>('', []),
     });
-  }
-
-  public showMessage(controlName: string): string {
-    const control = this.loginForm.get(controlName) as FormControl;
-    return showErrorMessage(control);
   }
 
   public registration(): void {

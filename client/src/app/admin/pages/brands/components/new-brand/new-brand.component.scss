@@ -3,24 +3,18 @@
 
 .new-brand {
   font-family: $source;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
 
-  &__title {
-    font-size: 14px;
-    font-weight: 600;
+  &__add-btn {
+    @include button-style($brown-1, $yellow, 10px 24px, $brown-2, true);
   }
 
   &__input {
-    @include input-style(9px 12px, $max-width: 500px, $invalid: false);
-  }
-
-  &__add-btn {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
-  }
-
-  &__field-wrapper {
-    margin-top: 8px;
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
+    flex: 1 1 0;
+    max-width: 500px;
+    width: 100%;
+    box-sizing: border-box;
   }
 }

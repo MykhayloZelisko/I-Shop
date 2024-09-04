@@ -1,0 +1,18 @@
+<div class="input" [ngStyle]="setHeight()">
+  <label class="input__label">{{ label }}</label>
+  <input
+    #input
+    class="input__input"
+    [ngClass]="{
+      'input__input--invalid': isInvalid() && withErrors
+    }"
+    [type]="inputType"
+    [placeholder]="placeholder"
+    (input)="changeValue($event)"
+    (blur)="onBlur()"
+    (focus)="onFocus()"
+  />
+  @if (isInvalid() && withErrors) {
+    <p class="input__error">{{ showMessage() }}</p>
+  }
+</div>

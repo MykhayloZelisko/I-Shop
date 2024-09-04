@@ -12,6 +12,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   DPropertyFormInterface,
@@ -45,6 +46,7 @@ import { CreateDeviceInterface } from '../../../shared/models/interfaces/create-
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
 import { FormActions } from '../../../+store/form/actions/form.actions';
 import { selectFormCleared } from '../../../+store/form/selectors/form.selectors';
+import { InputComponent } from '../../../shared/components/input/input.component';
 
 @Component({
   selector: 'app-new-device',
@@ -58,12 +60,15 @@ import { selectFormCleared } from '../../../+store/form/selectors/form.selectors
     CascadeSelectModule,
     FileControlComponent,
     SvgIconComponent,
+    InputComponent,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewDeviceComponent implements OnInit, OnDestroy {
+  protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
+
   public newDeviceForm!: FormGroup<NewDeviceFormInterface>;
 
   public brands$!: Observable<BrandInterface[]>;
@@ -98,9 +103,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public initDeviceForm(): void {
     this.newDeviceForm = this.fb.group<NewDeviceFormInterface>({
-      deviceName: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-      ]),
+      deviceName: this.fb.nonNullable.control<string>('', []),
       price: this.fb.nonNullable.control<number>(NaN, [
         requiredValidator(),
         positiveNumberValidator(),
@@ -163,7 +166,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       propertyName: this.fb.nonNullable.control<string>(propertyName, [
         requiredValidator(),
       ]),
-      value: this.fb.nonNullable.control<string>('', [requiredValidator()]),
+      value: this.fb.nonNullable.control<string>('', []),
     });
     this.getPropertiesCtrl().push(propertyForm);
   }
@@ -244,12 +247,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public setBase64Image(image: string, index: number): void {
     this.getBase64Ctrl().at(index).setValue(image);
-  }
-
-  public getPropertyValueCtrl(index: number): FormControl<string> {
-    return this.getPropertiesCtrl()
-      .at(index)
-      .get('value') as FormControl<string>;
   }
 
   public clearForm(): void {

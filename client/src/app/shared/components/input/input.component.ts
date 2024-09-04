@@ -6,7 +6,7 @@ import {
   EventEmitter,
   inject,
   Injector,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -42,7 +42,7 @@ import { NgClass, NgStyle } from '@angular/common';
   styleUrl: './input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent implements OnInit, ControlValueAccessor {
+export class InputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @ViewChild('input') public input!: ElementRef;
 
   @Input() public placeholder = '';
@@ -71,6 +71,11 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   public ngOnInit(): void {
     this.setComponentControl();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public registerOnChange(fn: () => void): void {

@@ -6,6 +6,7 @@
       [validators]="emailValidators"
       [inputType]="'email'"
       formControlName="email"
+      [withErrors]="true"
     ></app-input>
     <app-input
       [label]="'Пароль'"
@@ -13,6 +14,7 @@
       [validators]="passwordValidators"
       [inputType]="'password'"
       formControlName="password"
+      [withErrors]="true"
     ></app-input>
   </div>
   <p class="login-form__password" (click)="restorePassword()">

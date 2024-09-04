@@ -25,12 +25,12 @@ import {
 } from '@angular/forms';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { showErrorMessage } from '../../utils/validators';
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, NgStyle],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -52,6 +52,8 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true }) public label!: string;
 
   @Input() public validators: ValidatorFn[] = [];
+
+  @Input({ required: true }) public withErrors!: boolean;
 
   @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
 
@@ -137,5 +139,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   public onFocus(): void {
     this.focusEvent.emit();
+  }
+
+  public setHeight(): Record<string, string> {
+    return this.withErrors ? { height: '78px' } : { height: 'auto' };
   }
 }

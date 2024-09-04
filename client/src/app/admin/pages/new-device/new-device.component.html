@@ -1,8 +1,8 @@
 <div class="new-device">
   <div class="new-device__form" [formGroup]="newDeviceForm">
     <app-input
-      [label]="'Назва товару'"
-      [placeholder]="'Введіть назву товару'"
+      label="Назва товару"
+      placeholder="Введіть назву товару"
       [validators]="requiredValidators"
       formControlName="deviceName"
       [withErrors]="true"

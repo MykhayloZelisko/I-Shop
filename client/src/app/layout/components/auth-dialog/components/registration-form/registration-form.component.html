@@ -1,23 +1,23 @@
 <div class="registration-form">
   <div [formGroup]="registrationForm" class="registration-form__form">
     <app-input
-      [label]="'Електронна пошта'"
-      [placeholder]="'Введіть електронну пошту'"
+      label="Електронна пошта"
+      placeholder="Введіть електронну пошту"
       [validators]="emailValidators"
       [inputType]="'email'"
       formControlName="email"
       [withErrors]="true"
     ></app-input>
     <app-input
-      [label]="'Ім\'я'"
-      [placeholder]="'Введіть ім\'я'"
+      label="Ім'я"
+      placeholder="Введіть ім'я"
       [validators]="nameValidators"
       formControlName="firstName"
       [withErrors]="true"
     ></app-input>
     <app-input
-      [label]="'Прізвище'"
-      [placeholder]="'Введіть прізвище'"
+      label="Прізвище"
+      placeholder="Введіть прізвище"
       [validators]="nameValidators"
       formControlName="lastName"
       [withErrors]="true"
@@ -43,8 +43,8 @@
       }
     </div>
     <app-input
-      [label]="'Пароль'"
-      [placeholder]="'Введіть пароль'"
+      label="Пароль"
+      placeholder="Введіть пароль"
       [validators]="passwordValidators"
       [inputType]="'password'"
       formControlName="password"

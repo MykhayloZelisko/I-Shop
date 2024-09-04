@@ -1,16 +1,16 @@
 <div class="login-form">
   <div [formGroup]="loginForm" class="login-form__form">
     <app-input
-      [label]="'Електронна пошта'"
-      [placeholder]="'Введіть електронну пошту'"
+      label="Електронна пошта"
+      placeholder="Введіть електронну пошту"
       [validators]="emailValidators"
       [inputType]="'email'"
       formControlName="email"
       [withErrors]="true"
     ></app-input>
     <app-input
-      [label]="'Пароль'"
-      [placeholder]="'Введіть пароль'"
+      label="Пароль"
+      placeholder="Введіть пароль"
       [validators]="passwordValidators"
       [inputType]="'password'"
       formControlName="password"

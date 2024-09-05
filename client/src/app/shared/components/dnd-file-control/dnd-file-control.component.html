@@ -11,9 +11,9 @@
     #fileUpload
     accept="image/*"
   />
-  @if (form.controls.image.errors && form.controls.image.dirty) {
+  @if (control.errors && control.dirty) {
     <span class="dnd-file-control__text dnd-file-control__text--error">{{
-      showMessage(form.controls.image)
+      showMessage()
     }}</span>
   } @else if (fileName) {
     <span class="dnd-file-control__text">{{ fileName }}</span>

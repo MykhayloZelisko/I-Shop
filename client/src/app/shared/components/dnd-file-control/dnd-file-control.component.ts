@@ -3,22 +3,30 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  inject,
+  Injector,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormGroup,
+  FormControl,
+  FormControlDirective,
+  FormControlName,
+  FormGroupDirective,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  NgControl,
+  NgModel,
   ValidationErrors,
   Validator,
 } from '@angular/forms';
 import { DndDirective } from '../../directives/dnd.directive';
-import { SubCategoryFormInterface } from '../../models/interfaces/sub-categories-form.interface';
 import { showErrorMessage } from '../../utils/validators';
 import { JsonPipe } from '@angular/common';
+import { Subject, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-dnd-file-control',
@@ -41,10 +49,8 @@ import { JsonPipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DndFileControlComponent
-  implements ControlValueAccessor, Validator
+  implements OnInit, ControlValueAccessor, Validator
 {
-  @Input({ required: true }) public form!: FormGroup<SubCategoryFormInterface>;
-
   @Input({ required: true }) public imageUrl: string | null = null;
 
   @Input({ required: true }) public parentId: string | null = null;
@@ -69,9 +75,48 @@ export class DndFileControlComponent
 
   public fileName = '';
 
+  public control!: FormControl<unknown>;
+
   public onChange = (_: File[] | null): void => {};
 
   public onTouched = (): void => {};
+
+  private destroy$: Subject<void> = new Subject<void>();
+
+  private injector = inject(Injector);
+
+  public ngOnInit(): void {
+    this.setComponentControl();
+  }
+
+  public setComponentControl(): void {
+    const injectedControl = this.injector.get(NgControl);
+
+    switch (injectedControl.constructor) {
+      case NgModel: {
+        const { control, update } = injectedControl as NgModel;
+        this.control = control;
+        this.control.valueChanges
+          .pipe(
+            tap((value: unknown) => update.emit(value)),
+            takeUntil(this.destroy$),
+          )
+          .subscribe();
+        break;
+      }
+      case FormControlName: {
+        this.control = this.injector
+          .get(FormGroupDirective)
+          .getControl(injectedControl as FormControlName);
+        break;
+      }
+      default: {
+        this.control = (injectedControl as FormControlDirective)
+          .form as FormControl;
+        break;
+      }
+    }
+  }
 
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
@@ -155,7 +200,7 @@ export class DndFileControlComponent
     this.fileName = '';
   }
 
-  public showMessage(control: AbstractControl): string {
-    return showErrorMessage(control);
+  public showMessage(): string {
+    return showErrorMessage(this.control);
   }
 }

@@ -25,7 +25,6 @@
       <app-dnd-file-control
         [parentId]="category.parentId"
         [imageUrl]="category.base64image"
-        [form]="categoryForm"
         formControlName="image"
         (changeImage)="setImageUrl($event)"
       ></app-dnd-file-control>

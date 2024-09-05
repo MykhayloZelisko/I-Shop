@@ -121,7 +121,6 @@
             >
               <app-file-control
                 [file]="file"
-                [control]="getImagesCtrl().at(index)"
                 [formControlName]="index"
                 (uploadFile)="setBase64Image($event, index)"
               ></app-file-control>

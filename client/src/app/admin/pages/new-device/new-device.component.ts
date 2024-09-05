@@ -19,6 +19,7 @@ import {
   NewDeviceFormInterface,
 } from '../../../shared/models/interfaces/new-device-form.interface';
 import {
+  maxArrayLengthValidator,
   nonEmptyArrayValidator,
   positiveNumberValidator,
   requiredValidator,
@@ -30,7 +31,7 @@ import { BrandInterface } from '../../../shared/models/interfaces/brand.interfac
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { selectAllBrands } from '../../../+store/brands/selectors/brand.selectors';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass } from '@angular/common';
 import {
   selectCascadeCategories,
   selectProperties,
@@ -61,6 +62,7 @@ import { InputComponent } from '../../../shared/components/input/input.component
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
+    JsonPipe,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
@@ -112,10 +114,13 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         requiredValidator(),
         positiveNumberValidator(),
       ]),
-      images: this.fb.array<FormControl<File>>([], [nonEmptyArrayValidator()]),
+      images: this.fb.array<FormControl<File>>(
+        [],
+        [nonEmptyArrayValidator(), maxArrayLengthValidator(6)],
+      ),
       base64images: this.fb.array<FormControl<string>>(
         [],
-        [nonEmptyArrayValidator()],
+        [nonEmptyArrayValidator(), maxArrayLengthValidator(6)],
       ),
       categoryId: this.fb.nonNullable.control<string>('', [
         requiredValidator(),

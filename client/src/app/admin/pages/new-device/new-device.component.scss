@@ -58,12 +58,17 @@
     font-size: 12px;
     color: $red;
     font-weight: 700;
+
+    &--images {
+      line-height: 1.5;
+    }
   }
 
   &__upload-button {
     @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
 
     margin-top: 8px;
+    white-space: nowrap;
   }
 
   &__save-button {

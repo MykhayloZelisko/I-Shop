@@ -110,6 +110,9 @@
       <button class="new-device__upload-button" (click)="input.click()">
         Завантажити зображення
       </button>
+      <p class="new-device__error new-device__error--images">
+        {{ showMessage('images') }}
+      </p>
       <div formArrayName="images" class="new-device__files">
         @for (file of files; track file; let index = $index) {
           <div class="new-device__file-wrapper">

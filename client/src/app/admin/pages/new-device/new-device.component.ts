@@ -104,11 +104,11 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   public initDeviceForm(): void {
     this.newDeviceForm = this.fb.group<NewDeviceFormInterface>({
       deviceName: this.fb.nonNullable.control<string>('', []),
-      price: this.fb.nonNullable.control<number>(NaN, [
+      price: this.fb.control<number | null>(null, [
         requiredValidator(),
         positiveNumberValidator(),
       ]),
-      count: this.fb.nonNullable.control<number>(NaN, [
+      count: this.fb.nonNullable.control<number | null>(null, [
         requiredValidator(),
         positiveNumberValidator(),
       ]),

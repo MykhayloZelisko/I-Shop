@@ -11,7 +11,6 @@ import {
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -44,8 +43,6 @@ export class FileControlComponent
   implements ControlValueAccessor, OnInit, Validator
 {
   @Input({ required: true }) public file!: File;
-
-  @Input({ required: true }) public control!: FormControl<File>;
 
   @Output() public uploadFile: EventEmitter<string> =
     new EventEmitter<string>();

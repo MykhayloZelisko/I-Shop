@@ -2,8 +2,8 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface NewDeviceFormInterface {
   deviceName: FormControl<string>;
-  price: FormControl<number>;
-  count: FormControl<number>;
+  price: FormControl<number | null>;
+  count: FormControl<number | null>;
   images: FormArray<FormControl<File>>;
   base64images: FormArray<FormControl<string>>;
   categoryId: FormControl<string>;

@@ -107,7 +107,20 @@ export function phoneNumberValidator(str: RegExp): ValidatorFn {
 export function nonEmptyArrayValidator(): ValidatorFn {
   return (control: AbstractControl) => {
     if (control instanceof FormArray && control.length === 0) {
-      return { nonEmptyArray: true };
+      return {
+        nonEmptyArray: 'Не вибрано жодного файла',
+      };
+    }
+    return null;
+  };
+}
+
+export function maxArrayLengthValidator(max: number): ValidatorFn {
+  return (control: AbstractControl) => {
+    if (control instanceof FormArray && control.length > max) {
+      return {
+        maxArrayLength: `Кількість вибраних файлів перевищує ліміт (${max})`,
+      };
     }
     return null;
   };

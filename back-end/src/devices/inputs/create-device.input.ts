@@ -39,7 +39,7 @@ export class CreateDeviceInput {
   @Field(() => [String], { description: 'Device pictures links' })
   @IsArray({ message: 'Must be an array' })
   @ArrayNotEmpty({ message: 'Must be not empty array' })
-  @ArrayMaxSize(5, { message: 'Array must contain not more than 5 items' })
+  @ArrayMaxSize(6, { message: 'Array must contain not more than 6 items' })
   @IsBase64({ each: true })
   @IsImage({ each: true })
   @MaxFileSize(1024 * 1024, { each: true })

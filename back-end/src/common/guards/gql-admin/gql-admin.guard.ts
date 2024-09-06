@@ -1,4 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Role } from '../../../roles/models/role.model';
 
@@ -10,9 +16,19 @@ export class GqlAdminGuard implements CanActivate {
     const user = request.user;
 
     if (!request.isAuthenticated()) {
-      return false;
+      throw new UnauthorizedException(
+        'Session has expired or user is not authenticated',
+      );
     }
 
-    return user.roles.some((role: Role) => role.role === 'administrator');
+    const isAdmin = user.roles.some(
+      (role: Role) => role.role === 'administrator',
+    );
+
+    if (!isAdmin) {
+      throw new ForbiddenException('Forbidden resource');
+    }
+
+    return true;
   }
 }

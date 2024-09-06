@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -16,6 +16,11 @@ export class GqlLocalAuthGuard extends AuthGuard('local') {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
     await super.logIn(request);
-    return result;
+    if (!result) {
+      throw new UnauthorizedException(
+        'Session has expired or user is not authenticated',
+      );
+    }
+    return true;
   }
 }

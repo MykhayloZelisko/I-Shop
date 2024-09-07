@@ -15,6 +15,9 @@ export class Category {
   @Prop({ type: String, nullable: true })
   public image: string | null;
 
+  @Prop()
+  public level: number;
+
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'CProperty' }] })
   public properties: CProperty[];
 }

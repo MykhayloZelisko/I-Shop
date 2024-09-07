@@ -58,6 +58,7 @@ export class NewCategoryComponent implements OnInit {
           categoryName: this.newCategoryCtrl.getRawValue(),
           parentId: null,
           image: null,
+          level: 1,
         },
       }),
     );

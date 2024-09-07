@@ -39,6 +39,7 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
+      level: category.level,
     }));
   }
 
@@ -62,6 +63,8 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
+
+      level: category.level,
     };
   }
 
@@ -241,6 +244,7 @@ export class CategoriesService {
         ),
         categoryName: updatedCategory.categoryName,
         image: updatedCategory.image,
+        level: updatedCategory.level,
       };
     } else {
       const updatedCategory = await this.categoryModel
@@ -273,6 +277,7 @@ export class CategoriesService {
         ),
         categoryName: updatedCategory.categoryName,
         image: updatedCategory.image,
+        level: updatedCategory.level,
       };
     }
   }
@@ -304,6 +309,7 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
+      level: category.level,
     };
   }
 }

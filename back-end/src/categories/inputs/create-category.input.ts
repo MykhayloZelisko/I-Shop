@@ -1,9 +1,10 @@
-import { InputType, Field, ID } from '@nestjs/graphql';
+import { InputType, Field, ID, Int } from '@nestjs/graphql';
 import {
+  IsInt,
   IsNotEmpty,
-  IsOptional,
+  IsOptional, IsPositive,
   IsString,
-  Matches,
+  Matches, Max,
   ValidateIf,
 } from 'class-validator';
 import { IsImage } from '../../common/validators/is-image.validator';
@@ -38,4 +39,10 @@ export class CreateCategoryInput {
   @IsImage()
   @MaxFileSize(1024 * 1024)
   public image: string | null;
+
+  @Field(() => Int, { description: 'Category level' })
+  @IsInt({ message: 'Must be an integer number' })
+  @IsPositive({ message: 'Must be a positive number' })
+  @Max(3, { message: 'Must not be greater than 3' })
+  public level: number;
 }

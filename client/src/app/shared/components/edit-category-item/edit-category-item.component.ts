@@ -20,7 +20,7 @@ import { SubCategoryFormInterface } from '../../models/interfaces/sub-categories
 import { NgClass, NgStyle } from '@angular/common';
 import { ImageConfigInterface } from '../../models/interfaces/image-config.interface';
 import { requiredValidator } from '../../utils/validators';
-import { CategoryFormDataInterface } from '../../models/interfaces/category-form-data.interface';
+import { CategoryDataInterface } from '../../models/interfaces/category-data.interface';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -41,10 +41,10 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
   @ViewChild(DndFileControlComponent)
   public child!: DndFileControlComponent;
 
-  @Input({ required: true }) public category!: CategoryFormDataInterface;
+  @Input({ required: true }) public category!: CategoryDataInterface;
 
-  @Output() public changeFormValue: EventEmitter<CategoryFormDataInterface> =
-    new EventEmitter<CategoryFormDataInterface>();
+  @Output() public changeFormValue: EventEmitter<CategoryDataInterface> =
+    new EventEmitter<CategoryDataInterface>();
 
   public categoryForm!: FormGroup<SubCategoryFormInterface>;
 
@@ -77,6 +77,9 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
       parentId: this.fb.control<string | null>(this.category.parentId, [
         requiredValidator(),
       ]),
+      level: this.fb.nonNullable.control<number>(this.category.level, [
+        requiredValidator(),
+      ]),
       base64image: this.fb.control<string | null>(null, [requiredValidator()]),
     });
   }
@@ -86,7 +89,12 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
     this.categoryForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         const value = this.categoryForm.getRawValue();
-        this.changeFormValue.emit(value);
+        const newValue = {
+          ...value,
+          parentId: this.category.parentId,
+          level: this.category.level,
+        };
+        this.changeFormValue.emit(newValue);
       },
     });
   }

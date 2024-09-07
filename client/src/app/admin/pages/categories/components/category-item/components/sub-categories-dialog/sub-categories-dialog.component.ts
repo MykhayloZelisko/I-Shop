@@ -24,11 +24,11 @@ import {
 } from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
 import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
-import { CategoryFormDataInterface } from '../../../../../../../shared/models/interfaces/category-form-data.interface';
+import { CategoryDataInterface } from '../../../../../../../shared/models/interfaces/category-data.interface';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
 
 @Component({
-  selector: 'app-sub-category-dialog',
+  selector: 'app-sub-categories-dialog',
   standalone: true,
   imports: [
     ClickOutsideDirective,
@@ -45,9 +45,11 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   @Input({ required: true }) public parentId!: string;
 
+  @Input({ required: true }) public level!: number;
+
   public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
 
-  public categoryData!: CategoryFormDataInterface;
+  public categoryData!: CategoryDataInterface;
 
   private store = inject(Store<State>);
 
@@ -60,6 +62,7 @@ export class SubCategoriesDialogComponent implements OnInit {
       categoryName: '',
       image: [],
       parentId: this.parentId,
+      level: this.level,
     };
   }
 
@@ -76,6 +79,9 @@ export class SubCategoriesDialogComponent implements OnInit {
       ]),
       image: this.fb.nonNullable.control<File[]>([]),
       parentId: this.fb.control<string | null>(this.parentId, [
+        requiredValidator(),
+      ]),
+      level: this.fb.nonNullable.control<number>(this.level, [
         requiredValidator(),
       ]),
       base64image: this.fb.control<string | null>(null, [requiredValidator()]),
@@ -109,11 +115,12 @@ export class SubCategoriesDialogComponent implements OnInit {
         categoryName: item.categoryName,
         parentId: item.parentId,
         image: item.base64image,
+        level: item.level,
       }));
     this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
-  public setFormValue(index: number, value: CategoryFormDataInterface): void {
+  public setFormValue(index: number, value: CategoryDataInterface): void {
     this.getCategories().at(index).setValue(value);
   }
 }

@@ -24,6 +24,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId
@@ -67,6 +68,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId
@@ -110,6 +112,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId
@@ -147,6 +150,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId
@@ -216,6 +220,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId
@@ -263,6 +268,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId
@@ -301,6 +307,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              level
               properties {
                 id
                 categoryId

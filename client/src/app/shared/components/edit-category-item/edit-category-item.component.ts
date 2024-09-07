@@ -89,12 +89,7 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
     this.categoryForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         const value = this.categoryForm.getRawValue();
-        const newValue = {
-          ...value,
-          parentId: this.category.parentId,
-          level: this.category.level,
-        };
-        this.changeFormValue.emit(newValue);
+        this.changeFormValue.emit(value);
       },
     });
   }

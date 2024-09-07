@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { CProperty } from '../../c-properties/models/c-property.model';
 
 @ObjectType()
@@ -14,6 +14,9 @@ export class Category {
 
   @Field(() => String, { description: 'Category picture link', nullable: true })
   public image: string | null;
+
+  @Field(() => Int, { description: 'Category level' })
+  public level: number;
 
   @Field(() => [CProperty], { description: 'List of properties' })
   public properties: CProperty[];

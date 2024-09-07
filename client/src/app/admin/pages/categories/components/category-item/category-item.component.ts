@@ -100,6 +100,7 @@ export class CategoryItemComponent implements OnInit {
       categoryName: this.category.categoryName,
       image: [],
       base64image: this.category.image,
+      level: this.category.level,
     };
   }
 

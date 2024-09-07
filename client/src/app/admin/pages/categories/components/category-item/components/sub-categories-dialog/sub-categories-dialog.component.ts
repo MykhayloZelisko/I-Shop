@@ -28,7 +28,7 @@ import { CategoryFormDataInterface } from '../../../../../../../shared/models/in
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
 
 @Component({
-  selector: 'app-sub-category-dialog',
+  selector: 'app-sub-categories-dialog',
   standalone: true,
   imports: [
     ClickOutsideDirective,
@@ -45,6 +45,8 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   @Input({ required: true }) public parentId!: string;
 
+  @Input({ required: true }) public level!: number;
+
   public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
 
   public categoryData!: CategoryFormDataInterface;
@@ -60,6 +62,7 @@ export class SubCategoriesDialogComponent implements OnInit {
       categoryName: '',
       image: [],
       parentId: this.parentId,
+      level: this.level,
     };
   }
 
@@ -76,6 +79,9 @@ export class SubCategoriesDialogComponent implements OnInit {
       ]),
       image: this.fb.nonNullable.control<File[]>([]),
       parentId: this.fb.control<string | null>(this.parentId, [
+        requiredValidator(),
+      ]),
+      level: this.fb.nonNullable.control<number>(this.level, [
         requiredValidator(),
       ]),
       base64image: this.fb.control<string | null>(null, [requiredValidator()]),
@@ -109,6 +115,7 @@ export class SubCategoriesDialogComponent implements OnInit {
         categoryName: item.categoryName,
         parentId: item.parentId,
         image: item.base64image,
+        level: item.level,
       }));
     this.store.dispatch(CategoryActions.addCategories({ categories }));
   }

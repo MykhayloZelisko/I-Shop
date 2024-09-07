@@ -77,6 +77,9 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
       parentId: this.fb.control<string | null>(this.category.parentId, [
         requiredValidator(),
       ]),
+      level: this.fb.nonNullable.control<number>(this.category.level, [
+        requiredValidator(),
+      ]),
       base64image: this.fb.control<string | null>(null, [requiredValidator()]),
     });
   }

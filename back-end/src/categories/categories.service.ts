@@ -63,7 +63,6 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
-
       level: category.level,
     };
   }

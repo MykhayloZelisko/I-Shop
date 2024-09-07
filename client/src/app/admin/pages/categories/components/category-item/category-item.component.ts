@@ -22,7 +22,7 @@ import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enu
 import { SubCategoriesDialogComponent } from './components/sub-categories-dialog/sub-categories-dialog.component';
 import { CurrentCategoryStatusInterface } from '../../../../../shared/models/interfaces/current-category-status.interface';
 import { EditCategoryItemComponent } from '../../../../../shared/components/edit-category-item/edit-category-item.component';
-import { CategoryDataInterface } from '../../../../../shared/models/interfaces/category-data.interface';
+import { CategoryFormDataInterface } from '../../../../../shared/models/interfaces/category-form-data.interface';
 import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
 import { selectPopup } from '../../../../../+store/popup/selectors/popup.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
@@ -57,9 +57,9 @@ export class CategoryItemComponent implements OnInit {
 
   public dialog$!: Observable<PopupDataInterface>;
 
-  public newCategoryData!: CategoryDataInterface;
+  public newCategoryData!: CategoryFormDataInterface;
 
-  public categoryData!: CategoryDataInterface;
+  public categoryData!: CategoryFormDataInterface;
 
   public imageConfig: ImageConfigInterface = {
     width: 0,
@@ -158,7 +158,7 @@ export class CategoryItemComponent implements OnInit {
     this.imageConfig.height = imgElement.height;
   }
 
-  public changeCategoryData(categoryData: CategoryDataInterface): void {
+  public changeCategoryData(categoryData: CategoryFormDataInterface): void {
     this.newCategoryData = categoryData;
     this.isDisabled = !categoryData.categoryName.trim();
   }

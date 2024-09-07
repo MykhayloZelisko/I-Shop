@@ -20,7 +20,7 @@ import { SubCategoryFormInterface } from '../../models/interfaces/sub-categories
 import { NgClass, NgStyle } from '@angular/common';
 import { ImageConfigInterface } from '../../models/interfaces/image-config.interface';
 import { requiredValidator } from '../../utils/validators';
-import { CategoryDataInterface } from '../../models/interfaces/category-data.interface';
+import { CategoryFormDataInterface } from '../../models/interfaces/category-form-data.interface';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -41,10 +41,10 @@ export class EditCategoryItemComponent implements OnInit, OnDestroy {
   @ViewChild(DndFileControlComponent)
   public child!: DndFileControlComponent;
 
-  @Input({ required: true }) public category!: CategoryDataInterface;
+  @Input({ required: true }) public category!: CategoryFormDataInterface;
 
-  @Output() public changeFormValue: EventEmitter<CategoryDataInterface> =
-    new EventEmitter<CategoryDataInterface>();
+  @Output() public changeFormValue: EventEmitter<CategoryFormDataInterface> =
+    new EventEmitter<CategoryFormDataInterface>();
 
   public categoryForm!: FormGroup<SubCategoryFormInterface>;
 

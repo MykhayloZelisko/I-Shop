@@ -24,7 +24,7 @@ import {
 } from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
 import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
-import { CategoryDataInterface } from '../../../../../../../shared/models/interfaces/category-data.interface';
+import { CategoryFormDataInterface } from '../../../../../../../shared/models/interfaces/category-form-data.interface';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
 
 @Component({
@@ -49,7 +49,7 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
 
-  public categoryData!: CategoryDataInterface;
+  public categoryData!: CategoryFormDataInterface;
 
   private store = inject(Store<State>);
 
@@ -120,7 +120,7 @@ export class SubCategoriesDialogComponent implements OnInit {
     this.store.dispatch(CategoryActions.addCategories({ categories }));
   }
 
-  public setFormValue(index: number, value: CategoryDataInterface): void {
+  public setFormValue(index: number, value: CategoryFormDataInterface): void {
     this.getCategories().at(index).setValue(value);
   }
 }

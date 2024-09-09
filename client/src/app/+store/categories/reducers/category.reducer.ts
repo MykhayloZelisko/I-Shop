@@ -40,6 +40,7 @@ export const reducer = createReducer(
       changes: {
         categoryName: action.category.categoryName,
         image: action.category.image,
+        icon: action.category.icon,
         expanded: action.category.expanded,
       },
     };

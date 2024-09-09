@@ -6,7 +6,6 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,

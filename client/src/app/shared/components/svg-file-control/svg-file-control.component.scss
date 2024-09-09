@@ -1,5 +1,5 @@
-@import "variables";
-@import "mixins";
+@import 'variables';
+@import 'mixins';
 
 .svg-file-control {
   display: flex;
@@ -23,7 +23,7 @@
   }
 
   &__icon {
-    @include icon-style($brown-1, 24px)
+    @include icon-style($brown-1, 24px);
   }
 
   &__icon-button {

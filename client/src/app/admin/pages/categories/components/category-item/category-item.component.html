@@ -1,6 +1,9 @@
 @if (currentCategory$ | async; as currentCategory) {
   @if (currentCategory.id === category.id && currentCategory.isEditable) {
-    <div class="category-item category-item--editable" [formGroup]="categoryForm">
+    <div
+      class="category-item category-item--editable"
+      [formGroup]="categoryForm"
+    >
       <div
         class="category-item__content"
         [ngClass]="{ 'category-item__content--subcategory': category.parentId }"

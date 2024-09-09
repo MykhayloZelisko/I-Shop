@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, ElementRef,
+  Component,
+  ElementRef,
   HostListener,
   inject,
-  OnInit, ViewChild,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DndDirective } from '../../directives/dnd.directive';

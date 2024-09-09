@@ -38,10 +38,12 @@
                 href="#"
                 (click)="changeCategory($event, category.id)"
               >
-                <svg-icon
-                  class="small-catalog__icon"
-                  src="assets/images/four-squares-icon.svg"
-                ></svg-icon>
+                @if (category.icon) {
+                  <svg-icon
+                    class="small-catalog__icon"
+                    [src]="category.icon"
+                  ></svg-icon>
+                }
                 <span class="small-catalog__core-category-name">{{
                   category.categoryName
                 }}</span>

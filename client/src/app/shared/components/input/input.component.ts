@@ -5,7 +5,6 @@ import {
   ElementRef,
   EventEmitter,
   inject,
-  Injector,
   Input,
   OnDestroy,
   OnInit,
@@ -14,19 +13,13 @@ import {
 } from '@angular/core';
 import {
   ControlValueAccessor,
-  FormControl,
-  FormControlDirective,
-  FormControlName,
-  FormGroupDirective,
   NG_VALUE_ACCESSOR,
-  NgControl,
-  NgModel,
   ReactiveFormsModule,
   ValidatorFn,
 } from '@angular/forms';
-import { Subject, takeUntil, tap } from 'rxjs';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
+import { GetControlDirective } from '../../directives/get-control.directive';
 
 @Component({
   selector: 'app-input',
@@ -43,7 +36,10 @@ import { NgClass, NgStyle } from '@angular/common';
   styleUrl: './input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class InputComponent
+  extends GetControlDirective
+  implements OnInit, ControlValueAccessor
+{
   @ViewChild('input') public input!: ElementRef;
 
   @Input() public placeholder = '';
@@ -58,25 +54,17 @@ export class InputComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  public control!: FormControl<unknown>;
-
   public onChange = (_: unknown): void => {};
 
   public onTouched = (): void => {};
-
-  private destroy$: Subject<void> = new Subject<void>();
-
-  private injector = inject(Injector);
 
   private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.setComponentControl();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    if (this.validators.length) {
+      this.control.setValidators(this.validators);
+    }
   }
 
   public registerOnChange(fn: () => void): void {
@@ -92,38 +80,6 @@ export class InputComponent implements OnInit, OnDestroy, ControlValueAccessor {
       this.input.nativeElement.value = '';
     }
     this.cdr.detectChanges();
-  }
-
-  public setComponentControl(): void {
-    const injectedControl = this.injector.get(NgControl);
-
-    switch (injectedControl.constructor) {
-      case NgModel: {
-        const { control, update } = injectedControl as NgModel;
-        this.control = control;
-        this.control.valueChanges
-          .pipe(
-            tap((value: unknown) => update.emit(value)),
-            takeUntil(this.destroy$),
-          )
-          .subscribe();
-        break;
-      }
-      case FormControlName: {
-        this.control = this.injector
-          .get(FormGroupDirective)
-          .getControl(injectedControl as FormControlName);
-        break;
-      }
-      default: {
-        this.control = (injectedControl as FormControlDirective)
-          .form as FormControl;
-        break;
-      }
-    }
-    if (this.validators.length) {
-      this.control.setValidators(this.validators);
-    }
   }
 
   public showMessage(): string {

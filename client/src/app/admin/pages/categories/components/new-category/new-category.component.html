@@ -1,16 +1,17 @@
 <div class="new-category">
   @if (isNewCategory$ | async) {
-    <div class="new-category__input-wrapper">
+    <div class="new-category__wrapper" [formGroup]="newCategoryForm">
+      <app-svg-file-control formControlName="icon"></app-svg-file-control>
       <input
         class="new-category__input"
         type="text"
-        [formControl]="newCategoryCtrl"
+        formControlName="categoryName"
         (keydown.space)="$event.stopPropagation()"
       />
       <div class="new-category__icon-buttons">
         <button
           class="new-category__icon-button"
-          [disabled]="newCategoryCtrl.invalid"
+          [disabled]="newCategoryForm.invalid"
           (click)="saveCategory()"
         >
           <svg-icon

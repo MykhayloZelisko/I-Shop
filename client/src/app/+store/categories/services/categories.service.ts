@@ -24,6 +24,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -43,6 +44,9 @@ export class CategoriesService {
               ...category,
               image: category.image
                 ? `${environment.baseUrl}/${category.image}`
+                : null,
+              icon: category.icon
+                ? `${environment.baseUrl}/${category.icon}`
                 : null,
             }));
           }
@@ -68,6 +72,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -92,6 +97,9 @@ export class CategoriesService {
               image: response.data.updateCategory.image
                 ? `${environment.baseUrl}/${response.data.updateCategory.image}`
                 : null,
+              icon: response.data.updateCategory.icon
+                ? `${environment.baseUrl}/${response.data.updateCategory.icon}`
+                : null,
             };
           }
         }),
@@ -112,6 +120,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -128,7 +137,10 @@ export class CategoriesService {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return response.data.createCategory;
+            return {
+              ...response.data.createCategory,
+              icon: `${environment.baseUrl}/${response.data.createCategory.icon}`,
+            };
           }
         }),
         catchError((error) => throwError(() => error)),
@@ -150,6 +162,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -169,9 +182,7 @@ export class CategoriesService {
             return response.data.addSubCategories.map(
               (category: CategoryInterface) => ({
                 ...category,
-                image: category.image
-                  ? `${environment.baseUrl}/${category.image}`
-                  : null,
+                image: `${environment.baseUrl}/${category.image}`,
               }),
             );
           }
@@ -220,6 +231,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -240,6 +252,9 @@ export class CategoriesService {
               ...response.data.createCProperties,
               image: response.data.createCProperties.image
                 ? `${environment.baseUrl}/${response.data.createCProperties.image}`
+                : null,
+              icon: response.data.createCProperties.icon
+                ? `${environment.baseUrl}/${response.data.createCProperties.icon}`
                 : null,
             };
           }
@@ -268,6 +283,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -289,6 +305,9 @@ export class CategoriesService {
               image: response.data.updateCProperty.image
                 ? `${environment.baseUrl}/${response.data.updateCProperty.image}`
                 : null,
+              icon: response.data.updateCProperty.icon
+                ? `${environment.baseUrl}/${response.data.updateCProperty.icon}`
+                : null,
             };
           }
         }),
@@ -307,6 +326,7 @@ export class CategoriesService {
               categoryName
               parentId
               image
+              icon
               level
               properties {
                 id
@@ -327,6 +347,9 @@ export class CategoriesService {
               ...response.data.deleteCProperty,
               image: response.data.deleteCProperty.image
                 ? `${environment.baseUrl}/${response.data.deleteCProperty.image}`
+                : null,
+              icon: response.data.deleteCProperty.icon
+                ? `${environment.baseUrl}/${response.data.deleteCProperty.icon}`
                 : null,
             };
           }

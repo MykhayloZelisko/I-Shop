@@ -2,9 +2,11 @@ import { InputType, Field, ID, Int } from '@nestjs/graphql';
 import {
   IsInt,
   IsNotEmpty,
-  IsOptional, IsPositive,
+  IsOptional,
+  IsPositive,
   IsString,
-  Matches, Max,
+  Matches,
+  Max,
   ValidateIf,
 } from 'class-validator';
 import { IsImage } from '../../common/validators/is-image.validator';
@@ -21,11 +23,32 @@ export class CreateCategoryInput {
   @Field(() => ID, { description: 'Parent category id', nullable: true })
   @IsString({ message: 'Must be a string' })
   @Matches(/^[0-9a-fA-F]{24}$/, { message: 'Parent id is incorrect' })
-  @ValidateIf((object) => object.parentId !== null && object.image !== null, {
-    message: 'ParentId and image must be both present or both absent',
-  })
+  @ValidateIf(
+    (object) =>
+      object.parentId !== null && object.image !== null && object.icon === null,
+    {
+      message: 'ParentId and image must be both present or both absent',
+    },
+  )
   @IsOptional()
   public parentId: string | null;
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Category icon in base64 string format',
+  })
+  @IsOptional()
+  @IsBase64()
+  @ValidateIf(
+    (object) =>
+      object.parentId === null && object.image === null && object.icon !== null,
+    {
+      message: 'If parentId is present icon must be absent',
+    },
+  )
+  @IsImage()
+  @MaxFileSize(1024 * 1024)
+  public icon: string | null;
 
   @Field(() => String, {
     nullable: true,
@@ -33,9 +56,13 @@ export class CreateCategoryInput {
   })
   @IsOptional()
   @IsBase64()
-  @ValidateIf((object) => object.parentId !== null && object.image !== null, {
-    message: 'ParentId and image must be both present or both absent',
-  })
+  @ValidateIf(
+    (object) =>
+      object.parentId !== null && object.image !== null && object.icon === null,
+    {
+      message: 'ParentId and image must be both present or both absent',
+    },
+  )
   @IsImage()
   @MaxFileSize(1024 * 1024)
   public image: string | null;

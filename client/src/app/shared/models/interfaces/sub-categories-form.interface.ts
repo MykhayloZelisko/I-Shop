@@ -1,13 +1,13 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface SubCategoriesFormInterface {
-  categories: FormArray<FormGroup<SubCategoryFormInterface>>;
+  categories: FormArray<FormGroup<CategoryFormInterface>>;
 }
 
-export interface SubCategoryFormInterface {
+export interface CategoryFormInterface {
   categoryName: FormControl<string>;
-  image: FormControl<File[]>;
-  base64image: FormControl<string | null>;
+  image: FormControl<string | null>;
+  icon: FormControl<string | null>;
   parentId: FormControl<string | null>;
   level: FormControl<number>;
 }

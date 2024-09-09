@@ -9,7 +9,7 @@
   }
 
   &__input {
-    @include input-style(9px 77px 9px 12px, $invalid: false);
+    @include input-style(9px 12px);
   }
 
   &__icon-button {
@@ -39,14 +39,15 @@
   }
 
   &__icon-buttons {
-    position: absolute;
     display: flex;
-    top: 5px;
-    right: 10px;
   }
 
-  &__input-wrapper {
-    position: relative;
-    width: 100%;
+  &__wrapper {
+    background-color: $brown-4;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    border-radius: 5px;
+    padding-right: 10px;
   }
 }

@@ -18,4 +18,14 @@ export class UpdateCategoryInput extends PickType(CreateCategoryInput, [
   @IsImage()
   @MaxFileSize(1024 * 1024)
   public image: string | null;
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Category icon in base64 string format',
+  })
+  @IsOptional()
+  @IsBase64()
+  @IsImage()
+  @MaxFileSize(1024 * 1024)
+  public icon: string | null;
 }

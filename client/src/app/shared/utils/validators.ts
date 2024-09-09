@@ -1,4 +1,5 @@
-import { AbstractControl, FormArray, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidatorFn } from '@angular/forms';
+import { CategoryFormInterface } from '../models/interfaces/sub-categories-form.interface';
 
 export function requiredValidator(): ValidatorFn {
   return (control: AbstractControl) => {

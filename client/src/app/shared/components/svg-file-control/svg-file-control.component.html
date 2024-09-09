@@ -1,0 +1,32 @@
+<div class="svg-file-control">
+  <input
+    #fileUpload
+    class="svg-file-control__input"
+    type="file"
+    accept="image/svg+xml"
+  />
+  <div
+    class="svg-file-control__icon-container"
+    [ngClass]="{
+      'svg-file-control__icon-container--invalid':
+        control.invalid && (control.touched || control.dirty)
+    }"
+  >
+    @if (imageUrl) {
+      <svg-icon class="svg-file-control__icon" [src]="imageUrl"></svg-icon>
+    }
+  </div>
+  <button class="svg-file-control__icon-button" (click)="triggerFileInput()">
+    @if (imageUrl) {
+      <svg-icon
+        class="svg-file-control__icon"
+        src="assets/images/pencil-icon.svg"
+      ></svg-icon>
+    } @else {
+      <svg-icon
+        class="svg-file-control__icon"
+        src="assets/images/plus-round-line-icon.svg"
+      ></svg-icon>
+    }
+  </button>
+</div>

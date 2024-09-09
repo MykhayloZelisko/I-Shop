@@ -39,6 +39,7 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
+      icon: category.icon,
       level: category.level,
     }));
   }
@@ -63,6 +64,7 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
+      icon: category.icon,
       level: category.level,
     };
   }
@@ -75,6 +77,9 @@ export class CategoriesService {
       const deletedCategory = await this.categoryModel.findById(id).exec();
       if (deletedCategory && deletedCategory.image) {
         await this.filesService.removeImageFile(deletedCategory.image);
+      }
+      if (deletedCategory && deletedCategory.icon) {
+        await this.filesService.removeImageFile(deletedCategory.icon);
       }
       await this.categoryModel.findByIdAndDelete(id).exec();
     }
@@ -129,7 +134,11 @@ export class CategoriesService {
       }
     }
 
-    if (createCategoryInput.image && createCategoryInput.parentId) {
+    if (
+      createCategoryInput.image &&
+      createCategoryInput.parentId &&
+      !createCategoryInput.icon
+    ) {
       const fileName = await this.filesService.createImageFile(
         createCategoryInput.image,
       );
@@ -142,9 +151,17 @@ export class CategoriesService {
         ...category.toObject(),
         parentId: category.parentId ? category.parentId.toString() : null,
       };
-    } else if (!createCategoryInput.image && !createCategoryInput.parentId) {
+    } else if (
+      !createCategoryInput.image &&
+      !createCategoryInput.parentId &&
+      createCategoryInput.icon
+    ) {
+      const fileName = await this.filesService.createImageFile(
+        createCategoryInput.icon,
+      );
       const category = await this.categoryModel.create({
         ...createCategoryInput,
+        icon: fileName,
         properties: [],
       });
       return category.toObject();
@@ -210,7 +227,7 @@ export class CategoriesService {
       }
     }
 
-    if (updateCategoryInput.image) {
+    if (updateCategoryInput.image && existedCategory.parentId) {
       const fileName = await this.filesService.createImageFile(
         updateCategoryInput.image,
       );
@@ -243,16 +260,19 @@ export class CategoriesService {
         ),
         categoryName: updatedCategory.categoryName,
         image: updatedCategory.image,
+        icon: updatedCategory.icon,
         level: updatedCategory.level,
       };
-    } else {
+    } else if (updateCategoryInput.icon && !existedCategory.parentId) {
+      const fileName = await this.filesService.createImageFile(
+        updateCategoryInput.icon,
+      );
+      const oldIconName = existedCategory.icon as string;
+      await this.filesService.removeImageFile(oldIconName);
       const updatedCategory = await this.categoryModel
         .findByIdAndUpdate(
           id,
-          {
-            categoryName: updateCategoryInput.categoryName,
-            image: existedCategory.image,
-          },
+          { ...updateCategoryInput, icon: fileName },
           { new: true },
         )
         .populate('properties')
@@ -276,8 +296,11 @@ export class CategoriesService {
         ),
         categoryName: updatedCategory.categoryName,
         image: updatedCategory.image,
+        icon: updatedCategory.icon,
         level: updatedCategory.level,
       };
+    } else {
+      throw new BadRequestException('Bad Request');
     }
   }
 
@@ -308,6 +331,7 @@ export class CategoriesService {
       })),
       categoryName: category.categoryName,
       image: category.image,
+      icon: category.icon,
       level: category.level,
     };
   }

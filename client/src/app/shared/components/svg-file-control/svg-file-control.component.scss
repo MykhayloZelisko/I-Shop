@@ -1,0 +1,40 @@
+@import 'variables';
+@import 'mixins';
+
+.svg-file-control {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+
+  &__icon-container {
+    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid $brown-2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $white;
+
+    &--invalid {
+      border: 1px solid $red;
+    }
+  }
+
+  &__icon {
+    @include icon-style($brown-1, 24px);
+  }
+
+  &__icon-button {
+    @include icon-button-style(30px, transparent);
+
+    &:hover {
+      @include icon-style($blue-1);
+    }
+  }
+
+  &__input {
+    display: none;
+  }
+}

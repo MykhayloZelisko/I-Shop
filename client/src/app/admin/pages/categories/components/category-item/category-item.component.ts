@@ -21,11 +21,19 @@ import { PopupDataInterface } from '../../../../../shared/models/interfaces/popu
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { SubCategoriesDialogComponent } from './components/sub-categories-dialog/sub-categories-dialog.component';
 import { CurrentCategoryStatusInterface } from '../../../../../shared/models/interfaces/current-category-status.interface';
-import { EditCategoryItemComponent } from '../../../../../shared/components/edit-category-item/edit-category-item.component';
-import { CategoryFormDataInterface } from '../../../../../shared/models/interfaces/category-form-data.interface';
 import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
 import { selectPopup } from '../../../../../+store/popup/selectors/popup.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CategoryFormInterface } from '../../../../../shared/models/interfaces/sub-categories-form.interface';
+import { requiredValidator } from '../../../../../shared/utils/validators';
+import { SvgFileControlComponent } from '../../../../../shared/components/svg-file-control/svg-file-control.component';
+import { DndFileControlComponent } from '../../../../../shared/components/dnd-file-control/dnd-file-control.component';
 import { CPropertiesDialogComponent } from './components/c-properties-dialog/c-properties-dialog.component';
 
 @Component({
@@ -35,9 +43,12 @@ import { CPropertiesDialogComponent } from './components/c-properties-dialog/c-p
     SvgIconComponent,
     AsyncPipe,
     SubCategoriesDialogComponent,
-    EditCategoryItemComponent,
     NgClass,
     NgStyle,
+    FormsModule,
+    ReactiveFormsModule,
+    SvgFileControlComponent,
+    DndFileControlComponent,
     CPropertiesDialogComponent,
   ],
   templateUrl: './category-item.component.html',
@@ -57,18 +68,16 @@ export class CategoryItemComponent implements OnInit {
 
   public dialog$!: Observable<PopupDataInterface>;
 
-  public newCategoryData!: CategoryFormDataInterface;
-
-  public categoryData!: CategoryFormDataInterface;
+  public categoryForm!: FormGroup<CategoryFormInterface>;
 
   public imageConfig: ImageConfigInterface = {
     width: 0,
     height: 0,
   };
 
-  public isDisabled = true;
-
   private store = inject(Store<State>);
+
+  private fb = inject(FormBuilder);
 
   public ngOnInit(): void {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
@@ -79,6 +88,27 @@ export class CategoryItemComponent implements OnInit {
     );
   }
 
+  public initCategoryForm(): void {
+    this.categoryForm = this.fb.group<CategoryFormInterface>({
+      categoryName: this.fb.nonNullable.control<string>(
+        this.category.categoryName,
+        [requiredValidator()],
+      ),
+      image: this.fb.nonNullable.control<string | null>(this.category.image),
+      icon: this.fb.control<string | null>(this.category.icon),
+      parentId: this.fb.control<string | null>(this.category.parentId),
+      level: this.fb.nonNullable.control<number>(this.category.level, [
+        requiredValidator(),
+      ]),
+    });
+    if (this.category.parentId) {
+      this.categoryForm.controls.image.setValidators(requiredValidator());
+      this.categoryForm.controls.parentId.setValidators(requiredValidator());
+    } else {
+      this.categoryForm.controls.icon.setValidators(requiredValidator());
+    }
+  }
+
   public deleteCategory(): void {
     this.store.dispatch(
       CategoryActions.deleteCategory({ id: this.category.id }),
@@ -86,6 +116,7 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public editCategory(): void {
+    this.initCategoryForm();
     this.store.dispatch(
       CategoryActions.updateCPState({
         payload: {
@@ -95,13 +126,6 @@ export class CategoryItemComponent implements OnInit {
         },
       }),
     );
-    this.categoryData = {
-      parentId: this.category.parentId,
-      categoryName: this.category.categoryName,
-      image: [],
-      base64image: this.category.image,
-      level: this.category.level,
-    };
   }
 
   public cancelEditCategory(): void {
@@ -109,12 +133,14 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public saveCategory(): void {
+    const newCategoryData = this.categoryForm.getRawValue();
     this.store.dispatch(
       CategoryActions.updateCategory({
         id: this.category.id,
         category: {
-          categoryName: this.newCategoryData.categoryName,
-          image: this.newCategoryData.base64image,
+          categoryName: newCategoryData.categoryName,
+          image: newCategoryData.image,
+          icon: newCategoryData.icon,
         },
       }),
     );
@@ -156,11 +182,6 @@ export class CategoryItemComponent implements OnInit {
     const imgElement = event.target as HTMLImageElement;
     this.imageConfig.width = imgElement.width;
     this.imageConfig.height = imgElement.height;
-  }
-
-  public changeCategoryData(categoryData: CategoryFormDataInterface): void {
-    this.newCategoryData = categoryData;
-    this.isDisabled = !categoryData.categoryName.trim();
   }
 
   public openPropertiesDialog(): void {

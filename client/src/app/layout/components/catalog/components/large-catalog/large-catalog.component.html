@@ -8,14 +8,16 @@
           (click)="changeCategory($event, category.id)"
         >
           <div class="large-catalog__name-wrapper">
-            <svg-icon
-              class="large-catalog__icon"
-              [ngClass]="{
-                'large-catalog__icon--active':
-                  category.id === currentCategory.id
-              }"
-              src="assets/images/four-squares-icon.svg"
-            ></svg-icon>
+            @if (category.icon) {
+              <svg-icon
+                class="large-catalog__icon"
+                [ngClass]="{
+                  'large-catalog__icon--active':
+                    category.id === currentCategory.id
+                }"
+                [src]="category.icon"
+              ></svg-icon>
+            }
             <span
               class="large-catalog__core-category-name"
               [ngClass]="{

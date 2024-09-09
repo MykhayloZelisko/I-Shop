@@ -15,6 +15,9 @@ export class Category {
   @Prop({ type: String, nullable: true })
   public image: string | null;
 
+  @Prop({ type: String, nullable: true })
+  public icon: string | null;
+
   @Prop()
   public level: number;
 

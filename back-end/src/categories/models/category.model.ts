@@ -15,6 +15,9 @@ export class Category {
   @Field(() => String, { description: 'Category picture link', nullable: true })
   public image: string | null;
 
+  @Field(() => String, { nullable: true, description: 'Category icon link' })
+  public icon: string | null;
+
   @Field(() => Int, { description: 'Category level' })
   public level: number;
 

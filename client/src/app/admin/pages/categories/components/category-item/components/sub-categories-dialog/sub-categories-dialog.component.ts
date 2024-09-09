@@ -20,12 +20,11 @@ import {
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
 import {
   SubCategoriesFormInterface,
-  SubCategoryFormInterface,
+  CategoryFormInterface,
 } from '../../../../../../../shared/models/interfaces/sub-categories-form.interface';
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
-import { EditCategoryItemComponent } from '../../../../../../../shared/components/edit-category-item/edit-category-item.component';
-import { CategoryFormDataInterface } from '../../../../../../../shared/models/interfaces/category-form-data.interface';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
+import { DndFileControlComponent } from '../../../../../../../shared/components/dnd-file-control/dnd-file-control.component';
 
 @Component({
   selector: 'app-sub-categories-dialog',
@@ -34,7 +33,7 @@ import { PopupActions } from '../../../../../../../+store/popup/actions/popup.ac
     ClickOutsideDirective,
     SvgIconComponent,
     ReactiveFormsModule,
-    EditCategoryItemComponent,
+    DndFileControlComponent,
   ],
   templateUrl: './sub-categories-dialog.component.html',
   styleUrl: './sub-categories-dialog.component.scss',
@@ -49,42 +48,33 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
 
-  public categoryData!: CategoryFormDataInterface;
-
   private store = inject(Store<State>);
 
   private fb = inject(FormBuilder);
 
   public ngOnInit(): void {
     this.initSubCategoriesForm();
-    this.categoryData = {
-      base64image: null,
-      categoryName: '',
-      image: [],
-      parentId: this.parentId,
-      level: this.level,
-    };
   }
 
-  public getCategories(): FormArray<FormGroup<SubCategoryFormInterface>> {
+  public getCategories(): FormArray<FormGroup<CategoryFormInterface>> {
     return this.subCategoriesForm.get('categories') as FormArray<
-      FormGroup<SubCategoryFormInterface>
+      FormGroup<CategoryFormInterface>
     >;
   }
 
-  public newCategory(): FormGroup<SubCategoryFormInterface> {
-    return this.fb.group<SubCategoryFormInterface>({
+  public newCategory(): FormGroup<CategoryFormInterface> {
+    return this.fb.group<CategoryFormInterface>({
       categoryName: this.fb.nonNullable.control<string>('', [
         requiredValidator(),
       ]),
-      image: this.fb.nonNullable.control<File[]>([]),
+      image: this.fb.control<string | null>(null, [requiredValidator()]),
+      icon: this.fb.control<string | null>(null),
       parentId: this.fb.control<string | null>(this.parentId, [
         requiredValidator(),
       ]),
       level: this.fb.nonNullable.control<number>(this.level, [
         requiredValidator(),
       ]),
-      base64image: this.fb.control<string | null>(null, [requiredValidator()]),
     });
   }
 
@@ -94,7 +84,7 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   public initSubCategoriesForm(): void {
     this.subCategoriesForm = this.fb.group<SubCategoriesFormInterface>({
-      categories: this.fb.array<FormGroup<SubCategoryFormInterface>>([]),
+      categories: this.fb.array<FormGroup<CategoryFormInterface>>([]),
     });
     this.addCategory();
   }
@@ -109,18 +99,8 @@ export class SubCategoriesDialogComponent implements OnInit {
   }
 
   public saveSubCategories(): void {
-    const categories: CreateCategoryInterface[] = this.subCategoriesForm
-      .getRawValue()
-      .categories.map((item) => ({
-        categoryName: item.categoryName,
-        parentId: item.parentId,
-        image: item.base64image,
-        level: item.level,
-      }));
+    const categories: CreateCategoryInterface[] =
+      this.subCategoriesForm.getRawValue().categories;
     this.store.dispatch(CategoryActions.addCategories({ categories }));
-  }
-
-  public setFormValue(index: number, value: CategoryFormDataInterface): void {
-    this.getCategories().at(index).setValue(value);
   }
 }

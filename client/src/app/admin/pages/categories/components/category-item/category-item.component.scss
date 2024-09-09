@@ -3,7 +3,7 @@
 
 .category-item {
   display: flex;
-  gap: 12px;
+  gap: 5px;
   align-items: center;
   justify-content: space-between;
   background-color: $brown-4;
@@ -11,22 +11,31 @@
   border-radius: 5px;
   color: $brown-1;
   font-size: 16px;
+  padding: 0 10px;
 
-  &--first {
-    padding: 5px 10px;
-    min-height: 40px;
+  &--editable {
+    padding: 0 10px 0 0;
   }
 
-  &--not-first {
-    padding: 10px;
+  &__dnd {
+    padding-left: 10px;
   }
 
   &__name {
     font-size: 16px;
+  }
+
+  &__name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
 
     &--editable {
-      width: 100%;
-      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      height: 40px;
     }
   }
 
@@ -78,5 +87,14 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+
+    &--subcategory {
+      padding-top: 10px;
+    }
+  }
+
+  &__input {
+    @include input-style(9px 12px);
   }
 }

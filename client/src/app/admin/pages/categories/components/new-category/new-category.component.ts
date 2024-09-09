@@ -11,13 +11,20 @@ import { State } from '../../../../../+store/reducers';
 import { Observable } from 'rxjs';
 import { selectNewCategory } from '../../../../../+store/categories/selectors/category.selectors';
 import { AsyncPipe } from '@angular/common';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { requiredValidator } from '../../../../../shared/utils/validators';
+import { SvgFileControlComponent } from '../../../../../shared/components/svg-file-control/svg-file-control.component';
+import { NewCategoryFormInterface } from '../../../../../shared/models/interfaces/new-category-form.interface';
 
 @Component({
   selector: 'app-new-category',
   standalone: true,
-  imports: [SvgIconComponent, AsyncPipe, ReactiveFormsModule],
+  imports: [
+    SvgIconComponent,
+    AsyncPipe,
+    ReactiveFormsModule,
+    SvgFileControlComponent,
+  ],
   templateUrl: './new-category.component.html',
   styleUrl: './new-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,7 +32,7 @@ import { requiredValidator } from '../../../../../shared/utils/validators';
 export class NewCategoryComponent implements OnInit {
   public isNewCategory$!: Observable<boolean>;
 
-  public newCategoryCtrl!: FormControl<string>;
+  public newCategoryForm!: FormGroup<NewCategoryFormInterface>;
 
   private store = inject(Store<State>);
 
@@ -33,13 +40,20 @@ export class NewCategoryComponent implements OnInit {
 
   public ngOnInit(): void {
     this.isNewCategory$ = this.store.select(selectNewCategory);
-    this.newCategoryCtrl = this.fb.nonNullable.control<string>('', [
-      requiredValidator(),
-    ]);
+    this.initNewCategoryForm();
+  }
+
+  public initNewCategoryForm(): void {
+    this.newCategoryForm = this.fb.group<NewCategoryFormInterface>({
+      categoryName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+      ]),
+      icon: this.fb.nonNullable.control<string>('', [requiredValidator()]),
+    });
   }
 
   public addCategory(): void {
-    this.newCategoryCtrl.setValue('');
+    this.newCategoryForm.reset();
     this.store.dispatch(
       CategoryActions.updateCPState({
         payload: {
@@ -52,10 +66,11 @@ export class NewCategoryComponent implements OnInit {
   }
 
   public saveCategory(): void {
+    const categoryData = this.newCategoryForm.getRawValue();
     this.store.dispatch(
       CategoryActions.addCategory({
         category: {
-          categoryName: this.newCategoryCtrl.getRawValue(),
+          ...categoryData,
           parentId: null,
           image: null,
           level: 1,
@@ -66,6 +81,5 @@ export class NewCategoryComponent implements OnInit {
 
   public cancelAddCategory(): void {
     this.store.dispatch(CategoryActions.clearCPState());
-    this.newCategoryCtrl.setValue('');
   }
 }

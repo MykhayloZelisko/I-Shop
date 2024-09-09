@@ -1,25 +1,39 @@
 @if (currentCategory$ | async; as currentCategory) {
   @if (currentCategory.id === category.id && currentCategory.isEditable) {
     <div
-      class="category-item"
-      [ngClass]="{
-        'category-item--first': !category.parentId,
-        'category-item--not-first': category.parentId
-      }"
+      class="category-item category-item--editable"
+      [formGroup]="categoryForm"
     >
-      <app-edit-category-item
-        [category]="categoryData"
-        (changeFormValue)="changeCategoryData($event)"
-      ></app-edit-category-item>
+      <div
+        class="category-item__content"
+        [ngClass]="{ 'category-item__content--subcategory': category.parentId }"
+      >
+        @if (category.image) {
+          <div class="category-item__dnd">
+            <app-dnd-file-control
+              formControlName="image"
+            ></app-dnd-file-control>
+          </div>
+        }
+        <div class="category-item__name-wrapper--editable">
+          @if (category.icon) {
+            <app-svg-file-control formControlName="icon"></app-svg-file-control>
+          }
+          <input
+            class="category-item__input"
+            type="text"
+            formControlName="categoryName"
+            (keydown.space)="$event.stopPropagation()"
+          />
+        </div>
+      </div>
       <div
         class="category-item__buttons--editable"
-        [ngClass]="{
-          'category-item__buttons--not-first': category.parentId
-        }"
+        [ngClass]="{ 'category-item__buttons--not-first': category.parentId }"
       >
         <button
           class="category-item__button"
-          [disabled]="isDisabled"
+          [disabled]="categoryForm.invalid"
           (click)="saveCategory()"
         >
           <svg-icon
@@ -36,14 +50,11 @@
       </div>
     </div>
   } @else {
-    <div
-      class="category-item"
-      [ngClass]="{
-        'category-item--first': !category.parentId,
-        'category-item--not-first': category.parentId
-      }"
-    >
-      <div class="category-item__content">
+    <div class="category-item">
+      <div
+        class="category-item__content"
+        [ngClass]="{ 'category-item__content--subcategory': category.parentId }"
+      >
         @if (category.image) {
           <img
             class="category-item__image"
@@ -54,9 +65,17 @@
             (load)="onImageLoad($event)"
           />
         }
-        <p class="category-item__name">
-          {{ category.categoryName }}
-        </p>
+        <div class="category-item__name-wrapper">
+          @if (category.icon) {
+            <svg-icon
+              class="category-item__icon"
+              [src]="category.icon"
+            ></svg-icon>
+          }
+          <p class="category-item__name">
+            {{ category.categoryName }}
+          </p>
+        </div>
       </div>
       <div
         class="category-item__buttons"

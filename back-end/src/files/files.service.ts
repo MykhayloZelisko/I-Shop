@@ -9,10 +9,11 @@ export class FilesService {
     const prefix = 'data:image/';
     const startIndex = base64String.indexOf(prefix);
     const endIndex = base64String.indexOf(';base64,');
-    const extension = base64String.substring(
+    let extension = base64String.substring(
       startIndex + prefix.length,
       endIndex,
     );
+    extension = extension === 'svg+xml' ? 'svg' : extension;
     return uuidV4() + '.' + extension;
   }
 

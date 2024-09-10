@@ -21,7 +21,7 @@
     align-items: center;
 
     &--invalid {
-      border-color: $red;
+      border-color: $red-1;
     }
   }
 
@@ -35,7 +35,7 @@
     color: $brown-1;
 
     &--error {
-      color: $red;
+      color: $red-1;
     }
   }
 

@@ -62,7 +62,7 @@
 
     &--cancel:hover,
     &--delete:hover {
-      @include icon-style($red);
+      @include icon-style($red-1);
     }
   }
 

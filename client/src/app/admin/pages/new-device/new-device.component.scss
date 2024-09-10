@@ -17,7 +17,7 @@
     background-color: $white;
 
     &--invalid {
-      border-color: $red;
+      border-color: $red-1;
     }
   }
 
@@ -56,7 +56,7 @@
   &__error {
     font-family: $source;
     font-size: 12px;
-    color: $red;
+    color: $red-1;
     font-weight: 700;
 
     &--images {
@@ -83,7 +83,7 @@
     @include icon-style($brown-1, 24px);
 
     &:hover {
-      @include icon-style($red);
+      @include icon-style($red-1);
     }
   }
 
@@ -253,7 +253,7 @@
   .invalid-dropdown.ng-invalid.ng-touched:hover {
     & .p-dropdown,
     & .p-cascadeselect {
-      border: 1px solid $red !important;
+      border: 1px solid $red-1 !important;
     }
   }
 }

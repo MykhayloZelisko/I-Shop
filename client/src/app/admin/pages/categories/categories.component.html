@@ -7,6 +7,20 @@
       Згорнути все
     </button>
   </div>
+  <div class="categories__info">
+    <div class="categories__info-item">
+      <div class="categories__info-circle"></div>
+      <p class="categories__info-text">Заповнена категорія</p>
+    </div>
+    <div class="categories__info-item">
+      <div class="categories__info-circle"></div>
+      <p class="categories__info-text">Порожня категорія</p>
+    </div>
+    <div class="categories__info-item">
+      <div class="categories__info-circle"></div>
+      <p class="categories__info-text">Характеристика</p>
+    </div>
+  </div>
   @if (categories$ | async; as categories) {
     <div class="categories__tree">
       <p-tree

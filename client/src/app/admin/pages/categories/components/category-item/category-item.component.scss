@@ -13,6 +13,10 @@
   font-size: 16px;
   padding: 0 10px;
 
+  &--empty {
+    background-color: $red-2;
+  }
+
   &--editable {
     padding: 0 10px 0 0;
   }
@@ -62,7 +66,7 @@
 
     &--cancel:hover,
     &--delete:hover {
-      @include icon-style($red);
+      @include icon-style($red-1);
     }
   }
 

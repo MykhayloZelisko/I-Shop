@@ -58,7 +58,7 @@
     @include icon-style($yellow, 24px);
 
     &:hover {
-      @include icon-style($red);
+      @include icon-style($red-1);
     }
   }
 

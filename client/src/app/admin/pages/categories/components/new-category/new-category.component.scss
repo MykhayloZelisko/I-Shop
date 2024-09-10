@@ -34,7 +34,7 @@
     }
 
     &--cancel:hover {
-      @include icon-style($red);
+      @include icon-style($red-1);
     }
   }
 
@@ -43,7 +43,7 @@
   }
 
   &__wrapper {
-    background-color: $brown-4;
+    background-color: $red-2;
     display: flex;
     gap: 5px;
     align-items: center;

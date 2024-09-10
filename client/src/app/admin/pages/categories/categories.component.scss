@@ -17,6 +17,41 @@
 
     white-space: nowrap;
   }
+
+  &__info-circle {
+    min-width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+
+  &__info {
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+
+    & .categories__info-item:first-child .categories__info-circle {
+      background-color: $brown-4;
+    }
+
+    & .categories__info-item:nth-child(2) .categories__info-circle {
+      background-color: $red-2;
+    }
+
+    & .categories__info-item:last-child .categories__info-circle {
+      background-color: $blue-3;
+    }
+  }
+
+  &__info-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__info-text {
+    font-family: $source;
+    font-size: 14px;
+  }
 }
 
 :host ::ng-deep {
@@ -52,6 +87,10 @@
     &__buttons {
       justify-content: center;
     }
+
+    &__info {
+      justify-content: center;
+    }
   }
 }
 
@@ -63,6 +102,10 @@
     &__buttons {
       justify-content: space-evenly;
       gap: 0;
+    }
+
+    &__info {
+      display: none;
     }
   }
 }

@@ -20,7 +20,7 @@
       .small-catalog {
         &__icon {
           &--header-icon {
-            @include icon-style($red);
+            @include icon-style($red-1);
           }
         }
       }

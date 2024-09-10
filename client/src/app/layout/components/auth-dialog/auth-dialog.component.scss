@@ -41,7 +41,7 @@
     @include icon-button-style(24px, transparent, 12px);
 
     &:hover {
-      @include icon-style($red);
+      @include icon-style($red-1);
     }
   }
 

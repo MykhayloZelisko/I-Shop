@@ -41,7 +41,7 @@
 
     @if $invalid {
       &.ng-invalid.ng-touched {
-        border-color: $red;
+        border-color: $red-1;
       }
     }
   } @else {

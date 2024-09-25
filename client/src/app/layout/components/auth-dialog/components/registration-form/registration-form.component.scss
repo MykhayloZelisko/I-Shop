@@ -35,7 +35,7 @@
     @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
 
     &--login {
-      @include button-style($blue-1, $white, 8px 24px, $blue-2);
+      @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
     }
   }
 }

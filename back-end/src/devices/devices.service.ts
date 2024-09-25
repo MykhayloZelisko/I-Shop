@@ -20,7 +20,6 @@ export class DevicesService {
   public async createDevice(
     createDeviceInput: CreateDeviceInput,
   ): Promise<boolean> {
-    console.log(createDeviceInput);
     const brand = await this.brandsService.getBrandById(
       createDeviceInput.brandId,
     );
@@ -41,6 +40,7 @@ export class DevicesService {
       await this.deviceModel.create({
         deviceName: createDeviceInput.deviceName,
         price: createDeviceInput.price,
+        count: createDeviceInput.count,
         images: fileNames,
         category: category.id,
         categories: categoriesIds,

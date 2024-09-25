@@ -16,6 +16,7 @@ import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.ty
 import { Dictionary } from '@ngrx/entity';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
+import { selectId } from '../../router/selectors/router.selectors';
 
 const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 
@@ -125,10 +126,17 @@ export const selectCurrentPropertyId = createSelector(
 );
 
 export const selectHasChildren = (
-  id: string,
+  categoryId?: string,
 ): MemoizedSelector<NonNullable<unknown>, boolean> =>
-  createSelector(selectAllCategories, (categories: CategoryInterface[]) =>
-    categories.some((category: CategoryInterface) => category.parentId === id),
+  createSelector(
+    selectAllCategories,
+    selectId,
+    (categories: CategoryInterface[], id) => {
+      const newId = categoryId ?? id;
+      return categories.some(
+        (category: CategoryInterface) => category.parentId === newId,
+      );
+    },
   );
 
 export const selectHasProperties = (
@@ -177,3 +185,46 @@ export const selectProperties = (
       return entity ? entity.properties : [];
     },
   );
+
+export const selectHasChildChain = createSelector(
+  selectAllCategories,
+  selectId,
+  (categories: CategoryInterface[], id) => {
+    const childCategories = categories.filter(
+      (category: CategoryInterface) => category.parentId === id,
+    );
+
+    return childCategories.some((childCategory: CategoryInterface) =>
+      categories.some(
+        (category: CategoryInterface) => category.parentId === childCategory.id,
+      ),
+    );
+  },
+);
+
+export const selectCascadeSubCategories = createSelector(
+  selectCascadeCategories,
+  selectId,
+  (categories: CascadeCategoryInterface[], id) => {
+    const findSubtree = (
+      categoryId: string | null,
+      nodes: CascadeCategoryInterface[],
+    ): CascadeCategoryInterface | null => {
+      for (const node of nodes) {
+        if (node.id === categoryId) {
+          return node;
+        }
+
+        if (node.children && node.children.length > 0) {
+          const childSubtree = findSubtree(categoryId, node.children);
+          if (childSubtree) {
+            return childSubtree;
+          }
+        }
+      }
+      return null;
+    };
+
+    return findSubtree(id, categories);
+  },
+);

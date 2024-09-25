@@ -1,8 +1,4 @@
-import {
-  createFeature,
-  createFeatureSelector,
-  createSelector,
-} from '@ngrx/store';
+import { createFeature } from '@ngrx/store';
 import {
   adapter,
   devicesFeatureKey,
@@ -17,5 +13,10 @@ export const devicesFeature = createFeature({
   }),
 });
 
-export const { selectIds, selectEntities, selectAll, selectTotal } =
-  devicesFeature;
+export const selectAllDevices = devicesFeature.selectAll;
+
+export const selectEntitiesDevices = devicesFeature.selectEntities;
+
+export const selectIdsDevices = devicesFeature.selectIds;
+
+export const selectTotalDevices = devicesFeature.selectTotal;

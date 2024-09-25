@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { DeviceEffects } from './device.effects';
 
 describe('DeviceEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: DeviceEffects;
 
   beforeEach(() => {

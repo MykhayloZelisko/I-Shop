@@ -1,0 +1,21 @@
+@import 'mixins';
+@import 'variables';
+
+.rating {
+  display: flex;
+  gap: 10px;
+
+  &__votes {
+    font-family: $source;
+    font-size: 14px;
+  }
+
+  &__info {
+    display: flex;
+    gap: 5px;
+  }
+
+  &__comment {
+    @include icon-style($gray-5, 14px);
+  }
+}

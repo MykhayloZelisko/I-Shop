@@ -10,11 +10,11 @@
     align-items: center;
     filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
       drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
-    border: 1px solid $white;
+    border: 1px solid $white-1;
     border-radius: 4px;
     padding: 10px;
     gap: 10px;
-    background-color: $white;
+    background-color: $white-1;
 
     &--invalid {
       border-color: $red-1;
@@ -76,7 +76,7 @@
   }
 
   &__cancel-button {
-    @include button-style($blue-1, $white, 8px 24px, $blue-2);
+    @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
   }
 
   &__icon {
@@ -240,12 +240,12 @@
 
   .p-dropdown-items-wrapper::-webkit-scrollbar:vertical {
     width: 7px;
-    background-color: $white;
+    background-color: $white-1;
   }
 
   .p-dropdown-items-wrapper::-webkit-scrollbar-thumb {
     border-radius: 3px;
-    border: 2px solid $white !important;
+    border: 2px solid $white-1 !important;
     background-color: $brown-1;
   }
 

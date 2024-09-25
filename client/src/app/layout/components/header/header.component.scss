@@ -27,7 +27,7 @@
     }
 
     &--catalog {
-      @include icon-style($white);
+      @include icon-style($white-1);
     }
   }
 
@@ -36,7 +36,7 @@
   }
 
   &__button {
-    @include button-style($blue-1, $white, 0 18px, $blue-2);
+    @include button-style($blue-1, $white-1, 0 18px, $blue-2);
 
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@
     &--search {
       @include button-style(
         $blue-1,
-        $white,
+        $white-1,
         0 18px,
         $blue-2,
         $border-radius: 0 5px 5px 0
@@ -131,7 +131,7 @@
   .header {
     &__icon {
       &--search {
-        @include icon-style($white);
+        @include icon-style($white-1);
 
         display: block;
       }

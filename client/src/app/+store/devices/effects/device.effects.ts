@@ -35,4 +35,79 @@ export class DeviceEffects {
       ),
     ),
   );
+
+  public createDeviceFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(DeviceActions.createDeviceFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public loadDevices$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DeviceActions.loadDevices),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.devicesService
+          .getDevices(action.id, action.page, action.size)
+          .pipe(
+            mergeMap((devices) => [
+              LoaderActions.toggleLoader(),
+              DeviceActions.loadDevicesSuccess({ devices }),
+            ]),
+            catchError(() => {
+              this.store.dispatch(LoaderActions.toggleLoader());
+              return of(DeviceActions.loadDevicesFailure());
+            }),
+          ),
+      ),
+    ),
+  );
+
+  public loadDevicesFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(DeviceActions.loadDevicesFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public addDevices$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DeviceActions.addDevices),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.devicesService
+          .getDevices(action.id, action.page, action.size)
+          .pipe(
+            mergeMap((devices) => [
+              LoaderActions.toggleLoader(),
+              DeviceActions.addDevicesSuccess({ devices }),
+            ]),
+            catchError(() => {
+              this.store.dispatch(LoaderActions.toggleLoader());
+              return of(DeviceActions.addDevicesFailure());
+            }),
+          ),
+      ),
+    ),
+  );
+
+  public addDevicesFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(DeviceActions.addDevicesFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
 }

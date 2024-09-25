@@ -12,4 +12,8 @@ export const userRoutes: Routes = [
     loadChildren: () =>
       import('./categories.routes').then((m) => m.categoriesRoutes),
   },
+  {
+    path: UserRouteNameEnum.Devices,
+    loadChildren: () => import('./devices.routes').then((m) => m.devicesRoutes),
+  },
 ];

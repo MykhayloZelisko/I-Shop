@@ -173,25 +173,29 @@
 }
 
 ::ng-deep {
-  .category__paginator--small {
-    & .p-paginator-first {
-      order: 1;
-    }
+  .category {
+    &__paginator {
+      &--small {
+        & .p-paginator-first {
+          order: 1;
+        }
 
-    & .p-paginator-current {
-      order: 3;
-      font-family: $source;
-      font-size: 16px;
-      color: $brown-1;
-    }
+        & .p-paginator-current {
+          order: 3;
+          font-family: $source;
+          font-size: 16px;
+          color: $brown-1;
+        }
 
-    & .p-paginator-prev {
-      order: 2;
-    }
+        & .p-paginator-prev {
+          order: 2;
+        }
 
-    & .p-paginator-next,
-    & .p-paginator-last {
-      order: 4;
+        & .p-paginator-next,
+        & .p-paginator-last {
+          order: 4;
+        }
+      }
     }
   }
 
@@ -221,8 +225,14 @@
   .p-paginator-prev,
   .p-paginator-next,
   .p-paginator-last {
-    &:hover .p-paginator-icon .category__icon {
-      @include icon-style($blue-1, $lift: false);
+    &:hover {
+      & .p-paginator-icon {
+        & .category {
+          &__icon {
+            @include icon-style($blue-1, $lift: false);
+          }
+        }
+      }
     }
   }
 }

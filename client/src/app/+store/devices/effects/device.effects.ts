@@ -55,9 +55,9 @@ export class DeviceEffects {
         this.devicesService
           .getDevices(action.id, action.page, action.size)
           .pipe(
-            mergeMap((devices) => [
+            mergeMap((devicesList) => [
               LoaderActions.toggleLoader(),
-              DeviceActions.loadDevicesSuccess({ devices }),
+              DeviceActions.loadDevicesSuccess({ devicesList }),
             ]),
             catchError(() => {
               this.store.dispatch(LoaderActions.toggleLoader());
@@ -87,9 +87,9 @@ export class DeviceEffects {
         this.devicesService
           .getDevices(action.id, action.page, action.size)
           .pipe(
-            mergeMap((devices) => [
+            mergeMap((devicesList) => [
               LoaderActions.toggleLoader(),
-              DeviceActions.addDevicesSuccess({ devices }),
+              DeviceActions.addDevicesSuccess({ devicesList }),
             ]),
             catchError(() => {
               this.store.dispatch(LoaderActions.toggleLoader());

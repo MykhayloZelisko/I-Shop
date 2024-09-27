@@ -17,6 +17,7 @@ import { ParseIntegerPipe } from '../common/pipes/parse-integer/parse-integer.pi
 import { UseGuards, UsePipes } from '@nestjs/common';
 import { GqlAdminGuard } from '../common/guards/gql-admin/gql-admin.guard';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
+import { DevicesList } from './models/devices-list.model';
 
 @Resolver(() => Device)
 export class DevicesResolver {
@@ -31,12 +32,12 @@ export class DevicesResolver {
     return this.devicesService.createDevice(createDeviceInput);
   }
 
-  @Query(() => [Device], { name: 'devices' })
+  @Query(() => DevicesList, { name: 'devices' })
   public async getAllDevicesByCategoryIdWithPagination(
     @Args('categoryId', ParseObjectIdPipe) categoryId: string,
     @Args('page', { type: () => Int }, ParseIntegerPipe) page: number,
     @Args('size', { type: () => Int }, ParseIntegerPipe) size: number,
-  ): Promise<Device[]> {
+  ): Promise<DevicesList> {
     return this.devicesService.getAllDevicesByCategoryIdWithPagination(
       categoryId,
       page,

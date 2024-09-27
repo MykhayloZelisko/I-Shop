@@ -1,19 +1,19 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { CreateDeviceInterface } from '../../../shared/models/interfaces/create-device.interface';
-import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
+import { DevicesListInterface } from '../../../shared/models/interfaces/devices-list.interface';
 
 export const DeviceActions = createActionGroup({
   source: 'Device/API',
   events: {
     // entity actions
     LoadDevices: props<{ id: string; page: number; size: number }>(),
-    LoadDevicesSuccess: props<{ devices: DeviceInterface[] }>(),
+    LoadDevicesSuccess: props<{ devicesList: DevicesListInterface }>(),
     LoadDevicesFailure: emptyProps(),
     // 'Add Device': props<{ device: Device }>(),
     // 'Upsert Device': props<{ device: Device }>(),
     AddDevices: props<{ id: string; page: number; size: number }>(),
-    AddDevicesSuccess: props<{ devices: DeviceInterface[] }>(),
+    AddDevicesSuccess: props<{ devicesList: DevicesListInterface }>(),
     AddDevicesFailure: emptyProps(),
     // 'Upsert Devices': props<{ devices: Device[] }>(),
     // 'Update Device': props<{ device: Update<Device> }>(),

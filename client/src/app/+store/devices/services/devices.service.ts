@@ -5,6 +5,7 @@ import { CreateDeviceInterface } from '../../../shared/models/interfaces/create-
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
 import { ApolloQueryResult } from '@apollo/client';
 import { environment } from '../../../../environments/environment';
+import { DevicesListInterface } from '../../../shared/models/interfaces/devices-list.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -39,22 +40,27 @@ export class DevicesService {
     categoryId: string,
     page: number,
     size: number,
-  ): Observable<DeviceInterface[]> {
+  ): Observable<DevicesListInterface> {
     return this.apollo
-      .query<{ devices: DeviceInterface[] }>({
+      .query<{ devices: DevicesListInterface }>({
         query: gql`
           query Devices($categoryId: String!, $page: Int!, $size: Int!) {
             devices(categoryId: $categoryId, page: $page, size: $size) {
-              id
-              deviceName
-              price
-              count
-              rating
-              votes
-              images
-              properties {
-                propertyName
-                value
+              total
+              page
+              size
+              devices {
+                id
+                deviceName
+                price
+                count
+                rating
+                votes
+                images
+                properties {
+                  propertyName
+                  value
+                }
               }
             }
           }
@@ -63,18 +69,25 @@ export class DevicesService {
         fetchPolicy: 'network-only',
       })
       .pipe(
-        map((response: ApolloQueryResult<{ devices: DeviceInterface[] }>) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return response.data.devices.map((device: DeviceInterface) => ({
-              ...device,
-              images: device.images.map(
-                (image: string) => `${environment.baseUrl}/${image}`,
-              ),
-            }));
-          }
-        }),
+        map(
+          (response: ApolloQueryResult<{ devices: DevicesListInterface }>) => {
+            if (response.errors) {
+              throw response.errors[0];
+            } else {
+              return {
+                ...response.data.devices,
+                devices: response.data.devices.devices.map(
+                  (device: DeviceInterface) => ({
+                    ...device,
+                    images: device.images.map(
+                      (image: string) => `${environment.baseUrl}/${image}`,
+                    ),
+                  }),
+                ),
+              };
+            }
+          },
+        ),
         catchError((error) => throwError(() => error)),
       );
   }

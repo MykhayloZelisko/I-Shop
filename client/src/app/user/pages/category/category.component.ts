@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
@@ -14,15 +13,24 @@ import {
   selectCascadeSubCategories,
   selectHasChildChain,
 } from '../../../+store/categories/selectors/category.selectors';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
-import { selectAllDevices } from '../../../+store/devices/selectors/device.selectors';
-import { selectId } from '../../../+store/router/selectors/router.selectors';
+import {
+  selectAllDevices,
+  selectPaginationParams,
+} from '../../../+store/devices/selectors/device.selectors';
+import { selectIdAndPage } from '../../../+store/router/selectors/router.selectors';
 import { FilterComponent } from './components/filter/filter.component';
 import { SubCategoryItemComponent } from './components/sub-category-item/sub-category-item.component';
 import { DeviceItemComponent } from './components/device-item/device-item.component';
+import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
+import { PaginationParamsInterface } from '../../../shared/models/interfaces/pagination-params.interface';
+import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
+import { Router } from '@angular/router';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-category',
@@ -33,6 +41,9 @@ import { DeviceItemComponent } from './components/device-item/device-item.compon
     FilterComponent,
     SubCategoryItemComponent,
     DeviceItemComponent,
+    NgClass,
+    PaginatorModule,
+    SvgIconComponent,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
@@ -45,11 +56,17 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public devices$!: Observable<DeviceInterface[]>;
 
+  public paginationParams$!: Observable<PaginationParamsInterface>;
+
+  public currentPage!: number;
+
+  public currentId: string | null = null;
+
   private destroy$: Subject<void> = new Subject<void>();
 
   private store = inject(Store<State>);
 
-  private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   public ngOnInit(): void {
     this.initSubscribes();
@@ -61,23 +78,74 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   public initSubscribes(): void {
+    this.paginationParams$ = this.store.select(selectPaginationParams);
     this.cascadeCategories$ = this.store.select(selectCascadeSubCategories);
     this.hasChildChain$ = this.store.select(selectHasChildChain);
     this.devices$ = this.store.select(selectAllDevices);
+    this.initDevicesList();
+  }
+
+  public initDevicesList(): void {
     this.store
-      .select(selectId)
+      .select(selectIdAndPage)
       .pipe(combineLatestWith(this.hasChildChain$), takeUntil(this.destroy$))
-      .subscribe(([id, result]: [string | null, boolean]) => {
-        if (!result && id) {
-          this.store.dispatch(
-            DeviceActions.loadDevices({
-              id,
-              size: 60,
-              page: 1,
-            }),
-          );
+      .subscribe(([params, result]: [RouterParamsInterface, boolean]) => {
+        if (params && params.id) {
+          if (this.currentId !== params.id) {
+            this.currentId = params.id;
+            this.currentPage = params.page ? Number(params.page) : 1;
+
+            if (!result) {
+              this.store.dispatch(
+                DeviceActions.loadDevices({
+                  id: this.currentId,
+                  size: PAGE_SIZE,
+                  page: +this.currentPage,
+                }),
+              );
+            }
+          }
         }
-        this.cdr.detectChanges();
       });
+  }
+
+  public loadMore(): void {
+    this.currentPage += 1;
+
+    if (this.currentId) {
+      this.store.dispatch(
+        DeviceActions.addDevices({
+          id: this.currentId,
+          size: PAGE_SIZE,
+          page: this.currentPage,
+        }),
+      );
+    }
+
+    this.router.navigate([], {
+      queryParams: { page: this.currentPage },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  public pageChange(event: PaginatorState): void {
+    if (event.page !== this.currentPage - 1) {
+      this.currentPage = event.page ? event.page + 1 : 1;
+
+      if (this.currentId) {
+        this.store.dispatch(
+          DeviceActions.loadDevices({
+            id: this.currentId,
+            size: PAGE_SIZE,
+            page: this.currentPage,
+          }),
+        );
+      }
+
+      this.router.navigate([], {
+        queryParams: { page: this.currentPage },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 }

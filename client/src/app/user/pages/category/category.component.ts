@@ -13,7 +13,7 @@ import {
   selectCascadeSubCategories,
   selectHasChildChain,
 } from '../../../+store/categories/selectors/category.selectors';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
@@ -28,9 +28,7 @@ import { DeviceItemComponent } from './components/device-item/device-item.compon
 import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
 import { PaginationParamsInterface } from '../../../shared/models/interfaces/pagination-params.interface';
 import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
-import { Router } from '@angular/router';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { SvgIconComponent } from 'angular-svg-icon';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 
 @Component({
   selector: 'app-category',
@@ -41,9 +39,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
     FilterComponent,
     SubCategoryItemComponent,
     DeviceItemComponent,
-    NgClass,
-    PaginatorModule,
-    SvgIconComponent,
+    PaginatorComponent,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
@@ -58,15 +54,14 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public paginationParams$!: Observable<PaginationParamsInterface>;
 
-  public currentPage!: number;
-
-  public currentId: string | null = null;
+  public routerParams: RouterParamsInterface = {
+    id: null,
+    page: 0,
+  };
 
   private destroy$: Subject<void> = new Subject<void>();
 
   private store = inject(Store<State>);
-
-  private router = inject(Router);
 
   public ngOnInit(): void {
     this.initSubscribes();
@@ -91,61 +86,23 @@ export class CategoryComponent implements OnInit, OnDestroy {
       .pipe(combineLatestWith(this.hasChildChain$), takeUntil(this.destroy$))
       .subscribe(([params, result]: [RouterParamsInterface, boolean]) => {
         if (params && params.id) {
-          if (this.currentId !== params.id) {
-            this.currentId = params.id;
-            this.currentPage = params.page ? Number(params.page) : 1;
+          if (this.routerParams.id !== params.id) {
+            this.routerParams = {
+              id: params.id,
+              page: params.page ? Number(params.page) : 1,
+            };
 
-            if (!result) {
+            if (!result && this.routerParams.id) {
               this.store.dispatch(
                 DeviceActions.loadDevices({
-                  id: this.currentId,
+                  id: this.routerParams.id,
                   size: PAGE_SIZE,
-                  page: +this.currentPage,
+                  page: +this.routerParams.page,
                 }),
               );
             }
           }
         }
       });
-  }
-
-  public loadMore(): void {
-    this.currentPage += 1;
-
-    if (this.currentId) {
-      this.store.dispatch(
-        DeviceActions.addDevices({
-          id: this.currentId,
-          size: PAGE_SIZE,
-          page: this.currentPage,
-        }),
-      );
-    }
-
-    this.router.navigate([], {
-      queryParams: { page: this.currentPage },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  public pageChange(event: PaginatorState): void {
-    if (event.page !== this.currentPage - 1) {
-      this.currentPage = event.page ? event.page + 1 : 1;
-
-      if (this.currentId) {
-        this.store.dispatch(
-          DeviceActions.loadDevices({
-            id: this.currentId,
-            size: PAGE_SIZE,
-            page: this.currentPage,
-          }),
-        );
-      }
-
-      this.router.navigate([], {
-        queryParams: { page: this.currentPage },
-        queryParamsHandling: 'merge',
-      });
-    }
   }
 }

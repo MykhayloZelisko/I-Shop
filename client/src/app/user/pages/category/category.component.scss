@@ -80,30 +80,6 @@
     font-family: $source;
   }
 
-  &__load-more {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
-
-    width: 100%;
-
-    &--last {
-      display: none;
-    }
-  }
-
-  &__pagination {
-    margin-top: 36px;
-  }
-
-  &__paginator {
-    &--large {
-      display: block;
-    }
-
-    &--small {
-      display: none;
-    }
-  }
-
   &__icon {
     @include icon-style($brown-1, 12px, false);
   }
@@ -141,98 +117,10 @@
   }
 }
 
-@media screen and (width <= 480px) {
-  .category {
-    &__paginator {
-      &--large {
-        display: none;
-      }
-
-      &--small {
-        display: block;
-      }
-    }
-  }
-
-  ::ng-deep {
-    .p-paginator {
-      padding: 8px 0;
-    }
-    .p-paginator-current {
-      padding: 0;
-    }
-  }
-}
-
 @media screen and (width <= 400px) {
   .category {
     &__devices {
       grid-template-columns: 1fr;
-    }
-  }
-}
-
-::ng-deep {
-  .category {
-    &__paginator {
-      &--small {
-        & .p-paginator-first {
-          order: 1;
-        }
-
-        & .p-paginator-current {
-          order: 3;
-          font-family: $source;
-          font-size: 16px;
-          color: $brown-1;
-        }
-
-        & .p-paginator-prev {
-          order: 2;
-        }
-
-        & .p-paginator-next,
-        & .p-paginator-last {
-          order: 4;
-        }
-      }
-    }
-  }
-
-  .p-link {
-    font-family: $source;
-    font-size: 20px;
-    min-width: 40px;
-    height: 40px;
-    color: $brown-1;
-
-    &:hover {
-      border: 1px solid $brown-1;
-      border-radius: 10px;
-      color: $blue-1;
-      background-color: transparent;
-    }
-  }
-
-  .p-highlight {
-    border: 1px solid $brown-1;
-    border-radius: 10px;
-    color: $blue-1;
-    background-color: transparent;
-  }
-
-  .p-paginator-first,
-  .p-paginator-prev,
-  .p-paginator-next,
-  .p-paginator-last {
-    &:hover {
-      & .p-paginator-icon {
-        & .category {
-          &__icon {
-            @include icon-style($blue-1, $lift: false);
-          }
-        }
-      }
     }
   }
 }

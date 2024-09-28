@@ -16,7 +16,7 @@ import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.ty
 import { Dictionary } from '@ngrx/entity';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
-import { selectId } from '../../router/selectors/router.selectors';
+import { selectIdAndPage } from '../../router/selectors/router.selectors';
 
 const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 
@@ -130,9 +130,9 @@ export const selectHasChildren = (
 ): MemoizedSelector<NonNullable<unknown>, boolean> =>
   createSelector(
     selectAllCategories,
-    selectId,
-    (categories: CategoryInterface[], id) => {
-      const newId = categoryId ?? id;
+    selectIdAndPage,
+    (categories: CategoryInterface[], params) => {
+      const newId = categoryId ?? params.id;
       return categories.some(
         (category: CategoryInterface) => category.parentId === newId,
       );
@@ -188,10 +188,10 @@ export const selectProperties = (
 
 export const selectHasChildChain = createSelector(
   selectAllCategories,
-  selectId,
-  (categories: CategoryInterface[], id) => {
+  selectIdAndPage,
+  (categories: CategoryInterface[], params) => {
     const childCategories = categories.filter(
-      (category: CategoryInterface) => category.parentId === id,
+      (category: CategoryInterface) => category.parentId === params.id,
     );
 
     return childCategories.some((childCategory: CategoryInterface) =>
@@ -204,8 +204,8 @@ export const selectHasChildChain = createSelector(
 
 export const selectCascadeSubCategories = createSelector(
   selectCascadeCategories,
-  selectId,
-  (categories: CascadeCategoryInterface[], id) => {
+  selectIdAndPage,
+  (categories: CascadeCategoryInterface[], params) => {
     const findSubtree = (
       categoryId: string | null,
       nodes: CascadeCategoryInterface[],
@@ -225,6 +225,6 @@ export const selectCascadeSubCategories = createSelector(
       return null;
     };
 
-    return findSubtree(id, categories);
+    return findSubtree(params.id, categories);
   },
 );

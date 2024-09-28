@@ -1,14 +1,20 @@
 import { RouterReducerState } from '@ngrx/router-store';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { RouterStateUrlInterface } from '../serializer/custom-route-serializer';
+import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
 
 export const selectRouter =
   createFeatureSelector<RouterReducerState<RouterStateUrlInterface>>('router');
 
-export const selectId = createSelector(
+export const selectIdAndPage = createSelector(
   selectRouter,
-  (state: RouterReducerState<RouterStateUrlInterface>): string | null => {
-    return state.state.params['id'] ?? null;
+  (
+    state: RouterReducerState<RouterStateUrlInterface>,
+  ): RouterParamsInterface => {
+    return {
+      id: state.state.params['id'] ?? null,
+      page: state.state.queryParams['page'] ?? 1,
+    };
   },
 );
 // export const {

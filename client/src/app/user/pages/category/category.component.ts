@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
@@ -18,11 +17,18 @@ import { AsyncPipe } from '@angular/common';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
-import { selectAllDevices } from '../../../+store/devices/selectors/device.selectors';
-import { selectId } from '../../../+store/router/selectors/router.selectors';
+import {
+  selectAllDevices,
+  selectPaginationParams,
+} from '../../../+store/devices/selectors/device.selectors';
+import { selectIdAndPage } from '../../../+store/router/selectors/router.selectors';
 import { FilterComponent } from './components/filter/filter.component';
 import { SubCategoryItemComponent } from './components/sub-category-item/sub-category-item.component';
 import { DeviceItemComponent } from './components/device-item/device-item.component';
+import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
+import { PaginationParamsInterface } from '../../../shared/models/interfaces/pagination-params.interface';
+import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 
 @Component({
   selector: 'app-category',
@@ -33,6 +39,7 @@ import { DeviceItemComponent } from './components/device-item/device-item.compon
     FilterComponent,
     SubCategoryItemComponent,
     DeviceItemComponent,
+    PaginatorComponent,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
@@ -45,11 +52,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   public devices$!: Observable<DeviceInterface[]>;
 
+  public paginationParams$!: Observable<PaginationParamsInterface>;
+
+  public routerParams: RouterParamsInterface = {
+    id: null,
+    page: 0,
+  };
+
   private destroy$: Subject<void> = new Subject<void>();
 
   private store = inject(Store<State>);
-
-  private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.initSubscribes();
@@ -61,23 +73,36 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   public initSubscribes(): void {
+    this.paginationParams$ = this.store.select(selectPaginationParams);
     this.cascadeCategories$ = this.store.select(selectCascadeSubCategories);
     this.hasChildChain$ = this.store.select(selectHasChildChain);
     this.devices$ = this.store.select(selectAllDevices);
+    this.initDevicesList();
+  }
+
+  public initDevicesList(): void {
     this.store
-      .select(selectId)
+      .select(selectIdAndPage)
       .pipe(combineLatestWith(this.hasChildChain$), takeUntil(this.destroy$))
-      .subscribe(([id, result]: [string | null, boolean]) => {
-        if (!result && id) {
-          this.store.dispatch(
-            DeviceActions.loadDevices({
-              id,
-              size: 60,
-              page: 1,
-            }),
-          );
+      .subscribe(([params, result]: [RouterParamsInterface, boolean]) => {
+        if (params && params.id) {
+          if (this.routerParams.id !== params.id) {
+            this.routerParams = {
+              id: params.id,
+              page: params.page ? Number(params.page) : 1,
+            };
+
+            if (!result && this.routerParams.id) {
+              this.store.dispatch(
+                DeviceActions.loadDevices({
+                  id: this.routerParams.id,
+                  size: PAGE_SIZE,
+                  page: +this.routerParams.page,
+                }),
+              );
+            }
+          }
         }
-        this.cdr.detectChanges();
       });
   }
 }

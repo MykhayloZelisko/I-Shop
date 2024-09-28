@@ -114,6 +114,11 @@
     color: $black;
   }
 
+  .p-dropdown-trigger,
+  .p-cascadeselect-trigger {
+    display: none;
+  }
+
   .p-placeholder {
     color: $gray-6;
   }
@@ -127,6 +132,17 @@
 
     &:hover {
       border-color: $brown-1 !important;
+    }
+
+    &::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: url('/assets/images/line-angle-down-icon.svg') center center
+        no-repeat;
+      position: relative;
+      top: 15px;
+      right: 15px;
     }
   }
 

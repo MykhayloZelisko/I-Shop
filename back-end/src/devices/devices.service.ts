@@ -1,12 +1,12 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateDeviceInput } from './inputs/create-device.input';
-import { Device as DeviceGQL } from './models/device.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Device, DeviceDocument } from './schemas/device.schema';
 import { Model } from 'mongoose';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriesService } from '../categories/categories.service';
 import { FilesService } from '../files/files.service';
+import { DevicesList } from './models/devices-list.model';
 
 @Injectable()
 export class DevicesService {
@@ -58,14 +58,23 @@ export class DevicesService {
     categoryId: string,
     page: number,
     size: number,
-  ): Promise<DeviceGQL[]> {
+  ): Promise<DevicesList> {
     const devices = await this.deviceModel
       .find({ categories: { $in: [categoryId] } })
-      .skip(page - 1)
+      .skip((page - 1) * size)
       .limit(size)
       .populate(['category', 'brand', 'categories'])
       .exec();
 
-    return devices.map((device: DeviceDocument) => device.toObject());
+    const total = await this.deviceModel.countDocuments({
+      categories: { $in: [categoryId] },
+    });
+
+    return {
+      total,
+      page,
+      size,
+      devices: devices.map((device: DeviceDocument) => device.toObject()),
+    };
   }
 }

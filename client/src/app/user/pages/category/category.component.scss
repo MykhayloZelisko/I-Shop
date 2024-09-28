@@ -60,6 +60,10 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
+  &__devices-wrapper {
+    width: 100%;
+  }
+
   &__device {
     border-right: 1px solid $gray-4;
     border-bottom: 1px solid $gray-4;
@@ -74,6 +78,10 @@
   &__device-name {
     font-size: 16px;
     font-family: $source;
+  }
+
+  &__icon {
+    @include icon-style($brown-1, 12px, false);
   }
 }
 

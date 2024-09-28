@@ -18,8 +18,12 @@
                 <app-device-item [device]="device"></app-device-item>
               }
             </div>
-            <div>Load more</div>
-            <div>Pagination</div>
+            @if (paginationParams$ | async; as paginationParams) {
+              <app-paginator
+                [paginationParams]="paginationParams"
+                [routerParams]="routerParams"
+              ></app-paginator>
+            }
           </div>
         }
       </div>

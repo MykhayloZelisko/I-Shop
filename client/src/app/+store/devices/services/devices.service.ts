@@ -91,4 +91,44 @@ export class DevicesService {
         catchError((error) => throwError(() => error)),
       );
   }
+
+  public getDeviceById(id: string): Observable<DeviceInterface> {
+    return this.apollo
+      .query<{ device: DeviceInterface }>({
+        query: gql`
+          query Device($id: String!) {
+            device(id: $id) {
+              id
+              deviceName
+              price
+              count
+              rating
+              votes
+              images
+              properties {
+                propertyName
+                value
+              }
+            }
+          }
+        `,
+        variables: { id },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        map((response: ApolloQueryResult<{ device: DeviceInterface }>) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return {
+              ...response.data.device,
+              images: response.data.device.images.map(
+                (image: string) => `${environment.baseUrl}/${image}`,
+              ),
+            };
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
+  }
 }

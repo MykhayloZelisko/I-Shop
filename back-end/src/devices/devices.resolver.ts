@@ -45,6 +45,13 @@ export class DevicesResolver {
     );
   }
 
+  @Query(() => Device, { name: 'device' })
+  public async getDeviceById(
+    @Args('id', ParseObjectIdPipe) id: string,
+  ): Promise<Device> {
+    return this.devicesService.getDeviceById(id);
+  }
+
   @ResolveField(() => Category)
   public async category(@Parent() device: Device): Promise<Category> {
     return device.category;

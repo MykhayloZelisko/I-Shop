@@ -2,6 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { CreateDeviceInterface } from '../../../shared/models/interfaces/create-device.interface';
 import { DevicesListInterface } from '../../../shared/models/interfaces/devices-list.interface';
+import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
 
 export const DeviceActions = createActionGroup({
   source: 'Device/API',
@@ -25,5 +26,8 @@ export const DeviceActions = createActionGroup({
     CreateDevice: props<{ device: CreateDeviceInterface }>(),
     CreateDeviceSuccess: emptyProps(),
     CreateDeviceFailure: emptyProps(),
+    LoadDevice: props<{ id: string }>(),
+    LoadDeviceSuccess: props<{ device: DeviceInterface }>(),
+    LoadDeviceFailure: emptyProps(),
   },
 });

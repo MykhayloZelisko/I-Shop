@@ -12,8 +12,10 @@ export class CustomRouteSerializer
 {
   public serialize(routerState: RouterStateSnapshot): RouterStateUrlInterface {
     let route = routerState.root;
+    let params: Params = {};
 
     while (route.firstChild) {
+      params = { ...params, ...route.params };
       route = route.firstChild;
     }
 
@@ -21,7 +23,7 @@ export class CustomRouteSerializer
       url,
       root: { queryParams },
     } = routerState;
-    const { params } = route;
+    params = { ...params, ...route.params };
 
     return { url, params, queryParams };
   }

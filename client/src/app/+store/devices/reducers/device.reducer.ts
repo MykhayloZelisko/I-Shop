@@ -11,6 +11,7 @@ export interface State extends EntityState<DeviceInterface> {
   currentPage: number;
   size: number;
   maxPage: number;
+  currentDevice: DeviceInterface | null;
 }
 
 export const adapter: EntityAdapter<DeviceInterface> =
@@ -21,10 +22,12 @@ export const initialState: State = adapter.getInitialState({
   currentPage: 0,
   size: PAGE_SIZE,
   maxPage: 0,
+  currentDevice: null,
 });
 
 export const reducer = createReducer(
   initialState,
+  // entity actions
   // on(DeviceActions.addDevice, (state, action) =>
   //   adapter.addOne(action.device, state),
   // ),
@@ -69,4 +72,9 @@ export const reducer = createReducer(
     };
   }),
   // on(DeviceActions.clearDevices, (state) => adapter.removeAll(state)),
+  // other actions
+  on(DeviceActions.loadDeviceSuccess, (state, action) => ({
+    ...state,
+    currentDevice: action.device,
+  })),
 );

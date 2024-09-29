@@ -1,1 +1,8 @@
-<p>device works!</p>
+@if (device$ | async) {
+  <div class="device">
+    <p-tabMenu [scrollable]="true" [model]="items"></p-tabMenu>
+  </div>
+  <router-outlet></router-outlet>
+} @else {
+  <app-page-not-found></app-page-not-found>
+}

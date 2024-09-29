@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateDeviceInput } from './inputs/create-device.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Device, DeviceDocument } from './schemas/device.schema';
@@ -7,6 +7,7 @@ import { BrandsService } from '../brands/brands.service';
 import { CategoriesService } from '../categories/categories.service';
 import { FilesService } from '../files/files.service';
 import { DevicesList } from './models/devices-list.model';
+import { Device as DeviceGQL } from './models/device.model';
 
 @Injectable()
 export class DevicesService {
@@ -76,5 +77,16 @@ export class DevicesService {
       size,
       devices: devices.map((device: DeviceDocument) => device.toObject()),
     };
+  }
+
+  public async getDeviceById(id: string): Promise<DeviceGQL> {
+    const device = await this.deviceModel
+      .findById(id)
+      .populate(['category', 'brand', 'categories'])
+      .exec();
+    if (!device) {
+      throw new NotFoundException('Brand not found');
+    }
+    return device.toObject();
   }
 }

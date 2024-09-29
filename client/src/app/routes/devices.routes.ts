@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { DevicesRouteNameEnum } from '../shared/models/enums/devices-route-name.enum';
+import { deviceRoutes } from './device.routes';
 
 export const devicesRoutes: Routes = [
   {
@@ -16,5 +17,6 @@ export const devicesRoutes: Routes = [
       import('../user/pages/device/device.component').then(
         (m) => m.DeviceComponent,
       ),
+    loadChildren: () => import('./device.routes').then((m) => m.deviceRoutes),
   },
 ];

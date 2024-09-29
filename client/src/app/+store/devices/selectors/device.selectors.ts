@@ -9,6 +9,7 @@ import {
   reducer,
   State,
 } from '../reducers/device.reducer';
+import { selectIdAndPage } from '../../router/selectors/router.selectors';
 
 const selectDeviceState = createFeatureSelector<State>(devicesFeatureKey);
 
@@ -36,4 +37,9 @@ export const selectPaginationParams = createSelector(
     size: state.size,
     maxPage: state.maxPage,
   }),
+);
+
+export const selectDevice = createSelector(
+  selectDeviceState,
+  (state: State) => state.currentDevice,
 );

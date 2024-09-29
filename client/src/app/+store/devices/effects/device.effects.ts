@@ -110,4 +110,34 @@ export class DeviceEffects {
       ),
     { dispatch: false },
   );
+
+  public loadDevice$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DeviceActions.loadDevice),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.devicesService.getDeviceById(action.id).pipe(
+          mergeMap((device) => [
+            LoaderActions.toggleLoader(),
+            DeviceActions.loadDeviceSuccess({ device }),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(DeviceActions.loadDeviceFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public loadDeviceFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(DeviceActions.loadDeviceFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
 }

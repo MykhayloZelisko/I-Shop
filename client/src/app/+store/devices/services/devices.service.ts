@@ -57,9 +57,18 @@ export class DevicesService {
                 rating
                 votes
                 images
+                brand {
+                  id
+                  brandName
+                }
                 properties {
                   propertyName
                   value
+                }
+                category {
+                  id
+                  parentId
+                  categoryName
                 }
               }
             }
@@ -105,9 +114,18 @@ export class DevicesService {
               rating
               votes
               images
+              brand {
+                id
+                brandName
+              }
               properties {
                 propertyName
                 value
+              }
+              category {
+                id
+                parentId
+                categoryName
               }
             }
           }

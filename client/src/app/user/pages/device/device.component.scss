@@ -17,6 +17,10 @@
   }
 }
 
+.device {
+  padding: 12px 12px 0;
+}
+
 @media screen and (width <= 480px) {
   :host ::ng-deep {
     .p-menuitem-link {

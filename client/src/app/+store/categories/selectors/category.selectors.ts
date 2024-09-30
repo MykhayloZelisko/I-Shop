@@ -16,7 +16,11 @@ import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.ty
 import { Dictionary } from '@ngrx/entity';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
-import { selectIdAndPage } from '../../router/selectors/router.selectors';
+import {
+  selectIdAndPage,
+  selectRouter,
+} from '../../router/selectors/router.selectors';
+import { selectDevice } from '../../devices/selectors/device.selectors';
 
 const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 
@@ -226,5 +230,41 @@ export const selectCascadeSubCategories = createSelector(
     };
 
     return findSubtree(params.id, categories);
+  },
+);
+
+export const selectBreadcrumbsParams = createSelector(
+  selectRouter,
+  selectEntitiesCategories,
+  selectDevice,
+  (params, categories, device) => {
+    const isCategory = params.state.url.startsWith('/categories');
+    if (isCategory) {
+      let categoryPath: CategoryInterface[] = [];
+      let currentCategory = categories[params.state.params['id']];
+
+      while (currentCategory) {
+        categoryPath = [currentCategory, ...categoryPath];
+        currentCategory = currentCategory.parentId
+          ? categories[currentCategory.parentId]
+          : undefined;
+      }
+
+      return { isCategory, categoryPath };
+    } else if (device) {
+      let categoryPath: CategoryInterface[] = [];
+      let currentCategory = categories[device.category.id];
+
+      while (currentCategory) {
+        categoryPath = [currentCategory, ...categoryPath];
+        currentCategory = currentCategory.parentId
+          ? categories[currentCategory.parentId]
+          : undefined;
+      }
+
+      return { isCategory, categoryPath };
+    } else {
+      return null;
+    }
   },
 );

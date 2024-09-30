@@ -1,5 +1,6 @@
 @if (device$ | async) {
   <div class="device">
+    <app-breadcrumbs></app-breadcrumbs>
     <p-tabMenu [scrollable]="true" [model]="items"></p-tabMenu>
   </div>
   <router-outlet></router-outlet>

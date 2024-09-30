@@ -9,7 +9,6 @@ import {
   reducer,
   State,
 } from '../reducers/device.reducer';
-import { selectIdAndPage } from '../../router/selectors/router.selectors';
 
 const selectDeviceState = createFeatureSelector<State>(devicesFeatureKey);
 

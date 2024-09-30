@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
@@ -20,11 +19,18 @@ import { DeviceInterface } from '../../../shared/models/interfaces/device.interf
 import { selectDevice } from '../../../+store/devices/selectors/device.selectors';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { AsyncPipe } from '@angular/common';
+import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/breadcrumbs.component';
 
 @Component({
   selector: 'app-device',
   standalone: true,
-  imports: [RouterOutlet, TabMenuModule, PageNotFoundComponent, AsyncPipe],
+  imports: [
+    RouterOutlet,
+    TabMenuModule,
+    PageNotFoundComponent,
+    AsyncPipe,
+    BreadcrumbsComponent,
+  ],
   templateUrl: './device.component.html',
   styleUrl: './device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

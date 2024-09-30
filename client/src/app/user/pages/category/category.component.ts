@@ -29,6 +29,7 @@ import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
 import { PaginationParamsInterface } from '../../../shared/models/interfaces/pagination-params.interface';
 import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
 import { PaginatorComponent } from './components/paginator/paginator.component';
+import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/breadcrumbs.component';
 
 @Component({
   selector: 'app-category',
@@ -40,6 +41,7 @@ import { PaginatorComponent } from './components/paginator/paginator.component';
     SubCategoryItemComponent,
     DeviceItemComponent,
     PaginatorComponent,
+    BreadcrumbsComponent,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',

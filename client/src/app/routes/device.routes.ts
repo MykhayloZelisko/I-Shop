@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { DeviceRouteNameEnum } from '../shared/models/enums/device-route-name.enum';
-import { AdminRouteNameEnum } from '../shared/models/enums/admin-route-name.enum';
 
 export const deviceRoutes: Routes = [
   {

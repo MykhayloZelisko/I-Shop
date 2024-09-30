@@ -1,0 +1,58 @@
+@import "variables";
+@import "mixins";
+
+.breadcrumbs {
+  display: flex;
+  gap: 5px;
+
+  &--small {
+    display: none;
+  }
+
+  &__icon {
+    @include icon-style($brown-1, 12px, false);
+
+    &:hover {
+      @include icon-style($blue-2, $lift: false);
+    }
+  }
+
+  &__text {
+    font-family: $source;
+    font-size: 16px;
+    display: flex;
+    gap: 5px;
+  }
+
+  &__link {
+    display: flex;
+    gap: 5px;
+    text-decoration: none;
+    color: $black;
+
+    &:hover {
+      text-decoration: underline;
+      color: $blue-2;
+    }
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .breadcrumbs {
+    display: none;
+
+    &--small {
+      display: block;
+    }
+
+    &__link {
+      &:hover {
+        & .breadcrumbs {
+          &__icon {
+            @include icon-style($blue-2, $lift: false);
+          }
+        }
+      }
+    }
+  }
+}

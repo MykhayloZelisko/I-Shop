@@ -42,7 +42,7 @@
     }
   }
 
-  ::ng-deep {
+  :host ::ng-deep {
     .p-paginator {
       padding: 8px 0;
     }
@@ -52,7 +52,7 @@
   }
 }
 
-::ng-deep {
+:host ::ng-deep {
   .paginator {
     &__paginator {
       &--small {

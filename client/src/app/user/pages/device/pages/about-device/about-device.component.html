@@ -1,1 +1,37 @@
-<p>about-device works!</p>
+@if (device$ | async; as device) {
+  <div class="about-device">
+    <div class="about-device__carousel">
+      <div class="about-device__carousel-current" [ngStyle]="getStyle(device)">
+        <div class="about-device__buttons">
+          <button class="about-device__button" (click)="prevImage(device)">
+            <svg-icon
+              class="about-device__icon"
+              src="assets/images/line-angle-left-icon.svg"
+            ></svg-icon>
+          </button>
+          <button class="about-device__button" (click)="nextImage(device)">
+            <svg-icon
+              class="about-device__icon"
+              src="assets/images/line-angle-right-icon.svg"
+            ></svg-icon>
+          </button>
+        </div>
+      </div>
+      <ul class="about-device__list">
+        @for (image of device.images; track image; let index = $index) {
+          <li
+            class="about-device__list-item"
+            [ngClass]="{
+              'about-device__list-item--border': currentImageIndex === index
+            }"
+          >
+            <div class="about-device__list-image" [ngStyle]="getItemStyle(image)"></div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="about-device__info">
+      {{ device | json }}
+    </div>
+  </div>
+}

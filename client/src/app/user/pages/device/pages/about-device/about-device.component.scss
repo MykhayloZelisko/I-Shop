@@ -1,0 +1,67 @@
+@import "mixins";
+@import "variables";
+
+.about-device {
+  padding: 12px;
+  display: flex;
+  gap: 24px;
+
+  &__carousel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__carousel-current {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &__icon {
+    @include icon-style($brown-2, 24px);
+  }
+
+  &__button {
+    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+  }
+
+  &__buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+  }
+
+  &__list {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+  }
+
+  &__list-item {
+    padding: 5px;
+    border: 1px solid transparent;
+
+    &--border {
+      border: 1px solid $blue-1;
+    }
+  }
+
+  &__list-image {
+    aspect-ratio: 1;
+    height: 60px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}

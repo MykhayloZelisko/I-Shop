@@ -68,10 +68,4 @@ export class AboutDeviceComponent implements OnInit {
       this.currentImageIndex = 0;
     }
   }
-
-  public getItemStyle(image: string): Record<string, string> {
-    return {
-      'background-image': `url(${image})`,
-    };
-  }
 }

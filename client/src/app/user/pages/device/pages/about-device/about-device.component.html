@@ -1,7 +1,12 @@
 @if (device$ | async; as device) {
   <div class="about-device">
     <div class="about-device__carousel">
-      <div class="about-device__carousel-current" [ngStyle]="getStyle(device)">
+      <div class="about-device__carousel-current">
+        <img
+          class="about-device__image"
+          [src]="device.images[currentImageIndex]"
+          [alt]="device.images[currentImageIndex]"
+        />
         <div class="about-device__buttons">
           <button class="about-device__button" (click)="prevImage(device)">
             <svg-icon
@@ -25,7 +30,11 @@
               'about-device__list-item--border': currentImageIndex === index
             }"
           >
-            <div class="about-device__list-image" [ngStyle]="getItemStyle(image)"></div>
+            <img
+              class="about-device__image"
+              [src]="device.images[index]"
+              [alt]="device.images[index]"
+            />
           </li>
         }
       </ul>

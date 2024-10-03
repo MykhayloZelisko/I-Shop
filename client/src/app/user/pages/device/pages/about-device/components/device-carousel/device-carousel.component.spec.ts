@@ -8,10 +8,9 @@ describe('DeviceCarouselComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeviceCarouselComponent]
-    })
-    .compileComponents();
-    
+      imports: [DeviceCarouselComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(DeviceCarouselComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

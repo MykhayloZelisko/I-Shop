@@ -1,0 +1,138 @@
+@import 'mixins';
+@import 'variables';
+
+.about-device {
+  padding: 12px;
+  display: flex;
+  gap: 24px;
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__icon {
+    @include icon-style($brown-2, 24px);
+
+    &--yellow {
+      @include icon-style($yellow);
+    }
+
+    &--small {
+      @include icon-style($size: 14px);
+    }
+  }
+
+  &__icon-button {
+    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+  }
+
+  &__title {
+    font-family: $source;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  &__price {
+    font-size: 28px;
+    font-weight: bold;
+    font-family: $source;
+    color: $brown-1;
+    white-space: nowrap;
+  }
+
+  &__buying {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__button {
+    @include button-style($brown-1, $yellow, 6px 12px, $brown-2);
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    flex: 1;
+
+    &--credit {
+      @include button-style($blue-1, $white-1, 10px 12px, $blue-2);
+
+      flex: 1;
+      white-space: nowrap;
+    }
+  }
+
+  &__buttons {
+    &--large {
+      flex: 1;
+      display: flex;
+      gap: 12px;
+    }
+
+    &--small {
+      display: none;
+    }
+  }
+
+  &__icon-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__delivery {
+    padding: 12px 16px;
+    border: 1px solid $gray-5;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__city {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__text {
+    font-size: 16px;
+    font-family: $source;
+    color: $brown-2;
+
+    &--city {
+      font-weight: bold;
+    }
+  }
+}
+
+@media screen and (width <= 1280px) {
+  .about-device {
+    &__buying {
+      justify-content: space-between;
+    }
+
+    &__buttons {
+      &--large {
+        display: none;
+      }
+
+      &--small {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+  }
+}
+
+@media screen and (width <= 768px) {
+  .about-device {
+    flex-direction: column;
+  }
+}

@@ -1,9 +1,13 @@
 @if (device$ | async) {
   <div class="device">
     <app-breadcrumbs></app-breadcrumbs>
-    <p-tabMenu [scrollable]="true" [model]="items"></p-tabMenu>
+    <p-tabMenu
+      class="device__menu"
+      [scrollable]="true"
+      [model]="items"
+    ></p-tabMenu>
+    <router-outlet></router-outlet>
   </div>
-  <router-outlet></router-outlet>
 } @else {
   <app-page-not-found></app-page-not-found>
 }

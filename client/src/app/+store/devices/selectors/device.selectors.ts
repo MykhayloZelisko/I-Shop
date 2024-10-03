@@ -9,6 +9,9 @@ import {
   reducer,
   State,
 } from '../reducers/device.reducer';
+import { selectIdAndPage } from '../../router/selectors/router.selectors';
+import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
+import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
 
 const selectDeviceState = createFeatureSelector<State>(devicesFeatureKey);
 
@@ -41,4 +44,15 @@ export const selectPaginationParams = createSelector(
 export const selectDevice = createSelector(
   selectDeviceState,
   (state: State) => state.currentDevice,
+);
+
+export const selectIsCurrentDevice = createSelector(
+  selectDevice,
+  selectIdAndPage,
+  (device: DeviceInterface | null, params: RouterParamsInterface) => {
+    return {
+      isCurrent: !!device && device.id === params.id,
+      id: params.id,
+    };
+  },
 );

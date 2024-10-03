@@ -12,11 +12,12 @@ import { DEVICE_MENU } from '../../../shared/models/constants/device-menu';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import { selectIdAndPage } from '../../../+store/router/selectors/router.selectors';
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
-import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
-import { selectDevice } from '../../../+store/devices/selectors/device.selectors';
+import {
+  selectDevice,
+  selectIsCurrentDevice,
+} from '../../../+store/devices/selectors/device.selectors';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { AsyncPipe } from '@angular/common';
 import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/breadcrumbs.component';
@@ -56,11 +57,11 @@ export class DeviceComponent implements OnInit, OnDestroy {
 
   public initDevice(): void {
     this.store
-      .select(selectIdAndPage)
+      .select(selectIsCurrentDevice)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (params: RouterParamsInterface) => {
-          if (params.id) {
+        next: (params) => {
+          if (!params.isCurrent && params.id) {
             this.store.dispatch(DeviceActions.loadDevice({ id: params.id }));
           }
         },

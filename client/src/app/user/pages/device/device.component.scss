@@ -19,6 +19,20 @@
 
 .device {
   padding: 12px 12px 0;
+
+  &__menu {
+    position: sticky;
+    top: 66px;
+    z-index: 100;
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .device {
+    &__menu {
+      top: 52px;
+    }
+  }
 }
 
 @media screen and (width <= 480px) {

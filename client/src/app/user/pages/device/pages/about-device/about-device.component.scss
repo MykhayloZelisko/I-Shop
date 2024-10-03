@@ -6,30 +6,11 @@
   display: flex;
   gap: 24px;
 
-  &__carousel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  &__image {
-    aspect-ratio: 1;
-    width: 100%;
-    object-fit: contain;
-  }
-
   &__info {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-
-  &__carousel-current {
-    width: 100%;
-    aspect-ratio: 1;
-    position: relative;
   }
 
   &__icon {
@@ -46,34 +27,6 @@
 
   &__icon-button {
     @include icon-button-style(40px, $white-2, 5px, $blue-3);
-  }
-
-  &__carousel-buttons {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 12px;
-  }
-
-  &__list {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-  }
-
-  &__list-item {
-    padding: 5px;
-    border: 1px solid transparent;
-    aspect-ratio: 1;
-    height: 60px;
-    cursor: pointer;
-
-    &--border {
-      border: 1px solid $blue-1;
-    }
   }
 
   &__title {
@@ -174,14 +127,6 @@
         flex-direction: column;
         gap: 12px;
       }
-    }
-  }
-}
-
-@media screen and (width <= 1024px) {
-  .about-device {
-    &__list {
-      display: none;
     }
   }
 }

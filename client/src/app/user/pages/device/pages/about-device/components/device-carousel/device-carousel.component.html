@@ -1,0 +1,40 @@
+<div class="device-carousel">
+  <div class="device-carousel__current">
+    <img
+      class="device-carousel__image"
+      [src]="carousel[currentImageIndex]"
+      [alt]="carousel[currentImageIndex]"
+    />
+    <div class="device-carousel__buttons">
+      <button class="device-carousel__button" (click)="prevImage()">
+        <svg-icon
+          class="device-carousel__icon"
+          src="assets/images/line-angle-left-icon.svg"
+        ></svg-icon>
+      </button>
+      <button class="device-carousel__button" (click)="nextImage()">
+        <svg-icon
+          class="device-carousel__icon"
+          src="assets/images/line-angle-right-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+  <ul class="device-carousel__list">
+    @for (image of carousel; track image; let index = $index) {
+      <li
+        class="device-carousel__list-item"
+        [ngClass]="{
+          'device-carousel__list-item--border': currentImageIndex === index
+        }"
+        (click)="setCurrentIndex(index)"
+      >
+        <img
+          class="device-carousel__image"
+          [src]="carousel[index]"
+          [alt]="carousel[index]"
+        />
+      </li>
+    }
+  </ul>
+</div>

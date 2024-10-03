@@ -1,45 +1,6 @@
 @if (device$ | async; as device) {
   <div class="about-device">
-    <div class="about-device__carousel">
-      <div class="about-device__carousel-current">
-        <img
-          class="about-device__image"
-          [src]="device.images[currentImageIndex]"
-          [alt]="device.images[currentImageIndex]"
-        />
-        <div class="about-device__carousel-buttons">
-          <button class="about-device__icon-button" (click)="prevImage(device)">
-            <svg-icon
-              class="about-device__icon"
-              src="assets/images/line-angle-left-icon.svg"
-            ></svg-icon>
-          </button>
-          <button class="about-device__icon-button" (click)="nextImage(device)">
-            <svg-icon
-              class="about-device__icon"
-              src="assets/images/line-angle-right-icon.svg"
-            ></svg-icon>
-          </button>
-        </div>
-      </div>
-      <ul class="about-device__list">
-        @for (image of device.images; track image; let index = $index) {
-          <li
-            class="about-device__list-item"
-            [ngClass]="{
-              'about-device__list-item--border': currentImageIndex === index
-            }"
-            (click)="setCurrentIndex(index)"
-          >
-            <img
-              class="about-device__image"
-              [src]="device.images[index]"
-              [alt]="device.images[index]"
-            />
-          </li>
-        }
-      </ul>
-    </div>
+    <app-device-carousel [carousel]="device.images"></app-device-carousel>
     <div class="about-device__info">
       <h2 class="about-device__title">{{ device.deviceName }}</h2>
       <app-rating [rating]="device.rating" [votes]="device.votes"></app-rating>

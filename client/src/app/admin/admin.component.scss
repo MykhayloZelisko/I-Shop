@@ -17,6 +17,22 @@
   }
 }
 
+.admin {
+  &__menu {
+    position: sticky;
+    top: 66px;
+    z-index: 1;
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .admin {
+    &__menu {
+      top: 52px;
+    }
+  }
+}
+
 @media screen and (width <= 480px) {
   :host ::ng-deep {
     .p-menuitem-link {

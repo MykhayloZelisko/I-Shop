@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDeviceInput } from './inputs/create-device.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Device, DeviceDocument } from './schemas/device.schema';
@@ -46,7 +50,7 @@ export class DevicesService {
         category: category.id,
         categories: categoriesIds,
         brand: brand.id,
-        properties: createDeviceInput.properties,
+        groups: createDeviceInput.groups,
       });
     } catch {
       throw new InternalServerErrorException('Device is not created');

@@ -15,6 +15,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { BrandsModule } from './brands/brands.module';
 import { CPropertiesModule } from './c-properties/c-properties.module';
 import { DevicesModule } from './devices/devices.module';
+import { CPropertiesGroupsModule } from './c-properties-groups/c-properties-groups.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { DevicesModule } from './devices/devices.module';
     BrandsModule,
     CPropertiesModule,
     DevicesModule,
+    CPropertiesGroupsModule,
   ],
 })
 export class AppModule {}

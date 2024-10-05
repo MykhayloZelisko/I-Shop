@@ -8,6 +8,6 @@ export class CProperty {
   @Field({ description: 'Property name' })
   public propertyName: string;
 
-  @Field(() => ID, { description: 'Category id' })
-  public categoryId: string;
+  @Field(() => ID, { description: 'Group id' })
+  public groupId: string;
 }

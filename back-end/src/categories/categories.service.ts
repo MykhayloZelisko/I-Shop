@@ -12,7 +12,8 @@ import { Category as CategoryGQL } from './models/category.model';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { FilesService } from '../files/files.service';
 import { UpdateCategoryInput } from './inputs/update-category.input';
-import { CPropertiesService } from '../c-properties/c-properties.service';
+import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
+import { CPropertiesGroupDocument } from '../c-properties-groups/schemas/c-properties-group.schema';
 import { CPropertyDocument } from '../c-properties/schemas/c-property.schema';
 
 @Injectable()
@@ -20,22 +21,32 @@ export class CategoriesService {
   public constructor(
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
     private filesService: FilesService,
-    private cPropertiesService: CPropertiesService,
+    private cPropertiesGroupsService: CPropertiesGroupsService,
   ) {}
 
   public async getAllCategories(): Promise<CategoryGQL[]> {
     const categories = await this.categoryModel
       .find()
-      .populate('properties')
+      .populate({
+        path: 'groups',
+        populate: {
+          path: 'properties',
+        },
+      })
       .exec();
 
     return categories.map((category: CategoryDocument) => ({
       id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
-      properties: category.properties.map((property: CPropertyDocument) => ({
-        id: property.id,
-        categoryId: property.categoryId.toString(),
-        propertyName: property.propertyName,
+      groups: category.groups.map((group: CPropertiesGroupDocument) => ({
+        id: group.id,
+        categoryId: group.categoryId.toString(),
+        groupName: group.groupName,
+        properties: group.properties.map((property: CPropertyDocument) => ({
+          id: property.id,
+          groupId: property.groupId.toString(),
+          propertyName: property.propertyName,
+        })),
       })),
       categoryName: category.categoryName,
       image: category.image,
@@ -47,7 +58,12 @@ export class CategoriesService {
   public async getCategoryById(id: string): Promise<CategoryGQL> {
     const category = await this.categoryModel
       .findById(id)
-      .populate('properties')
+      .populate({
+        path: 'groups',
+        populate: {
+          path: 'properties',
+        },
+      })
       .exec();
 
     if (!category) {
@@ -57,10 +73,15 @@ export class CategoriesService {
     return {
       id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
-      properties: category.properties.map((property: CPropertyDocument) => ({
-        id: property.id,
-        categoryId: property.categoryId.toString(),
-        propertyName: property.propertyName,
+      groups: category.groups.map((group: CPropertiesGroupDocument) => ({
+        id: group.id,
+        categoryId: group.categoryId.toString(),
+        groupName: group.groupName,
+        properties: group.properties.map((property: CPropertyDocument) => ({
+          id: property.id,
+          groupId: property.groupId.toString(),
+          propertyName: property.propertyName,
+        })),
       })),
       categoryName: category.categoryName,
       image: category.image,
@@ -83,7 +104,7 @@ export class CategoriesService {
       }
       await this.categoryModel.findByIdAndDelete(id).exec();
     }
-    await this.cPropertiesService.deleteAllCPropertiesByCategoryId(category.id);
+    await this.cPropertiesGroupsService.deleteAllGroupsByCategoryId(category.id);
     return subCategoriesIds;
   }
 
@@ -145,7 +166,7 @@ export class CategoriesService {
       const category = await this.categoryModel.create({
         ...createCategoryInput,
         image: fileName,
-        properties: [],
+        groups: [],
       });
       return {
         ...category.toObject(),
@@ -162,7 +183,7 @@ export class CategoriesService {
       const category = await this.categoryModel.create({
         ...createCategoryInput,
         icon: fileName,
-        properties: [],
+        groups: [],
       });
       return category.toObject();
     } else {
@@ -173,13 +194,13 @@ export class CategoriesService {
   public async addSubCategories(
     createCategoryInputs: CreateCategoryInput[],
   ): Promise<CategoryGQL[]> {
-    const propertiesIds =
-      await this.cPropertiesService.findCPropertiesIdsByCategoryId(
+    const groupsIds =
+      await this.cPropertiesGroupsService.findGroupsIdsByCategoryId(
         createCategoryInputs[0].parentId as string,
       );
-    if (propertiesIds.length) {
+    if (groupsIds.length) {
       throw new ConflictException(
-        'A category cannot include properties and subcategories',
+        'A category cannot include properties groups and subcategories',
       );
     }
 
@@ -239,7 +260,12 @@ export class CategoriesService {
           { ...updateCategoryInput, image: fileName },
           { new: true },
         )
-        .populate('properties')
+        .populate({
+          path: 'groups',
+          populate: {
+            path: 'properties',
+          },
+        })
         .exec();
 
       if (!updatedCategory) {
@@ -251,11 +277,16 @@ export class CategoriesService {
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
-        properties: updatedCategory.properties.map(
-          (property: CPropertyDocument) => ({
-            id: property.id,
-            categoryId: property.categoryId.toString(),
-            propertyName: property.propertyName,
+        groups: updatedCategory.groups.map(
+          (group: CPropertiesGroupDocument) => ({
+            id: group.id,
+            categoryId: group.categoryId.toString(),
+            groupName: group.groupName,
+            properties: group.properties.map((property: CPropertyDocument) => ({
+              id: property.id,
+              groupId: property.groupId.toString(),
+              propertyName: property.propertyName,
+            })),
           }),
         ),
         categoryName: updatedCategory.categoryName,
@@ -275,7 +306,12 @@ export class CategoriesService {
           { ...updateCategoryInput, icon: fileName },
           { new: true },
         )
-        .populate('properties')
+        .populate({
+          path: 'groups',
+          populate: {
+            path: 'properties',
+          },
+        })
         .exec();
 
       if (!updatedCategory) {
@@ -287,11 +323,16 @@ export class CategoriesService {
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
-        properties: updatedCategory.properties.map(
-          (property: CPropertyDocument) => ({
-            id: property.id,
-            categoryId: property.categoryId.toString(),
-            propertyName: property.propertyName,
+        groups: updatedCategory.groups.map(
+          (group: CPropertiesGroupDocument) => ({
+            id: group.id,
+            categoryId: group.categoryId.toString(),
+            groupName: group.groupName,
+            properties: group.properties.map((property: CPropertyDocument) => ({
+              id: property.id,
+              groupId: property.groupId.toString(),
+              propertyName: property.propertyName,
+            })),
           }),
         ),
         categoryName: updatedCategory.categoryName,
@@ -304,30 +345,40 @@ export class CategoriesService {
     }
   }
 
-  public async addPropertiesToCategory(
+  public async addGroupsToCategory(
     categoryId: string,
-    propertyIds: string[],
+    groupsIds: string[],
   ): Promise<CategoryGQL> {
     const category = await this.categoryModel
       .findByIdAndUpdate(
         categoryId,
-        { $push: { properties: { $each: propertyIds } } },
+        { $push: { groups: { $each: groupsIds } } },
         { new: true },
       )
-      .populate('properties')
+      .populate({
+        path: 'groups',
+        populate: {
+          path: 'properties',
+        },
+      })
       .exec();
     if (!category) {
       throw new InternalServerErrorException(
-        'Properties are not added to a category',
+        'Properties groups are not added to a category',
       );
     }
     return {
       id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
-      properties: category.properties.map((property: CPropertyDocument) => ({
-        id: property.id,
-        categoryId: property.categoryId.toString(),
-        propertyName: property.propertyName,
+      groups: category.groups.map((group: CPropertiesGroupDocument) => ({
+        id: group.id,
+        categoryId: group.categoryId.toString(),
+        groupName: group.groupName,
+        properties: group.properties.map((property: CPropertyDocument) => ({
+          id: property.id,
+          groupId: property.groupId.toString(),
+          propertyName: property.propertyName,
+        })),
       })),
       categoryName: category.categoryName,
       image: category.image,

@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
-import { CProperty } from '../../c-properties/models/c-property.model';
+import { CPropertiesGroup } from '../../c-properties-groups/models/c-properties-group.model';
 
 @ObjectType()
 export class Category {
@@ -21,6 +21,8 @@ export class Category {
   @Field(() => Int, { description: 'Category level' })
   public level: number;
 
-  @Field(() => [CProperty], { description: 'List of properties' })
-  public properties: CProperty[];
+  @Field(() => [CPropertiesGroup], {
+    description: 'List of groups of properties',
+  })
+  public groups: CPropertiesGroup[];
 }

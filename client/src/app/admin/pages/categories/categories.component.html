@@ -8,17 +8,29 @@
     </button>
   </div>
   <div class="categories__info">
-    <div class="categories__info-item">
-      <div class="categories__info-circle"></div>
-      <p class="categories__info-text">Заповнена категорія</p>
+    <div class="categories__info">
+      <div class="categories__info-item categories__info-item--1">
+        <div class="categories__info-circle"></div>
+        <p class="categories__info-text">Заповнена категорія</p>
+      </div>
+      <div class="categories__info-item categories__info-item--2">
+        <div class="categories__info-circle"></div>
+        <p class="categories__info-text">Порожня категорія</p>
+      </div>
+      <div class="categories__info-item categories__info-item--3">
+        <div class="categories__info-circle"></div>
+        <p class="categories__info-text">Заповнена група</p>
+      </div>
     </div>
-    <div class="categories__info-item">
-      <div class="categories__info-circle"></div>
-      <p class="categories__info-text">Порожня категорія</p>
-    </div>
-    <div class="categories__info-item">
-      <div class="categories__info-circle"></div>
-      <p class="categories__info-text">Характеристика</p>
+    <div class="categories__info">
+      <div class="categories__info-item categories__info-item--4">
+        <div class="categories__info-circle"></div>
+        <p class="categories__info-text">Порожня група</p>
+      </div>
+      <div class="categories__info-item categories__info-item--5">
+        <div class="categories__info-circle"></div>
+        <p class="categories__info-text">Характеристика</p>
+      </div>
     </div>
   </div>
   @if (categories$ | async; as categories) {
@@ -30,6 +42,11 @@
       >
         <ng-template let-node pTemplate="category">
           <app-category-item [category]="node.data"></app-category-item>
+        </ng-template>
+        <ng-template let-node pTemplate="group">
+          <app-c-properties-group-item
+            [group]="node.data"
+          ></app-c-properties-group-item>
         </ng-template>
         <ng-template pTemplate="default">
           <app-new-category></app-new-category>

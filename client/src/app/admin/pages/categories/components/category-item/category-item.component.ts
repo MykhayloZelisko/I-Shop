@@ -15,12 +15,12 @@ import { Observable } from 'rxjs';
 import {
   selectCurrentCategory,
   selectHasChildren,
-  selectHasProperties,
+  selectHasGroups,
 } from '../../../../../+store/categories/selectors/category.selectors';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { SubCategoriesDialogComponent } from './components/sub-categories-dialog/sub-categories-dialog.component';
-import { CurrentCategoryStatusInterface } from '../../../../../shared/models/interfaces/current-category-status.interface';
+import { CurrentStatusInterface } from '../../../../../shared/models/interfaces/current-status.interface';
 import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
 import { selectPopup } from '../../../../../+store/popup/selectors/popup.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
@@ -34,7 +34,7 @@ import { CategoryFormInterface } from '../../../../../shared/models/interfaces/s
 import { requiredValidator } from '../../../../../shared/utils/validators';
 import { SvgFileControlComponent } from '../../../../../shared/components/svg-file-control/svg-file-control.component';
 import { DndFileControlComponent } from '../../../../../shared/components/dnd-file-control/dnd-file-control.component';
-import { CPropertiesDialogComponent } from './components/c-properties-dialog/c-properties-dialog.component';
+import { CPropertiesGroupsDialogComponent } from './components/c-properties-groups-dialog/c-properties-groups-dialog.component';
 
 @Component({
   selector: 'app-category-item',
@@ -49,7 +49,7 @@ import { CPropertiesDialogComponent } from './components/c-properties-dialog/c-p
     ReactiveFormsModule,
     SvgFileControlComponent,
     DndFileControlComponent,
-    CPropertiesDialogComponent,
+    CPropertiesGroupsDialogComponent,
   ],
   templateUrl: './category-item.component.html',
   styleUrl: './category-item.component.scss',
@@ -60,11 +60,11 @@ export class CategoryItemComponent implements OnInit {
 
   public readonly dialogEnum = PopupTypeEnum;
 
-  public currentCategory$!: Observable<CurrentCategoryStatusInterface>;
+  public currentCategory$!: Observable<CurrentStatusInterface>;
 
   public hasChildren$!: Observable<boolean>;
 
-  public hasProperties$!: Observable<boolean>;
+  public hasGroups$!: Observable<boolean>;
 
   public dialog$!: Observable<PopupDataInterface>;
 
@@ -83,9 +83,7 @@ export class CategoryItemComponent implements OnInit {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
     this.dialog$ = this.store.select(selectPopup);
     this.hasChildren$ = this.store.select(selectHasChildren(this.category.id));
-    this.hasProperties$ = this.store.select(
-      selectHasProperties(this.category.id),
-    );
+    this.hasGroups$ = this.store.select(selectHasGroups(this.category.id));
   }
 
   public initCategoryForm(): void {
@@ -118,18 +116,19 @@ export class CategoryItemComponent implements OnInit {
   public editCategory(): void {
     this.initCategoryForm();
     this.store.dispatch(
-      CategoryActions.updateCPState({
+      CategoryActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
           currentCategory: { id: this.category.id, isEditable: true },
+          currentGroup: { id: null, isEditable: false },
         },
       }),
     );
   }
 
   public cancelEditCategory(): void {
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 
   public saveCategory(): void {
@@ -156,11 +155,12 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CategoryActions.updateCPState({
+      CategoryActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
           currentCategory: { id: this.category.id, isEditable: false },
+          currentGroup: { id: null, isEditable: false },
         },
       }),
     );
@@ -184,21 +184,22 @@ export class CategoryItemComponent implements OnInit {
     this.imageConfig.height = imgElement.height;
   }
 
-  public openPropertiesDialog(): void {
+  public openGroupsDialog(): void {
     this.store.dispatch(
       PopupActions.openPopup({
         popup: {
-          title: 'Характеристики',
-          popupType: PopupTypeEnum.CProperties,
+          title: 'Групи характеристик',
+          popupType: PopupTypeEnum.CPropertiesGroups,
         },
       }),
     );
     this.store.dispatch(
-      CategoryActions.updateCPState({
+      CategoryActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
           currentCategory: { id: this.category.id, isEditable: false },
+          currentGroup: { id: null, isEditable: false },
         },
       }),
     );

@@ -20,6 +20,7 @@ import { CategoryItemComponent } from './components/category-item/category-item.
 import { NewCategoryComponent } from './components/new-category/new-category.component';
 import { CategoryActions } from '../../../+store/categories/actions/category.actions';
 import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.type';
+import { CPropertiesGroupItemComponent } from './components/c-properties-group-item/c-properties-group-item.component';
 import { CPropertyItemComponent } from './components/c-property-item/c-property-item.component';
 
 @Component({
@@ -30,6 +31,7 @@ import { CPropertyItemComponent } from './components/c-property-item/c-property-
     AsyncPipe,
     CategoryItemComponent,
     NewCategoryComponent,
+    CPropertiesGroupItemComponent,
     CPropertyItemComponent,
   ],
   templateUrl: './categories.component.html',
@@ -46,17 +48,17 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 
   public expandAll(): void {
     this.store.dispatch(CategoryActions.updateCategories({ expanded: true }));
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 
   public collapseAll(): void {
     this.store.dispatch(CategoryActions.updateCategories({ expanded: false }));
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 
   public nodeExpand(event: TreeNodeExpandEvent): void {
@@ -65,7 +67,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         category: { ...event.node.data, expanded: true },
       }),
     );
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 
   public nodeCollapse(event: TreeNodeCollapseEvent): void {
@@ -74,6 +76,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         category: { ...event.node.data, expanded: false },
       }),
     );
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 }

@@ -6,5 +6,6 @@ export enum PopupTypeEnum {
   SubCategories = 'SubCategories',
   MainMenu = 'MainMenu',
   Catalog = 'Catalog',
-  CProperties = 'C-properties',
+  CProperties = 'CProperties',
+  CPropertiesGroups = 'CPropertiesGroups',
 }

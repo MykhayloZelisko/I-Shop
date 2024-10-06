@@ -10,12 +10,12 @@ export const devicesRoutes: Routes = [
       ),
     pathMatch: 'full',
   },
-  {
-    path: DevicesRouteNameEnum.DeviceId,
-    loadComponent: () =>
-      import('../user/pages/device/device.component').then(
-        (m) => m.DeviceComponent,
-      ),
-    loadChildren: () => import('./device.routes').then((m) => m.deviceRoutes),
-  },
+  // {
+  //   path: DevicesRouteNameEnum.DeviceId,
+  //   loadComponent: () =>
+  //     import('../user/pages/device/device.component').then(
+  //       (m) => m.DeviceComponent,
+  //     ),
+  //   loadChildren: () => import('./device.routes').then((m) => m.deviceRoutes),
+  // },
 ];

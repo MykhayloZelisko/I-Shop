@@ -4,272 +4,272 @@
 .new-device {
   padding: 12px;
 
-  &__file {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
-    border: 1px solid $white-1;
-    border-radius: 4px;
-    padding: 10px;
-    gap: 10px;
-    background-color: $white-1;
-
-    &--invalid {
-      border-color: $red-1;
-    }
-  }
-
-  &__file-wrapper {
-    height: 234px;
-  }
-
-  &__files {
-    margin: 10px 0;
-    display: flex;
-    gap: 10px 15px;
-    flex-wrap: wrap;
-  }
-
-  &__field {
-    height: 78px;
-  }
-
-  &__label {
-    font-size: 14px;
-    display: block;
-    font-family: $source;
-    font-weight: 600;
-  }
-
-  &__input {
-    @include input-style(9px 12px);
-
-    margin-top: 8px;
-
-    &--file {
-      display: none;
-    }
-  }
-
-  &__error {
-    font-family: $source;
-    font-size: 12px;
-    color: $red-1;
-    font-weight: 700;
-
-    &--images {
-      line-height: 1.5;
-    }
-  }
-
-  &__upload-button {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
-
-    margin-top: 8px;
-    white-space: nowrap;
-  }
-
-  &__save-button {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
-  }
-
-  &__cancel-button {
-    @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
-  }
-
-  &__icon {
-    @include icon-style($brown-1, 24px);
-
-    &:hover {
-      @include icon-style($red-1);
-    }
-  }
-
-  &__delete-button {
-    @include icon-button-style(30px, transparent);
-  }
-
-  &__title {
-    font-family: $source;
-    font-size: 16px;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  &__buttons {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-  }
+//  &__file {
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
+//      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+//    border: 1px solid $white-1;
+//    border-radius: 4px;
+//    padding: 10px;
+//    gap: 10px;
+//    background-color: $white-1;
+//
+//    &--invalid {
+//      border-color: $red-1;
+//    }
+//  }
+//
+//  &__file-wrapper {
+//    height: 234px;
+//  }
+//
+//  &__files {
+//    margin: 10px 0;
+//    display: flex;
+//    gap: 10px 15px;
+//    flex-wrap: wrap;
+//  }
+//
+//  &__field {
+//    height: 78px;
+//  }
+//
+//  &__label {
+//    font-size: 14px;
+//    display: block;
+//    font-family: $source;
+//    font-weight: 600;
+//  }
+//
+//  &__input {
+//    @include input-style(9px 12px);
+//
+//    margin-top: 8px;
+//
+//    &--file {
+//      display: none;
+//    }
+//  }
+//
+//  &__error {
+//    font-family: $source;
+//    font-size: 12px;
+//    color: $red-1;
+//    font-weight: 700;
+//
+//    &--images {
+//      line-height: 1.5;
+//    }
+//  }
+//
+//  &__upload-button {
+//    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
+//
+//    margin-top: 8px;
+//    white-space: nowrap;
+//  }
+//
+//  &__save-button {
+//    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
+//  }
+//
+//  &__cancel-button {
+//    @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
+//  }
+//
+//  &__icon {
+//    @include icon-style($brown-1, 24px);
+//
+//    &:hover {
+//      @include icon-style($red-1);
+//    }
+//  }
+//
+//  &__delete-button {
+//    @include icon-button-style(30px, transparent);
+//  }
+//
+//  &__title {
+//    font-family: $source;
+//    font-size: 16px;
+//    text-align: center;
+//    font-weight: bold;
+//  }
+//
+//  &__buttons {
+//    display: flex;
+//    justify-content: center;
+//    gap: 18px;
+//  }
 }
 
-:host ::ng-deep {
-  .p-dropdown-label,
-  .p-cascadeselect-label {
-    padding: 11px 12px;
-    font-family: $source;
-    font-size: 16px;
-    color: $black;
-  }
-
-  .p-dropdown-trigger,
-  .p-cascadeselect-trigger {
-    display: none;
-  }
-
-  .p-placeholder {
-    color: $gray-6;
-  }
-
-  .p-dropdown,
-  .p-cascadeselect {
-    border-radius: 3px;
-    border: 1px solid $brown-5;
-    width: 100%;
-    margin-top: 8px;
-
-    &:hover {
-      border-color: $brown-1 !important;
-    }
-
-    &::after {
-      content: '';
-      width: 10px;
-      height: 10px;
-      background: url('/assets/images/line-angle-down-icon.svg') center center
-        no-repeat;
-      position: relative;
-      top: 15px;
-      right: 15px;
-    }
-  }
-
-  .p-cascadeselect-sublist {
-    max-width: 525px;
-    min-width: auto;
-    width: calc(33.33vw - 8px);
-    left: calc(min(33.33vw - 8px, 525px));
-  }
-
-  .p-cascadeselect .p-overlay-content {
-    max-width: 525px;
-    width: calc(33.33vw - 8px);
-    min-width: auto;
-  }
-
-  .p-focus {
-    border-color: $brown-2 !important;
-  }
-
-  .p-dropdown:not(.p-disabled).p-focus,
-  .p-cascadeselect:not(.p-disabled).p-focus {
-    box-shadow: none;
-  }
-
-  .p-dropdown-panel {
-    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
-    border-radius: 4px;
-
-    & .p-dropdown-items {
-      & .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
-        background-color: $brown-4 !important;
-      }
-
-      & .p-dropdown-item {
-        padding: 5px 12px;
-        font-family: $source;
-        font-size: 16px;
-        color: $black;
-
-        &:hover {
-          background-color: $brown-4 !important;
-          color: $black !important;
-        }
-      }
-
-      & .p-element:first-child {
-        & .p-dropdown-item {
-          border-radius: 4px 4px 0 0;
-        }
-      }
-
-      & .p-element:last-child {
-        & .p-dropdown-item {
-          border-radius: 0 0 4px 4px;
-        }
-      }
-
-      & .p-dropdown-item.p-highlight {
-        color: $black;
-        background-color: $brown-4;
-      }
-    }
-  }
-
-  .p-cascadeselect-panel {
-    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
-    border-radius: 4px;
-
-    & .p-cascadeselect-items {
-      & .p-cascadeselect-item:not(.p-highlight):not(.p-disabled).p-focus {
-        background-color: $brown-4 !important;
-      }
-
-      & .p-cascadeselect-item {
-        padding: 5px 12px;
-        font-family: $source;
-        font-size: 16px;
-        color: $black;
-
-        &:hover {
-          background-color: $brown-4 !important;
-          color: $black !important;
-        }
-
-        & .p-cascadeselect-item-content {
-          padding: 0;
-        }
-      }
-
-      & .p-cascadeselect-item:first-child {
-        border-radius: 4px 4px 0 0;
-      }
-
-      & .p-cascadeselect-item:last-child {
-        border-radius: 0 0 4px 4px;
-      }
-
-      & .p-cascadeselect-item.p-highlight {
-        color: $black;
-        background-color: $brown-4;
-      }
-    }
-  }
-
-  .p-dropdown-items-wrapper::-webkit-scrollbar {
-    appearance: none;
-  }
-
-  .p-dropdown-items-wrapper::-webkit-scrollbar:vertical {
-    width: 7px;
-    background-color: $white-1;
-  }
-
-  .p-dropdown-items-wrapper::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    border: 2px solid $white-1 !important;
-    background-color: $brown-1;
-  }
-
-  .invalid-dropdown.ng-invalid.ng-touched,
-  .invalid-dropdown.ng-invalid.ng-touched:hover {
-    & .p-dropdown,
-    & .p-cascadeselect {
-      border: 1px solid $red-1 !important;
-    }
-  }
-}
+//:host ::ng-deep {
+//  .p-dropdown-label,
+//  .p-cascadeselect-label {
+//    padding: 11px 12px;
+//    font-family: $source;
+//    font-size: 16px;
+//    color: $black;
+//  }
+//
+//  .p-dropdown-trigger,
+//  .p-cascadeselect-trigger {
+//    display: none;
+//  }
+//
+//  .p-placeholder {
+//    color: $gray-6;
+//  }
+//
+//  .p-dropdown,
+//  .p-cascadeselect {
+//    border-radius: 3px;
+//    border: 1px solid $brown-5;
+//    width: 100%;
+//    margin-top: 8px;
+//
+//    &:hover {
+//      border-color: $brown-1 !important;
+//    }
+//
+//    &::after {
+//      content: '';
+//      width: 10px;
+//      height: 10px;
+//      background: url('/assets/images/line-angle-down-icon.svg') center center
+//        no-repeat;
+//      position: relative;
+//      top: 15px;
+//      right: 15px;
+//    }
+//  }
+//
+//  .p-cascadeselect-sublist {
+//    max-width: 525px;
+//    min-width: auto;
+//    width: calc(33.33vw - 8px);
+//    left: calc(min(33.33vw - 8px, 525px));
+//  }
+//
+//  .p-cascadeselect .p-overlay-content {
+//    max-width: 525px;
+//    width: calc(33.33vw - 8px);
+//    min-width: auto;
+//  }
+//
+//  .p-focus {
+//    border-color: $brown-2 !important;
+//  }
+//
+//  .p-dropdown:not(.p-disabled).p-focus,
+//  .p-cascadeselect:not(.p-disabled).p-focus {
+//    box-shadow: none;
+//  }
+//
+//  .p-dropdown-panel {
+//    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
+//      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+//    border-radius: 4px;
+//
+//    & .p-dropdown-items {
+//      & .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
+//        background-color: $brown-4 !important;
+//      }
+//
+//      & .p-dropdown-item {
+//        padding: 5px 12px;
+//        font-family: $source;
+//        font-size: 16px;
+//        color: $black;
+//
+//        &:hover {
+//          background-color: $brown-4 !important;
+//          color: $black !important;
+//        }
+//      }
+//
+//      & .p-element:first-child {
+//        & .p-dropdown-item {
+//          border-radius: 4px 4px 0 0;
+//        }
+//      }
+//
+//      & .p-element:last-child {
+//        & .p-dropdown-item {
+//          border-radius: 0 0 4px 4px;
+//        }
+//      }
+//
+//      & .p-dropdown-item.p-highlight {
+//        color: $black;
+//        background-color: $brown-4;
+//      }
+//    }
+//  }
+//
+//  .p-cascadeselect-panel {
+//    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
+//      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+//    border-radius: 4px;
+//
+//    & .p-cascadeselect-items {
+//      & .p-cascadeselect-item:not(.p-highlight):not(.p-disabled).p-focus {
+//        background-color: $brown-4 !important;
+//      }
+//
+//      & .p-cascadeselect-item {
+//        padding: 5px 12px;
+//        font-family: $source;
+//        font-size: 16px;
+//        color: $black;
+//
+//        &:hover {
+//          background-color: $brown-4 !important;
+//          color: $black !important;
+//        }
+//
+//        & .p-cascadeselect-item-content {
+//          padding: 0;
+//        }
+//      }
+//
+//      & .p-cascadeselect-item:first-child {
+//        border-radius: 4px 4px 0 0;
+//      }
+//
+//      & .p-cascadeselect-item:last-child {
+//        border-radius: 0 0 4px 4px;
+//      }
+//
+//      & .p-cascadeselect-item.p-highlight {
+//        color: $black;
+//        background-color: $brown-4;
+//      }
+//    }
+//  }
+//
+//  .p-dropdown-items-wrapper::-webkit-scrollbar {
+//    appearance: none;
+//  }
+//
+//  .p-dropdown-items-wrapper::-webkit-scrollbar:vertical {
+//    width: 7px;
+//    background-color: $white-1;
+//  }
+//
+//  .p-dropdown-items-wrapper::-webkit-scrollbar-thumb {
+//    border-radius: 3px;
+//    border: 2px solid $white-1 !important;
+//    background-color: $brown-1;
+//  }
+//
+//  .invalid-dropdown.ng-invalid.ng-touched,
+//  .invalid-dropdown.ng-invalid.ng-touched:hover {
+//    & .p-dropdown,
+//    & .p-cascadeselect {
+//      border: 1px solid $red-1 !important;
+//    }
+//  }
+//}

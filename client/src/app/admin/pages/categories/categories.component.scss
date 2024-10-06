@@ -27,25 +27,52 @@
   &__info {
     display: flex;
     gap: 20px;
-    flex-direction: row;
-
-    & .categories__info-item:first-child .categories__info-circle {
-      background-color: $brown-4;
-    }
-
-    & .categories__info-item:nth-child(2) .categories__info-circle {
-      background-color: $red-2;
-    }
-
-    & .categories__info-item:last-child .categories__info-circle {
-      background-color: $blue-3;
-    }
   }
 
   &__info-item {
     display: flex;
     align-items: center;
     gap: 5px;
+
+    &--1 {
+      & .categories {
+        &__info-circle {
+          background-color: $brown-4;
+        }
+      }
+    }
+
+    &--2 {
+      & .categories {
+        &__info-circle {
+          background-color: $red-2;
+        }
+      }
+    }
+
+    &--3 {
+      & .categories {
+        &__info-circle {
+          background-color: $green;
+        }
+      }
+    }
+
+    &--4 {
+      & .categories {
+        &__info-circle {
+          background-color: $pink;
+        }
+      }
+    }
+
+    &--5 {
+      & .categories {
+        &__info-circle {
+          background-color: $blue-3;
+        }
+      }
+    }
   }
 
   &__info-text {
@@ -90,6 +117,8 @@
 
     &__info {
       justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
     }
   }
 }

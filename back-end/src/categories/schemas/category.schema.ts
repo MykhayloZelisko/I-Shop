@@ -21,7 +21,9 @@ export class Category {
   @Prop()
   public level: number;
 
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'CProperty' }] })
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'CPropertiesGroup' }],
+  })
   public groups: CPropertiesGroup[];
 }
 

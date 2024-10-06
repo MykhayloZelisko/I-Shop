@@ -1,8 +1,8 @@
-import { DeviceInterface } from './device.interface';
-
-export interface DevicesListInterface {
-  total: number;
-  page: number;
-  size: number;
-  devices: DeviceInterface[];
-}
+// import { DeviceInterface } from './device.interface';
+//
+// export interface DevicesListInterface {
+//   total: number;
+//   page: number;
+//   size: number;
+//   devices: DeviceInterface[];
+// }

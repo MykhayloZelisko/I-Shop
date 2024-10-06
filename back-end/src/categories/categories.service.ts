@@ -104,7 +104,9 @@ export class CategoriesService {
       }
       await this.categoryModel.findByIdAndDelete(id).exec();
     }
-    await this.cPropertiesGroupsService.deleteAllGroupsByCategoryId(category.id);
+    await this.cPropertiesGroupsService.deleteAllGroupsByCategoryId(
+      category.id,
+    );
     return subCategoriesIds;
   }
 

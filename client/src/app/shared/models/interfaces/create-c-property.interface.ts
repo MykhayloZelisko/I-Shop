@@ -1,4 +1,4 @@
 export interface CreateCPropertyInterface {
-  categoryId: string;
+  groupId: string;
   propertyName: string;
 }

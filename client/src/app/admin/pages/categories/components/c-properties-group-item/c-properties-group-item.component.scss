@@ -1,0 +1,77 @@
+@import 'variables';
+@import 'mixins';
+
+.c-properties-group-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $green;
+  font-family: $source;
+  border-radius: 5px;
+  color: $brown-1;
+  font-size: 16px;
+  padding: 5px 10px;
+  min-height: 40px;
+
+  &--empty {
+    background-color: $pink;
+  }
+
+  &--editable {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: $blue-3;
+    border-radius: 5px;
+  }
+
+  &__name {
+    font-size: 16px;
+  }
+
+  &__button {
+    @include icon-button-style(30px, transparent, $disabled: true);
+
+    &:disabled {
+      & .c-properties-group-item {
+        &__icon {
+          @include icon-style($gray-5);
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    opacity: 0;
+
+    &--editable {
+      display: flex;
+      opacity: 1;
+    }
+  }
+
+  &:hover &__buttons {
+    opacity: 1;
+  }
+
+  &__icon {
+    @include icon-style($brown-1, 24px);
+
+    &--save:hover,
+    &--add:hover,
+    &--edit:hover {
+      @include icon-style($blue-1);
+    }
+
+    &--cancel:hover,
+    &--delete:hover {
+      @include icon-style($red-1);
+    }
+  }
+
+  &__input {
+    @include input-style(9px 12px);
+  }
+}

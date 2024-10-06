@@ -3,12 +3,13 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CategoryActions } from '../actions/category.actions';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { UpdateStr } from '@ngrx/entity/src/models';
-import { CurrentCategoryStatusInterface } from '../../../shared/models/interfaces/current-category-status.interface';
+import { CurrentStatusInterface } from '../../../shared/models/interfaces/current-status.interface';
 
 export const categoriesFeatureKey = 'categories';
 
 export interface State extends EntityState<CategoryInterface> {
-  currentCategory: CurrentCategoryStatusInterface;
+  currentCategory: CurrentStatusInterface;
+  currentGroup: CurrentStatusInterface;
   isNewCategory: boolean;
   currentPropertyId: string | null;
 }
@@ -18,6 +19,10 @@ export const adapter: EntityAdapter<CategoryInterface> =
 
 export const initialState: State = adapter.getInitialState({
   currentCategory: {
+    id: null,
+    isEditable: false,
+  },
+  currentGroup: {
     id: null,
     isEditable: false,
   },
@@ -63,6 +68,9 @@ export const reducer = createReducer(
     adapter.setAll(action.categories, state),
   ),
   on(
+    CategoryActions.addCPropertiesGroupsSuccess,
+    CategoryActions.updateCPropertiesGroupSuccess,
+    CategoryActions.deleteCPropertiesGroupSuccess,
     CategoryActions.addCPropertiesSuccess,
     CategoryActions.updateCPropertySuccess,
     CategoryActions.deleteCPropertySuccess,
@@ -70,23 +78,25 @@ export const reducer = createReducer(
       const update: UpdateStr<CategoryInterface> = {
         id: action.category.id,
         changes: {
-          properties: action.category.properties,
+          groups: action.category.groups,
         },
       };
       return adapter.updateOne(update, state);
     },
   ),
   // other actions
-  on(CategoryActions.updateCPState, (state, action) => ({
+  on(CategoryActions.updateCGPState, (state, action) => ({
     ...state,
     currentPropertyId: action.payload.currentPropertyId,
     isNewCategory: action.payload.isNewCategory,
     currentCategory: { ...action.payload.currentCategory },
+    currentGroup: { ...action.payload.currentGroup },
   })),
-  on(CategoryActions.clearCPState, (state) => ({
+  on(CategoryActions.clearCGPState, (state) => ({
     ...state,
     currentPropertyId: null,
     isNewCategory: false,
     currentCategory: { id: null, isEditable: false },
+    currentGroup: { id: null, isEditable: false },
   })),
 );

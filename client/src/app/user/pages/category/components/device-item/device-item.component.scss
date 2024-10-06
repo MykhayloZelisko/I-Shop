@@ -1,68 +1,68 @@
-@import 'variables';
-@import 'mixins';
-
-.device {
-  border-right: 1px solid $gray-4;
-  border-bottom: 1px solid $gray-4;
-  padding: 16px;
-  height: 100%;
-  position: relative;
-
-  &:hover {
-    border: none;
-    box-shadow: 0 16px 16px $blue-3;
-  }
-
-  &__image {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: contain;
-    margin-bottom: 10px;
-  }
-
-  &__name {
-    font-size: 18px;
-    font-family: $source;
-    text-decoration: none;
-    color: $black;
-  }
-
-  &__price {
-    font-size: 22px;
-    font-family: $source;
-    color: $brown-2;
-  }
-
-  &__price-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  &__icon {
-    @include icon-style($brown-2, 24px);
-
-    &--heart {
-      @include icon-style($yellow, 24px);
-    }
-  }
-
-  &__button {
-    @include icon-button-style(40px, $white-2, 5px, $blue-3);
-  }
-
-  &__buttons {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  &__info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-}
+//@import 'variables';
+//@import 'mixins';
+//
+//.device {
+//  border-right: 1px solid $gray-4;
+//  border-bottom: 1px solid $gray-4;
+//  padding: 16px;
+//  height: 100%;
+//  position: relative;
+//
+//  &:hover {
+//    border: none;
+//    box-shadow: 0 16px 16px $blue-3;
+//  }
+//
+//  &__image {
+//    width: 100%;
+//    aspect-ratio: 1;
+//    object-fit: contain;
+//    margin-bottom: 10px;
+//  }
+//
+//  &__name {
+//    font-size: 18px;
+//    font-family: $source;
+//    text-decoration: none;
+//    color: $black;
+//  }
+//
+//  &__price {
+//    font-size: 22px;
+//    font-family: $source;
+//    color: $brown-2;
+//  }
+//
+//  &__price-wrapper {
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//  }
+//
+//  &__icon {
+//    @include icon-style($brown-2, 24px);
+//
+//    &--heart {
+//      @include icon-style($yellow, 24px);
+//    }
+//  }
+//
+//  &__button {
+//    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+//  }
+//
+//  &__buttons {
+//    position: absolute;
+//    top: 16px;
+//    right: 16px;
+//    display: flex;
+//    flex-direction: column;
+//    gap: 10px;
+//  }
+//
+//  &__info {
+//    display: flex;
+//    flex-direction: column;
+//    gap: 8px;
+//  }
+//}

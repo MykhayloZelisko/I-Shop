@@ -1,23 +1,23 @@
-<div class="sub-category-item">
-  <img
-    class="sub-category-item__image"
-    [src]="category.image"
-    [alt]="category.image"
-  />
-  <a
-    class="sub-category-item__link"
-    [routerLink]="['/categories', category.id]"
-    >{{ category.categoryName }}</a
-  >
-  <ul>
-    @for (subCategory of category.children; track subCategory) {
-      <li>
-        <a
-          class="sub-category-item__link sub-category-item__link--sub-link"
-          [routerLink]="['/categories', subCategory.id]"
-          >{{ subCategory.categoryName }}</a
-        >
-      </li>
-    }
-  </ul>
-</div>
+<!--<div class="sub-category-item">-->
+<!--  <img-->
+<!--    class="sub-category-item__image"-->
+<!--    [src]="category.image"-->
+<!--    [alt]="category.image"-->
+<!--  />-->
+<!--  <a-->
+<!--    class="sub-category-item__link"-->
+<!--    [routerLink]="['/categories', category.id]"-->
+<!--    >{{ category.categoryName }}</a-->
+<!--  >-->
+<!--  <ul>-->
+<!--    @for (subCategory of category.children; track subCategory) {-->
+<!--      <li>-->
+<!--        <a-->
+<!--          class="sub-category-item__link sub-category-item__link&#45;&#45;sub-link"-->
+<!--          [routerLink]="['/categories', subCategory.id]"-->
+<!--          >{{ subCategory.categoryName }}</a-->
+<!--        >-->
+<!--      </li>-->
+<!--    }-->
+<!--  </ul>-->
+<!--</div>-->

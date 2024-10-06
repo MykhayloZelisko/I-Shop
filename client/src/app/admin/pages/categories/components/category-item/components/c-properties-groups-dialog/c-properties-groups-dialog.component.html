@@ -1,0 +1,66 @@
+<div class="c-properties-groups-dialog__wrapper" appClickOutside>
+  <div class="c-properties-groups-dialog">
+    <div class="c-properties-groups-dialog__header">
+      <h3 class="c-properties-groups-dialog__title">{{ dialog.title }}</h3>
+      <button
+        class="c-properties-groups-dialog__icon-button c-properties-groups-dialog__icon-button--close"
+        (click)="closeDialog()"
+      >
+        <svg-icon
+          class="c-properties-groups-dialog__icon c-properties-groups-dialog__icon--close"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+    <div class="c-properties-groups-dialog__body">
+      <div
+        [formGroup]="cPropertiesGroupsForm"
+        class="c-properties-groups-dialog__form"
+      >
+        <ng-container formArrayName="groups">
+          @for (
+            control of getGroups().controls;
+            let index = $index;
+            track control
+          ) {
+            <div
+              class="c-properties-groups-dialog__field"
+              [formGroupName]="index"
+            >
+              <input
+                class="c-properties-groups-dialog__input"
+                type="text"
+                formControlName="groupName"
+                (keydown.space)="$event.stopPropagation()"
+              />
+              <button
+                class="c-properties-groups-dialog__icon-button"
+                [disabled]="getGroups().controls.length === 1"
+                (click)="deleteGroup(index)"
+              >
+                <svg-icon
+                  class="c-properties-groups-dialog__icon c-properties-groups-dialog__icon--delete"
+                  src="assets/images/trash-bin-icon.svg"
+                ></svg-icon>
+              </button>
+            </div>
+          }
+        </ng-container>
+      </div>
+      <button
+        class="c-properties-groups-dialog__button"
+        (click)="addGroup()"
+        [disabled]="getGroups().length === 10"
+      >
+        Додати
+      </button>
+      <button
+        class="c-properties-groups-dialog__button--save"
+        (click)="saveGroups()"
+        [disabled]="cPropertiesGroupsForm.invalid"
+      >
+        Зберегти
+      </button>
+    </div>
+  </div>
+</div>

@@ -61,9 +61,12 @@ export class DevicesService {
                   id
                   brandName
                 }
-                properties {
-                  propertyName
-                  value
+                groups {
+                  groupName
+                  properties {
+                    propertyName
+                    value
+                  }
                 }
                 category {
                   id
@@ -118,9 +121,12 @@ export class DevicesService {
                 id
                 brandName
               }
-              properties {
-                propertyName
-                value
+              groups {
+                groupName
+                properties {
+                  propertyName
+                  value
+                }
               }
               category {
                 id

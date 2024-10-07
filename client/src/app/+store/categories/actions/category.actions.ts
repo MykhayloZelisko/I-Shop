@@ -3,7 +3,8 @@ import { CategoryInterface } from '../../../shared/models/interfaces/category.in
 import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
 import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
 import { CreateCPropertyInterface } from '../../../shared/models/interfaces/create-c-property.interface';
-import { CPStateInterface } from '../../../shared/models/interfaces/c-p-state.interface';
+import { CGPStateInterface } from '../../../shared/models/interfaces/c-g-p-state.interface';
+import { CreateCPropertiesGroupInterface } from '../../../shared/models/interfaces/create-c-properties-group.interface';
 
 export const CategoryActions = createActionGroup({
   source: 'Category/API',
@@ -35,8 +36,19 @@ export const CategoryActions = createActionGroup({
     UpdateCProperty: props<{ id: string; propertyName: string }>(),
     UpdateCPropertySuccess: props<{ category: CategoryInterface }>(),
     UpdateCPropertyFailure: emptyProps(),
+    AddCPropertiesGroups: props<{
+      groups: CreateCPropertiesGroupInterface[];
+    }>(),
+    AddCPropertiesGroupsSuccess: props<{ category: CategoryInterface }>(),
+    AddCPropertiesGroupsFailure: emptyProps(),
+    UpdateCPropertiesGroup: props<{ id: string; groupName: string }>(),
+    UpdateCPropertiesGroupSuccess: props<{ category: CategoryInterface }>(),
+    UpdateCPropertiesGroupFailure: emptyProps(),
+    DeleteCPropertiesGroup: props<{ id: string }>(),
+    DeleteCPropertiesGroupSuccess: props<{ category: CategoryInterface }>(),
+    DeleteCPropertiesGroupFailure: emptyProps(),
     // Other actions
-    UpdateCPState: props<{ payload: CPStateInterface }>(),
-    ClearCPState: emptyProps(),
+    UpdateCGPState: props<{ payload: CGPStateInterface }>(),
+    ClearCGPState: emptyProps(),
   },
 });

@@ -1,4 +1,4 @@
-import { DPropertyInterface } from './d-property.interface';
+import { DPropertiesGroupInterface } from './d-properties-group.interface';
 
 export interface CreateDeviceInterface {
   deviceName: string;
@@ -7,5 +7,5 @@ export interface CreateDeviceInterface {
   images: string[];
   categoryId: string;
   brandId: string;
-  properties: DPropertyInterface[];
+  groups: DPropertiesGroupInterface[];
 }

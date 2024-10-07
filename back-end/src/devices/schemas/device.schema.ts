@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { Category } from '../../categories/schemas/category.schema';
 import { Brand } from '../../brands/schemas/brand.schema';
-import { DProperty } from './d-property.schema';
+import { DPropertiesGroup } from './d-properties-group.schema';
 
 export type DeviceDocument = HydratedDocument<Device>;
 
@@ -35,8 +35,8 @@ export class Device {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Brand' })
   public brand: Brand;
 
-  @Prop({ type: [DProperty] })
-  public properties: DProperty[];
+  @Prop({ type: [DPropertiesGroup] })
+  public groups: DPropertiesGroup[];
 }
 
 export const DeviceSchema = SchemaFactory.createForClass(Device);

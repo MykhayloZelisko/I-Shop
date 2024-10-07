@@ -62,6 +62,10 @@
     &--images {
       line-height: 1.5;
     }
+
+    &--group {
+      margin-bottom: 10px;
+    }
   }
 
   &__upload-button {
@@ -93,9 +97,21 @@
 
   &__title {
     font-family: $source;
-    font-size: 16px;
+    font-size: 22px;
     text-align: center;
     font-weight: bold;
+  }
+
+  &__sub-title {
+    font-family: $source;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+
+    &--invalid {
+      margin-bottom: 0;
+      color: $red-1;
+    }
   }
 
   &__buttons {
@@ -174,7 +190,7 @@
     border-radius: 4px;
 
     & .p-dropdown-items {
-      & .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
+      & .p-dropdown-item:not(.p-highlight, .p-disabled).p-focus {
         background-color: $brown-4 !important;
       }
 
@@ -215,7 +231,7 @@
     border-radius: 4px;
 
     & .p-cascadeselect-items {
-      & .p-cascadeselect-item:not(.p-highlight):not(.p-disabled).p-focus {
+      & .p-cascadeselect-item:not(.p-highlight, .p-disabled).p-focus {
         background-color: $brown-4 !important;
       }
 

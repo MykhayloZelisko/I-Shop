@@ -1,6 +1,6 @@
 import { CategoryInterface } from './category.interface';
 import { BrandInterface } from './brand.interface';
-import { DPropertyInterface } from './d-property.interface';
+import { DPropertiesGroupInterface } from './d-properties-group.interface';
 
 export interface DeviceInterface {
   id: string;
@@ -13,5 +13,5 @@ export interface DeviceInterface {
   categories: CategoryInterface[];
   category: CategoryInterface;
   brand: BrandInterface;
-  properties: DPropertyInterface[];
+  groups: DPropertiesGroupInterface[];
 }

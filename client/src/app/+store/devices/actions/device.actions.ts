@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Update } from '@ngrx/entity';
+// import { Update } from '@ngrx/entity';
 import { CreateDeviceInterface } from '../../../shared/models/interfaces/create-device.interface';
 import { DevicesListInterface } from '../../../shared/models/interfaces/devices-list.interface';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';

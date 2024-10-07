@@ -14,6 +14,7 @@ import { Model } from 'mongoose';
 import { CProperty, CPropertyDocument } from './schemas/c-property.schema';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/models/category.model';
+import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
 import { DeleteResult } from 'mongodb';
 
 @Injectable()
@@ -23,20 +24,14 @@ export class CPropertiesService {
     private cPropertyModel: Model<CPropertyDocument>,
     @Inject(forwardRef(() => CategoriesService))
     private categoriesService: CategoriesService,
+    @Inject(forwardRef(() => CPropertiesGroupsService))
+    private cPropertiesGroupsService: CPropertiesGroupsService,
   ) {}
 
   public async createCProperties(
     createCPropertyInputs: CreateCPropertyInput[],
   ): Promise<Category> {
-    const categoryId = createCPropertyInputs[0].categoryId;
-    const subcategoriesIds =
-      await this.categoriesService.findSubCategoriesIds(categoryId);
-    if (subcategoriesIds.length > 1) {
-      throw new ConflictException(
-        'A category cannot include properties and subcategories',
-      );
-    }
-
+    const groupId = createCPropertyInputs[0].groupId;
     const propertyNames = createCPropertyInputs.map(
       (input) => input.propertyName,
     );
@@ -45,14 +40,14 @@ export class CPropertiesService {
 
     const existedProperties = await this.cPropertyModel
       .find({
-        categoryId,
+        groupId,
         propertyName: { $in: propertyNames },
       })
       .exec();
 
     if (existedProperties.length || hasDuplicates) {
       throw new ConflictException(
-        'A category cannot have two properties with the same name',
+        'A group of properties cannot have two properties with the same name',
       );
     }
 
@@ -62,8 +57,8 @@ export class CPropertiesService {
     const propertyIds = createdProperties.map(
       (property: CPropertyDocument) => property.id,
     );
-    return this.categoriesService.addPropertiesToCategory(
-      categoryId,
+    return this.cPropertiesGroupsService.addPropertiesToGroup(
+      groupId,
       propertyIds,
     );
   }
@@ -77,7 +72,7 @@ export class CPropertiesService {
       .exec();
     if (property && property.id !== id) {
       throw new ConflictException(
-        'A category cannot have two properties with the same name',
+        'A group cannot have two properties with the same name',
       );
     }
     const updatedProperty = await this.cPropertyModel
@@ -88,7 +83,10 @@ export class CPropertiesService {
       )
       .exec();
     if (updatedProperty) {
-      return this.categoriesService.getCategoryById(updatedProperty.categoryId);
+      const group = await this.cPropertiesGroupsService.findGroupByPropertyId(
+        updatedProperty.id,
+      );
+      return this.categoriesService.getCategoryById(group.categoryId);
     }
     throw new BadRequestException('A property is not updated');
   }
@@ -97,26 +95,24 @@ export class CPropertiesService {
     // TODO: check products. If a property cannot be deleted you should throw ForbiddenException
     const property = await this.cPropertyModel.findByIdAndDelete(id).exec();
     if (property) {
-      return this.categoriesService.getCategoryById(property.categoryId);
+      const group = await this.cPropertiesGroupsService.findGroupByPropertyId(
+        property.id,
+      );
+      return this.categoriesService.getCategoryById(group.categoryId);
     } else {
       throw new NotFoundException('Property not found');
     }
   }
 
-  public async deleteAllCPropertiesByCategoryId(
-    categoryId: string,
+  public async deleteAllCPropertiesByGroupIds(
+    groupIds: string[],
   ): Promise<DeleteResult> {
     try {
-      return await this.cPropertyModel.deleteMany({ categoryId }).exec();
+      return await this.cPropertyModel
+        .deleteMany({ groupId: { $in: groupIds } })
+        .exec();
     } catch {
       throw new InternalServerErrorException('Something is wrong');
     }
-  }
-
-  public async findCPropertiesIdsByCategoryId(
-    categoryId: string,
-  ): Promise<string[]> {
-    const properties = await this.cPropertyModel.find({ categoryId }).exec();
-    return properties.map((property) => property.id);
   }
 }

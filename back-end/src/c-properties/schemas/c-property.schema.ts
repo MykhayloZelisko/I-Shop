@@ -9,7 +9,7 @@ export class CProperty {
   public propertyName: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId })
-  public categoryId: string;
+  public groupId: string;
 }
 
 export const CPropertySchema = SchemaFactory.createForClass(CProperty);

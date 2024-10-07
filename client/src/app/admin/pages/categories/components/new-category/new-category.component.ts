@@ -55,11 +55,12 @@ export class NewCategoryComponent implements OnInit {
   public addCategory(): void {
     this.newCategoryForm.reset();
     this.store.dispatch(
-      CategoryActions.updateCPState({
+      CategoryActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: true,
           currentCategory: { id: null, isEditable: false },
+          currentGroup: { id: null, isEditable: false },
         },
       }),
     );
@@ -80,6 +81,6 @@ export class NewCategoryComponent implements OnInit {
   }
 
   public cancelAddCategory(): void {
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 }

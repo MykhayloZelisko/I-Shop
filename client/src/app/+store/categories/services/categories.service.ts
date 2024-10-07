@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environment';
 import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
 import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
 import { CreateCPropertyInterface } from '../../../shared/models/interfaces/create-c-property.interface';
+import { CreateCPropertiesGroupInterface } from '../../../shared/models/interfaces/create-c-properties-group.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -26,10 +27,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -74,10 +80,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -122,10 +133,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -164,10 +180,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -233,10 +254,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -273,11 +299,11 @@ export class CategoriesService {
         mutation: gql`
           mutation UpdateCProperty(
             $id: String!
-            $updateCPropertyInputs: UpdateCPropertyInput!
+            $updateCPropertyInput: UpdateCPropertyInput!
           ) {
             updateCProperty(
               id: $id
-              updateCPropertyInput: $updateCPropertyInputs
+              updateCPropertyInput: $updateCPropertyInput
             ) {
               id
               categoryName
@@ -285,10 +311,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -328,10 +359,15 @@ export class CategoriesService {
               image
               icon
               level
-              properties {
+              groups {
                 id
                 categoryId
-                propertyName
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
               }
             }
           }
@@ -350,6 +386,165 @@ export class CategoriesService {
                 : null,
               icon: response.data.deleteCProperty.icon
                 ? `${environment.baseUrl}/${response.data.deleteCProperty.icon}`
+                : null,
+            };
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
+  }
+
+  public addCPropertiesGroup(
+    data: CreateCPropertiesGroupInterface[],
+  ): Observable<CategoryInterface> {
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation CreateCPropertiesGroups(
+            $createCPropertiesGroupInputs: [CreateCPropertiesGroupInput!]!
+          ) {
+            createCPropertiesGroups(
+              createCPropertiesGroupInputs: $createCPropertiesGroupInputs
+            ) {
+              id
+              categoryName
+              parentId
+              image
+              icon
+              level
+              groups {
+                id
+                categoryId
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
+              }
+            }
+          }
+        `,
+        variables: { createCPropertiesGroupInputs: data },
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return {
+              ...response.data.createCPropertiesGroups,
+              image: response.data.createCPropertiesGroups.image
+                ? `${environment.baseUrl}/${response.data.createCPropertiesGroups.image}`
+                : null,
+              icon: response.data.createCPropertiesGroups.icon
+                ? `${environment.baseUrl}/${response.data.createCPropertiesGroups.icon}`
+                : null,
+            };
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
+  }
+
+  public updateCPropertiesGroup(
+    id: string,
+    groupName: string,
+  ): Observable<CategoryInterface> {
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation UpdateCPropertiesGroup(
+            $id: String!
+            $updateCPropertiesGroupInput: UpdateCPropertiesGroupInput!
+          ) {
+            updateCPropertiesGroup(
+              id: $id
+              updateCPropertiesGroupInput: $updateCPropertiesGroupInput
+            ) {
+              id
+              categoryName
+              parentId
+              image
+              icon
+              level
+              groups {
+                id
+                categoryId
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
+              }
+            }
+          }
+        `,
+        variables: { id: id, updateCPropertiesGroupInput: { groupName } },
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return {
+              ...response.data.updateCPropertiesGroup,
+              image: response.data.updateCPropertiesGroup.image
+                ? `${environment.baseUrl}/${response.data.updateCPropertiesGroup.image}`
+                : null,
+              icon: response.data.updateCPropertiesGroup.icon
+                ? `${environment.baseUrl}/${response.data.updateCPropertiesGroup.icon}`
+                : null,
+            };
+          }
+        }),
+        catchError((error) => throwError(() => error)),
+      );
+  }
+
+  public deleteCPropertiesGroup(id: string): Observable<CategoryInterface> {
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation DeleteCPropertiesGroup($id: String!) {
+            deleteCPropertiesGroup(id: $id) {
+              id
+              categoryName
+              parentId
+              image
+              icon
+              level
+              groups {
+                id
+                categoryId
+                groupName
+                properties {
+                  id
+                  groupId
+                  propertyName
+                }
+              }
+            }
+          }
+        `,
+        variables: { id: id },
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return {
+              ...response.data.deleteCPropertiesGroup,
+              image: response.data.deleteCPropertiesGroup.image
+                ? `${environment.baseUrl}/${response.data.deleteCPropertiesGroup.image}`
+                : null,
+              icon: response.data.deleteCPropertiesGroup.icon
+                ? `${environment.baseUrl}/${response.data.deleteCPropertiesGroup.icon}`
                 : null,
             };
           }

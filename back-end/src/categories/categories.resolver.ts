@@ -14,7 +14,7 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
-import { CProperty } from '../c-properties/models/c-property.model';
+import { CPropertiesGroup } from '../c-properties-groups/models/c-properties-group.model';
 
 @Resolver(() => Category)
 export class CategoriesResolver {
@@ -62,8 +62,10 @@ export class CategoriesResolver {
     return this.categoriesService.deleteCategory(id);
   }
 
-  @ResolveField(() => [CProperty])
-  public async properties(@Parent() category: Category): Promise<CProperty[]> {
-    return category.properties;
+  @ResolveField(() => [CPropertiesGroup])
+  public async groups(
+    @Parent() category: Category,
+  ): Promise<CPropertiesGroup[]> {
+    return category.groups;
   }
 }

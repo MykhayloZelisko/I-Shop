@@ -56,7 +56,7 @@ export class CategoryEffects {
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.updateCategorySuccess({ category }),
-            CategoryActions.clearCPState(),
+            CategoryActions.clearCGPState(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());
@@ -87,7 +87,7 @@ export class CategoryEffects {
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.addCategorySuccess({ category }),
-            CategoryActions.clearCPState(),
+            CategoryActions.clearCGPState(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());
@@ -213,7 +213,7 @@ export class CategoryEffects {
             mergeMap((category) => [
               LoaderActions.toggleLoader(),
               CategoryActions.updateCPropertySuccess({ category }),
-              CategoryActions.clearCPState(),
+              CategoryActions.clearCGPState(),
             ]),
             catchError(() => {
               this.store.dispatch(LoaderActions.toggleLoader());
@@ -258,6 +258,100 @@ export class CategoryEffects {
     () =>
       this.actions$.pipe(
         ofType(CategoryActions.deleteCPropertyFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public addCPropertiesGroups$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.addCPropertiesGroups),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.categoriesService.addCPropertiesGroup(action.groups).pipe(
+          mergeMap((category) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.addCPropertiesGroupsSuccess({ category }),
+            PopupActions.closePopup(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.addCPropertiesGroupsFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public addCPropertiesGroupsFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.addCPropertiesGroupsFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public updateCPropertiesGroup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.updateCPropertiesGroup),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.categoriesService
+          .updateCPropertiesGroup(action.id, action.groupName)
+          .pipe(
+            mergeMap((category) => [
+              LoaderActions.toggleLoader(),
+              CategoryActions.updateCPropertiesGroupSuccess({ category }),
+              CategoryActions.clearCGPState(),
+            ]),
+            catchError(() => {
+              this.store.dispatch(LoaderActions.toggleLoader());
+              return of(CategoryActions.updateCPropertiesGroupFailure());
+            }),
+          ),
+      ),
+    ),
+  );
+
+  public updateCPropertiesGroupFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.updateCPropertiesGroupFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public deleteCPropertiesGroup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CategoryActions.deleteCPropertiesGroup),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.categoriesService.deleteCPropertiesGroup(action.id).pipe(
+          mergeMap((category) => [
+            LoaderActions.toggleLoader(),
+            CategoryActions.deleteCPropertiesGroupSuccess({ category }),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CategoryActions.deleteCPropertiesGroupFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public deleteCPropertiesGroupFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoryActions.deleteCPropertiesGroupFailure),
         tap(() => {
           // TODO: add dialog
         }),

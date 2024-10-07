@@ -8,6 +8,11 @@ export interface NewDeviceFormInterface {
   base64images: FormArray<FormControl<string>>;
   categoryId: FormControl<string>;
   brandId: FormControl<string>;
+  groups: FormArray<FormGroup<DPropertiesGroupFormInterface>>;
+}
+
+export interface DPropertiesGroupFormInterface {
+  groupName: FormControl<string>;
   properties: FormArray<FormGroup<DPropertyFormInterface>>;
 }
 

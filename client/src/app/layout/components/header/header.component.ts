@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
     this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 
@@ -89,13 +89,13 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
     this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 
   public clearState(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
     this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 }

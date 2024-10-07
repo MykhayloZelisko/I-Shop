@@ -8,8 +8,8 @@ export class CreateCPropertyInput {
   @IsNotEmpty({ message: 'Must be a not empty string' })
   public propertyName: string;
 
-  @Field(() => ID, { description: 'Category id' })
+  @Field(() => ID, { description: 'Group id' })
   @IsString({ message: 'Must be a string' })
-  @Matches(/^[0-9a-fA-F]{24}$/, { message: 'Parent id is incorrect' })
-  public categoryId: string;
+  @Matches(/^[0-9a-fA-F]{24}$/, { message: 'Group id is incorrect' })
+  public groupId: string;
 }

@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID, Int, Float } from '@nestjs/graphql';
 import { Category } from '../../categories/models/category.model';
 import { Brand } from '../../brands/models/brand.model';
-import { DProperty } from './d-property.model';
+import { DPropertiesGroup } from './d-properties-group.model';
 
 @ObjectType()
 export class Device {
@@ -35,6 +35,8 @@ export class Device {
   @Field(() => Brand, { description: 'Device brand' })
   public brand: Brand;
 
-  @Field(() => [DProperty], { description: 'Device properties list' })
-  public properties: DProperty[];
+  @Field(() => [DPropertiesGroup], {
+    description: 'Device properties groups list',
+  })
+  public groups: DPropertiesGroup[];
 }

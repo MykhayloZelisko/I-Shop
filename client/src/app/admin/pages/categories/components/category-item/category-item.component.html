@@ -4,7 +4,7 @@
       class="category-item category-item--editable"
       [ngClass]="{
         'category-item--empty': !(
-          (hasProperties$ | async) || (hasChildren$ | async)
+          (hasGroups$ | async) || (hasChildren$ | async)
         )
       }"
       [formGroup]="categoryForm"
@@ -59,7 +59,7 @@
       class="category-item"
       [ngClass]="{
         'category-item--empty': !(
-          (hasProperties$ | async) || (hasChildren$ | async)
+          (hasGroups$ | async) || (hasChildren$ | async)
         )
       }"
     >
@@ -97,7 +97,7 @@
       >
         <button
           class="category-item__button"
-          (click)="openPropertiesDialog()"
+          (click)="openGroupsDialog()"
           [disabled]="hasChildren$ | async"
         >
           <svg-icon
@@ -108,7 +108,7 @@
         <button
           class="category-item__button"
           (click)="openSubCategoriesDialog()"
-          [disabled]="(hasProperties$ | async) || category.level === 3"
+          [disabled]="(hasGroups$ | async) || category.level === 3"
         >
           <svg-icon
             class="category-item__icon category-item__icon--add"
@@ -144,13 +144,13 @@
     }
 
     @if (
-      dialog.popupType === dialogEnum.CProperties &&
+      dialog.popupType === dialogEnum.CPropertiesGroups &&
       currentCategory.id === category.id
     ) {
-      <app-c-properties-dialog
+      <app-c-properties-groups-dialog
         [dialog]="dialog"
         [parentId]="category.id"
-      ></app-c-properties-dialog>
+      ></app-c-properties-groups-dialog>
     }
   }
 }

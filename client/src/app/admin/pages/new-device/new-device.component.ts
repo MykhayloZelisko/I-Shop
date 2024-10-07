@@ -15,6 +15,7 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import {
+  DPropertiesGroupFormInterface,
   DPropertyFormInterface,
   NewDeviceFormInterface,
 } from '../../../shared/models/interfaces/new-device-form.interface';
@@ -31,10 +32,10 @@ import { BrandInterface } from '../../../shared/models/interfaces/brand.interfac
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { selectAllBrands } from '../../../+store/brands/selectors/brand.selectors';
-import { AsyncPipe, JsonPipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
   selectCascadeCategories,
-  selectProperties,
+  selectPropertiesGroups,
 } from '../../../+store/categories/selectors/category.selectors';
 import {
   CascadeSelectChangeEvent,
@@ -48,6 +49,7 @@ import { DeviceActions } from '../../../+store/devices/actions/device.actions';
 import { FormActions } from '../../../+store/form/actions/form.actions';
 import { selectFormCleared } from '../../../+store/form/selectors/form.selectors';
 import { InputComponent } from '../../../shared/components/input/input.component';
+import { CPropertiesGroupInterface } from '../../../shared/models/interfaces/c-properties-group.interface';
 
 @Component({
   selector: 'app-new-device',
@@ -62,7 +64,6 @@ import { InputComponent } from '../../../shared/components/input/input.component
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
-    JsonPipe,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
@@ -78,7 +79,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public categories$!: Observable<any[]>;
 
-  public properties$!: Observable<CPropertyInterface[]>;
+  public propertiesGroups$!: Observable<CPropertiesGroupInterface[]>;
 
   public files: File[] = [];
 
@@ -116,19 +117,19 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       ]),
       images: this.fb.array<FormControl<File>>(
         [],
-        [nonEmptyArrayValidator(), maxArrayLengthValidator(6)],
+        [nonEmptyArrayValidator('images'), maxArrayLengthValidator(6)],
       ),
       base64images: this.fb.array<FormControl<string>>(
         [],
-        [nonEmptyArrayValidator(), maxArrayLengthValidator(6)],
+        [nonEmptyArrayValidator('images'), maxArrayLengthValidator(6)],
       ),
       categoryId: this.fb.nonNullable.control<string>('', [
         requiredValidator(),
       ]),
       brandId: this.fb.nonNullable.control<string>('', [requiredValidator()]),
-      properties: this.fb.array<FormGroup<DPropertyFormInterface>>(
+      groups: this.fb.array<FormGroup<DPropertiesGroupFormInterface>>(
         [],
-        [nonEmptyArrayValidator()],
+        [nonEmptyArrayValidator('groups')],
       ),
     });
     this.newDeviceForm.markAsPristine();
@@ -139,10 +140,10 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     return showErrorMessage(control);
   }
 
-  public showMessageArray(arrayName: string, index: number): string {
+  public showMessageArrayItem(arrayName: string, index: number): string {
     switch (arrayName) {
-      case 'properties': {
-        const control = this.getPropertiesCtrl().at(index).controls.value;
+      case 'groups': {
+        const control = this.getPropertiesCtrl(index);
         return showErrorMessage(control);
       }
       case 'images': {
@@ -155,25 +156,22 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   }
 
   public changeValue(event: CascadeSelectChangeEvent): void {
-    this.clearPropertiesCtrl();
-    this.properties$ = this.store.select(selectProperties(event.value)).pipe(
-      takeUntil(this.destroy$),
-      tap((properties) => {
-        properties.forEach((property) => {
-          this.addPropertyForm(property.propertyName);
-        });
-      }),
-    );
-  }
-
-  public addPropertyForm(propertyName: string): void {
-    const propertyForm = this.fb.group<DPropertyFormInterface>({
-      propertyName: this.fb.nonNullable.control<string>(propertyName, [
-        requiredValidator(),
-      ]),
-      value: this.fb.nonNullable.control<string>('', []),
-    });
-    this.getPropertiesCtrl().push(propertyForm);
+    this.clearGroupsCtrl();
+    this.propertiesGroups$ = this.store
+      .select(selectPropertiesGroups(event.value))
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((groups) => {
+          groups.forEach((group) => {
+            this.addGroupCtrl(group);
+          });
+          if (!groups.length) {
+            this.newDeviceForm.controls.categoryId.setErrors({
+              nonEmptyArray: this.showMessage('groups'),
+            });
+          }
+        }),
+      );
   }
 
   public uploadFiles(event: Event): void {
@@ -198,10 +196,60 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     >;
   }
 
-  public getPropertiesCtrl(): FormArray<FormGroup<DPropertyFormInterface>> {
-    return this.newDeviceForm.get('properties') as FormArray<
+  public getPropertiesCtrl(
+    index: number,
+  ): FormArray<FormGroup<DPropertyFormInterface>> {
+    return this.getGroupsCtrl().at(index).get('properties') as FormArray<
       FormGroup<DPropertyFormInterface>
     >;
+  }
+
+  public addPropertyCtrl(
+    groupIndex: number,
+    property: CPropertyInterface,
+  ): void {
+    this.getPropertiesCtrl(groupIndex).push(
+      this.newPropertyCtrl(property.propertyName),
+    );
+  }
+
+  public newPropertyCtrl(
+    propertyName: string,
+  ): FormGroup<DPropertyFormInterface> {
+    return this.fb.group<DPropertyFormInterface>({
+      propertyName: this.fb.nonNullable.control<string>(propertyName, [
+        requiredValidator(),
+      ]),
+      value: this.fb.nonNullable.control<string>('', [requiredValidator()]),
+    });
+  }
+
+  public getGroupsCtrl(): FormArray<FormGroup<DPropertiesGroupFormInterface>> {
+    return this.newDeviceForm.get('groups') as FormArray<
+      FormGroup<DPropertiesGroupFormInterface>
+    >;
+  }
+
+  public addGroupCtrl(group: CPropertiesGroupInterface): void {
+    const groupIndex = this.getGroupsCtrl().length;
+    this.getGroupsCtrl().push(this.newGroupCtrl(group.groupName));
+    group.properties.forEach((property: CPropertyInterface) => {
+      this.addPropertyCtrl(groupIndex, property);
+    });
+  }
+
+  public newGroupCtrl(
+    groupName: string,
+  ): FormGroup<DPropertiesGroupFormInterface> {
+    return this.fb.group<DPropertiesGroupFormInterface>({
+      groupName: this.fb.nonNullable.control<string>(groupName, [
+        requiredValidator(),
+      ]),
+      properties: this.fb.array<FormGroup<DPropertyFormInterface>>(
+        [],
+        [nonEmptyArrayValidator('properties')],
+      ),
+    });
   }
 
   public addImageCtrl(file: File): void {
@@ -224,8 +272,8 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     this.getBase64Ctrl().removeAt(imageIndex);
   }
 
-  public clearPropertiesCtrl(): void {
-    this.getPropertiesCtrl().clear();
+  public clearGroupsCtrl(): void {
+    this.getGroupsCtrl().clear();
   }
 
   public clearBase64Ctrl(): void {
@@ -238,6 +286,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public saveDevice(): void {
     const formData = this.newDeviceForm.getRawValue();
+    console.log(formData);
     const device: CreateDeviceInterface = {
       brandId: formData.brandId,
       categoryId: formData.categoryId,
@@ -245,7 +294,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       deviceName: formData.deviceName,
       images: formData.base64images,
       price: Number(formData.price),
-      properties: formData.properties,
+      groups: formData.groups,
     };
     this.store.dispatch(DeviceActions.createDevice({ device }));
   }
@@ -263,7 +312,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           this.newDeviceForm.reset();
           this.clearBase64Ctrl();
           this.clearImagesCtrl();
-          this.clearPropertiesCtrl();
+          this.clearGroupsCtrl();
           this.newDeviceForm.markAsPristine();
           this.store.dispatch(FormActions.clearFormOff());
         }

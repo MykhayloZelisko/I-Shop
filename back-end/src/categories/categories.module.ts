@@ -4,7 +4,7 @@ import { CategoriesResolver } from './categories.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Category, CategorySchema } from './schemas/category.schema';
 import { FilesModule } from '../files/files.module';
-import { CPropertiesModule } from '../c-properties/c-properties.module';
+import { CPropertiesGroupsModule } from '../c-properties-groups/c-properties-groups.module';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { CPropertiesModule } from '../c-properties/c-properties.module';
       { name: Category.name, schema: CategorySchema },
     ]),
     FilesModule,
-    CPropertiesModule,
+    CPropertiesGroupsModule,
   ],
   providers: [CategoriesService, CategoriesResolver],
   exports: [CategoriesService],

@@ -104,12 +104,36 @@ export function phoneNumberValidator(str: RegExp): ValidatorFn {
   };
 }
 
-export function nonEmptyArrayValidator(): ValidatorFn {
+export function nonEmptyArrayValidator(arrayName: string): ValidatorFn {
   return (control: AbstractControl) => {
-    if (control instanceof FormArray && control.length === 0) {
-      return {
-        nonEmptyArray: 'Не вибрано жодного файла',
-      };
+    switch (arrayName) {
+      case 'images': {
+        if (control instanceof FormArray && control.length === 0) {
+          return {
+            nonEmptyArray: 'Не вибрано жодного файла',
+          };
+        }
+        break;
+      }
+      case 'groups': {
+        if (control instanceof FormArray && control.length === 0) {
+          return {
+            nonEmptyArray: 'Категорія порожня',
+          };
+        }
+        break;
+      }
+      case 'properties': {
+        if (control instanceof FormArray && control.length === 0) {
+          return {
+            nonEmptyArray: 'Група порожня',
+          };
+        }
+        break;
+      }
+      default: {
+        return null;
+      }
     }
     return null;
   };

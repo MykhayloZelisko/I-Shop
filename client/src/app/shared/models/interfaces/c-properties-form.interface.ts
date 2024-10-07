@@ -6,5 +6,5 @@ export interface CPropertiesFormInterface {
 
 export interface CPropertyFormInterface {
   propertyName: FormControl<string>;
-  categoryId: FormControl<string>;
+  groupId: FormControl<string>;
 }

@@ -139,26 +139,50 @@
             </div>
             @if (getImagesCtrl().at(index).invalid) {
               <p class="new-device__error">
-                {{ showMessageArray('images', index) }}
+                {{ showMessageArrayItem('images', index) }}
               </p>
             }
           </div>
         }
       </div>
     </div>
-    @if (properties$ | async; as properties) {
-      @if (properties.length) {
+    @if (propertiesGroups$ | async; as groups) {
+      @if (groups.length) {
         <h3 class="new-device__title">Характеристики</h3>
       }
-      <ng-container formArrayName="properties">
-        @for (property of properties; track property; let index = $index) {
+      <ng-container formArrayName="groups">
+        @for (group of groups; track group; let index = $index) {
           <ng-container [formGroupName]="index">
-            <app-input
-              [label]="property.propertyName"
-              [validators]="requiredValidators"
-              formControlName="value"
-              [withErrors]="true"
-            ></app-input>
+            <h4
+              class="new-device__sub-title"
+              [ngClass]="{
+                'new-device__sub-title--invalid':
+                  !getPropertiesCtrl(index).length
+              }"
+            >
+              {{ group.groupName }}
+            </h4>
+            @if (getPropertiesCtrl(index).invalid) {
+              <p class="new-device__error new-device__error--group">
+                {{ showMessageArrayItem('groups', index) }}
+              </p>
+            }
+            <ng-container formArrayName="properties">
+              @for (
+                property of group.properties;
+                track property;
+                let index = $index
+              ) {
+                <ng-container [formGroupName]="index">
+                  <app-input
+                    [label]="property.propertyName"
+                    [validators]="requiredValidators"
+                    formControlName="value"
+                    [withErrors]="true"
+                  ></app-input>
+                </ng-container>
+              }
+            </ng-container>
           </ng-container>
         }
       </ng-container>

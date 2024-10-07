@@ -15,7 +15,7 @@ import { TreeNode } from 'primeng/api';
 import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.type';
 import { Dictionary } from '@ngrx/entity';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
-import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
+import { CPropertiesGroupInterface } from '../../../shared/models/interfaces/c-properties-group.interface';
 import {
   selectIdAndPage,
   selectRouter,
@@ -47,15 +47,15 @@ export const selectCategoriesWithPropertiesTree = createSelector(
       type: 'default',
     };
 
-    const categoriesWithProperties = categories.filter(
-      (category) => category.properties.length > 0,
+    const categoriesWithGroups = categories.filter(
+      (category) => category.groups.length > 0,
     );
-    const categoriesWithoutProperties = categories.filter(
-      (category) => category.properties.length === 0,
+    const categoriesWithoutGroups = categories.filter(
+      (category) => category.groups.length === 0,
     );
 
     const categoriesWithChildren: TreeNode<CategoryInterface>[] =
-      categoriesWithoutProperties.map((category) => ({
+      categoriesWithoutGroups.map((category) => ({
         data: category,
         type: 'category',
         children: [],
@@ -75,7 +75,7 @@ export const selectCategoriesWithPropertiesTree = createSelector(
 
     const allNodes: TreeNode<TreeNodeDataType>[] = categoriesWithChildren;
 
-    for (const category of categoriesWithProperties) {
+    for (const category of categoriesWithGroups) {
       const categoryNode: TreeNode<TreeNodeDataType> = {
         data: category,
         type: 'category',
@@ -83,11 +83,19 @@ export const selectCategoriesWithPropertiesTree = createSelector(
         expanded: category.expanded ?? false,
       };
 
-      categoryNode.children = category.properties.map((property) => ({
-        data: property,
-        type: 'property',
-        expanded: false,
-      }));
+      categoryNode.children = category.groups.map((group) => {
+        const groupNode: TreeNode<TreeNodeDataType> = {
+          data: group,
+          type: 'group',
+          expanded: false,
+          children: group.properties.map((property) => ({
+            data: property,
+            type: 'property',
+            expanded: false,
+          })),
+        };
+        return groupNode;
+      });
 
       if (category.parentId === null) {
         allNodes.push(categoryNode);
@@ -119,6 +127,11 @@ export const selectCurrentCategory = createSelector(
   (state: State) => state.currentCategory,
 );
 
+export const selectCurrentGroup = createSelector(
+  selectCategoryState,
+  (state: State) => state.currentGroup,
+);
+
 export const selectNewCategory = createSelector(
   selectCategoryState,
   (state: State) => state.isNewCategory,
@@ -143,14 +156,14 @@ export const selectHasChildren = (
     },
   );
 
-export const selectHasProperties = (
+export const selectHasGroups = (
   id: string,
 ): MemoizedSelector<NonNullable<unknown>, boolean> =>
   createSelector(
     selectEntitiesCategories,
     (entities: Dictionary<CategoryInterface>) => {
       const entity = entities[id];
-      return !!entity && !!entity.properties.length;
+      return !!entity && !!entity.groups.length;
     },
   );
 
@@ -179,14 +192,14 @@ export const selectCascadeCategories = createSelector(
   },
 );
 
-export const selectProperties = (
+export const selectPropertiesGroups = (
   id: string,
-): MemoizedSelector<NonNullable<unknown>, CPropertyInterface[]> =>
+): MemoizedSelector<NonNullable<unknown>, CPropertiesGroupInterface[]> =>
   createSelector(
     selectEntitiesCategories,
     (entities: Dictionary<CategoryInterface>) => {
       const entity = entities[id];
-      return entity ? entity.properties : [];
+      return entity ? entity.groups : [];
     },
   );
 

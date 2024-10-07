@@ -15,7 +15,7 @@ import {
 import { IsBase64 } from '../../common/validators/is-base64.validator';
 import { IsImage } from '../../common/validators/is-image.validator';
 import { MaxFileSize } from '../../common/validators/max-file-size.validator';
-import { CreateDPropertyInput } from './create-d-property.input';
+import { CreateDPropertiesGroupInput } from './create-d-properties-group.input';
 import { Type } from 'class-transformer';
 
 @InputType()
@@ -61,12 +61,12 @@ export class CreateDeviceInput {
   @IsNotEmpty({ message: 'Must be a not empty string' })
   public brandId: string;
 
-  @Field(() => [CreateDPropertyInput], {
-    description: 'Array of device properties',
+  @Field(() => [CreateDPropertiesGroupInput], {
+    description: 'Array of device groups',
   })
   @IsArray({ message: 'Must be an array' })
   @ArrayNotEmpty({ message: 'Must be not empty array' })
   @ValidateNested({ each: true })
-  @Type(() => CreateDPropertyInput)
-  public properties: CreateDPropertyInput[];
+  @Type(() => CreateDPropertiesGroupInput)
+  public groups: CreateDPropertiesGroupInput[];
 }

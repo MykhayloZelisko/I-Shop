@@ -45,11 +45,12 @@ export class CPropertyItemComponent implements OnInit {
 
   public editProperty(): void {
     this.store.dispatch(
-      CategoryActions.updateCPState({
+      CategoryActions.updateCGPState({
         payload: {
           currentPropertyId: this.property.id,
           isNewCategory: false,
           currentCategory: { id: null, isEditable: false },
+          currentGroup: { id: null, isEditable: false },
         },
       }),
     );
@@ -63,7 +64,7 @@ export class CPropertyItemComponent implements OnInit {
   }
 
   public cancelEditProperty(): void {
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
     this.propertyCtrl.setValue(this.property.propertyName);
   }
 

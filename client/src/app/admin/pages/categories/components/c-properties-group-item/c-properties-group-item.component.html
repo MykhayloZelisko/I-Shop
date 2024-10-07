@@ -1,0 +1,81 @@
+@if (currentGroup$ | async; as currentGroup) {
+  @if (currentGroup.id === group.id && currentGroup.isEditable) {
+    <div class="c-properties-group-item--editable">
+      <input
+        class="c-properties-group-item__input"
+        [formControl]="groupCtrl"
+        type="text"
+        (keydown.space)="$event.stopPropagation()"
+      />
+      <div
+        class="c-properties-group-item__buttons c-properties-group-item__buttons--editable"
+      >
+        <button
+          class="c-properties-group-item__button"
+          [disabled]="groupCtrl.invalid"
+          (click)="saveGroup()"
+        >
+          <svg-icon
+            class="c-properties-group-item__icon c-properties-group-item__icon--save"
+            src="assets/images/save-icon.svg"
+          ></svg-icon>
+        </button>
+        <button
+          class="c-properties-group-item__button"
+          (click)="cancelEditGroup()"
+        >
+          <svg-icon
+            class="c-properties-group-item__icon c-properties-group-item__icon--cancel"
+            src="assets/images/close-round-line-icon.svg"
+          ></svg-icon>
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div
+      class="c-properties-group-item"
+      [ngClass]="{
+        'c-properties-group-item--empty': !group.properties.length
+      }"
+    >
+      <p class="c-properties-group-item__name">
+        {{ group.groupName }}
+      </p>
+      <div class="c-properties-group-item__buttons">
+        <button
+          class="c-properties-group-item__button"
+          (click)="openPropertiesDialog()"
+        >
+          <svg-icon
+            class="c-properties-group-item__icon c-properties-group-item__icon--add"
+            src="assets/images/plus-round-line-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="c-properties-group-item__button" (click)="editGroup()">
+          <svg-icon
+            class="c-properties-group-item__icon c-properties-group-item__icon--edit"
+            src="assets/images/pencil-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="c-properties-group-item__button" (click)="deleteGroup()">
+          <svg-icon
+            class="c-properties-group-item__icon c-properties-group-item__icon--delete"
+            src="assets/images/trash-bin-icon.svg"
+          ></svg-icon>
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (dialog$ | async; as dialog) {
+    @if (
+      dialog.popupType === dialogEnum.CProperties &&
+      currentGroup.id === group.id
+    ) {
+      <app-c-properties-dialog
+        [dialog]="dialog"
+        [parentId]="group.id"
+      ></app-c-properties-dialog>
+    }
+  }
+}

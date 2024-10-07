@@ -91,7 +91,7 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   public closeDialog(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(CategoryActions.clearCPState());
+    this.store.dispatch(CategoryActions.clearCGPState());
   }
 
   public deleteCategory(catIndex: number): void {

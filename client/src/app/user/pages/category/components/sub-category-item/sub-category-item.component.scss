@@ -1,30 +1,30 @@
-//@import 'variables';
-//@import 'mixins';
-//
-//.sub-category-item {
-//  padding-bottom: 10px;
-//
-//  &__image {
-//    aspect-ratio: 1;
-//    width: 100%;
-//    object-fit: contain;
-//    margin-bottom: 10px;
-//  }
-//
-//  &__link {
-//    font-family: $source;
-//    font-size: 18px;
-//    line-height: 1.5;
-//    color: $blue-1;
-//    text-decoration: none;
-//
-//    &:hover {
-//      color: $blue-2;
-//      text-decoration: underline;
-//    }
-//
-//    &--sub-link {
-//      font-size: 14px;
-//    }
-//  }
-//}
+@import 'variables';
+@import 'mixins';
+
+.sub-category-item {
+  padding-bottom: 10px;
+
+  &__image {
+    aspect-ratio: 1;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+
+  &__link {
+    font-family: $source;
+    font-size: 18px;
+    line-height: 1.5;
+    color: $blue-1;
+    text-decoration: none;
+
+    &:hover {
+      color: $blue-2;
+      text-decoration: underline;
+    }
+
+    &--sub-link {
+      font-size: 14px;
+    }
+  }
+}

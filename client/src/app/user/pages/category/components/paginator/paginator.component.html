@@ -1,80 +1,80 @@
-<!--<div class="paginator">-->
-<!--  <button-->
-<!--    class="paginator__load-more"-->
-<!--    [ngClass]="{-->
-<!--      'paginator__load-more&#45;&#45;last':-->
-<!--        paginationParams.currentPage === paginationParams.maxPage-->
-<!--    }"-->
-<!--    (click)="loadMore()"-->
-<!--  >-->
-<!--    Завантажити ще-->
-<!--  </button>-->
-<!--  <p-paginator-->
-<!--    class="paginator__paginator&#45;&#45;large"-->
-<!--    [first]="(paginationParams.currentPage - 1) * paginationParams.size"-->
-<!--    [rows]="paginationParams.size"-->
-<!--    [totalRecords]="paginationParams.total"-->
-<!--    (onPageChange)="pageChange($event)"-->
-<!--  >-->
-<!--    <ng-template pTemplate="firstpagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/double-arrow-left-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--    <ng-template pTemplate="previouspagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/line-angle-left-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--    <ng-template pTemplate="nextpagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/line-angle-right-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--    <ng-template pTemplate="lastpagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/double-arrow-right-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--  </p-paginator>-->
-<!--  <p-paginator-->
-<!--    class="paginator__paginator&#45;&#45;small"-->
-<!--    (onPageChange)="pageChange($event)"-->
-<!--    [first]="(paginationParams.currentPage - 1) * paginationParams.size"-->
-<!--    [rows]="paginationParams.size"-->
-<!--    [totalRecords]="paginationParams.total"-->
-<!--    [showCurrentPageReport]="true"-->
-<!--    [showPageLinks]="false"-->
-<!--    [showJumpToPageDropdown]="false"-->
-<!--    currentPageReportTemplate="Сторінка {currentPage} з {totalPages}"-->
-<!--  >-->
-<!--    <ng-template pTemplate="firstpagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/double-arrow-left-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--    <ng-template pTemplate="previouspagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/line-angle-left-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--    <ng-template pTemplate="nextpagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/line-angle-right-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--    <ng-template pTemplate="lastpagelinkicon">-->
-<!--      <svg-icon-->
-<!--        class="paginator__icon"-->
-<!--        src="assets/images/double-arrow-right-icon.svg"-->
-<!--      ></svg-icon>-->
-<!--    </ng-template>-->
-<!--  </p-paginator>-->
-<!--</div>-->
+<div class="paginator">
+  <button
+    class="paginator__load-more"
+    [ngClass]="{
+      'paginator__load-more--last':
+        paginationParams.currentPage === paginationParams.maxPage
+    }"
+    (click)="loadMore()"
+  >
+    Завантажити ще
+  </button>
+  <p-paginator
+    class="paginator__paginator--large"
+    [first]="(paginationParams.currentPage - 1) * paginationParams.size"
+    [rows]="paginationParams.size"
+    [totalRecords]="paginationParams.total"
+    (onPageChange)="pageChange($event)"
+  >
+    <ng-template pTemplate="firstpagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/double-arrow-left-icon.svg"
+      ></svg-icon>
+    </ng-template>
+    <ng-template pTemplate="previouspagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/line-angle-left-icon.svg"
+      ></svg-icon>
+    </ng-template>
+    <ng-template pTemplate="nextpagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/line-angle-right-icon.svg"
+      ></svg-icon>
+    </ng-template>
+    <ng-template pTemplate="lastpagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/double-arrow-right-icon.svg"
+      ></svg-icon>
+    </ng-template>
+  </p-paginator>
+  <p-paginator
+    class="paginator__paginator--small"
+    (onPageChange)="pageChange($event)"
+    [first]="(paginationParams.currentPage - 1) * paginationParams.size"
+    [rows]="paginationParams.size"
+    [totalRecords]="paginationParams.total"
+    [showCurrentPageReport]="true"
+    [showPageLinks]="false"
+    [showJumpToPageDropdown]="false"
+    currentPageReportTemplate="Сторінка {currentPage} з {totalPages}"
+  >
+    <ng-template pTemplate="firstpagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/double-arrow-left-icon.svg"
+      ></svg-icon>
+    </ng-template>
+    <ng-template pTemplate="previouspagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/line-angle-left-icon.svg"
+      ></svg-icon>
+    </ng-template>
+    <ng-template pTemplate="nextpagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/line-angle-right-icon.svg"
+      ></svg-icon>
+    </ng-template>
+    <ng-template pTemplate="lastpagelinkicon">
+      <svg-icon
+        class="paginator__icon"
+        src="assets/images/double-arrow-right-icon.svg"
+      ></svg-icon>
+    </ng-template>
+  </p-paginator>
+</div>

@@ -1,4 +1,4 @@
-// export interface DPropertyInterface {
-//   propertyName: string;
-//   value: string;
-// }
+export interface DPropertyInterface {
+  propertyName: string;
+  value: string;
+}

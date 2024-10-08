@@ -1,6 +1,5 @@
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { CProperty } from '../../c-properties/schemas/c-property.schema';
 
 export type CPropertiesGroupDocument = HydratedDocument<CPropertiesGroup>;
 
@@ -11,9 +10,6 @@ export class CPropertiesGroup {
 
   @Prop({ type: MongooseSchema.Types.ObjectId })
   public categoryId: string;
-
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'CProperty' }] })
-  public properties: CProperty[];
 }
 
 export const CPropertiesGroupSchema =

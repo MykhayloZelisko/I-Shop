@@ -1,8 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  forwardRef,
-  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -12,25 +10,31 @@ import { UpdateCPropertyInput } from './inputs/update-c-property.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CProperty, CPropertyDocument } from './schemas/c-property.schema';
-import { CategoriesService } from '../categories/categories.service';
-import { Category } from '../categories/models/category.model';
-import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
-import { DeleteResult } from 'mongodb';
+import { CProperty as CPropertyGQL } from './models/c-property.model';
+import { DeletedIds } from '../common/models/deleted-ids.model';
 
 @Injectable()
 export class CPropertiesService {
   public constructor(
     @InjectModel(CProperty.name)
     private cPropertyModel: Model<CPropertyDocument>,
-    @Inject(forwardRef(() => CategoriesService))
-    private categoriesService: CategoriesService,
-    @Inject(forwardRef(() => CPropertiesGroupsService))
-    private cPropertiesGroupsService: CPropertiesGroupsService,
   ) {}
+
+  public async getAllCProperties(): Promise<CPropertyGQL[]> {
+    const properties = await this.cPropertyModel.find().exec();
+    return properties.map((property: CPropertyDocument) => property.toObject());
+  }
+
+  public async getCPropertiesByGroupId(
+    groupId: string,
+  ): Promise<CPropertyGQL[]> {
+    const properties = await this.cPropertyModel.find({ groupId }).exec();
+    return properties.map((property: CPropertyDocument) => property.toObject());
+  }
 
   public async createCProperties(
     createCPropertyInputs: CreateCPropertyInput[],
-  ): Promise<Category> {
+  ): Promise<CPropertyGQL[]> {
     const groupId = createCPropertyInputs[0].groupId;
     const propertyNames = createCPropertyInputs.map(
       (input) => input.propertyName,
@@ -54,19 +58,15 @@ export class CPropertiesService {
     const createdProperties = await this.cPropertyModel.insertMany(
       createCPropertyInputs,
     );
-    const propertyIds = createdProperties.map(
-      (property: CPropertyDocument) => property.id,
-    );
-    return this.cPropertiesGroupsService.addPropertiesToGroup(
-      groupId,
-      propertyIds,
+    return createdProperties.map((property: CPropertyDocument) =>
+      property.toObject(),
     );
   }
 
   public async updateCProperty(
     id: string,
     updateCPropertyInput: UpdateCPropertyInput,
-  ): Promise<Category> {
+  ): Promise<CPropertyGQL> {
     const property = await this.cPropertyModel
       .findOne({ propertyName: updateCPropertyInput.propertyName })
       .exec();
@@ -83,34 +83,43 @@ export class CPropertiesService {
       )
       .exec();
     if (updatedProperty) {
-      const group = await this.cPropertiesGroupsService.findGroupByPropertyId(
-        updatedProperty.id,
-      );
-      return this.categoriesService.getCategoryById(group.categoryId);
+      return updatedProperty.toObject();
     }
     throw new BadRequestException('A property is not updated');
   }
 
-  public async deleteCProperty(id: string): Promise<Category> {
+  public async deleteCProperty(id: string): Promise<DeletedIds> {
     // TODO: check products. If a property cannot be deleted you should throw ForbiddenException
     const property = await this.cPropertyModel.findByIdAndDelete(id).exec();
     if (property) {
-      const group = await this.cPropertiesGroupsService.findGroupByPropertyId(
-        property.id,
-      );
-      return this.categoriesService.getCategoryById(group.categoryId);
+      return {
+        categoriesIds: [],
+        groupsIds: [],
+        propertiesIds: [id],
+      };
     } else {
       throw new NotFoundException('Property not found');
     }
   }
 
-  public async deleteAllCPropertiesByGroupIds(
-    groupIds: string[],
-  ): Promise<DeleteResult> {
+  public async deleteAllCPropertiesByGroupsIds(
+    groupsIds: string[],
+  ): Promise<DeletedIds> {
     try {
-      return await this.cPropertyModel
-        .deleteMany({ groupId: { $in: groupIds } })
+      const properties = await this.cPropertyModel
+        .find({
+          groupId: { $in: groupsIds },
+        })
         .exec();
+      const propertiesIds = properties.map((property) => property.id);
+      await this.cPropertyModel
+        .deleteMany({ groupId: { $in: groupsIds } })
+        .exec();
+      return {
+        groupsIds,
+        propertiesIds,
+        categoriesIds: [],
+      };
     } catch {
       throw new InternalServerErrorException('Something is wrong');
     }

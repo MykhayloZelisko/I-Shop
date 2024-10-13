@@ -89,81 +89,45 @@ export const selectCascadeCategories = createSelector(
   },
 );
 
-// export const selectHasChildChain = createSelector(
-//   selectAllCategories,
-//   selectIdAndPage,
-//   (categories: CategoryInterface[], params) => {
-//     const childCategories = categories.filter(
-//       (category: CategoryInterface) => category.parentId === params.id,
-//     );
-//
-//     return childCategories.some((childCategory: CategoryInterface) =>
-//       categories.some(
-//         (category: CategoryInterface) => category.parentId === childCategory.id,
-//       ),
-//     );
-//   },
-// );
-//
-// export const selectCascadeSubCategories = createSelector(
-//   selectCascadeCategories,
-//   selectIdAndPage,
-//   (categories: CascadeCategoryInterface[], params) => {
-//     const findSubtree = (
-//       categoryId: string | null,
-//       nodes: CascadeCategoryInterface[],
-//     ): CascadeCategoryInterface | null => {
-//       for (const node of nodes) {
-//         if (node.id === categoryId) {
-//           return node;
-//         }
-//
-//         if (node.children && node.children.length > 0) {
-//           const childSubtree = findSubtree(categoryId, node.children);
-//           if (childSubtree) {
-//             return childSubtree;
-//           }
-//         }
-//       }
-//       return null;
-//     };
-//
-//     return findSubtree(params.id, categories);
-//   },
-// );
-//
-// export const selectBreadcrumbsParams = createSelector(
-//   selectRouter,
-//   selectEntitiesCategories,
-//   selectDevice,
-//   (params, categories, device) => {
-//     const isCategory = params.state.url.startsWith('/categories');
-//     if (isCategory) {
-//       let categoryPath: CategoryInterface[] = [];
-//       let currentCategory = categories[params.state.params['id']];
-//
-//       while (currentCategory) {
-//         categoryPath = [currentCategory, ...categoryPath];
-//         currentCategory = currentCategory.parentId
-//           ? categories[currentCategory.parentId]
-//           : undefined;
-//       }
-//
-//       return { isCategory, categoryPath };
-//     } else if (device) {
-//       let categoryPath: CategoryInterface[] = [];
-//       let currentCategory = categories[device.category.id];
-//
-//       while (currentCategory) {
-//         categoryPath = [currentCategory, ...categoryPath];
-//         currentCategory = currentCategory.parentId
-//           ? categories[currentCategory.parentId]
-//           : undefined;
-//       }
-//
-//       return { isCategory, categoryPath };
-//     } else {
-//       return null;
-//     }
-//   },
-// );
+export const selectHasChildChain = createSelector(
+  selectAllCategories,
+  selectIdAndPage,
+  (categories: CategoryInterface[], params) => {
+    const childCategories = categories.filter(
+      (category: CategoryInterface) => category.parentId === params.id,
+    );
+
+    return childCategories.some((childCategory: CategoryInterface) =>
+      categories.some(
+        (category: CategoryInterface) => category.parentId === childCategory.id,
+      ),
+    );
+  },
+);
+
+export const selectCascadeSubCategories = createSelector(
+  selectCascadeCategories,
+  selectIdAndPage,
+  (categories: CascadeCategoryInterface[], params) => {
+    const findSubtree = (
+      categoryId: string | null,
+      nodes: CascadeCategoryInterface[],
+    ): CascadeCategoryInterface | null => {
+      for (const node of nodes) {
+        if (node.id === categoryId) {
+          return node;
+        }
+
+        if (node.children && node.children.length > 0) {
+          const childSubtree = findSubtree(categoryId, node.children);
+          if (childSubtree) {
+            return childSubtree;
+          }
+        }
+      }
+      return null;
+    };
+
+    return findSubtree(params.id, categories);
+  },
+);

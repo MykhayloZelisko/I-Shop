@@ -12,6 +12,8 @@ import { TreeNode } from 'primeng/api';
 import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.type';
 import { GPTreeInterface } from '../../../shared/models/interfaces/g-p-tree.interface';
 import { GPLoadInterface } from '../../../shared/models/interfaces/g-p-load.interface';
+import { selectRouter } from '../../router/selectors/router.selectors';
+import { selectDevice } from '../../devices/selectors/device.selectors';
 
 export const selectCGPTree = createSelector(
   selectAllCategories,
@@ -139,3 +141,39 @@ export const selectLoadGroupsAndPropertiesForCategory = (
       return { loadGroups, loadProperties };
     },
   );
+
+export const selectBreadcrumbsParams = createSelector(
+  selectRouter,
+  selectEntitiesCategories,
+  selectDevice,
+  (params, categories, device) => {
+    const isCategory = params.state.url.startsWith('/categories');
+    if (isCategory) {
+      let categoryPath: CategoryInterface[] = [];
+      let currentCategory = categories[params.state.params['id']];
+
+      while (currentCategory) {
+        categoryPath = [currentCategory, ...categoryPath];
+        currentCategory = currentCategory.parentId
+          ? categories[currentCategory.parentId]
+          : undefined;
+      }
+
+      return { isCategory, categoryPath };
+    } else if (device) {
+      let categoryPath: CategoryInterface[] = [];
+      let currentCategory = categories[device.category.id];
+
+      while (currentCategory) {
+        categoryPath = [currentCategory, ...categoryPath];
+        currentCategory = currentCategory.parentId
+          ? categories[currentCategory.parentId]
+          : undefined;
+      }
+
+      return { isCategory, categoryPath };
+    } else {
+      return null;
+    }
+  },
+);

@@ -8,7 +8,7 @@ import {
 } from './schemas/c-properties-group.schema';
 import { CategoriesModule } from '../categories/categories.module';
 import { CPropertiesModule } from '../c-properties/c-properties.module';
-import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
@@ -17,11 +17,11 @@ import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-
     ]),
     forwardRef(() => CategoriesModule),
     CPropertiesModule,
+    CommonModule,
   ],
   providers: [
     CPropertiesGroupsResolver,
     CPropertiesGroupsService,
-    ParseObjectIdPipe,
   ],
   exports: [CPropertiesGroupsService],
 })

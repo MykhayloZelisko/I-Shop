@@ -16,7 +16,7 @@ import { BrandsModule } from './brands/brands.module';
 import { CPropertiesModule } from './c-properties/c-properties.module';
 import { DevicesModule } from './devices/devices.module';
 import { CPropertiesGroupsModule } from './c-properties-groups/c-properties-groups.module';
-import { CommonResolver } from './common/resolvers/common/common.resolver';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { CommonResolver } from './common/resolvers/common/common.resolver';
     CPropertiesModule,
     DevicesModule,
     CPropertiesGroupsModule,
+    CommonModule,
   ],
-  providers: [CommonResolver],
 })
 export class AppModule {}

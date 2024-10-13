@@ -4,15 +4,15 @@ import { CPropertiesResolver } from './c-properties.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CProperty, CPropertySchema } from './schemas/c-property.schema';
 import { CPropertiesGroupsModule } from '../c-properties-groups/c-properties-groups.module';
-import { CategoriesModule } from '../categories/categories.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: CProperty.name, schema: CPropertySchema },
     ]),
-    forwardRef(() => CategoriesModule),
     forwardRef(() => CPropertiesGroupsModule),
+    CommonModule,
   ],
   providers: [CPropertiesResolver, CPropertiesService],
   exports: [CPropertiesService],

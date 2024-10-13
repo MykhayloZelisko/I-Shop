@@ -8,6 +8,7 @@ import {
 } from './schemas/c-properties-group.schema';
 import { CategoriesModule } from '../categories/categories.module';
 import { CPropertiesModule } from '../c-properties/c-properties.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CPropertiesModule } from '../c-properties/c-properties.module';
     ]),
     forwardRef(() => CategoriesModule),
     CPropertiesModule,
+    CommonModule,
   ],
   providers: [CPropertiesGroupsResolver, CPropertiesGroupsService],
   exports: [CPropertiesGroupsService],

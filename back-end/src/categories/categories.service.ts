@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,8 +12,7 @@ import { CreateCategoryInput } from './inputs/create-category.input';
 import { FilesService } from '../files/files.service';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
-import { CPropertiesGroupDocument } from '../c-properties-groups/schemas/c-properties-group.schema';
-import { CPropertyDocument } from '../c-properties/schemas/c-property.schema';
+import { Deleted } from '../common/models/deleted.model';
 
 @Injectable()
 export class CategoriesService {
@@ -25,72 +23,48 @@ export class CategoriesService {
   ) {}
 
   public async getAllCategories(): Promise<CategoryGQL[]> {
-    const categories = await this.categoryModel
-      .find()
-      .populate({
-        path: 'groups',
-        populate: {
-          path: 'properties',
-        },
-      })
-      .exec();
+    const categories = await this.categoryModel.find().exec();
 
-    return categories.map((category: CategoryDocument) => ({
-      id: category.id,
-      parentId: category.parentId ? category.parentId.toString() : null,
-      groups: category.groups.map((group: CPropertiesGroupDocument) => ({
-        id: group.id,
-        categoryId: group.categoryId.toString(),
-        groupName: group.groupName,
-        properties: group.properties.map((property: CPropertyDocument) => ({
-          id: property.id,
-          groupId: property.groupId.toString(),
-          propertyName: property.propertyName,
-        })),
-      })),
-      categoryName: category.categoryName,
-      image: category.image,
-      icon: category.icon,
-      level: category.level,
-    }));
+    return Promise.all(
+      categories.map(async (category: CategoryDocument) => {
+        const hasGroups = await this.cPropertiesGroupsService.hasCategoryGroups(
+          category.id,
+        );
+        return {
+          id: category.id,
+          parentId: category.parentId ? category.parentId.toString() : null,
+          categoryName: category.categoryName,
+          image: category.image,
+          icon: category.icon,
+          level: category.level,
+          hasGroups,
+        };
+      }),
+    );
   }
 
   public async getCategoryById(id: string): Promise<CategoryGQL> {
-    const category = await this.categoryModel
-      .findById(id)
-      .populate({
-        path: 'groups',
-        populate: {
-          path: 'properties',
-        },
-      })
-      .exec();
+    const category = await this.categoryModel.findById(id).exec();
 
     if (!category) {
       throw new NotFoundException('Category not found');
     }
+    const hasGroups = await this.cPropertiesGroupsService.hasCategoryGroups(
+      category.id,
+    );
 
     return {
       id: category.id,
       parentId: category.parentId ? category.parentId.toString() : null,
-      groups: category.groups.map((group: CPropertiesGroupDocument) => ({
-        id: group.id,
-        categoryId: group.categoryId.toString(),
-        groupName: group.groupName,
-        properties: group.properties.map((property: CPropertyDocument) => ({
-          id: property.id,
-          groupId: property.groupId.toString(),
-          propertyName: property.propertyName,
-        })),
-      })),
       categoryName: category.categoryName,
       image: category.image,
       icon: category.icon,
       level: category.level,
+      hasGroups,
     };
   }
 
-  public async deleteCategory(categoryId: string): Promise<string[]> {
+  public async deleteCategory(categoryId: string): Promise<Deleted> {
     const category = await this.getCategoryById(categoryId);
     const subCategoriesIds = await this.findSubCategoriesIds(categoryId);
     // TODO: check subcategories and products. If a category cannot be deleted you should throw ForbiddenException
@@ -104,10 +78,27 @@ export class CategoriesService {
       }
       await this.categoryModel.findByIdAndDelete(id).exec();
     }
-    await this.cPropertiesGroupsService.deleteAllGroupsByCategoryId(
-      category.id,
-    );
-    return subCategoriesIds;
+    const ids =
+      await this.cPropertiesGroupsService.deleteAllGroupsByCategoriesIds(
+        subCategoriesIds,
+      );
+    if (category.parentId) {
+      const parentCategory = await this.getCategoryById(category.parentId);
+      return {
+        categoriesIds: subCategoriesIds,
+        groupsIds: ids.groupsIds,
+        propertiesIds: ids.propertiesIds,
+        category: parentCategory,
+        group: null,
+      };
+    }
+    return {
+      categoriesIds: subCategoriesIds,
+      groupsIds: ids.groupsIds,
+      propertiesIds: ids.propertiesIds,
+      category: null,
+      group: null,
+    };
   }
 
   public async findSubCategoriesIds(categoryId: string): Promise<string[]> {
@@ -168,11 +159,11 @@ export class CategoriesService {
       const category = await this.categoryModel.create({
         ...createCategoryInput,
         image: fileName,
-        groups: [],
       });
       return {
         ...category.toObject(),
         parentId: category.parentId ? category.parentId.toString() : null,
+        hasGroups: false,
       };
     } else if (
       !createCategoryInput.image &&
@@ -185,9 +176,11 @@ export class CategoriesService {
       const category = await this.categoryModel.create({
         ...createCategoryInput,
         icon: fileName,
-        groups: [],
       });
-      return category.toObject();
+      return {
+        ...category.toObject(),
+        hasGroups: false,
+      };
     } else {
       throw new BadRequestException('Bad Request');
     }
@@ -262,39 +255,26 @@ export class CategoriesService {
           { ...updateCategoryInput, image: fileName },
           { new: true },
         )
-        .populate({
-          path: 'groups',
-          populate: {
-            path: 'properties',
-          },
-        })
         .exec();
 
       if (!updatedCategory) {
         throw new NotFoundException('Category not found');
       }
 
+      const hasGroups = await this.cPropertiesGroupsService.hasCategoryGroups(
+        updatedCategory.id,
+      );
+
       return {
         id: updatedCategory.id,
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
-        groups: updatedCategory.groups.map(
-          (group: CPropertiesGroupDocument) => ({
-            id: group.id,
-            categoryId: group.categoryId.toString(),
-            groupName: group.groupName,
-            properties: group.properties.map((property: CPropertyDocument) => ({
-              id: property.id,
-              groupId: property.groupId.toString(),
-              propertyName: property.propertyName,
-            })),
-          }),
-        ),
         categoryName: updatedCategory.categoryName,
         image: updatedCategory.image,
         icon: updatedCategory.icon,
         level: updatedCategory.level,
+        hasGroups,
       };
     } else if (updateCategoryInput.icon && !existedCategory.parentId) {
       const fileName = await this.filesService.createImageFile(
@@ -308,84 +288,29 @@ export class CategoriesService {
           { ...updateCategoryInput, icon: fileName },
           { new: true },
         )
-        .populate({
-          path: 'groups',
-          populate: {
-            path: 'properties',
-          },
-        })
         .exec();
 
       if (!updatedCategory) {
         throw new NotFoundException('Category not found');
       }
 
+      const hasGroups = await this.cPropertiesGroupsService.hasCategoryGroups(
+        updatedCategory.id,
+      );
+
       return {
         id: updatedCategory.id,
         parentId: updatedCategory.parentId
           ? updatedCategory.parentId.toString()
           : null,
-        groups: updatedCategory.groups.map(
-          (group: CPropertiesGroupDocument) => ({
-            id: group.id,
-            categoryId: group.categoryId.toString(),
-            groupName: group.groupName,
-            properties: group.properties.map((property: CPropertyDocument) => ({
-              id: property.id,
-              groupId: property.groupId.toString(),
-              propertyName: property.propertyName,
-            })),
-          }),
-        ),
         categoryName: updatedCategory.categoryName,
         image: updatedCategory.image,
         icon: updatedCategory.icon,
         level: updatedCategory.level,
+        hasGroups,
       };
     } else {
       throw new BadRequestException('Bad Request');
     }
-  }
-
-  public async addGroupsToCategory(
-    categoryId: string,
-    groupsIds: string[],
-  ): Promise<CategoryGQL> {
-    const category = await this.categoryModel
-      .findByIdAndUpdate(
-        categoryId,
-        { $push: { groups: { $each: groupsIds } } },
-        { new: true },
-      )
-      .populate({
-        path: 'groups',
-        populate: {
-          path: 'properties',
-        },
-      })
-      .exec();
-    if (!category) {
-      throw new InternalServerErrorException(
-        'Properties groups are not added to a category',
-      );
-    }
-    return {
-      id: category.id,
-      parentId: category.parentId ? category.parentId.toString() : null,
-      groups: category.groups.map((group: CPropertiesGroupDocument) => ({
-        id: group.id,
-        categoryId: group.categoryId.toString(),
-        groupName: group.groupName,
-        properties: group.properties.map((property: CPropertyDocument) => ({
-          id: property.id,
-          groupId: property.groupId.toString(),
-          propertyName: property.propertyName,
-        })),
-      })),
-      categoryName: category.categoryName,
-      image: category.image,
-      icon: category.icon,
-      level: category.level,
-    };
   }
 }

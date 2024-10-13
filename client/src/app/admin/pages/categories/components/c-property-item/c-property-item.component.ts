@@ -8,13 +8,14 @@ import {
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { Observable } from 'rxjs';
-import { selectCurrentPropertyId } from '../../../../../+store/categories/selectors/category.selectors';
+import { selectCurrentPropertyId } from '../../../../../+store/c-properties/selectors/c-property.selectors';
 import { AsyncPipe } from '@angular/common';
 import { CPropertyInterface } from '../../../../../shared/models/interfaces/c-property.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { requiredValidator } from '../../../../../shared/utils/validators';
-import { CategoryActions } from '../../../../../+store/categories/actions/category.actions';
+import { SharedActions } from '../../../../../+store/shared/actions/shared.actions';
+import { CPropertyActions } from '../../../../../+store/c-properties/actions/c-property.actions';
 
 @Component({
   selector: 'app-c-property-item',
@@ -45,7 +46,7 @@ export class CPropertyItemComponent implements OnInit {
 
   public editProperty(): void {
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: this.property.id,
           isNewCategory: false,
@@ -59,18 +60,18 @@ export class CPropertyItemComponent implements OnInit {
   public saveProperty(): void {
     const propertyName = this.propertyCtrl.getRawValue();
     this.store.dispatch(
-      CategoryActions.updateCProperty({ id: this.property.id, propertyName }),
+      CPropertyActions.updateCProperty({ id: this.property.id, propertyName }),
     );
   }
 
   public cancelEditProperty(): void {
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
     this.propertyCtrl.setValue(this.property.propertyName);
   }
 
   public deleteProperty(): void {
     this.store.dispatch(
-      CategoryActions.deleteCProperty({ id: this.property.id }),
+      CPropertyActions.deleteCProperty({ id: this.property.id }),
     );
   }
 }

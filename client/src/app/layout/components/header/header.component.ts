@@ -17,7 +17,7 @@ import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-n
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { PopupDataInterface } from '../../../shared/models/interfaces/popup-data.interface';
 import { selectPopup } from '../../../+store/popup/selectors/popup.selectors';
-import { CategoryActions } from '../../../+store/categories/actions/category.actions';
+import { SharedActions } from '../../../+store/shared/actions/shared.actions';
 import { BrandActions } from '../../../+store/brands/actions/brand.actions';
 
 @Component({
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
     this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 
@@ -89,13 +89,13 @@ export class HeaderComponent implements OnInit {
         },
       }),
     );
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
     this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 
   public clearState(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
     this.store.dispatch(BrandActions.clearCurrentBrandId());
   }
 }

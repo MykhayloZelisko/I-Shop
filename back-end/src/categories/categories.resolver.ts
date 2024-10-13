@@ -1,11 +1,4 @@
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoriesService } from './categories.service';
 import { Category } from './models/category.model';
 import { UseGuards, UsePipes } from '@nestjs/common';
@@ -14,7 +7,7 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
-import { CPropertiesGroup } from '../c-properties-groups/models/c-properties-group.model';
+import { Deleted } from '../common/models/deleted.model';
 
 @Resolver(() => Category)
 export class CategoriesResolver {
@@ -54,18 +47,11 @@ export class CategoriesResolver {
     return this.categoriesService.updateCategory(id, updateCategoryInput);
   }
 
-  @Mutation(() => [String])
+  @Mutation(() => Deleted)
   @UseGuards(GqlAdminGuard)
   public async deleteCategory(
     @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<string[]> {
+  ): Promise<Deleted> {
     return this.categoriesService.deleteCategory(id);
-  }
-
-  @ResolveField(() => [CPropertiesGroup])
-  public async groups(
-    @Parent() category: Category,
-  ): Promise<CPropertiesGroup[]> {
-    return category.groups;
   }
 }

@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { requiredValidator } from '../../../../../shared/utils/validators';
 import { SvgFileControlComponent } from '../../../../../shared/components/svg-file-control/svg-file-control.component';
 import { NewCategoryFormInterface } from '../../../../../shared/models/interfaces/new-category-form.interface';
+import { SharedActions } from '../../../../../+store/shared/actions/shared.actions';
 
 @Component({
   selector: 'app-new-category',
@@ -55,7 +56,7 @@ export class NewCategoryComponent implements OnInit {
   public addCategory(): void {
     this.newCategoryForm.reset();
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: true,
@@ -81,6 +82,6 @@ export class NewCategoryComponent implements OnInit {
   }
 
   public cancelAddCategory(): void {
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
   }
 }

@@ -3,9 +3,7 @@
     <div
       class="category-item category-item--editable"
       [ngClass]="{
-        'category-item--empty': !(
-          (hasGroups$ | async) || (hasChildren$ | async)
-        )
+        'category-item--empty': !(category.hasGroups || (hasChildren$ | async))
       }"
       [formGroup]="categoryForm"
     >
@@ -58,9 +56,7 @@
     <div
       class="category-item"
       [ngClass]="{
-        'category-item--empty': !(
-          (hasGroups$ | async) || (hasChildren$ | async)
-        )
+        'category-item--empty': !(category.hasGroups || (hasChildren$ | async))
       }"
     >
       <div
@@ -108,7 +104,7 @@
         <button
           class="category-item__button"
           (click)="openSubCategoriesDialog()"
-          [disabled]="(hasGroups$ | async) || category.level === 3"
+          [disabled]="category.hasGroups || category.level === 3"
         >
           <svg-icon
             class="category-item__icon category-item__icon--add"
@@ -149,7 +145,7 @@
     ) {
       <app-c-properties-groups-dialog
         [dialog]="dialog"
-        [parentId]="category.id"
+        [category]="category"
       ></app-c-properties-groups-dialog>
     }
   }

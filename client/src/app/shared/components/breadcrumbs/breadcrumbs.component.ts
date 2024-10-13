@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { BreadcrumbsParamsInterface } from '../../models/interfaces/breadcrumbs-params.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import { selectBreadcrumbsParams } from '../../../+store/categories/selectors/category.selectors';
+import { selectBreadcrumbsParams } from '../../../+store/shared/selectors/shared.selectors';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';

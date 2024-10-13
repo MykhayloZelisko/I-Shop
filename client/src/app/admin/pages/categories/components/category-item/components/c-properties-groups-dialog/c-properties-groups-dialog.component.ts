@@ -8,7 +8,6 @@ import {
 import { PopupDataInterface } from '../../../../../../../shared/models/interfaces/popup-data.interface';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
-import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -24,6 +23,9 @@ import {
 } from '../../../../../../../shared/models/interfaces/c-properties-groups-form.interface';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
 import { CreateCPropertiesGroupInterface } from '../../../../../../../shared/models/interfaces/create-c-properties-group.interface';
+import { SharedActions } from '../../../../../../../+store/shared/actions/shared.actions';
+import { CPropertiesGroupActions } from '../../../../../../../+store/c-properties-groups/actions/c-properties-group.actions';
+import { CategoryInterface } from '../../../../../../../shared/models/interfaces/category.interface';
 
 @Component({
   selector: 'app-c-properties-groups-dialog',
@@ -36,7 +38,7 @@ import { CreateCPropertiesGroupInterface } from '../../../../../../../shared/mod
 export class CPropertiesGroupsDialogComponent implements OnInit {
   @Input({ required: true }) public dialog!: PopupDataInterface;
 
-  @Input({ required: true }) public parentId!: string;
+  @Input({ required: true }) public category!: CategoryInterface;
 
   public cPropertiesGroupsForm!: FormGroup<CPropertiesGroupsFormInterface>;
 
@@ -68,7 +70,7 @@ export class CPropertiesGroupsDialogComponent implements OnInit {
   public newGroup(): FormGroup<CPropertiesGroupFormInterface> {
     return this.fb.group<CPropertiesGroupFormInterface>({
       groupName: this.fb.nonNullable.control<string>('', [requiredValidator()]),
-      categoryId: this.fb.nonNullable.control<string>(this.parentId, [
+      categoryId: this.fb.nonNullable.control<string>(this.category.id, [
         requiredValidator(),
       ]),
     });
@@ -76,7 +78,7 @@ export class CPropertiesGroupsDialogComponent implements OnInit {
 
   public closeDialog(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
   }
 
   public deleteGroup(groupIndex: number): void {
@@ -86,6 +88,11 @@ export class CPropertiesGroupsDialogComponent implements OnInit {
   public saveGroups(): void {
     const groups: CreateCPropertiesGroupInterface[] =
       this.cPropertiesGroupsForm.getRawValue().groups;
-    this.store.dispatch(CategoryActions.addCPropertiesGroups({ groups }));
+    this.store.dispatch(
+      CPropertiesGroupActions.addCPropertiesGroups({
+        groups,
+        category: this.category,
+      }),
+    );
   }
 }

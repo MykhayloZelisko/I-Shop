@@ -8,7 +8,6 @@ import {
 import { PopupDataInterface } from '../../../../../../../shared/models/interfaces/popup-data.interface';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
-import { CategoryActions } from '../../../../../../../+store/categories/actions/category.actions';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -24,6 +23,9 @@ import {
 } from '../../../../../../../shared/models/interfaces/c-properties-form.interface';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
 import { CreateCPropertyInterface } from '../../../../../../../shared/models/interfaces/create-c-property.interface';
+import { SharedActions } from '../../../../../../../+store/shared/actions/shared.actions';
+import { CPropertyActions } from '../../../../../../../+store/c-properties/actions/c-property.actions';
+import { CPropertiesGroupInterface } from '../../../../../../../shared/models/interfaces/c-properties-group.interface';
 
 @Component({
   selector: 'app-c-properties-dialog',
@@ -36,7 +38,7 @@ import { CreateCPropertyInterface } from '../../../../../../../shared/models/int
 export class CPropertiesDialogComponent implements OnInit {
   @Input({ required: true }) public dialog!: PopupDataInterface;
 
-  @Input({ required: true }) public parentId!: string;
+  @Input({ required: true }) public group!: CPropertiesGroupInterface;
 
   public cPropertiesForm!: FormGroup<CPropertiesFormInterface>;
 
@@ -70,7 +72,7 @@ export class CPropertiesDialogComponent implements OnInit {
       propertyName: this.fb.nonNullable.control<string>('', [
         requiredValidator(),
       ]),
-      groupId: this.fb.nonNullable.control<string>(this.parentId, [
+      groupId: this.fb.nonNullable.control<string>(this.group.id, [
         requiredValidator(),
       ]),
     });
@@ -78,7 +80,7 @@ export class CPropertiesDialogComponent implements OnInit {
 
   public closeDialog(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
   }
 
   public deleteProperty(propIndex: number): void {
@@ -88,6 +90,8 @@ export class CPropertiesDialogComponent implements OnInit {
   public saveProperties(): void {
     const properties: CreateCPropertyInterface[] =
       this.cPropertiesForm.getRawValue().properties;
-    this.store.dispatch(CategoryActions.addCProperties({ properties }));
+    this.store.dispatch(
+      CPropertyActions.addCProperties({ group: this.group, properties }),
+    );
   }
 }

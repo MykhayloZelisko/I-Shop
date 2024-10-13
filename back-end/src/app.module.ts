@@ -16,6 +16,7 @@ import { BrandsModule } from './brands/brands.module';
 import { CPropertiesModule } from './c-properties/c-properties.module';
 import { DevicesModule } from './devices/devices.module';
 import { CPropertiesGroupsModule } from './c-properties-groups/c-properties-groups.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { CPropertiesGroupsModule } from './c-properties-groups/c-properties-grou
     CPropertiesModule,
     DevicesModule,
     CPropertiesGroupsModule,
+    CommonModule,
   ],
 })
 export class AppModule {}

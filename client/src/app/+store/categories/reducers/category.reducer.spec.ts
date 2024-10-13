@@ -1,4 +1,4 @@
-import { reducer, initialState } from '../reducers/category.reducer';
+import { reducer, initialState } from './category.reducer';
 import { Action } from '@ngrx/store';
 
 describe('Category Reducer', () => {

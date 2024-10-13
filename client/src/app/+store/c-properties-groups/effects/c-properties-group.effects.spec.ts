@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { CPropertiesGroupEffects } from './c-properties-group.effects';
 
 describe('CPropertiesGroupEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: CPropertiesGroupEffects;
 
   beforeEach(() => {

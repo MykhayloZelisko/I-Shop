@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { CPropertyEffects } from './c-property.effects';
 
 describe('CPropertyEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: CPropertyEffects;
 
   beforeEach(() => {

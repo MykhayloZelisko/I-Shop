@@ -7,7 +7,8 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCPropertiesGroupInput } from './inputs/create-c-properties-group.input';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 import { UpdateCPropertiesGroupInput } from './inputs/update-c-properties-group.input';
-import { DeletedIds } from '../common/models/deleted-ids.model';
+import { Deleted } from '../common/models/deleted.model';
+import { ParseObjectIdArrayPipe } from '../common/pipes/parse-object-id-array/parse-object-id-array.pipe';
 
 @Resolver(() => CPropertiesGroup)
 @UseGuards(GqlAdminGuard)
@@ -17,11 +18,14 @@ export class CPropertiesGroupsResolver {
   ) {}
 
   @Query(() => [CPropertiesGroup], { name: 'allGroups' })
-  public async getAllCPropertiesGroups(): Promise<CPropertiesGroup[]> {
-    return this.cPropertiesGroupsService.getAllCPropertiesGroups();
+  public async getFilteredCPropertiesGroups(
+    @Args('ids', { type: () => [String] }, ParseObjectIdArrayPipe)
+    ids: string[],
+  ): Promise<CPropertiesGroup[]> {
+    return this.cPropertiesGroupsService.getFilteredCPropertiesGroups(ids);
   }
 
-  @Query(() => [CPropertiesGroup], { name: 'groupsById' })
+  @Query(() => [CPropertiesGroup], { name: 'groupsByCategoryId' })
   public async getCPGroupsByCategoryId(
     @Args('id', ParseObjectIdPipe) id: string,
   ): Promise<CPropertiesGroup[]> {
@@ -53,10 +57,10 @@ export class CPropertiesGroupsResolver {
     );
   }
 
-  @Mutation(() => DeletedIds)
+  @Mutation(() => Deleted)
   public async deleteCPropertiesGroup(
     @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<DeletedIds> {
+  ): Promise<Deleted> {
     return this.cPropertiesGroupsService.deleteCPropertiesGroup(id);
   }
 }

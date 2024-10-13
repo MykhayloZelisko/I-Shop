@@ -27,16 +27,13 @@ import {
   showErrorMessage,
 } from '../../../shared/utils/validators';
 import { DropdownModule } from 'primeng/dropdown';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, take, takeUntil, tap } from 'rxjs';
 import { BrandInterface } from '../../../shared/models/interfaces/brand.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { selectAllBrands } from '../../../+store/brands/selectors/brand.selectors';
 import { AsyncPipe, NgClass } from '@angular/common';
-import {
-  selectCascadeCategories,
-  selectPropertiesGroups,
-} from '../../../+store/categories/selectors/category.selectors';
+import { selectCascadeCategories } from '../../../+store/categories/selectors/category.selectors';
 import {
   CascadeSelectChangeEvent,
   CascadeSelectModule,
@@ -49,7 +46,13 @@ import { DeviceActions } from '../../../+store/devices/actions/device.actions';
 import { FormActions } from '../../../+store/form/actions/form.actions';
 import { selectFormCleared } from '../../../+store/form/selectors/form.selectors';
 import { InputComponent } from '../../../shared/components/input/input.component';
-import { CPropertiesGroupInterface } from '../../../shared/models/interfaces/c-properties-group.interface';
+import { GPTreeInterface } from '../../../shared/models/interfaces/g-p-tree.interface';
+import {
+  selectGPTreeById,
+  selectLoadGroupsAndPropertiesForCategory,
+} from '../../../+store/shared/selectors/shared.selectors';
+import { SharedActions } from '../../../+store/shared/actions/shared.actions';
+import { CPropertyActions } from '../../../+store/c-properties/actions/c-property.actions';
 
 @Component({
   selector: 'app-new-device',
@@ -79,15 +82,15 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public categories$!: Observable<any[]>;
 
-  public propertiesGroups$!: Observable<CPropertiesGroupInterface[]>;
+  public propertiesGroups$!: Observable<GPTreeInterface[]>;
 
   public files: File[] = [];
+
+  public isFormCleared$!: Observable<boolean>;
 
   private fb = inject(FormBuilder);
 
   private store = inject(Store<State>);
-
-  public isFormCleared$!: Observable<boolean>;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -157,21 +160,55 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public changeValue(event: CascadeSelectChangeEvent): void {
     this.clearGroupsCtrl();
+    this.loadGroupsAndProperties(event.value);
+
     this.propertiesGroups$ = this.store
-      .select(selectPropertiesGroups(event.value))
+      .select(selectGPTreeById(event.value))
       .pipe(
-        takeUntil(this.destroy$),
         tap((groups) => {
+          let hasGroups = false;
+
           groups.forEach((group) => {
-            this.addGroupCtrl(group);
+            if (group.hasProperties && group.properties.length) {
+              this.addGroupCtrl(group);
+              hasGroups = true;
+            }
           });
-          if (!groups.length) {
+
+          if (event.value && !hasGroups) {
             this.newDeviceForm.controls.categoryId.setErrors({
               nonEmptyArray: this.showMessage('groups'),
             });
+          } else if (hasGroups) {
+            this.newDeviceForm.controls.categoryId.setErrors(null);
           }
         }),
       );
+  }
+
+  private loadGroupsAndProperties(categoryId: string): void {
+    this.store
+      .select(selectLoadGroupsAndPropertiesForCategory(categoryId))
+      .pipe(
+        take(1),
+        tap((gpState) => {
+          if (gpState.loadGroups) {
+            this.store.dispatch(
+              SharedActions.addGroupsWithProperties({ id: categoryId }),
+            );
+          } else if (
+            !gpState.loadProperties.allGroups &&
+            gpState.loadProperties.groupsIds.length
+          ) {
+            this.store.dispatch(
+              CPropertyActions.addCPropertiesByGroupsIds({
+                ids: gpState.loadProperties.groupsIds,
+              }),
+            );
+          }
+        }),
+      )
+      .subscribe();
   }
 
   public uploadFiles(event: Event): void {
@@ -230,7 +267,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     >;
   }
 
-  public addGroupCtrl(group: CPropertiesGroupInterface): void {
+  public addGroupCtrl(group: GPTreeInterface): void {
     const groupIndex = this.getGroupsCtrl().length;
     this.getGroupsCtrl().push(this.newGroupCtrl(group.groupName));
     group.properties.forEach((property: CPropertyInterface) => {

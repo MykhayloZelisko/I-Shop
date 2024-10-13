@@ -35,7 +35,7 @@
     <div
       class="c-properties-group-item"
       [ngClass]="{
-        'c-properties-group-item--empty': !group.properties.length
+        'c-properties-group-item--empty': !group.hasProperties
       }"
     >
       <p class="c-properties-group-item__name">
@@ -74,7 +74,7 @@
     ) {
       <app-c-properties-dialog
         [dialog]="dialog"
-        [parentId]="group.id"
+        [group]="group"
       ></app-c-properties-dialog>
     }
   }

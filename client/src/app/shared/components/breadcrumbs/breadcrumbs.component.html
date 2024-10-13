@@ -1,67 +1,67 @@
-@if (breadcrumbsParams$ | async; as params) {
-  <div class="breadcrumbs">
-    <a routerLink="/">
-      <svg-icon
-        class="breadcrumbs__icon"
-        src="assets/images/home-icon.svg"
-      ></svg-icon>
-    </a>
-    @for (param of params.categoryPath; track param; let last = $last) {
-      <p class="breadcrumbs__text">
-        /
-        @if (last && params.isCategory) {
-          <span>{{ param.categoryName }}</span>
-        } @else {
-          <a
-            class="breadcrumbs__link"
-            [routerLink]="['/categories', param.id]"
-            >{{ param.categoryName }}</a
-          >
-        }
-      </p>
-    }
-  </div>
-  <div class="breadcrumbs--small">
-    @if (!params.isCategory) {
-      <a
-        class="breadcrumbs__link"
-        [routerLink]="[
-          '/categories',
-          params.categoryPath[params.categoryPath.length - 1].id
-        ]"
-      >
-        <svg-icon
-          class="breadcrumbs__icon"
-          src="assets/images/line-angle-left-icon.svg"
-        ></svg-icon>
-        <p class="breadcrumbs__text">
-          {{ params.categoryPath[params.categoryPath.length - 1].categoryName }}
-        </p>
-      </a>
-    } @else if (params.categoryPath.length > 1) {
-      <a
-        class="breadcrumbs__link"
-        [routerLink]="[
-          '/categories',
-          params.categoryPath[params.categoryPath.length - 2].id
-        ]"
-      >
-        <svg-icon
-          class="breadcrumbs__icon"
-          src="assets/images/line-angle-left-icon.svg"
-        ></svg-icon>
-        <span class="breadcrumbs__text">{{
-          params.categoryPath[params.categoryPath.length - 2].categoryName
-        }}</span>
-      </a>
-    } @else {
-      <a class="breadcrumbs__link" routerLink="/">
-        <svg-icon
-          class="breadcrumbs__icon"
-          src="assets/images/line-angle-left-icon.svg"
-        ></svg-icon>
-        <span class="breadcrumbs__text">На головну</span>
-      </a>
-    }
-  </div>
-}
+<!--@if (breadcrumbsParams$ | async; as params) {-->
+<!--  <div class="breadcrumbs">-->
+<!--    <a routerLink="/">-->
+<!--      <svg-icon-->
+<!--        class="breadcrumbs__icon"-->
+<!--        src="assets/images/home-icon.svg"-->
+<!--      ></svg-icon>-->
+<!--    </a>-->
+<!--    @for (param of params.categoryPath; track param; let last = $last) {-->
+<!--      <p class="breadcrumbs__text">-->
+<!--        /-->
+<!--        @if (last && params.isCategory) {-->
+<!--          <span>{{ param.categoryName }}</span>-->
+<!--        } @else {-->
+<!--          <a-->
+<!--            class="breadcrumbs__link"-->
+<!--            [routerLink]="['/categories', param.id]"-->
+<!--            >{{ param.categoryName }}</a-->
+<!--          >-->
+<!--        }-->
+<!--      </p>-->
+<!--    }-->
+<!--  </div>-->
+<!--  <div class="breadcrumbs&#45;&#45;small">-->
+<!--    @if (!params.isCategory) {-->
+<!--      <a-->
+<!--        class="breadcrumbs__link"-->
+<!--        [routerLink]="[-->
+<!--          '/categories',-->
+<!--          params.categoryPath[params.categoryPath.length - 1].id-->
+<!--        ]"-->
+<!--      >-->
+<!--        <svg-icon-->
+<!--          class="breadcrumbs__icon"-->
+<!--          src="assets/images/line-angle-left-icon.svg"-->
+<!--        ></svg-icon>-->
+<!--        <p class="breadcrumbs__text">-->
+<!--          {{ params.categoryPath[params.categoryPath.length - 1].categoryName }}-->
+<!--        </p>-->
+<!--      </a>-->
+<!--    } @else if (params.categoryPath.length > 1) {-->
+<!--      <a-->
+<!--        class="breadcrumbs__link"-->
+<!--        [routerLink]="[-->
+<!--          '/categories',-->
+<!--          params.categoryPath[params.categoryPath.length - 2].id-->
+<!--        ]"-->
+<!--      >-->
+<!--        <svg-icon-->
+<!--          class="breadcrumbs__icon"-->
+<!--          src="assets/images/line-angle-left-icon.svg"-->
+<!--        ></svg-icon>-->
+<!--        <span class="breadcrumbs__text">{{-->
+<!--          params.categoryPath[params.categoryPath.length - 2].categoryName-->
+<!--        }}</span>-->
+<!--      </a>-->
+<!--    } @else {-->
+<!--      <a class="breadcrumbs__link" routerLink="/">-->
+<!--        <svg-icon-->
+<!--          class="breadcrumbs__icon"-->
+<!--          src="assets/images/line-angle-left-icon.svg"-->
+<!--        ></svg-icon>-->
+<!--        <span class="breadcrumbs__text">На головну</span>-->
+<!--      </a>-->
+<!--    }-->
+<!--  </div>-->
+<!--}-->

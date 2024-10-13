@@ -7,6 +7,8 @@ import * as loader from '../loader/reducers/loader.reducer';
 import * as brands from '../brands/reducers/brand.reducer';
 import * as form from '../form/reducers/form.reducer';
 import * as devices from '../devices/reducers/device.reducer';
+import * as cPropertiesGroups from '../c-properties-groups/reducers/c-properties-group.reducer';
+import * as cProperties from '../c-properties/reducers/c-property.reducer';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { RouterStateUrlInterface } from '../router/serializer/custom-route-serializer';
 
@@ -18,6 +20,8 @@ export interface State {
   brands: brands.State;
   form: form.State;
   devices: devices.State;
+  cPropertiesGroups: cPropertiesGroups.State;
+  cProperties: cProperties.State;
   router: RouterReducerState<RouterStateUrlInterface>;
 }
 
@@ -29,6 +33,8 @@ export const reducers: ActionReducerMap<State> = {
   brands: brands.reducer,
   form: form.reducer,
   devices: devices.reducer,
+  cPropertiesGroups: cPropertiesGroups.reducer,
+  cProperties: cProperties.reducer,
   router: routerReducer,
 };
 

@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
 import {
   selectCurrentCategory,
   selectHasChildren,
-  selectHasGroups,
 } from '../../../../../+store/categories/selectors/category.selectors';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
@@ -31,6 +30,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CategoryFormInterface } from '../../../../../shared/models/interfaces/sub-categories-form.interface';
+import { SharedActions } from '../../../../../+store/shared/actions/shared.actions';
 import { requiredValidator } from '../../../../../shared/utils/validators';
 import { SvgFileControlComponent } from '../../../../../shared/components/svg-file-control/svg-file-control.component';
 import { DndFileControlComponent } from '../../../../../shared/components/dnd-file-control/dnd-file-control.component';
@@ -64,8 +64,6 @@ export class CategoryItemComponent implements OnInit {
 
   public hasChildren$!: Observable<boolean>;
 
-  public hasGroups$!: Observable<boolean>;
-
   public dialog$!: Observable<PopupDataInterface>;
 
   public categoryForm!: FormGroup<CategoryFormInterface>;
@@ -83,7 +81,6 @@ export class CategoryItemComponent implements OnInit {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
     this.dialog$ = this.store.select(selectPopup);
     this.hasChildren$ = this.store.select(selectHasChildren(this.category.id));
-    this.hasGroups$ = this.store.select(selectHasGroups(this.category.id));
   }
 
   public initCategoryForm(): void {
@@ -116,7 +113,7 @@ export class CategoryItemComponent implements OnInit {
   public editCategory(): void {
     this.initCategoryForm();
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
@@ -128,7 +125,7 @@ export class CategoryItemComponent implements OnInit {
   }
 
   public cancelEditCategory(): void {
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
   }
 
   public saveCategory(): void {
@@ -155,7 +152,7 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
@@ -194,7 +191,7 @@ export class CategoryItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,

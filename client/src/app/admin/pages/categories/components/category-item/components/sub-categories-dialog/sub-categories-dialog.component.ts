@@ -25,6 +25,7 @@ import {
 import { CreateCategoryInterface } from '../../../../../../../shared/models/interfaces/create-category.interface';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
 import { DndFileControlComponent } from '../../../../../../../shared/components/dnd-file-control/dnd-file-control.component';
+import { SharedActions } from '../../../../../../../+store/shared/actions/shared.actions';
 
 @Component({
   selector: 'app-sub-categories-dialog',
@@ -91,7 +92,7 @@ export class SubCategoriesDialogComponent implements OnInit {
 
   public closeDialog(): void {
     this.store.dispatch(PopupActions.closePopup());
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
   }
 
   public deleteCategory(catIndex: number): void {

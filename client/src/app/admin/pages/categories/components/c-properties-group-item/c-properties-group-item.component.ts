@@ -8,7 +8,7 @@ import {
 import { CPropertiesGroupInterface } from '../../../../../shared/models/interfaces/c-properties-group.interface';
 import { Observable } from 'rxjs';
 import { CurrentStatusInterface } from '../../../../../shared/models/interfaces/current-status.interface';
-import { selectCurrentGroup } from '../../../../../+store/categories/selectors/category.selectors';
+import { selectCurrentGroup } from '../../../../../+store/c-properties-groups/selectors/c-properties-group.selectors';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { AsyncPipe, NgClass } from '@angular/common';
@@ -18,9 +18,10 @@ import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enu
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CPropertiesDialogComponent } from './components/c-properties-dialog/c-properties-dialog.component';
 import { requiredValidator } from '../../../../../shared/utils/validators';
-import { CategoryActions } from '../../../../../+store/categories/actions/category.actions';
+import { CPropertiesGroupActions } from '../../../../../+store/c-properties-groups/actions/c-properties-group.actions';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
+import { SharedActions } from '../../../../../+store/shared/actions/shared.actions';
 
 @Component({
   selector: 'app-c-properties-group-item',
@@ -61,7 +62,7 @@ export class CPropertiesGroupItemComponent implements OnInit {
 
   public editGroup(): void {
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
@@ -75,18 +76,21 @@ export class CPropertiesGroupItemComponent implements OnInit {
   public saveGroup(): void {
     const groupName = this.groupCtrl.getRawValue();
     this.store.dispatch(
-      CategoryActions.updateCPropertiesGroup({ id: this.group.id, groupName }),
+      CPropertiesGroupActions.updateCPropertiesGroup({
+        id: this.group.id,
+        groupName,
+      }),
     );
   }
 
   public cancelEditGroup(): void {
-    this.store.dispatch(CategoryActions.clearCGPState());
+    this.store.dispatch(SharedActions.clearCGPState());
     this.groupCtrl.setValue(this.group.groupName);
   }
 
   public deleteGroup(): void {
     this.store.dispatch(
-      CategoryActions.deleteCPropertiesGroup({ id: this.group.id }),
+      CPropertiesGroupActions.deleteCPropertiesGroup({ id: this.group.id }),
     );
   }
 
@@ -100,7 +104,7 @@ export class CPropertiesGroupItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CategoryActions.updateCGPState({
+      SharedActions.updateCGPState({
         payload: {
           currentPropertyId: null,
           isNewCategory: false,

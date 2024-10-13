@@ -17,7 +17,7 @@ import {
 } from './schemas/c-properties-group.schema';
 import { CPropertiesGroup as CPropertiesGroupGQL } from './models/c-properties-group.model';
 import { CategoriesService } from '../categories/categories.service';
-import { DeletedIds } from '../common/models/deleted-ids.model';
+import { Deleted } from '../common/models/deleted.model';
 import { CPropertiesService } from '../c-properties/c-properties.service';
 
 @Injectable()
@@ -30,16 +30,67 @@ export class CPropertiesGroupsService {
     private cPropertiesService: CPropertiesService,
   ) {}
 
-  public async getAllCPropertiesGroups(): Promise<CPropertiesGroupGQL[]> {
-    const groups = await this.cPropertiesGroupModel.find().exec();
-    return groups.map((group: CPropertiesGroupDocument) => group.toObject());
+  public async getFilteredCPropertiesGroups(
+    ids: string[],
+  ): Promise<CPropertiesGroupGQL[]> {
+    const groups = await this.cPropertiesGroupModel
+      .find({
+        _id: { $nin: ids },
+      })
+      .exec();
+
+    return Promise.all(
+      groups.map(async (group: CPropertiesGroupDocument) => {
+        const hasProperties = await this.cPropertiesService.hasGroupProperties(
+          group.id,
+        );
+        return {
+          ...group.toObject(),
+          hasProperties,
+        };
+      }),
+    );
   }
 
   public async getCPGroupsByCategoryId(
     categoryId: string,
   ): Promise<CPropertiesGroupGQL[]> {
     const groups = await this.cPropertiesGroupModel.find({ categoryId }).exec();
-    return groups.map((group: CPropertiesGroupDocument) => group.toObject());
+
+    return Promise.all(
+      groups.map(async (group: CPropertiesGroupDocument) => {
+        const hasProperties = await this.cPropertiesService.hasGroupProperties(
+          group.id,
+        );
+        return {
+          ...group.toObject(),
+          hasProperties,
+        };
+      }),
+    );
+  }
+
+  public async getCPropertiesGroupById(
+    id: string,
+  ): Promise<CPropertiesGroupGQL> {
+    const group = await this.cPropertiesGroupModel.findById(id).exec();
+    if (!group) {
+      throw new NotFoundException('Group not found');
+    }
+    const hasProperties = await this.cPropertiesService.hasGroupProperties(
+      group.id,
+    );
+    return {
+      ...group.toObject(),
+      hasProperties,
+    };
+  }
+
+  public async hasCategoryGroups(categoryId: string): Promise<boolean> {
+    const countGroups = await this.cPropertiesGroupModel
+      .countDocuments({ categoryId })
+      .exec();
+    return countGroups > 0;
   }
 
   public async createCPropertiesGroups(
@@ -76,9 +127,10 @@ export class CPropertiesGroupsService {
     const createdGroups = await this.cPropertiesGroupModel.insertMany(
       createCPropertiesGroupInputs,
     );
-    return createdGroups.map((group: CPropertiesGroupDocument) =>
-      group.toObject(),
-    );
+    return createdGroups.map((group: CPropertiesGroupDocument) => ({
+      ...group.toObject(),
+      hasProperties: false,
+    }));
   }
 
   public async updateCPropertiesGroup(
@@ -101,21 +153,29 @@ export class CPropertiesGroupsService {
       )
       .exec();
     if (updatedGroup) {
-      return updatedGroup.toObject();
+      const hasProperties = await this.cPropertiesService.hasGroupProperties(
+        updatedGroup.id,
+      );
+      return { ...updatedGroup.toObject(), hasProperties };
     }
     throw new BadRequestException('A group is not updated');
   }
 
-  public async deleteCPropertiesGroup(id: string): Promise<DeletedIds> {
+  public async deleteCPropertiesGroup(id: string): Promise<Deleted> {
     // TODO: check products. If a property cannot be deleted you should throw ForbiddenException
     const group = await this.cPropertiesGroupModel.findByIdAndDelete(id).exec();
     if (group) {
       const ids = await this.cPropertiesService.deleteAllCPropertiesByGroupsIds(
         [id],
       );
+      const category = await this.categoriesService.getCategoryById(
+        group.categoryId,
+      );
       return {
         ...ids,
         groupsIds: [id],
+        category,
+        group: null,
       };
     } else {
       throw new NotFoundException('Property not found');
@@ -124,7 +184,7 @@ export class CPropertiesGroupsService {
 
   public async deleteAllGroupsByCategoriesIds(
     categoriesIds: string[],
-  ): Promise<DeletedIds> {
+  ): Promise<Deleted> {
     try {
       const groups = await this.cPropertiesGroupModel
         .find({ categoryId: { $in: categoriesIds } })
@@ -143,6 +203,8 @@ export class CPropertiesGroupsService {
         propertiesIds: ids.propertiesIds,
         groupsIds,
         categoriesIds,
+        group: null,
+        category: null,
       };
     } catch {
       throw new InternalServerErrorException('Something is wrong');

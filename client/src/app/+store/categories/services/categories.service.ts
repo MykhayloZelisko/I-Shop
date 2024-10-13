@@ -6,8 +6,7 @@ import { ApolloQueryResult } from '@apollo/client';
 import { environment } from '../../../../environments/environment';
 import { CreateCategoryInterface } from '../../../shared/models/interfaces/create-category.interface';
 import { UpdateCategoryInterface } from '../../../shared/models/interfaces/update-category.interface';
-import { CreateCPropertyInterface } from '../../../shared/models/interfaces/create-c-property.interface';
-import { CreateCPropertiesGroupInterface } from '../../../shared/models/interfaces/create-c-properties-group.interface';
+import { DeletedInterface } from '../../../shared/models/interfaces/deleted.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,16 +26,7 @@ export class CategoriesService {
               image
               icon
               level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
+              hasGroups
             }
           }
         `,
@@ -80,16 +70,7 @@ export class CategoriesService {
               image
               icon
               level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
+              hasGroups
             }
           }
         `,
@@ -133,16 +114,7 @@ export class CategoriesService {
               image
               icon
               level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
+              hasGroups
             }
           }
         `,
@@ -180,16 +152,7 @@ export class CategoriesService {
               image
               icon
               level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
+              hasGroups
             }
           }
         `,
@@ -212,13 +175,32 @@ export class CategoriesService {
       );
   }
 
-  public deleteCategory(id: string): Observable<string[]> {
+  public deleteCategory(id: string): Observable<DeletedInterface> {
     return this.apollo
       .use('withCredentials')
       .mutate({
         mutation: gql`
           mutation DeleteCategory($id: String!) {
-            deleteCategory(id: $id)
+            deleteCategory(id: $id) {
+              categoriesIds
+              groupsIds
+              propertiesIds
+              category {
+                id
+                categoryName
+                parentId
+                image
+                icon
+                level
+                hasGroups
+              }
+              group {
+                id
+                groupName
+                categoryId
+                hasProperties
+              }
+            }
           }
         `,
         variables: {
@@ -231,322 +213,6 @@ export class CategoriesService {
             throw response.errors[0];
           } else {
             return response.data.deleteCategory;
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
-  }
-
-  public addCProperties(
-    data: CreateCPropertyInterface[],
-  ): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation CreateCProperties(
-            $createCPropertyInputs: [CreateCPropertyInput!]!
-          ) {
-            createCProperties(createCPropertyInputs: $createCPropertyInputs) {
-              id
-              categoryName
-              parentId
-              image
-              icon
-              level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
-            }
-          }
-        `,
-        variables: { createCPropertyInputs: data },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.createCProperties,
-              image: response.data.createCProperties.image
-                ? `${environment.baseUrl}/${response.data.createCProperties.image}`
-                : null,
-              icon: response.data.createCProperties.icon
-                ? `${environment.baseUrl}/${response.data.createCProperties.icon}`
-                : null,
-            };
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
-  }
-
-  public updateCProperty(
-    id: string,
-    propertyName: string,
-  ): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation UpdateCProperty(
-            $id: String!
-            $updateCPropertyInput: UpdateCPropertyInput!
-          ) {
-            updateCProperty(
-              id: $id
-              updateCPropertyInput: $updateCPropertyInput
-            ) {
-              id
-              categoryName
-              parentId
-              image
-              icon
-              level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
-            }
-          }
-        `,
-        variables: { id: id, updateCPropertyInputs: { propertyName } },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.updateCProperty,
-              image: response.data.updateCProperty.image
-                ? `${environment.baseUrl}/${response.data.updateCProperty.image}`
-                : null,
-              icon: response.data.updateCProperty.icon
-                ? `${environment.baseUrl}/${response.data.updateCProperty.icon}`
-                : null,
-            };
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
-  }
-
-  public deleteCProperty(id: string): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation DeleteCProperty($id: String!) {
-            deleteCProperty(id: $id) {
-              id
-              categoryName
-              parentId
-              image
-              icon
-              level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
-            }
-          }
-        `,
-        variables: { id: id },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.deleteCProperty,
-              image: response.data.deleteCProperty.image
-                ? `${environment.baseUrl}/${response.data.deleteCProperty.image}`
-                : null,
-              icon: response.data.deleteCProperty.icon
-                ? `${environment.baseUrl}/${response.data.deleteCProperty.icon}`
-                : null,
-            };
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
-  }
-
-  public addCPropertiesGroup(
-    data: CreateCPropertiesGroupInterface[],
-  ): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation CreateCPropertiesGroups(
-            $createCPropertiesGroupInputs: [CreateCPropertiesGroupInput!]!
-          ) {
-            createCPropertiesGroups(
-              createCPropertiesGroupInputs: $createCPropertiesGroupInputs
-            ) {
-              id
-              categoryName
-              parentId
-              image
-              icon
-              level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
-            }
-          }
-        `,
-        variables: { createCPropertiesGroupInputs: data },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.createCPropertiesGroups,
-              image: response.data.createCPropertiesGroups.image
-                ? `${environment.baseUrl}/${response.data.createCPropertiesGroups.image}`
-                : null,
-              icon: response.data.createCPropertiesGroups.icon
-                ? `${environment.baseUrl}/${response.data.createCPropertiesGroups.icon}`
-                : null,
-            };
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
-  }
-
-  public updateCPropertiesGroup(
-    id: string,
-    groupName: string,
-  ): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation UpdateCPropertiesGroup(
-            $id: String!
-            $updateCPropertiesGroupInput: UpdateCPropertiesGroupInput!
-          ) {
-            updateCPropertiesGroup(
-              id: $id
-              updateCPropertiesGroupInput: $updateCPropertiesGroupInput
-            ) {
-              id
-              categoryName
-              parentId
-              image
-              icon
-              level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
-            }
-          }
-        `,
-        variables: { id: id, updateCPropertiesGroupInput: { groupName } },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.updateCPropertiesGroup,
-              image: response.data.updateCPropertiesGroup.image
-                ? `${environment.baseUrl}/${response.data.updateCPropertiesGroup.image}`
-                : null,
-              icon: response.data.updateCPropertiesGroup.icon
-                ? `${environment.baseUrl}/${response.data.updateCPropertiesGroup.icon}`
-                : null,
-            };
-          }
-        }),
-        catchError((error) => throwError(() => error)),
-      );
-  }
-
-  public deleteCPropertiesGroup(id: string): Observable<CategoryInterface> {
-    return this.apollo
-      .use('withCredentials')
-      .mutate({
-        mutation: gql`
-          mutation DeleteCPropertiesGroup($id: String!) {
-            deleteCPropertiesGroup(id: $id) {
-              id
-              categoryName
-              parentId
-              image
-              icon
-              level
-              groups {
-                id
-                categoryId
-                groupName
-                properties {
-                  id
-                  groupId
-                  propertyName
-                }
-              }
-            }
-          }
-        `,
-        variables: { id: id },
-      })
-      .pipe(
-        map((response: MutationResult) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.deleteCPropertiesGroup,
-              image: response.data.deleteCPropertiesGroup.image
-                ? `${environment.baseUrl}/${response.data.deleteCPropertiesGroup.image}`
-                : null,
-              icon: response.data.deleteCPropertiesGroup.icon
-                ? `${environment.baseUrl}/${response.data.deleteCPropertiesGroup.icon}`
-                : null,
-            };
           }
         }),
         catchError((error) => throwError(() => error)),

@@ -7,7 +7,7 @@ import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
-import { DeletedIds } from '../common/models/deleted-ids.model';
+import { Deleted } from '../common/models/deleted.model';
 
 @Resolver(() => Category)
 export class CategoriesResolver {
@@ -47,11 +47,11 @@ export class CategoriesResolver {
     return this.categoriesService.updateCategory(id, updateCategoryInput);
   }
 
-  @Mutation(() => DeletedIds)
+  @Mutation(() => Deleted)
   @UseGuards(GqlAdminGuard)
   public async deleteCategory(
     @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<DeletedIds> {
+  ): Promise<Deleted> {
     return this.categoriesService.deleteCategory(id);
   }
 }

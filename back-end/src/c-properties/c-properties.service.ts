@@ -1,6 +1,8 @@
 import {
   BadRequestException,
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -11,17 +13,43 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CProperty, CPropertyDocument } from './schemas/c-property.schema';
 import { CProperty as CPropertyGQL } from './models/c-property.model';
-import { DeletedIds } from '../common/models/deleted-ids.model';
+import { Deleted } from '../common/models/deleted.model';
+import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
+import { CPropertiesGroup } from '../c-properties-groups/models/c-properties-group.model';
 
 @Injectable()
 export class CPropertiesService {
   public constructor(
     @InjectModel(CProperty.name)
     private cPropertyModel: Model<CPropertyDocument>,
+    @Inject(forwardRef(() => CPropertiesGroupsService))
+    private cPropertiesGroupsService: CPropertiesGroupsService,
   ) {}
 
-  public async getAllCProperties(): Promise<CPropertyGQL[]> {
-    const properties = await this.cPropertyModel.find().exec();
+  public async getFilteredCProperties(ids: string[]): Promise<CPropertyGQL[]> {
+    const properties = await this.cPropertyModel
+      .find({
+        _id: { $nin: ids },
+      })
+      .exec();
+    return properties.map((property: CPropertyDocument) => property.toObject());
+  }
+
+  public async getCPropertiesByCategoryId(id: string): Promise<CPropertyGQL[]> {
+    const groups =
+      await this.cPropertiesGroupsService.getCPGroupsByCategoryId(id);
+    const ids = groups.map((group: CPropertiesGroup) => group.id);
+    return this.getCPropertiesByGroupsIds(ids);
+  }
+
+  public async getCPropertiesByGroupsIds(
+    ids: string[],
+  ): Promise<CPropertyGQL[]> {
+    const properties = await this.cPropertyModel
+      .find({
+        groupId: { $in: ids },
+      })
+      .exec();
     return properties.map((property: CPropertyDocument) => property.toObject());
   }
 
@@ -88,14 +116,19 @@ export class CPropertiesService {
     throw new BadRequestException('A property is not updated');
   }
 
-  public async deleteCProperty(id: string): Promise<DeletedIds> {
+  public async deleteCProperty(id: string): Promise<Deleted> {
     // TODO: check products. If a property cannot be deleted you should throw ForbiddenException
     const property = await this.cPropertyModel.findByIdAndDelete(id).exec();
     if (property) {
+      const group = await this.cPropertiesGroupsService.getCPropertiesGroupById(
+        property.groupId,
+      );
       return {
         categoriesIds: [],
         groupsIds: [],
         propertiesIds: [id],
+        group,
+        category: null,
       };
     } else {
       throw new NotFoundException('Property not found');
@@ -104,7 +137,7 @@ export class CPropertiesService {
 
   public async deleteAllCPropertiesByGroupsIds(
     groupsIds: string[],
-  ): Promise<DeletedIds> {
+  ): Promise<Deleted> {
     try {
       const properties = await this.cPropertyModel
         .find({
@@ -119,9 +152,18 @@ export class CPropertiesService {
         groupsIds,
         propertiesIds,
         categoriesIds: [],
+        group: null,
+        category: null,
       };
     } catch {
       throw new InternalServerErrorException('Something is wrong');
     }
+  }
+
+  public async hasGroupProperties(groupId: string): Promise<boolean> {
+    const countProperties = await this.cPropertyModel
+      .countDocuments({ groupId })
+      .exec();
+    return countProperties > 0;
   }
 }

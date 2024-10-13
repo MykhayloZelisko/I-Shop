@@ -4,14 +4,13 @@ import { CategoryActions } from '../actions/category.actions';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { UpdateStr } from '@ngrx/entity/src/models';
 import { CurrentStatusInterface } from '../../../shared/models/interfaces/current-status.interface';
+import { SharedActions } from '../../shared/actions/shared.actions';
 
 export const categoriesFeatureKey = 'categories';
 
 export interface State extends EntityState<CategoryInterface> {
   currentCategory: CurrentStatusInterface;
-  currentGroup: CurrentStatusInterface;
   isNewCategory: boolean;
-  currentPropertyId: string | null;
 }
 
 export const adapter: EntityAdapter<CategoryInterface> =
@@ -22,12 +21,7 @@ export const initialState: State = adapter.getInitialState({
     id: null,
     isEditable: false,
   },
-  currentGroup: {
-    id: null,
-    isEditable: false,
-  },
   isNewCategory: false,
-  currentPropertyId: null,
 });
 
 export const reducer = createReducer(
@@ -47,6 +41,7 @@ export const reducer = createReducer(
         image: action.category.image,
         icon: action.category.icon,
         expanded: action.category.expanded,
+        hasGroups: action.category.hasGroups,
       },
     };
     return adapter.updateOne(update, state);
@@ -54,49 +49,41 @@ export const reducer = createReducer(
   on(CategoryActions.updateCategories, (state, action) => {
     const categoryIds: string[] = state.ids as string[];
     const updatedCategories: UpdateStr<CategoryInterface>[] = categoryIds.map(
-      (id: string) => ({
-        id,
-        changes: { expanded: action.expanded },
-      }),
+      (id: string) => {
+        const category = state.entities[id];
+        const changes: Partial<CategoryInterface> = {};
+
+        if (action.expanded !== undefined) {
+          changes.expanded = action.expanded;
+        }
+        if (
+          action.loadedGroups !== undefined &&
+          category &&
+          category.hasGroups
+        ) {
+          changes.loadedGroups = action.loadedGroups;
+        }
+
+        return { id, changes };
+      },
     );
     return adapter.updateMany(updatedCategories, state);
   }),
-  on(CategoryActions.deleteCategories, (state, action) =>
+  on(CategoryActions.deleteCategorySuccess, (state, action) =>
     adapter.removeMany(action.ids, state),
   ),
   on(CategoryActions.loadCategoriesSuccess, (state, action) =>
     adapter.setAll(action.categories, state),
   ),
-  on(
-    CategoryActions.addCPropertiesGroupsSuccess,
-    CategoryActions.updateCPropertiesGroupSuccess,
-    CategoryActions.deleteCPropertiesGroupSuccess,
-    CategoryActions.addCPropertiesSuccess,
-    CategoryActions.updateCPropertySuccess,
-    CategoryActions.deleteCPropertySuccess,
-    (state, action) => {
-      const update: UpdateStr<CategoryInterface> = {
-        id: action.category.id,
-        changes: {
-          groups: action.category.groups,
-        },
-      };
-      return adapter.updateOne(update, state);
-    },
-  ),
   // other actions
-  on(CategoryActions.updateCGPState, (state, action) => ({
+  on(SharedActions.updateCGPState, (state, action) => ({
     ...state,
-    currentPropertyId: action.payload.currentPropertyId,
     isNewCategory: action.payload.isNewCategory,
     currentCategory: { ...action.payload.currentCategory },
-    currentGroup: { ...action.payload.currentGroup },
   })),
-  on(CategoryActions.clearCGPState, (state) => ({
+  on(SharedActions.clearCGPState, (state) => ({
     ...state,
-    currentPropertyId: null,
     isNewCategory: false,
     currentCategory: { id: null, isEditable: false },
-    currentGroup: { id: null, isEditable: false },
   })),
 );

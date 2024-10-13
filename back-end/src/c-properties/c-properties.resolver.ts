@@ -7,7 +7,8 @@ import { UseGuards, UsePipes } from '@nestjs/common';
 import { GqlAdminGuard } from '../common/guards/gql-admin/gql-admin.guard';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
-import { DeletedIds } from '../common/models/deleted-ids.model';
+import { Deleted } from '../common/models/deleted.model';
+import { ParseObjectIdArrayPipe } from '../common/pipes/parse-object-id-array/parse-object-id-array.pipe';
 
 @Resolver(() => CProperty)
 @UseGuards(GqlAdminGuard)
@@ -15,11 +16,22 @@ export class CPropertiesResolver {
   public constructor(private cPropertiesService: CPropertiesService) {}
 
   @Query(() => [CProperty], { name: 'allProperties' })
-  public async getAllCProperties(): Promise<CProperty[]> {
-    return this.cPropertiesService.getAllCProperties();
+  public async getFilteredCProperties(
+    @Args('ids', { type: () => [String] }, ParseObjectIdArrayPipe)
+    ids: string[],
+  ): Promise<CProperty[]> {
+    return this.cPropertiesService.getFilteredCProperties(ids);
   }
 
-  @Query(() => [CProperty], { name: 'propertiesById' })
+  @Query(() => [CProperty], { name: 'propertiesByGroupsIds' })
+  public async getCPropertiesByGroupsIds(
+    @Args('ids', { type: () => [String] }, ParseObjectIdArrayPipe)
+    ids: string[],
+  ): Promise<CProperty[]> {
+    return this.cPropertiesService.getCPropertiesByGroupsIds(ids);
+  }
+
+  @Query(() => [CProperty], { name: 'propertiesByGroupId' })
   public async getCPropertiesByGroupId(
     @Args('id', ParseObjectIdPipe) id: string,
   ): Promise<CProperty[]> {
@@ -44,10 +56,10 @@ export class CPropertiesResolver {
     return this.cPropertiesService.updateCProperty(id, updateCPropertyInput);
   }
 
-  @Mutation(() => DeletedIds)
+  @Mutation(() => Deleted)
   public async deleteCProperty(
     @Args('id', ParseObjectIdPipe) id: string,
-  ): Promise<DeletedIds> {
+  ): Promise<Deleted> {
     return this.cPropertiesService.deleteCProperty(id);
   }
 }

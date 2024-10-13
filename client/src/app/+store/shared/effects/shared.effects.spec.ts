@@ -10,10 +10,7 @@ describe('SharedEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        SharedEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [SharedEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(SharedEffects);

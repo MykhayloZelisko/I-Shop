@@ -10,10 +10,7 @@ describe('CPropertiesGroupEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CPropertiesGroupEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [CPropertiesGroupEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(CPropertiesGroupEffects);

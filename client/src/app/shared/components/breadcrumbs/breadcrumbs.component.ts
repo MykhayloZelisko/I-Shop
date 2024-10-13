@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-//   inject,
+  //   inject,
   OnInit,
 } from '@angular/core';
 // import { Observable } from 'rxjs';
@@ -16,17 +16,17 @@ import {
 @Component({
   selector: 'app-breadcrumbs',
   standalone: true,
-//   imports: [AsyncPipe, RouterLink, SvgIconComponent],
+  //   imports: [AsyncPipe, RouterLink, SvgIconComponent],
   templateUrl: './breadcrumbs.component.html',
   styleUrl: './breadcrumbs.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbsComponent implements OnInit {
-//   public breadcrumbsParams$!: Observable<BreadcrumbsParamsInterface | null>;
-//
-//   private store = inject(Store<State>);
-//
+  //   public breadcrumbsParams$!: Observable<BreadcrumbsParamsInterface | null>;
+  //
+  //   private store = inject(Store<State>);
+  //
   public ngOnInit(): void {
-//     this.breadcrumbsParams$ = this.store.select(selectBreadcrumbsParams);
+    //     this.breadcrumbsParams$ = this.store.select(selectBreadcrumbsParams);
   }
 }

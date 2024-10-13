@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-//   inject,
+  //   inject,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -34,77 +34,77 @@ import {
 @Component({
   selector: 'app-category',
   standalone: true,
-//   imports: [
-//     AsyncPipe,
-//     PageNotFoundComponent,
-//     FilterComponent,
-//     SubCategoryItemComponent,
-//     DeviceItemComponent,
-//     PaginatorComponent,
-//     BreadcrumbsComponent,
-//   ],
+  //   imports: [
+  //     AsyncPipe,
+  //     PageNotFoundComponent,
+  //     FilterComponent,
+  //     SubCategoryItemComponent,
+  //     DeviceItemComponent,
+  //     PaginatorComponent,
+  //     BreadcrumbsComponent,
+  //   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryComponent implements OnInit, OnDestroy {
-//   public hasChildChain$!: Observable<boolean>;
-//
-//   public cascadeCategories$!: Observable<CascadeCategoryInterface | null>;
-//
-//   public devices$!: Observable<DeviceInterface[]>;
-//
-//   public paginationParams$!: Observable<PaginationParamsInterface>;
-//
-//   public routerParams: RouterParamsInterface = {
-//     id: null,
-//     page: 0,
-//   };
-//
-//   private destroy$: Subject<void> = new Subject<void>();
-//
-//   private store = inject(Store<State>);
-//
+  //   public hasChildChain$!: Observable<boolean>;
+  //
+  //   public cascadeCategories$!: Observable<CascadeCategoryInterface | null>;
+  //
+  //   public devices$!: Observable<DeviceInterface[]>;
+  //
+  //   public paginationParams$!: Observable<PaginationParamsInterface>;
+  //
+  //   public routerParams: RouterParamsInterface = {
+  //     id: null,
+  //     page: 0,
+  //   };
+  //
+  //   private destroy$: Subject<void> = new Subject<void>();
+  //
+  //   private store = inject(Store<State>);
+  //
   public ngOnInit(): void {
-//     this.initSubscribes();
+    //     this.initSubscribes();
   }
 
   public ngOnDestroy(): void {
-//     this.destroy$.next();
-//     this.destroy$.complete();
+    //     this.destroy$.next();
+    //     this.destroy$.complete();
   }
 
-//   public initSubscribes(): void {
-//     this.paginationParams$ = this.store.select(selectPaginationParams);
-//     this.cascadeCategories$ = this.store.select(selectCascadeSubCategories);
-//     this.hasChildChain$ = this.store.select(selectHasChildChain);
-//     this.devices$ = this.store.select(selectAllDevices);
-//     this.initDevicesList();
-//   }
-//
-//   public initDevicesList(): void {
-//     this.store
-//       .select(selectIdAndPage)
-//       .pipe(combineLatestWith(this.hasChildChain$), takeUntil(this.destroy$))
-//       .subscribe(([params, result]: [RouterParamsInterface, boolean]) => {
-//         if (params && params.id) {
-//           if (this.routerParams.id !== params.id) {
-//             this.routerParams = {
-//               id: params.id,
-//               page: params.page ? Number(params.page) : 1,
-//             };
-//
-//             if (!result && this.routerParams.id) {
-//               this.store.dispatch(
-//                 DeviceActions.loadDevices({
-//                   id: this.routerParams.id,
-//                   size: PAGE_SIZE,
-//                   page: +this.routerParams.page,
-//                 }),
-//               );
-//             }
-//           }
-//         }
-//       });
-//   }
+  //   public initSubscribes(): void {
+  //     this.paginationParams$ = this.store.select(selectPaginationParams);
+  //     this.cascadeCategories$ = this.store.select(selectCascadeSubCategories);
+  //     this.hasChildChain$ = this.store.select(selectHasChildChain);
+  //     this.devices$ = this.store.select(selectAllDevices);
+  //     this.initDevicesList();
+  //   }
+  //
+  //   public initDevicesList(): void {
+  //     this.store
+  //       .select(selectIdAndPage)
+  //       .pipe(combineLatestWith(this.hasChildChain$), takeUntil(this.destroy$))
+  //       .subscribe(([params, result]: [RouterParamsInterface, boolean]) => {
+  //         if (params && params.id) {
+  //           if (this.routerParams.id !== params.id) {
+  //             this.routerParams = {
+  //               id: params.id,
+  //               page: params.page ? Number(params.page) : 1,
+  //             };
+  //
+  //             if (!result && this.routerParams.id) {
+  //               this.store.dispatch(
+  //                 DeviceActions.loadDevices({
+  //                   id: this.routerParams.id,
+  //                   size: PAGE_SIZE,
+  //                   page: +this.routerParams.page,
+  //                 }),
+  //               );
+  //             }
+  //           }
+  //         }
+  //       });
+  //   }
 }

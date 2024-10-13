@@ -19,10 +19,7 @@ import { CommonModule } from '../common/common.module';
     CPropertiesModule,
     CommonModule,
   ],
-  providers: [
-    CPropertiesGroupsResolver,
-    CPropertiesGroupsService,
-  ],
+  providers: [CPropertiesGroupsResolver, CPropertiesGroupsService],
   exports: [CPropertiesGroupsService],
 })
 export class CPropertiesGroupsModule {}

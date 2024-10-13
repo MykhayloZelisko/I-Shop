@@ -10,10 +10,7 @@ describe('CPropertyEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CPropertyEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [CPropertyEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(CPropertyEffects);

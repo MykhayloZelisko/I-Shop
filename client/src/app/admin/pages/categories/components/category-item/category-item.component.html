@@ -3,9 +3,7 @@
     <div
       class="category-item category-item--editable"
       [ngClass]="{
-        'category-item--empty': !(
-          category.hasGroups || (hasChildren$ | async)
-        )
+        'category-item--empty': !(category.hasGroups || (hasChildren$ | async))
       }"
       [formGroup]="categoryForm"
     >

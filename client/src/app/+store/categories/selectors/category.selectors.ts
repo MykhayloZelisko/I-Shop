@@ -11,16 +11,8 @@ import {
   State,
 } from '../reducers/category.reducer';
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
-// import { TreeNode } from 'primeng/api';
-// import { TreeNodeDataType } from '../../../shared/models/types/tree-node-data.type';
-// import { Dictionary } from '@ngrx/entity';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
-// import { CPropertiesGroupInterface } from '../../../shared/models/interfaces/c-properties-group.interface';
-import {
-  selectIdAndPage,
-  // selectRouter,
-} from '../../router/selectors/router.selectors';
-// import { selectDevice } from '../../devices/selectors/device.selectors';
+import { selectIdAndPage } from '../../router/selectors/router.selectors';
 
 const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 

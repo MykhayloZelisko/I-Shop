@@ -10,6 +10,7 @@ import { CategoryActions } from '../../categories/actions/category.actions';
 import { PopupActions } from '../../popup/actions/popup.actions';
 import { SharedActions } from '../../shared/actions/shared.actions';
 import { CPropertyActions } from '../../c-properties/actions/c-property.actions';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class CPropertiesGroupEffects {
@@ -205,7 +206,11 @@ export class CPropertiesGroupEffects {
             if (deleted.category) {
               actions.push(
                 CategoryActions.updateCategorySuccess({
-                  category: deleted.category,
+                  category: {
+                    ...deleted.category,
+                    image: `${environment.baseUrl}/${deleted.category.image}`,
+                    expanded: deleted.category.hasGroups,
+                  },
                 }),
               );
             }

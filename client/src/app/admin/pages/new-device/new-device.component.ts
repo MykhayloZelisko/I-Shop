@@ -327,7 +327,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public saveDevice(): void {
     const formData = this.newDeviceForm.getRawValue();
-    console.log(formData);
     const device: CreateDeviceInterface = {
       brandId: formData.brandId,
       categoryId: formData.categoryId,

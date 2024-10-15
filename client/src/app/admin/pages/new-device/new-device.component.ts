@@ -173,6 +173,10 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
               this.addGroupCtrl(group);
               hasGroups = true;
             }
+            if (!group.hasProperties) {
+              this.getGroupsCtrl().push(this.newGroupCtrl(group.groupName));
+              hasGroups = true;
+            }
           });
 
           if (event.value && !hasGroups) {

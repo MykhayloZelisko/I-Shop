@@ -19,11 +19,13 @@
                 <app-device-item [device]="device"></app-device-item>
               }
             </div>
-            @if (paginationParams$ | async; as paginationParams) {
-              <app-paginator
-                [paginationParams]="paginationParams"
-                [routerParams]="routerParams"
-              ></app-paginator>
+            @if (devices.length) {
+              @if (paginationParams$ | async; as paginationParams) {
+                <app-paginator
+                  [paginationParams]="paginationParams"
+                  [routerParams]="routerParams"
+                ></app-paginator>
+              }
             }
           </div>
         }

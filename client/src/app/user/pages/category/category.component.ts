@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { combineLatestWith, Observable, Subject, takeUntil } from 'rxjs';
+import { map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
@@ -85,10 +85,17 @@ export class CategoryComponent implements OnInit, OnDestroy {
   public initDevicesList(): void {
     this.store
       .select(selectIdAndPage)
-      .pipe(combineLatestWith(this.hasChildChain$), takeUntil(this.destroy$))
-      .subscribe(([params, result]: [RouterParamsInterface, boolean]) => {
+      .pipe(
+        switchMap((params) => {
+          return this.hasChildChain$.pipe(
+            map((result) => ({ params, result })),
+          );
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(({ params, result }) => {
         if (params && params.id) {
-          if (this.routerParams.id !== params.id) {
+          if (this.routerParams?.id !== params.id) {
             this.routerParams = {
               id: params.id,
               page: params.page ? Number(params.page) : 1,

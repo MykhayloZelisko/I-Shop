@@ -53,10 +53,10 @@ export class CPropertiesGroupsService {
   ): Observable<CPropertiesGroupInterface[]> {
     return this.apollo
       .use('withCredentials')
-      .query<{ groupsById: CPropertiesGroupInterface[] }>({
+      .query<{ groupsByCategoryId: CPropertiesGroupInterface[] }>({
         query: gql`
-          query GroupsById($id: String!) {
-            groupsById(id: $id) {
+          query GroupsByCategoryId($id: String!) {
+            groupsByCategoryId(id: $id) {
               id
               groupName
               categoryId
@@ -70,13 +70,13 @@ export class CPropertiesGroupsService {
         map(
           (
             response: ApolloQueryResult<{
-              groupsById: CPropertiesGroupInterface[];
+              groupsByCategoryId: CPropertiesGroupInterface[];
             }>,
           ) => {
             if (response.errors) {
               throw response.errors[0];
             } else {
-              return response.data.groupsById;
+              return response.data.groupsByCategoryId;
             }
           },
         ),

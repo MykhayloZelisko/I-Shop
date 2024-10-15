@@ -188,7 +188,10 @@ export class CPropertyEffects {
             if (deleted.group) {
               actions.push(
                 CPropertiesGroupActions.updateCPropertiesGroupSuccess({
-                  group: deleted.group,
+                  group: {
+                    ...deleted.group,
+                    expanded: deleted.group.hasProperties,
+                  },
                 }),
               );
             }

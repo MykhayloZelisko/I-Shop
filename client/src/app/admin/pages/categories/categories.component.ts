@@ -63,22 +63,18 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.store
       .select(selectIdsCPropertiesGroups)
       .pipe(take(1))
-      .subscribe({
-        next: (ids) => {
-          this.store.dispatch(
-            CPropertiesGroupActions.addFilteredGroups({ ids: ids as string[] }),
-          );
-        },
+      .subscribe((ids) => {
+        this.store.dispatch(
+          CPropertiesGroupActions.addFilteredGroups({ ids: ids as string[] }),
+        );
       });
     this.store
       .select(selectIdsCProperties)
       .pipe(take(1))
-      .subscribe({
-        next: (ids) => {
-          this.store.dispatch(
-            CPropertyActions.addFilteredProperties({ ids: ids as string[] }),
-          );
-        },
+      .subscribe((ids) => {
+        this.store.dispatch(
+          CPropertyActions.addFilteredProperties({ ids: ids as string[] }),
+        );
       });
     this.store.dispatch(SharedActions.clearCGPState());
   }

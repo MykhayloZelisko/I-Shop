@@ -59,12 +59,10 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.store
       .select(selectIsCurrentDevice)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (params) => {
-          if (!params.isCurrent && params.id) {
-            this.store.dispatch(DeviceActions.loadDevice({ id: params.id }));
-          }
-        },
+      .subscribe((params) => {
+        if (!params.isCurrent && params.id) {
+          this.store.dispatch(DeviceActions.loadDevice({ id: params.id }));
+        }
       });
   }
 }

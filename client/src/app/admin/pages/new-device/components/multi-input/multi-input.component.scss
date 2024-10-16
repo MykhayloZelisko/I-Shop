@@ -49,10 +49,6 @@
     }
   }
 
-  &__input {
-    @include input-style(9px 12px);
-  }
-
   &__buttons {
     display: flex;
     align-items: center;

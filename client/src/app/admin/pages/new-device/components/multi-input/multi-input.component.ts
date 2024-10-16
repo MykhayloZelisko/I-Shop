@@ -15,10 +15,7 @@ import {
 } from '@angular/forms';
 import { DPropertyFormInterface } from '../../../../../shared/models/interfaces/new-device-form.interface';
 import { NgClass, NgStyle } from '@angular/common';
-import {
-  requiredValidator,
-  showErrorMessage,
-} from '../../../../../shared/utils/validators';
+import { showErrorMessage } from '../../../../../shared/utils/validators';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
@@ -58,7 +55,9 @@ export class MultiInputComponent implements OnInit {
   }
 
   public newValueCtrl(): FormControl<string> {
-    return this.fb.nonNullable.control<string>('', [requiredValidator()]);
+    const control = this.fb.nonNullable.control<string>('', []);
+    control.setValidators(this.validators);
+    return control;
   }
 
   public addValueCtrl(): void {

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class CreateDPropertyInput {
@@ -8,8 +8,10 @@ export class CreateDPropertyInput {
   @IsNotEmpty({ message: 'Must be a not empty string' })
   public propertyName: string;
 
-  @Field({ description: 'Device property value' })
-  @IsString({ message: 'Must be a string' })
-  @IsNotEmpty({ message: 'Must be a not empty string' })
-  public value: string;
+  @Field(() => [String], { description: 'Device property values' })
+  @IsArray({ message: 'Must be an array' })
+  @ArrayNotEmpty({ message: 'Must be not empty array' })
+  @IsString({ each: true, message: 'Each value must be a string' })
+  @IsNotEmpty({ each: true, message: 'Each string must be not empty' })
+  public value: string[];
 }

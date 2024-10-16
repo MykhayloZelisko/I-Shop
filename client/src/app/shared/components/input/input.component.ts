@@ -3,11 +3,9 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   inject,
   Input,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -50,8 +48,6 @@ export class InputComponent
   @Input() public validators: ValidatorFn[] = [];
 
   @Input({ required: true }) public withErrors!: boolean;
-
-  @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
 
   public onChange = (_: unknown): void => {};
 
@@ -96,10 +92,6 @@ export class InputComponent
 
   public isInvalid(): boolean {
     return this.control.invalid && (this.control.dirty || this.control.touched);
-  }
-
-  public onFocus(): void {
-    this.focusEvent.emit();
   }
 
   public setHeight(): Record<string, string> {

@@ -5,6 +5,6 @@ export class DProperty {
   @Prop()
   public propertyName: string;
 
-  @Prop()
-  public value: string;
+  @Prop({ type: [String] })
+  public value: string[];
 }

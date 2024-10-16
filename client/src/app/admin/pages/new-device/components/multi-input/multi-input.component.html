@@ -1,0 +1,45 @@
+<div class="multi-input" [formGroup]="multiInputForm">
+  <label class="multi-input__label">{{ label }}</label>
+  <ng-container formArrayName="value">
+    @for (
+      control of getValueArrayCtrl().controls;
+      track control;
+      let index = $index
+    ) {
+      <div class="multi-input__field" [ngStyle]="setHeight()">
+        <div class="multi-input__input-wrapper">
+          <input
+            class="multi-input__input"
+            [ngClass]="{
+              'multi-input__input--invalid': isInvalid(index) && withErrors
+            }"
+            [formControlName]="index"
+          />
+          <div class="multi-input__buttons">
+            <button class="multi-input__button" (click)="addValueCtrl()">
+              <svg-icon
+                class="multi-input__icon multi-input__icon--add"
+                src="assets/images/plus-round-line-icon.svg"
+              ></svg-icon>
+            </button>
+            <button
+              class="multi-input__button"
+              [disabled]="getValueArrayCtrl().controls.length === 1"
+              (click)="deleteValueCtrl(index)"
+            >
+              <svg-icon
+                class="multi-input__icon multi-input__icon--delete"
+                src="assets/images/trash-bin-icon.svg"
+              ></svg-icon>
+            </button>
+          </div>
+        </div>
+        @if (isInvalid(index) && withErrors) {
+          <p class="multi-input__error">
+            {{ showMessage(getValueCtrlByIndex(index)) }}
+          </p>
+        }
+      </div>
+    }
+  </ng-container>
+</div>

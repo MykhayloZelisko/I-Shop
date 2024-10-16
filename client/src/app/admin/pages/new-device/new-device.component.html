@@ -151,35 +151,37 @@
         <h3 class="new-device__title">Характеристики</h3>
       }
       <ng-container formArrayName="groups">
-        @for (group of groups; track group; let index = $index) {
-          <ng-container [formGroupName]="index">
+        @for (group of groups; track group; let groupIndex = $index) {
+          <ng-container [formGroupName]="groupIndex">
             <h4
               class="new-device__sub-title"
               [ngClass]="{
                 'new-device__sub-title--invalid':
-                  !getPropertiesCtrl(index).length
+                  !getPropertiesCtrl(groupIndex).length
               }"
             >
               {{ group.groupName }}
             </h4>
-            @if (getPropertiesCtrl(index).invalid) {
+            @if (getPropertiesCtrl(groupIndex).invalid) {
               <p class="new-device__error new-device__error--group">
-                {{ showMessageArrayItem('groups', index) }}
+                {{ showMessageArrayItem('groups', groupIndex) }}
               </p>
             }
             <ng-container formArrayName="properties">
               @for (
                 property of group.properties;
                 track property;
-                let index = $index
+                let propertyIndex = $index
               ) {
-                <ng-container [formGroupName]="index">
-                  <app-input
+                <ng-container [formGroupName]="propertyIndex">
+                  <app-multi-input
                     [label]="property.propertyName"
                     [validators]="requiredValidators"
-                    formControlName="value"
+                    [multiInputForm]="
+                      getPropertyCtrl(groupIndex, propertyIndex)
+                    "
                     [withErrors]="true"
-                  ></app-input>
+                  ></app-multi-input>
                 </ng-container>
               }
             </ng-container>

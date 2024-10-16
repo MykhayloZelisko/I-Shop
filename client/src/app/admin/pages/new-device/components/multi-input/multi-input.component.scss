@@ -1,0 +1,63 @@
+@import 'variables';
+@import 'mixins';
+
+.multi-input {
+  &__label {
+    font-size: 14px;
+    display: block;
+    font-family: $source;
+    font-weight: 600;
+  }
+
+  &__input {
+    @include input-style(9px 12px);
+
+    &--invalid,
+    &--invalid:hover,
+    &--invalid:focus {
+      border-color: $red-1;
+    }
+  }
+
+  &__input-wrapper {
+    margin-top: 8px;
+    display: flex;
+    gap: 5px;
+  }
+
+  &__button {
+    @include icon-button-style(30px, transparent, $disabled: true);
+
+    &:disabled {
+      & .multi-input {
+        &__icon {
+          @include icon-style($gray-5);
+        }
+      }
+    }
+  }
+
+  &__icon {
+    @include icon-style($brown-1, 24px);
+
+    &--add:hover {
+      @include icon-style($blue-1);
+    }
+
+    &--delete:hover {
+      @include icon-style($red-1);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+  }
+
+  &__error {
+    font-family: $source;
+    font-size: 12px;
+    color: $red-1;
+    font-weight: 700;
+  }
+}

@@ -53,6 +53,7 @@ import {
 } from '../../../+store/shared/selectors/shared.selectors';
 import { SharedActions } from '../../../+store/shared/actions/shared.actions';
 import { CPropertyActions } from '../../../+store/c-properties/actions/c-property.actions';
+import { MultiInputComponent } from './components/multi-input/multi-input.component';
 
 @Component({
   selector: 'app-new-device',
@@ -67,6 +68,7 @@ import { CPropertyActions } from '../../../+store/c-properties/actions/c-propert
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
+    MultiInputComponent,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
@@ -261,7 +263,10 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       propertyName: this.fb.nonNullable.control<string>(propertyName, [
         requiredValidator(),
       ]),
-      value: this.fb.nonNullable.control<string>('', [requiredValidator()]),
+      value: this.fb.array<FormControl<string>>(
+        [],
+        [nonEmptyArrayValidator('value')],
+      ),
     });
   }
 
@@ -361,5 +366,12 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public cancelDevice(): void {
     this.store.dispatch(FormActions.clearFormOn());
+  }
+
+  public getPropertyCtrl(
+    groupIndex: number,
+    propertyIndex: number,
+  ): FormGroup<DPropertyFormInterface> {
+    return this.getPropertiesCtrl(groupIndex).at(propertyIndex);
   }
 }

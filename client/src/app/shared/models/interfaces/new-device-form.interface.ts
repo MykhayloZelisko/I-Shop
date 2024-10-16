@@ -18,5 +18,5 @@ export interface DPropertiesGroupFormInterface {
 
 export interface DPropertyFormInterface {
   propertyName: FormControl<string>;
-  value: FormControl<string>;
+  value: FormArray<FormControl<string>>;
 }

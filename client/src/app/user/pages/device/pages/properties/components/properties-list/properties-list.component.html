@@ -1,0 +1,25 @@
+<ul class="properties-list">
+  @for (group of device.groups; track group) {
+    <li class="properties-list__group">
+      <p class="properties-list__group-name">{{ group.groupName }}</p>
+      <ul class="properties-list__property-list">
+        @for (property of group.properties; track property) {
+          <li class="properties-list__property">
+            <p class="properties-list__property-name-wrapper">
+              <span class="properties-list__property-name">{{
+                property.propertyName
+              }}</span>
+            </p>
+            <ul class="properties-list__value-list">
+              @for (value of property.value; track value) {
+                <li class="properties-list__value-list">
+                  <p class="properties-list__value-name">{{ value }}</p>
+                </li>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+    </li>
+  }
+</ul>

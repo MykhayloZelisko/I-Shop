@@ -12,11 +12,19 @@ import { selectDevice } from '../../../../../+store/devices/selectors/device.sel
 import { AsyncPipe } from '@angular/common';
 import { RatingComponent } from '../../../../../shared/components/rating/rating.component';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { PropertiesListComponent } from './components/properties-list/properties-list.component';
+import { PropertiesAsideComponent } from './components/properties-aside/properties-aside.component';
 
 @Component({
   selector: 'app-properties',
   standalone: true,
-  imports: [AsyncPipe, RatingComponent, SvgIconComponent],
+  imports: [
+    AsyncPipe,
+    RatingComponent,
+    SvgIconComponent,
+    PropertiesListComponent,
+    PropertiesAsideComponent,
+  ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

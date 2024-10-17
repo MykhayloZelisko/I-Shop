@@ -11,7 +11,6 @@ import { State } from '../../../../../+store/reducers';
 import { selectDevice } from '../../../../../+store/devices/selectors/device.selectors';
 import { AsyncPipe } from '@angular/common';
 import { RatingComponent } from '../../../../../shared/components/rating/rating.component';
-import { SvgIconComponent } from 'angular-svg-icon';
 import { PropertiesListComponent } from './components/properties-list/properties-list.component';
 import { PropertiesAsideComponent } from './components/properties-aside/properties-aside.component';
 
@@ -21,7 +20,6 @@ import { PropertiesAsideComponent } from './components/properties-aside/properti
   imports: [
     AsyncPipe,
     RatingComponent,
-    SvgIconComponent,
     PropertiesListComponent,
     PropertiesAsideComponent,
   ],

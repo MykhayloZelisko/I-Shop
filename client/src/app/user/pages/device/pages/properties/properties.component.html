@@ -1,1 +1,74 @@
-<p>properties works!</p>
+@if (device$ | async; as device) {
+  <div class="properties">
+    <div class="properties__title">
+      <h3 class="properties__title-text">
+        Характеристики {{ device.deviceName }}
+      </h3>
+      <app-rating [rating]="device.rating" [votes]="device.votes"></app-rating>
+    </div>
+    <div class="properties__inner">
+      <ul class="properties__group-list">
+        @for (group of device.groups; track group) {
+          <li class="properties__group">
+            <p class="properties__group-name">{{ group.groupName }}</p>
+            <ul class="properties__property-list">
+              @for (property of group.properties; track property) {
+                <li class="properties__property">
+                  <p class="properties__property-name-wrapper">
+                    <span class="properties__property-name">{{
+                      property.propertyName
+                    }}</span>
+                  </p>
+                  <ul class="properties__value-list">
+                    @for (value of property.value; track value) {
+                      <li class="properties__value-list">
+                        <p class="properties__value-name">{{ value }}</p>
+                      </li>
+                    }
+                  </ul>
+                </li>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+      <aside class="properties__aside">
+        <div class="properties__device">
+          <img
+            class="properties__device-photo"
+            [src]="device.images[0]"
+            alt="device-photo"
+          />
+          <p class="properties__device-title">{{ device.deviceName }}</p>
+        </div>
+        <div class="properties__buying">
+          <div class="properties__price-wrapper">
+            <span class="properties__price">{{ device.price }} &#8372;</span>
+            <div class="properties__icon-buttons">
+              <button class="properties__icon-button">
+                <svg-icon
+                  class="properties__icon"
+                  src="assets/images/scale-icon.svg"
+                ></svg-icon>
+              </button>
+              <button class="properties__icon-button">
+                <svg-icon
+                  class="properties__icon properties__icon--yellow"
+                  src="assets/images/heart-thin-icon.svg"
+                ></svg-icon>
+              </button>
+            </div>
+          </div>
+          <button class="properties__button">
+            <svg-icon
+              class="properties__icon properties__icon--yellow"
+              src="assets/images/shopping-cart-icon.svg"
+            ></svg-icon>
+            Купити
+          </button>
+          <button class="properties__button--credit">Купити в кредит</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+}

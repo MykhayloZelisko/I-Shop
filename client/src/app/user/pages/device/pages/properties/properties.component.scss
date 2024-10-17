@@ -1,0 +1,34 @@
+@import 'mixins';
+@import 'variables';
+
+.properties {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__title-text {
+    font-family: $source;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  &__inner {
+    display: flex;
+    gap: 24px;
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .properties {
+    &__title-text {
+      font-size: 20px;
+    }
+  }
+}

@@ -1,0 +1,87 @@
+@import 'mixins';
+@import 'variables';
+
+:host {
+  flex: 2;
+}
+
+.properties-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__group-name {
+    font-family: $source;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  &__property {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+
+  &__property-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__property-name-wrapper {
+    flex: 1;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      border-bottom: 1px dotted $gray-5;
+      z-index: -1;
+    }
+  }
+
+  &__property-name {
+    font-family: $source;
+    font-size: 14px;
+    line-height: 1.2;
+    background-color: $white-1;
+    word-break: break-word;
+    padding-right: 10px;
+  }
+
+  &__value-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__value-name {
+    font-family: $source;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .properties-list {
+    &__group-name {
+      font-size: 18px;
+    }
+  }
+}
+
+@media screen and (width <= 768px) {
+  .properties-list {
+    &__property-name-wrapper {
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

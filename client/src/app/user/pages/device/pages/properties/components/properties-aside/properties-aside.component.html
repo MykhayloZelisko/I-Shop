@@ -1,0 +1,37 @@
+<aside class="properties-aside">
+  <div class="properties-aside__device">
+    <img
+      class="properties-aside__device-photo"
+      [src]="device.images[0]"
+      alt="device-photo"
+    />
+    <p class="properties-aside__device-title">{{ device.deviceName }}</p>
+  </div>
+  <div class="properties-aside__buying">
+    <div class="properties-aside__price-wrapper">
+      <span class="properties-aside__price">{{ device.price }} &#8372;</span>
+      <div class="properties-aside__icon-buttons">
+        <button class="properties-aside__icon-button">
+          <svg-icon
+            class="properties-aside__icon"
+            src="assets/images/scale-icon.svg"
+          ></svg-icon>
+        </button>
+        <button class="properties-aside__icon-button">
+          <svg-icon
+            class="properties-aside__icon properties-aside__icon--yellow"
+            src="assets/images/heart-thin-icon.svg"
+          ></svg-icon>
+        </button>
+      </div>
+    </div>
+    <button class="properties-aside__button">
+      <svg-icon
+        class="properties-aside__icon properties-aside__icon--yellow"
+        src="assets/images/shopping-cart-icon.svg"
+      ></svg-icon>
+      Купити
+    </button>
+    <button class="properties-aside__button--credit">Купити в кредит</button>
+  </div>
+</aside>

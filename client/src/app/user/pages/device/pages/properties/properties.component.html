@@ -1,1 +1,14 @@
-<p>properties works!</p>
+@if (device$ | async; as device) {
+  <div class="properties">
+    <div class="properties__title">
+      <h3 class="properties__title-text">
+        Характеристики {{ device.deviceName }}
+      </h3>
+      <app-rating [rating]="device.rating" [votes]="device.votes"></app-rating>
+    </div>
+    <div class="properties__inner">
+      <app-properties-list [device]="device"></app-properties-list>
+      <app-properties-aside [device]="device"></app-properties-aside>
+    </div>
+  </div>
+}

@@ -20,7 +20,7 @@
 .admin {
   &__menu {
     position: sticky;
-    top: 66px;
+    top: 64px;
     z-index: 1;
   }
 }
@@ -28,7 +28,7 @@
 @media screen and (width <= 1024px) {
   .admin {
     &__menu {
-      top: 52px;
+      top: 50px;
     }
   }
 }

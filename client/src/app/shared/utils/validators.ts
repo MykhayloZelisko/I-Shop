@@ -162,6 +162,18 @@ export function positiveNumberValidator(): ValidatorFn {
   };
 }
 
+export function ratingValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    const value = Number(control.value);
+    if (!value || value <= 0) {
+      return {
+        pattern: `Необхідно виставити оцінку`,
+      };
+    }
+    return null;
+  };
+}
+
 export function showErrorMessage(control: AbstractControl): string {
   return control.errors ? Object.values(control.errors)[0] : null;
 }

@@ -1,0 +1,19 @@
+<div class="textarea">
+  <label class="textarea__label">{{ label }}</label>
+  <textarea
+    #textarea
+    class="textarea__textarea"
+    [ngClass]="{
+      'textarea__textarea--invalid': isInvalid() && withErrors
+    }"
+    [ngStyle]="setStyle()"
+    [placeholder]="placeholder"
+    (input)="changeValue($event)"
+    (blur)="onBlur()"
+  ></textarea>
+  @if (isInvalid() && withErrors) {
+    <p class="textarea__error">{{ showMessage() }}</p>
+  } @else {
+    <p class="textarea__error--empty"></p>
+  }
+</div>

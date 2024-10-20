@@ -3,7 +3,11 @@
     <app-device-carousel [carousel]="device.images"></app-device-carousel>
     <div class="about-device__info">
       <h2 class="about-device__title">{{ device.deviceName }}</h2>
-      <app-rating [rating]="device.rating" [votes]="device.votes"></app-rating>
+      <app-rating
+        [rating]="device.rating"
+        [votes]="device.votes"
+        [deviceId]="device.id"
+      ></app-rating>
       <div class="about-device__buying">
         <span class="about-device__price">{{ device.price }} &#8372;</span>
         <div class="about-device__buttons--large">

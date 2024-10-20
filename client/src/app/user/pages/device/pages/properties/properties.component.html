@@ -4,11 +4,18 @@
       <h3 class="properties__title-text">
         Характеристики {{ device.deviceName }}
       </h3>
-      <app-rating [rating]="device.rating" [votes]="device.votes"></app-rating>
+      <app-rating
+        [rating]="device.rating"
+        [votes]="device.votes"
+        [deviceId]="device.id"
+      ></app-rating>
     </div>
     <div class="properties__inner">
       <app-properties-list [device]="device"></app-properties-list>
-      <app-properties-aside [device]="device"></app-properties-aside>
+      <app-device-aside
+        class="properties__aside"
+        [device]="device"
+      ></app-device-aside>
     </div>
   </div>
 }

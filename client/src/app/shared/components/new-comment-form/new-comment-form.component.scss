@@ -1,0 +1,23 @@
+@import 'variables';
+@import 'mixins';
+
+.new-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__button {
+    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
+
+    white-space: nowrap;
+
+    &--cancel {
+      @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
+    }
+  }
+
+  &__buttons-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+}

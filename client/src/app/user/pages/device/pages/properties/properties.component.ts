@@ -12,7 +12,7 @@ import { selectDevice } from '../../../../../+store/devices/selectors/device.sel
 import { AsyncPipe } from '@angular/common';
 import { RatingComponent } from '../../../../../shared/components/rating/rating.component';
 import { PropertiesListComponent } from './components/properties-list/properties-list.component';
-import { PropertiesAsideComponent } from './components/properties-aside/properties-aside.component';
+import { DeviceAsideComponent } from '../../../../../shared/components/device-aside/device-aside.component';
 
 @Component({
   selector: 'app-properties',
@@ -21,7 +21,7 @@ import { PropertiesAsideComponent } from './components/properties-aside/properti
     AsyncPipe,
     RatingComponent,
     PropertiesListComponent,
-    PropertiesAsideComponent,
+    DeviceAsideComponent,
   ],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.scss',

@@ -1,0 +1,36 @@
+<div class="rating-control">
+  <p class="rating-control__title">Оцініть товар</p>
+  <div class="rating-control__controls">
+    @for (ratingValue of ratingValues; track ratingValue) {
+      <div class="rating-control__input">
+        <input
+          [id]="ratingValue"
+          name="rating"
+          class="rating-control__radio"
+          type="radio"
+          (change)="changeRating(ratingValue)"
+        />
+        <label
+          [for]="ratingValue"
+          class="rating-control__label"
+          (mouseenter)="onMouseEnter(ratingValue)"
+          (mouseleave)="onMouseLeave()"
+        >
+          <svg-icon
+            [ngClass]="{
+              'rating-control__icon--active':
+                hoverRating >= ratingValue || activeRating >= ratingValue
+            }"
+            class="rating-control__icon"
+            src="assets/images/star.svg"
+          ></svg-icon>
+        </label>
+      </div>
+    }
+  </div>
+  @if (isInvalid()) {
+    <p class="rating-control__error">{{ showMessage() }}</p>
+  } @else {
+    <p class="rating-control__error--empty"></p>
+  }
+</div>

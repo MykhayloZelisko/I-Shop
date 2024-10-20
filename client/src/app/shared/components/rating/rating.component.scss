@@ -5,9 +5,22 @@
   display: flex;
   gap: 10px;
 
+  &:hover {
+    cursor: pointer;
+
+    .rating {
+      &__votes {
+        color: $blue-2;
+        text-decoration: underline;
+      }
+    }
+  }
+
   &__votes {
     font-family: $source;
     font-size: 14px;
+    color: $black;
+    text-decoration: none;
   }
 
   &__info {

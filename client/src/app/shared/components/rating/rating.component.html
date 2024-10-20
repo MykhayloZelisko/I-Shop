@@ -1,4 +1,4 @@
-<div class="rating">
+<div class="rating" [routerLink]="['/devices', deviceId, 'comments']">
   @if (rating) {
     <div class="rating__stars">
       <svg
@@ -130,6 +130,12 @@
       <span class="rating__votes">{{ votes }}</span>
     </div>
   } @else {
-    <span class="rating__votes">Залишити відгук</span>
+    <div class="rating__info">
+      <svg-icon
+        class="rating__comment"
+        src="assets/images/message-icon.svg"
+      ></svg-icon>
+      <span class="rating__votes">Залишити відгук</span>
+    </div>
   }
 </div>

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { DeviceInterface } from '../../../../../../../shared/models/interfaces/device.interface';
+import { DeviceInterface } from '../../models/interfaces/device.interface';
 
 @Component({
-  selector: 'app-properties-aside',
+  selector: 'app-device-aside',
   standalone: true,
   imports: [SvgIconComponent],
-  templateUrl: './properties-aside.component.html',
-  styleUrl: './properties-aside.component.scss',
+  templateUrl: './device-aside.component.html',
+  styleUrl: './device-aside.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PropertiesAsideComponent {
+export class DeviceAsideComponent {
   @Input({ required: true }) public device!: DeviceInterface;
 }

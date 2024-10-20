@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PropertiesAsideComponent } from './properties-aside.component';
+import { DeviceAsideComponent } from './device-aside.component';
 
 describe('PropertiesAsideComponent', () => {
-  let component: PropertiesAsideComponent;
-  let fixture: ComponentFixture<PropertiesAsideComponent>;
+  let component: DeviceAsideComponent;
+  let fixture: ComponentFixture<DeviceAsideComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PropertiesAsideComponent],
+      imports: [DeviceAsideComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PropertiesAsideComponent);
+    fixture = TestBed.createComponent(DeviceAsideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

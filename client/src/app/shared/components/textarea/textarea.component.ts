@@ -11,43 +11,44 @@ import {
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
   ValidatorFn,
 } from '@angular/forms';
+import { GetControlDirective } from '../../directives/get-control.directive';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
-import { GetControlDirective } from '../../directives/get-control.directive';
 
 @Component({
-  selector: 'app-input',
+  selector: 'app-textarea',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgStyle],
+  imports: [NgClass, NgStyle],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: InputComponent,
+      useExisting: TextareaComponent,
       multi: true,
     },
   ],
-  templateUrl: './input.component.html',
-  styleUrl: './input.component.scss',
+  templateUrl: './textarea.component.html',
+  styleUrl: './textarea.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent
+export class TextareaComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  @ViewChild('input') public input!: ElementRef;
+  @ViewChild('textarea') public textarea!: ElementRef;
 
   @Input() public placeholder = '';
-
-  @Input() public inputType = 'text';
 
   @Input({ required: true }) public label!: string;
 
   @Input() public validators: ValidatorFn[] = [];
 
   @Input({ required: true }) public withErrors!: boolean;
+
+  @Input({ required: true }) public resizeX!: boolean;
+
+  @Input({ required: true }) public resizeY!: boolean;
 
   public onChange = (_: unknown): void => {};
 
@@ -71,9 +72,10 @@ export class InputComponent
   }
 
   public writeValue(value: unknown): void {
-    if (this.input) {
-      this.input.nativeElement.value = value;
+    if (this.textarea) {
+      this.textarea.nativeElement.value = value;
     }
+    this.control.updateValueAndValidity();
     this.cdr.detectChanges();
   }
 
@@ -94,8 +96,15 @@ export class InputComponent
     return this.control.invalid && (this.control.dirty || this.control.touched);
   }
 
-  public setHeight(): Record<string, string> {
-    return this.withErrors ? { height: '78px' } : { height: '66px' };
+  public setStyle(): Record<string, string> {
+    const resize = this.resizeX
+      ? this.resizeY
+        ? 'both'
+        : 'horizontal'
+      : this.resizeY
+        ? 'vertical'
+        : 'none';
+    return { resize };
   }
 
   public markAsDirty(): void {

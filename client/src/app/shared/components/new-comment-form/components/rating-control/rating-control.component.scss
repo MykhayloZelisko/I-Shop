@@ -1,0 +1,56 @@
+@import 'mixins';
+@import 'variables';
+
+.rating-control {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 5px;
+
+  &__controls {
+    padding: 0 7%;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  &__icon {
+    @include icon-style($gray-5);
+
+    &--active {
+      @include icon-style($yellow);
+    }
+  }
+
+  &__label {
+    cursor: pointer;
+    display: block;
+  }
+
+  &__radio {
+    display: none;
+  }
+
+  &__title {
+    font-family: $source;
+    font-size: 14px;
+  }
+
+  &__input {
+    flex-grow: 1;
+
+    &:first-child {
+      flex-grow: 0;
+    }
+  }
+
+  &__error {
+    font-family: $source;
+    font-size: 12px;
+    color: $red-1;
+    font-weight: 700;
+
+    &--empty {
+      height: 12px;
+    }
+  }
+}

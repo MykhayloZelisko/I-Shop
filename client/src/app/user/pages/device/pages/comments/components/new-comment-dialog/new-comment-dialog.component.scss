@@ -1,0 +1,53 @@
+@import '../../../../../../../../assets/style/variables';
+@import '../../../../../../../../assets/style/mixins';
+
+.new-comment {
+  position: relative;
+  top: 20px;
+  background-color: $white-1;
+  border-radius: 10px;
+  box-shadow:
+    0 1px 2px 0 $gray-1,
+    0 2px 10px 0 $gray-2;
+
+  &__wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    background-color: $brown-3;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &__header {
+    padding: 24px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $brown-1;
+  }
+
+  &__title {
+    font-family: $source;
+    font-weight: bold;
+    font-size: 24px;
+    color: $yellow;
+  }
+
+  &__icon {
+    @include icon-style($yellow, 24px);
+  }
+
+  &__close {
+    @include icon-button-style(24px, transparent, 12px);
+
+    &:hover {
+      @include icon-style($red-1);
+    }
+  }
+}

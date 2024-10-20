@@ -1,0 +1,48 @@
+<div class="new-comment-form">
+  <div class="new-comment-form__form" [formGroup]="commentForm">
+    <app-rating-control formControlName="rating"></app-rating-control>
+    <app-input
+      label="Переваги"
+      [withErrors]="true"
+      formControlName="advantages"
+      [validators]="requiredValidators"
+    ></app-input>
+    <app-input
+      label="Недоліки"
+      [withErrors]="true"
+      formControlName="disadvantages"
+      [validators]="requiredValidators"
+    ></app-input>
+    <app-textarea
+      label="Коментар"
+      [withErrors]="true"
+      formControlName="comment"
+      [validators]="requiredValidators"
+      [resizeX]="false"
+      [resizeY]="true"
+    ></app-textarea>
+  </div>
+  <div class="new-comment-form__buttons-wrapper">
+    @if (user$ | async; as user) {
+      @if (dialog && dialog.popupType === popupEnum.Comment) {
+        <button
+          class="new-comment-form__button--cancel"
+          (click)="cancelSending()"
+        >
+          Скасувати
+        </button>
+        <button class="new-comment-form__button" (click)="sendComment(user.id)">
+          Залишити відгук
+        </button>
+      } @else {
+        <button class="new-comment-form__button" (click)="sendComment(user.id)">
+          Залишити відгук
+        </button>
+      }
+    } @else {
+      <button class="new-comment-form__button" (click)="login()">
+        Увійти в особистий кабінет
+      </button>
+    }
+  </div>
+</div>

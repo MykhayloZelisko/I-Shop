@@ -23,6 +23,22 @@
     display: flex;
     gap: 24px;
   }
+
+  &__aside {
+    flex: 1;
+  }
+}
+
+@media screen and (width <= 1280px) {
+  .properties {
+    &__aside {
+      flex: 0;
+    }
+
+    &__inner {
+      gap: 0;
+    }
+  }
 }
 
 @media screen and (width <= 1024px) {

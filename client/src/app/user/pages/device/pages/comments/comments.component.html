@@ -1,1 +1,33 @@
-<p>comments works!</p>
+@if (device$ | async; as device) {
+  <div class="comments">
+    <div class="comments__title">
+      <h3 class="comments__title-text">
+        Відгуки покупців про {{ device.deviceName }}
+      </h3>
+      <app-rating
+        [rating]="device.rating"
+        [votes]="device.votes"
+        [deviceId]="device.id"
+      ></app-rating>
+    </div>
+    <div class="comments__inner">
+      <div class="comments__main">
+        @if (device.votes) {
+          111111111111111111
+        } @else {
+          <app-new-comment-form [deviceId]="device.id"></app-new-comment-form>
+        }
+      </div>
+      <app-device-aside
+        class="comments__aside"
+        [device]="device"
+      ></app-device-aside>
+    </div>
+  </div>
+
+  @if (dialog$ | async; as dialog) {
+    @if (dialog.popupType === popupEnum.Comment) {
+      <app-new-comment-dialog [dialog]="dialog" [deviceId]="device.id"></app-new-comment-dialog>
+    }
+  }
+}

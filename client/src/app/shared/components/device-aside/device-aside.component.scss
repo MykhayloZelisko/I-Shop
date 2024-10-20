@@ -1,10 +1,6 @@
 @import 'mixins';
 @import 'variables';
 
-:host {
-  flex: 1;
-}
-
 .properties-aside {
   flex: 1;
   display: flex;

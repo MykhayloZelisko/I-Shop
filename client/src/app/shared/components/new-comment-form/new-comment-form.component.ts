@@ -29,6 +29,7 @@ import { selectUser } from '../../../+store/auth/selectors/auth.selectors';
 import { AsyncPipe } from '@angular/common';
 import { CreateCommentInterface } from '../../models/interfaces/create-comment.interface';
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
+import { CommentActions } from '../../../+store/comments/actions/comment.actions';
 
 @Component({
   selector: 'app-new-comment-form',
@@ -89,12 +90,12 @@ export class NewCommentFormComponent implements OnInit {
     this.ratingCtrl.markAsDirty();
     if (this.commentForm.valid) {
       const formData = this.commentForm.getRawValue();
-      const commentData: CreateCommentInterface = {
+      const comment: CreateCommentInterface = {
         ...formData,
         deviceId: this.deviceId,
         userId: id,
       };
-      console.log(commentData);
+      this.store.dispatch(CommentActions.addComment({ comment }));
     }
   }
 

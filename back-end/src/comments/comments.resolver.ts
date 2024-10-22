@@ -6,7 +6,8 @@ import {
   Int,
   ResolveField,
   Parent,
-  ID, Context,
+  ID,
+  Context,
 } from '@nestjs/graphql';
 import { CommentsService } from './comments.service';
 import { Comment } from './models/comment.model';
@@ -20,6 +21,7 @@ import { CommentsList } from './models/comments-list.model';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 import { ParseIntegerPipe } from '../common/pipes/parse-integer/parse-integer.pipe';
 import { DeletedComment } from './models/deleted-comment.model';
+import { Device } from '../devices/models/device.model';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
@@ -76,5 +78,10 @@ export class CommentsResolver {
   @ResolveField(() => User)
   public async user(@Parent() comment: Comment): Promise<User> {
     return comment.user;
+  }
+
+  @ResolveField(() => Device)
+  public async device(@Parent() comment: Comment): Promise<Device> {
+    return comment.device;
   }
 }

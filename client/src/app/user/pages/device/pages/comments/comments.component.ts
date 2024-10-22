@@ -17,6 +17,8 @@ import { selectDevice } from '../../../../../+store/devices/selectors/device.sel
 import { NewCommentFormComponent } from '../../../../../shared/components/new-comment-form/new-comment-form.component';
 import { RatingComponent } from '../../../../../shared/components/rating/rating.component';
 import { DeviceAsideComponent } from '../../../../../shared/components/device-aside/device-aside.component';
+import { CommentInterface } from '../../../../../shared/models/interfaces/comment.interface';
+import { selectAllComments } from '../../../../../+store/comments/selectors/comment.selectors';
 
 @Component({
   selector: 'app-comments',
@@ -39,10 +41,13 @@ export class CommentsComponent implements OnInit {
 
   public device$!: Observable<DeviceInterface | null>;
 
+  public comments$!: Observable<CommentInterface[]>;
+
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
     this.dialog$ = this.store.select(selectPopup);
     this.device$ = this.store.select(selectDevice);
+    this.comments$ = this.store.select(selectAllComments);
   }
 }

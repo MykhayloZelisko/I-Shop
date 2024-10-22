@@ -12,10 +12,12 @@
     </div>
     <div class="comments__inner">
       <div class="comments__main">
-        @if (device.votes) {
-          111111111111111111
-        } @else {
-          <app-new-comment-form [deviceId]="device.id"></app-new-comment-form>
+        @if (comments$ | async; as comments) {
+          @if (comments.length) {
+            111111111
+          } @else {
+            <app-new-comment-form [deviceId]="device.id"></app-new-comment-form>
+          }
         }
       </div>
       <app-device-aside

@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateCommentInput } from './inputs/create-comment.input';
 import { UpdateCommentInput } from './inputs/update-comment.input';
@@ -23,7 +22,14 @@ export class CommentsService {
   public async createComment(
     createCommentInput: CreateCommentInput,
   ): Promise<CommentGQL> {
-    const newComment = await this.commentModel.create(createCommentInput);
+    const newComment = await this.commentModel.create({
+      comment: createCommentInput.comment,
+      advantages: createCommentInput.advantages,
+      disadvantages: createCommentInput.disadvantages,
+      rating: createCommentInput.rating,
+      device: createCommentInput.deviceId,
+      user: createCommentInput.userId,
+    });
     await newComment.populate('user');
     return newComment.toObject();
   }
@@ -42,7 +48,7 @@ export class CommentsService {
     const comments = await this.commentModel
       .find(query)
       .limit(limit + 1)
-      .populate('user')
+      .populate(['user', 'device'])
       .exec();
 
     let hasMore = false;
@@ -75,6 +81,7 @@ export class CommentsService {
 
     const updatedComment = await this.commentModel
       .findByIdAndUpdate(id, updateCommentInput, { new: true })
+      .populate(['user', 'device'])
       .exec();
     if (updatedComment) {
       return updatedComment.toObject();
@@ -102,7 +109,7 @@ export class CommentsService {
     if (id === cursor) {
       const prevComment = await this.commentModel
         .findOne({
-          deviceId: comment.deviceId,
+          device: comment.device,
           id: { $lt: comment.id },
         })
         .sort({ id: -1 })

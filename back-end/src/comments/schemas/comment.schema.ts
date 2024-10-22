@@ -1,13 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { User } from '../../users/schemas/user.schema';
+import { Device } from '../../devices/schemas/device.schema';
 
 export type CommentDocument = HydratedDocument<Comment>;
 
 @Schema()
 export class Comment {
-  @Prop({ type: MongooseSchema.Types.ObjectId })
-  public deviceId: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Device' })
+  public device: Device;
+
   @Prop()
   public rating: number;
 
@@ -20,7 +22,7 @@ export class Comment {
   @Prop()
   public comment: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   public user: User;
 }
 

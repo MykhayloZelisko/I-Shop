@@ -5,6 +5,7 @@ import { DeviceEffects } from '../devices/effects/device.effects';
 import { CPropertiesGroupEffects } from '../c-properties-groups/effects/c-properties-group.effects';
 import { CPropertyEffects } from '../c-properties/effects/c-property.effects';
 import { SharedEffects } from '../shared/effects/shared.effects';
+import { CommentEffects } from '../comments/effects/comment.effects';
 
 export const AppEffects = [
   AuthEffects,
@@ -14,4 +15,5 @@ export const AppEffects = [
   CPropertiesGroupEffects,
   CPropertyEffects,
   SharedEffects,
+  CommentEffects,
 ];

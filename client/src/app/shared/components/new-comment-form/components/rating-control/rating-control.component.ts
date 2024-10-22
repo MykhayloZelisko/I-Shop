@@ -32,13 +32,13 @@ export class RatingControlComponent
 {
   public readonly ratingValues: number[] = [5, 4, 3, 2, 1];
 
-  public rating = 0;
+  public rating!: number;
 
   public hoverRating = 0;
 
   public activeRating = 0;
 
-  public onChange = (_: unknown): void => {};
+  public onChange = (_: number): void => {};
 
   public onTouched = (): void => {};
 
@@ -56,7 +56,9 @@ export class RatingControlComponent
     this.onTouched = fn;
   }
 
-  public writeValue(): void {}
+  public writeValue(): void {
+    this.rating = 0;
+  }
 
   public changeRating(rate: number): void {
     this.rating = rate;

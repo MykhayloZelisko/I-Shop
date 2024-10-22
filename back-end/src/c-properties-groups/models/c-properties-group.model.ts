@@ -11,7 +11,7 @@ export class CPropertiesGroup {
   @Field(() => ID, { description: 'Category id' })
   public categoryId: string;
 
-  @Field(() => Boolean, {
+  @Field({
     description: 'The presence of a property in a group',
   })
   public hasProperties: boolean;

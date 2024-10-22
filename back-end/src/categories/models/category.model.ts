@@ -20,7 +20,7 @@ export class Category {
   @Field(() => Int, { description: 'Category level' })
   public level: number;
 
-  @Field(() => Boolean, {
+  @Field({
     description: 'The presence of a group in a category',
   })
   public hasGroups: boolean;

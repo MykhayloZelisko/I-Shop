@@ -45,7 +45,7 @@ export class CreateDeviceInput {
   @MaxFileSize(1024 * 1024, { each: true })
   public images: string[];
 
-  @Field({ description: 'Device category' })
+  @Field({ description: 'Device category ID' })
   @IsMongoId({
     message:
       'String must be a valid hex-encoded representation of a MongoDB ObjectId.',
@@ -53,7 +53,7 @@ export class CreateDeviceInput {
   @IsNotEmpty({ message: 'Must be a not empty string' })
   public categoryId: string;
 
-  @Field({ description: 'Device brand' })
+  @Field({ description: 'Device brand ID' })
   @IsMongoId({
     message:
       'String must be a valid hex-encoded representation of a MongoDB ObjectId.',

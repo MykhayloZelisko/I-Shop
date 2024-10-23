@@ -25,7 +25,6 @@ import { UserInterface } from '../../models/interfaces/user.interface';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import { selectUser } from '../../../+store/auth/selectors/auth.selectors';
 import { AsyncPipe } from '@angular/common';
 import { CreateCommentInterface } from '../../models/interfaces/create-comment.interface';
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
@@ -56,11 +55,11 @@ export class NewCommentFormComponent implements OnInit {
 
   @Input({ required: true }) public deviceId!: string;
 
+  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
+
   protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
 
   public readonly popupEnum = PopupTypeEnum;
-
-  public user$!: Observable<UserInterface | null>;
 
   public commentForm!: FormGroup<CommentFormInterface>;
 
@@ -69,7 +68,6 @@ export class NewCommentFormComponent implements OnInit {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.user$ = this.store.select(selectUser);
     this.initForm();
   }
 
@@ -107,5 +105,7 @@ export class NewCommentFormComponent implements OnInit {
     );
   }
 
-  public cancelSending(): void {}
+  public cancelSending(): void {
+    this.store.dispatch(PopupActions.closePopup());
+  }
 }

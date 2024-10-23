@@ -11,6 +11,7 @@
     </div>
     <div class="new-comment-dialog__body">
       <app-new-comment-form
+        [user$]='user$'
         [dialog]="dialog"
         [deviceId]="deviceId"
       ></app-new-comment-form>

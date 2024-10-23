@@ -25,7 +25,7 @@ import { selectIdAndPage } from '../../../+store/router/selectors/router.selecto
 import { FilterComponent } from './components/filter/filter.component';
 import { SubCategoryItemComponent } from './components/sub-category-item/sub-category-item.component';
 import { DeviceItemComponent } from './components/device-item/device-item.component';
-import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
+import { DEVICES_PAGE_SIZE } from '../../../shared/models/constants/page-size';
 import { PaginationParamsInterface } from '../../../shared/models/interfaces/pagination-params.interface';
 import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
 import { PaginatorComponent } from './components/paginator/paginator.component';
@@ -105,7 +105,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
               this.store.dispatch(
                 DeviceActions.loadDevices({
                   id: this.routerParams.id,
-                  size: PAGE_SIZE,
+                  size: DEVICES_PAGE_SIZE,
                   page: +this.routerParams.page,
                 }),
               );

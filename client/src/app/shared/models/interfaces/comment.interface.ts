@@ -9,4 +9,6 @@ export interface CommentInterface {
   disadvantages: string;
   comment: string;
   user: UserInterface;
+  updatedAt: string;
+  createdAt: string;
 }

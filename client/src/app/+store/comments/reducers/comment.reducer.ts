@@ -47,8 +47,14 @@ export const reducer = createReducer(
   // on(CommentActions.deleteComments, (state, action) =>
   //   adapter.removeMany(action.ids, state),
   // ),
-  // on(CommentActions.loadComments, (state, action) =>
-  //   adapter.setAll(action.comments, state),
-  // ),
+  on(CommentActions.loadCommentsSuccess, (state, action) => {
+    const updatedState = adapter.setAll(action.comments.comments, state);
+    return {
+      ...state,
+      ...updatedState,
+      cursor: action.comments.cursor,
+      hasMore: action.comments.hasMore,
+    };
+  }),
   // on(CommentActions.clearComments, (state) => adapter.removeAll(state)),
 );

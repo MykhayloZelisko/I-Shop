@@ -31,4 +31,9 @@
   &__comment {
     @include icon-style($gray-5, 14px);
   }
+
+  &__stars {
+    display: flex;
+    flex-direction: row-reverse;
+  }
 }

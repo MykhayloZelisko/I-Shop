@@ -11,6 +11,8 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../+store/reducers';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
 import { NewCommentFormComponent } from '../../../../../../../shared/components/new-comment-form/new-comment-form.component';
+import { Observable } from 'rxjs';
+import { UserInterface } from '../../../../../../../shared/models/interfaces/user.interface';
 
 @Component({
   selector: 'app-new-comment-dialog',
@@ -24,6 +26,8 @@ export class NewCommentDialogComponent {
   @Input({ required: true }) public dialog!: PopupDataInterface;
 
   @Input({ required: true }) public deviceId!: string;
+
+  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
 
   private store = inject(Store<State>);
 

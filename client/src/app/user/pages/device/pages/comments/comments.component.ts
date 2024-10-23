@@ -4,7 +4,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, take, tap } from 'rxjs';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
@@ -19,6 +19,11 @@ import { RatingComponent } from '../../../../../shared/components/rating/rating.
 import { DeviceAsideComponent } from '../../../../../shared/components/device-aside/device-aside.component';
 import { CommentInterface } from '../../../../../shared/models/interfaces/comment.interface';
 import { selectAllComments } from '../../../../../+store/comments/selectors/comment.selectors';
+import { CommentActions } from '../../../../../+store/comments/actions/comment.actions';
+import { COMMENTS_PAGE_SIZE } from '../../../../../shared/models/constants/page-size';
+import { UserInterface } from '../../../../../shared/models/interfaces/user.interface';
+import { selectUser } from '../../../../../+store/auth/selectors/auth.selectors';
+import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-comments',
@@ -43,11 +48,43 @@ export class CommentsComponent implements OnInit {
 
   public comments$!: Observable<CommentInterface[]>;
 
+  public user$!: Observable<UserInterface | null>;
+
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
+    this.user$ = this.store.select(selectUser);
     this.dialog$ = this.store.select(selectPopup);
-    this.device$ = this.store.select(selectDevice);
+    this.device$ = this.store.select(selectDevice).pipe(
+      take(1),
+      tap((device: DeviceInterface | null) => {
+        if (device) {
+          this.store.dispatch(
+            CommentActions.loadComments({
+              deviceId: device.id,
+              cursor: null,
+              limit: COMMENTS_PAGE_SIZE,
+            }),
+          );
+        }
+      }),
+    );
     this.comments$ = this.store.select(selectAllComments);
+  }
+
+  public openDialog(user: UserInterface | null): void {
+    if (user) {
+      this.store.dispatch(
+        PopupActions.openPopup({
+          popup: { title: 'Написати відгук', popupType: PopupTypeEnum.Comment },
+        }),
+      );
+    } else {
+      this.store.dispatch(
+        PopupActions.openPopup({
+          popup: { title: 'Вхід', popupType: PopupTypeEnum.Login },
+        }),
+      );
+    }
   }
 }

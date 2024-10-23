@@ -2,7 +2,8 @@ import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { DeviceActions } from '../actions/device.actions';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
-import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
+import { DEVICES_PAGE_SIZE } from '../../../shared/models/constants/page-size';
+import { UpdateStr } from '@ngrx/entity/src/models';
 
 export const devicesFeatureKey = 'devices';
 
@@ -20,7 +21,7 @@ export const adapter: EntityAdapter<DeviceInterface> =
 export const initialState: State = adapter.getInitialState({
   total: 0,
   currentPage: 0,
-  size: PAGE_SIZE,
+  size: DEVICES_PAGE_SIZE,
   maxPage: 0,
   currentDevice: null,
 });
@@ -44,6 +45,16 @@ export const reducer = createReducer(
       size: action.devicesList.size,
       maxPage: Math.ceil(action.devicesList.total / action.devicesList.size),
     };
+  }),
+  on(DeviceActions.updateDeviceRating, (state, action) => {
+    const update: UpdateStr<DeviceInterface> = {
+      id: action.id,
+      changes: {
+        rating: action.rating,
+        votes: action.votes,
+      },
+    };
+    return adapter.updateOne(update, state);
   }),
   // on(DeviceActions.upsertDevices, (state, action) =>
   //   adapter.upsertMany(action.devices, state),
@@ -77,4 +88,18 @@ export const reducer = createReducer(
     ...state,
     currentDevice: action.device,
   })),
+  on(DeviceActions.updateCurrentDeviceRating, (state, action) => {
+    if (state.currentDevice) {
+      return {
+        ...state,
+        currentDevice: {
+          ...state.currentDevice,
+          votes: action.votes,
+          rating: action.rating,
+        },
+      };
+    } else {
+      return state;
+    }
+  }),
 );

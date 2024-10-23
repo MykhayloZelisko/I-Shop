@@ -22,6 +22,7 @@ import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-
 import { ParseIntegerPipe } from '../common/pipes/parse-integer/parse-integer.pipe';
 import { DeletedComment } from './models/deleted-comment.model';
 import { Device } from '../devices/models/device.model';
+import { ParseObjectIdNullablePipe } from '../common/pipes/parse-object-id-nullable/parse-object-id-nullable.pipe';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
@@ -39,41 +40,45 @@ export class CommentsResolver {
   @Query(() => CommentsList, { name: 'comments' })
   public async getCommentsByDeviceIdAfterCursor(
     @Args('deviceId', ParseObjectIdPipe) deviceId: string,
-    @Args('after', { type: () => ID, nullable: true }, ParseObjectIdPipe)
-    after: string | null,
+    @Args(
+      'cursor',
+      { type: () => ID, nullable: true },
+      ParseObjectIdNullablePipe,
+    )
+    cursor: string | null,
     @Args('limit', { type: () => Int }, ParseIntegerPipe) limit: number,
   ): Promise<CommentsList> {
     return this.commentsService.getCommentsByDeviceIdAfterCursor(
       deviceId,
-      after,
+      cursor,
       limit,
     );
   }
 
-  @Mutation(() => Comment)
-  @UseGuards(GqlAuthGuard)
-  public async updateComment(
-    @Args('id', ParseObjectIdPipe) id: string,
-    @Args('updateCommentInput', ValidationPipe)
-    updateCommentInput: UpdateCommentInput,
-    @Context() context: { req: { user: User } },
-  ): Promise<Comment> {
-    return this.commentsService.updateComment(
-      id,
-      updateCommentInput,
-      context.req.user,
-    );
-  }
-
-  @Mutation(() => DeletedComment)
-  @UseGuards(GqlAuthGuard)
-  public async removeComment(
-    @Args('id', ParseObjectIdPipe) id: string,
-    @Args('cursor', ParseObjectIdPipe) cursor: string,
-    @Context() context: { req: { user: User } },
-  ): Promise<DeletedComment> {
-    return this.commentsService.deleteComment(id, cursor, context.req.user);
-  }
+  // @Mutation(() => Comment)
+  // @UseGuards(GqlAuthGuard)
+  // public async updateComment(
+  //   @Args('id', ParseObjectIdPipe) id: string,
+  //   @Args('updateCommentInput', ValidationPipe)
+  //   updateCommentInput: UpdateCommentInput,
+  //   @Context() context: { req: { user: User } },
+  // ): Promise<Comment> {
+  //   return this.commentsService.updateComment(
+  //     id,
+  //     updateCommentInput,
+  //     context.req.user,
+  //   );
+  // }
+  //
+  // @Mutation(() => DeletedComment)
+  // @UseGuards(GqlAuthGuard)
+  // public async removeComment(
+  //   @Args('id', ParseObjectIdPipe) id: string,
+  //   @Args('cursor', ParseObjectIdPipe) cursor: string,
+  //   @Context() context: { req: { user: User } },
+  // ): Promise<DeletedComment> {
+  //   return this.commentsService.deleteComment(id, cursor, context.req.user);
+  // }
 
   @ResolveField(() => User)
   public async user(@Parent() comment: Comment): Promise<User> {

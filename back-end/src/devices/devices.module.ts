@@ -15,5 +15,6 @@ import { FilesModule } from '../files/files.module';
     FilesModule,
   ],
   providers: [DevicesResolver, DevicesService],
+  exports: [DevicesService],
 })
 export class DevicesModule {}

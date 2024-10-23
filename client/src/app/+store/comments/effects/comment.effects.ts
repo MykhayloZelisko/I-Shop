@@ -8,6 +8,8 @@ import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
 import { LoaderActions } from '../../loader/actions/loader.actions';
 import { FormActions } from '../../form/actions/form.actions';
 import { CommentInterface } from '../../../shared/models/interfaces/comment.interface';
+import { DeviceActions } from '../../devices/actions/device.actions';
+import { CommentsListInterface } from '../../../shared/models/interfaces/comments-list.interface';
 
 @Injectable()
 export class CommentEffects {
@@ -26,6 +28,15 @@ export class CommentEffects {
           mergeMap((comment: CommentInterface) => [
             LoaderActions.toggleLoader(),
             CommentActions.addCommentSuccess({ comment }),
+            DeviceActions.updateDeviceRating({
+              id: comment.device.id,
+              votes: comment.device.votes,
+              rating: comment.device.rating,
+            }),
+            DeviceActions.updateCurrentDeviceRating({
+              votes: comment.device.votes,
+              rating: comment.device.rating,
+            }),
             FormActions.clearFormOn(),
           ]),
           catchError(() => {
@@ -41,6 +52,42 @@ export class CommentEffects {
     () =>
       this.actions$.pipe(
         ofType(CommentActions.addCommentFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public loadComments$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CommentActions.loadComments),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.commentsService
+          .getAllCommentsByDeviceId(
+            action.deviceId,
+            action.cursor,
+            action.limit,
+          )
+          .pipe(
+            mergeMap((comments: CommentsListInterface) => [
+              LoaderActions.toggleLoader(),
+              CommentActions.loadCommentsSuccess({ comments }),
+            ]),
+            catchError(() => {
+              this.store.dispatch(LoaderActions.toggleLoader());
+              return of(CommentActions.loadCommentsFailure());
+            }),
+          ),
+      ),
+    ),
+  );
+
+  public loadCommentsFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CommentActions.loadCommentsFailure),
         tap(() => {
           // TODO: add dialog
         }),

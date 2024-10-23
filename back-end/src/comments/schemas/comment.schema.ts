@@ -5,7 +5,7 @@ import { Device } from '../../devices/schemas/device.schema';
 
 export type CommentDocument = HydratedDocument<Comment>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Comment {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Device' })
   public device: Device;

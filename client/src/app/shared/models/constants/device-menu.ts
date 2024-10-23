@@ -11,7 +11,7 @@ export const DEVICE_MENU: MenuItem[] = [
     routerLink: DeviceRouteNameEnum.Properties,
   },
   {
-    label: 'Відгуки',
+    label: '',
     routerLink: DeviceRouteNameEnum.Comments,
   },
 ];

@@ -24,4 +24,10 @@ export class Comment {
 
   @Field(() => Device, { description: 'Device' })
   public device: Device;
+
+  @Field({ description: 'Creating timestamp' })
+  public createdAt: string;
+
+  @Field({ description: 'Updating timestamp' })
+  public updatedAt: string;
 }

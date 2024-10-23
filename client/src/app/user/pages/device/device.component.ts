@@ -52,6 +52,12 @@ export class DeviceComponent implements OnInit {
               ? { label: 'Залишити відгук', routerLink: item.routerLink }
               : item,
           );
+        } else {
+          this.items = this.items.map((item: MenuItem) =>
+            item.routerLink === DeviceRouteNameEnum.Comments
+              ? { label: 'Відгуки', routerLink: item.routerLink }
+              : item,
+          );
         }
       }),
     );

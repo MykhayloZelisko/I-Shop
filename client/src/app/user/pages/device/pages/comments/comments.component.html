@@ -14,9 +14,33 @@
       <div class="comments__main">
         @if (comments$ | async; as comments) {
           @if (comments.length) {
-            111111111
+            <div class="comments__list-wrapper">
+              <div class="comments__create">
+                <p class="comments__create-text">
+                  Залиште свій відгук про цей товар
+                </p>
+                @if (user$ | async; as user) {
+                  <button
+                    class="comments__create-button"
+                    (click)="openDialog(user)"
+                  >
+                    Написати відгук
+                  </button>
+                } @else {
+                  <button
+                    class="comments__create-button"
+                    (click)="openDialog(null)"
+                  >
+                    Написати відгук
+                  </button>
+                }
+              </div>
+            </div>
           } @else {
-            <app-new-comment-form [deviceId]="device.id"></app-new-comment-form>
+            <app-new-comment-form
+              [deviceId]="device.id"
+              [user$]="user$"
+            ></app-new-comment-form>
           }
         }
       </div>
@@ -29,7 +53,11 @@
 
   @if (dialog$ | async; as dialog) {
     @if (dialog.popupType === popupEnum.Comment) {
-      <app-new-comment-dialog [dialog]="dialog" [deviceId]="device.id"></app-new-comment-dialog>
+      <app-new-comment-dialog
+        [dialog]="dialog"
+        [deviceId]="device.id"
+        [user$]='user$'
+      ></app-new-comment-dialog>
     }
   }
 }

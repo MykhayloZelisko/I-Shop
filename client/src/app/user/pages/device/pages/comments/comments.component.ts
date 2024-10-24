@@ -4,7 +4,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { Observable, take, tap } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
@@ -24,6 +24,9 @@ import { COMMENTS_PAGE_SIZE } from '../../../../../shared/models/constants/page-
 import { UserInterface } from '../../../../../shared/models/interfaces/user.interface';
 import { selectUser } from '../../../../../+store/auth/selectors/auth.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
+import { CommentComponent } from './components/comment/comment.component';
+import { selectIdAndPage } from '../../../../../+store/router/selectors/router.selectors';
+import { RouterParamsInterface } from '../../../../../shared/models/interfaces/router-params.interface';
 
 @Component({
   selector: 'app-comments',
@@ -34,6 +37,7 @@ import { PopupActions } from '../../../../../+store/popup/actions/popup.actions'
     NewCommentFormComponent,
     RatingComponent,
     DeviceAsideComponent,
+    CommentComponent,
   ],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',
@@ -55,21 +59,28 @@ export class CommentsComponent implements OnInit {
   public ngOnInit(): void {
     this.user$ = this.store.select(selectUser);
     this.dialog$ = this.store.select(selectPopup);
-    this.device$ = this.store.select(selectDevice).pipe(
-      take(1),
-      tap((device: DeviceInterface | null) => {
-        if (device) {
-          this.store.dispatch(
-            CommentActions.loadComments({
-              deviceId: device.id,
-              cursor: null,
-              limit: COMMENTS_PAGE_SIZE,
-            }),
-          );
-        }
-      }),
-    );
+    this.device$ = this.store.select(selectDevice);
     this.comments$ = this.store.select(selectAllComments);
+    this.initCommentsList();
+  }
+
+  public initCommentsList(): void {
+    this.store
+      .select(selectIdAndPage)
+      .pipe(take(1))
+      .subscribe({
+        next: (params: RouterParamsInterface) => {
+          if (params.id) {
+            this.store.dispatch(
+              CommentActions.loadComments({
+                deviceId: params.id,
+                cursor: null,
+                limit: COMMENTS_PAGE_SIZE,
+              }),
+            );
+          }
+        },
+      });
   }
 
   public openDialog(user: UserInterface | null): void {

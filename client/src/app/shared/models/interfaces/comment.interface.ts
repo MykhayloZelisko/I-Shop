@@ -7,8 +7,10 @@ export interface CommentInterface {
   rating: number;
   advantages: string;
   disadvantages: string;
-  comment: string;
+  content: string;
   user: UserInterface;
   updatedAt: string;
   createdAt: string;
+  likesUsers: UserInterface[];
+  dislikesUsers: UserInterface[];
 }

@@ -17,7 +17,7 @@ export class Comment {
   public disadvantages: string;
 
   @Field({ description: `Comment's content` })
-  public comment: string;
+  public content: string;
 
   @Field(() => User, { description: `Comment's author` })
   public user: User;
@@ -30,4 +30,14 @@ export class Comment {
 
   @Field({ description: 'Updating timestamp' })
   public updatedAt: string;
+
+  @Field(() => [User], {
+    description: 'Array of user ids who liked the comment',
+  })
+  public likesUsers: User[];
+
+  @Field(() => [User], {
+    description: 'Array of user ids who disliked the comment',
+  })
+  public dislikesUsers: User[];
 }

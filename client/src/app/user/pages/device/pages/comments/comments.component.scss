@@ -51,6 +51,18 @@
 
     white-space: nowrap;
   }
+
+  &__list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
 @media screen and (width <= 1280px) {

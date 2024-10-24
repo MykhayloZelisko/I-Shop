@@ -78,7 +78,7 @@ export class NewCommentFormComponent implements OnInit {
         requiredValidator(),
       ]),
       disadvantages: this.fb.nonNullable.control<string>('', []),
-      comment: this.fb.nonNullable.control<string>('', []),
+      content: this.fb.nonNullable.control<string>('', []),
     });
   }
 

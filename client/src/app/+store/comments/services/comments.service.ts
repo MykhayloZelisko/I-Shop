@@ -24,7 +24,7 @@ export class CommentsService {
               id
               advantages
               disadvantages
-              comment
+              content
               rating
               user {
                 id
@@ -38,6 +38,12 @@ export class CommentsService {
               }
               createdAt
               updatedAt
+              likesUsers {
+                id
+              }
+              dislikesUsers {
+                id
+              }
             }
           }
         `,
@@ -72,7 +78,7 @@ export class CommentsService {
                 rating
                 advantages
                 disadvantages
-                comment
+                content
                 device {
                   id
                 }
@@ -83,11 +89,18 @@ export class CommentsService {
                 }
                 createdAt
                 updatedAt
+                likesUsers {
+                  id
+                }
+                dislikesUsers {
+                  id
+                }
               }
             }
           }
         `,
         variables: { deviceId, cursor, limit },
+        fetchPolicy: 'network-only',
       })
       .pipe(
         map(
@@ -101,6 +114,58 @@ export class CommentsService {
             }
           },
         ),
+        catchError((error) => throwError(() => error)),
+      );
+  }
+
+  public updateLikeDislike(
+    commentId: string,
+    status: -1 | 1,
+  ): Observable<CommentInterface> {
+    return this.apollo
+      .use('withCredentials')
+      .mutate({
+        mutation: gql`
+          mutation UpdateLikeDislike(
+            $updateLikeDislikeInput: UpdateLikeDislikeInput!
+          ) {
+            updateLikeDislike(updateLikeDislikeInput: $updateLikeDislikeInput) {
+              id
+              advantages
+              disadvantages
+              content
+              rating
+              user {
+                id
+                firstName
+                lastName
+              }
+              device {
+                id
+                votes
+                rating
+              }
+              createdAt
+              updatedAt
+              likesUsers {
+                id
+              }
+              dislikesUsers {
+                id
+              }
+            }
+          }
+        `,
+        variables: { updateLikeDislikeInput: { commentId, status } },
+      })
+      .pipe(
+        map((response: MutationResult) => {
+          if (response.errors) {
+            throw response.errors[0];
+          } else {
+            return response.data.updateLikeDislike;
+          }
+        }),
         catchError((error) => throwError(() => error)),
       );
   }

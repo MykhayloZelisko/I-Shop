@@ -5,13 +5,15 @@
   display: flex;
   gap: 10px;
 
-  &:hover {
-    cursor: pointer;
+  &--hover {
+    &:hover {
+      cursor: pointer;
 
-    .rating {
-      &__votes {
-        color: $blue-2;
-        text-decoration: underline;
+      .rating {
+        &__votes {
+          color: $blue-2;
+          text-decoration: underline;
+        }
       }
     }
   }

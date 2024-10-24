@@ -1,0 +1,55 @@
+<div class="comment">
+  <div class="comment__header">
+    <p class="comment__user">
+      {{ comment.user.firstName }} {{ comment.user.lastName }}
+    </p>
+    <p class="comment__date">
+      {{ comment.createdAt | date: 'dd.MM.YYYY HH:mm' }}
+    </p>
+  </div>
+  <app-rating
+    [deviceId]="comment.device.id"
+    [rating]="comment.rating"
+  ></app-rating>
+  <div class="comment__text">{{ comment.content }}</div>
+  <div class="comment__text">
+    <span class="comment__text--bold">Переваги: </span>{{ comment.advantages }}
+  </div>
+  <div class="comment__text">
+    <span class="comment__text--bold">Недоліки: </span
+    >{{ comment.disadvantages }}
+  </div>
+  <div class="comment__footer">
+    <button class="comment__button">Відповісти</button>
+    <div class="comment__footer-right">
+      <div class="comment__like">
+        <button class="comment__icon-button" (click)="likeComment(1)">
+          <svg-icon
+            class="comment__icon-like"
+            src="assets/images/like.svg"
+          ></svg-icon>
+        </button>
+        <span class="comment__number-likes">{{
+          comment.likesUsers.length
+        }}</span>
+      </div>
+      <div class="comment__like">
+        <button class="comment__icon-button" (click)="likeComment(-1)">
+          <svg-icon
+            class="comment__icon-like"
+            src="assets/images/dislike.svg"
+          ></svg-icon>
+        </button>
+        <span class="comment__number-likes">{{
+          comment.dislikesUsers.length
+        }}</span>
+      </div>
+      <button class="comment__icon-button">
+        <svg-icon
+          class="comment__icon-more"
+          src="assets/images/navigation-more_vert.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+</div>

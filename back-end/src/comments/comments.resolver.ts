@@ -23,6 +23,7 @@ import { ParseIntegerPipe } from '../common/pipes/parse-integer/parse-integer.pi
 import { DeletedComment } from './models/deleted-comment.model';
 import { Device } from '../devices/models/device.model';
 import { ParseObjectIdNullablePipe } from '../common/pipes/parse-object-id-nullable/parse-object-id-nullable.pipe';
+import { UpdateLikeDislikeInput } from './inputs/update-like-dislike.input';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
@@ -52,6 +53,19 @@ export class CommentsResolver {
       deviceId,
       cursor,
       limit,
+    );
+  }
+
+  @Mutation(() => Comment)
+  @UseGuards(GqlAuthGuard)
+  public async updateLikeDislike(
+    @Args('updateLikeDislikeInput', ValidationPipe)
+    updateLikeDislikeInput: UpdateLikeDislikeInput,
+    @Context() context: { req: { user: User } },
+  ): Promise<Comment> {
+    return this.commentsService.updateLikeDislike(
+      updateLikeDislikeInput,
+      context.req.user,
     );
   }
 
@@ -88,5 +102,15 @@ export class CommentsResolver {
   @ResolveField(() => Device)
   public async device(@Parent() comment: Comment): Promise<Device> {
     return comment.device;
+  }
+
+  @ResolveField(() => [User])
+  public async likesUsers(@Parent() comment: Comment): Promise<User[]> {
+    return comment.likesUsers;
+  }
+
+  @ResolveField(() => [User])
+  public async dislikesUsers(@Parent() comment: Comment): Promise<User[]> {
+    return comment.dislikesUsers;
   }
 }

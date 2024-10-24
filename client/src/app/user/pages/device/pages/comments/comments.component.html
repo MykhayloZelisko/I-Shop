@@ -35,6 +35,11 @@
                   </button>
                 }
               </div>
+              <div class="comments__list">
+                @for (comment of comments; track comment) {
+                  <app-comment [comment]="comment"></app-comment>
+                }
+              </div>
             </div>
           } @else {
             <app-new-comment-form

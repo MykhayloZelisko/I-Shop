@@ -3,6 +3,6 @@ export interface CreateCommentInterface {
   rating: number;
   advantages: string;
   disadvantages: string;
-  comment: string;
+  content: string;
   userId: string;
 }

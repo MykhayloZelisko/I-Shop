@@ -45,5 +45,5 @@ export class CreateCommentInput {
   @Field({ description: `Comment's content` })
   @IsString({ message: 'Must be a string' })
   @IsNotEmpty({ message: 'Must be a not empty string' })
-  public comment: string;
+  public content: string;
 }

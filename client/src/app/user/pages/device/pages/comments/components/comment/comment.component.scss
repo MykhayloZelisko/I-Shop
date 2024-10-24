@@ -1,0 +1,88 @@
+@import "variables";
+@import "mixins";
+
+.comment {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid $gray-4;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__user {
+    font-family: $source;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  &__date {
+    font-family: $source;
+    font-size: 14px;
+    color: $gray-5;
+  }
+
+  &__text {
+    font-family: $source;
+    font-size: 16px;
+    line-height: 1.2;
+
+    &--bold {
+      font-weight: bold;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__footer-right {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__like {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__button {
+    @include button-style(transparent, $brown-2, 6px 12px, transparent);
+
+    &:hover {
+      color: $blue-2;
+    }
+  }
+
+  &__icon-like {
+    @include icon-style($brown-1, 24px);
+  }
+
+  &__icon-more {
+    @include icon-style($gray-5, 24px);
+  }
+
+  &__icon-button {
+    @include icon-button-style(30px, transparent);
+
+    &:hover {
+      .comment {
+        &__icon-like {
+          @include icon-style($brown-2);
+        }
+      }
+    }
+  }
+
+  &__number-likes {
+    font-family: $source;
+    font-size: 16px;
+  }
+}

@@ -20,10 +20,22 @@ export class Comment {
   public disadvantages: string;
 
   @Prop()
-  public comment: string;
+  public content: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   public user: User;
+
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }],
+    default: [],
+  })
+  public likesUsers: User[];
+
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }],
+    default: [],
+  })
+  public dislikesUsers: User[];
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);

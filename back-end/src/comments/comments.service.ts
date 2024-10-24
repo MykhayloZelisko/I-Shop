@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateCommentInput } from './inputs/create-comment.input';
 import { UpdateCommentInput } from './inputs/update-comment.input';
@@ -13,6 +14,7 @@ import { CommentsList } from './models/comments-list.model';
 import { User } from '../users/models/user.model';
 import { DeletedComment } from './models/deleted-comment.model';
 import { RatingsService } from '../ratings/ratings.service';
+import { UpdateLikeDislikeInput } from './inputs/update-like-dislike.input';
 
 @Injectable()
 export class CommentsService {
@@ -31,17 +33,24 @@ export class CommentsService {
         createCommentInput.rating,
       );
       const newComment = await this.commentModel.create({
-        comment: createCommentInput.comment,
+        content: createCommentInput.content,
         advantages: createCommentInput.advantages,
         disadvantages: createCommentInput.disadvantages,
         rating: createCommentInput.rating,
         device: createCommentInput.deviceId,
         user: createCommentInput.userId,
       });
-      await newComment.populate(['user', 'device']);
+      await newComment.populate([
+        'user',
+        'device',
+        'likesUsers',
+        'dislikesUsers',
+      ]);
       return await newComment.toObject();
     } catch {
-      throw new ForbiddenException('You cannot re-rate this device');
+      throw new ForbiddenException(
+        'You cannot add new comment for this device',
+      );
     }
   }
 
@@ -59,7 +68,7 @@ export class CommentsService {
     const comments = await this.commentModel
       .find(query)
       .limit(limit + 1)
-      .populate(['user', 'device'])
+      .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
       .exec();
 
     let hasMore = false;
@@ -73,6 +82,85 @@ export class CommentsService {
       hasMore,
       cursor: hasMore ? comments[comments.length - 1].id : null,
     };
+  }
+
+  public async updateLikeDislike(
+    updateLikeDislikeInput: UpdateLikeDislikeInput,
+    user: User,
+  ): Promise<CommentGQL> {
+    const { commentId, status } = updateLikeDislikeInput;
+    const comment = await this.commentModel
+      .findById(commentId)
+      .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+      .exec();
+
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    const commentObj = comment.toObject();
+    let updatedComment: CommentDocument | null = null;
+    if (status === 1) {
+      const isLiked = commentObj.likesUsers.some(
+        (likeUser: User) => likeUser.id.toString() === user.id,
+      );
+
+      if (isLiked) {
+        updatedComment = await this.commentModel
+          .findByIdAndUpdate(
+            commentId,
+            { $pull: { likesUsers: user.id } },
+            { new: true },
+          )
+          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+          .exec();
+      } else {
+        updatedComment = await this.commentModel
+          .findByIdAndUpdate(
+            commentId,
+            {
+              $addToSet: { likesUsers: user.id },
+              $pull: { dislikesUsers: user.id },
+            },
+            { new: true },
+          )
+          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+          .exec();
+      }
+    } else if (status === -1) {
+      const isDisliked = commentObj.dislikesUsers.some(
+        (dislikeUser: User) => dislikeUser.id.toString() === user.id,
+      );
+
+      if (isDisliked) {
+        updatedComment = await this.commentModel
+          .findByIdAndUpdate(
+            commentId,
+            { $pull: { dislikesUsers: user.id } },
+            { new: true },
+          )
+          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+          .exec();
+      } else {
+        updatedComment = await this.commentModel
+          .findByIdAndUpdate(
+            commentId,
+            {
+              $addToSet: { dislikesUsers: user.id },
+              $pull: { likesUsers: user.id },
+            },
+            { new: true },
+          )
+          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+          .exec();
+      }
+    }
+
+    if (!updatedComment) {
+      throw new BadRequestException('A comment is not updated');
+    }
+
+    return updatedComment.toObject();
   }
 
   // public async updateComment(

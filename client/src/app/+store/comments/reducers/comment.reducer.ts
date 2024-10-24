@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CommentActions } from '../actions/comment.actions';
 import { CommentInterface } from '../../../shared/models/interfaces/comment.interface';
+import { UpdateStr } from '@ngrx/entity/src/models';
 
 export const commentsFeatureKey = 'comments';
 
@@ -55,6 +56,16 @@ export const reducer = createReducer(
       cursor: action.comments.cursor,
       hasMore: action.comments.hasMore,
     };
+  }),
+  on(CommentActions.updateLikesSuccess, (state, action) => {
+    const update: UpdateStr<CommentInterface> = {
+      id: action.comment.id,
+      changes: {
+        likesUsers: [...action.comment.likesUsers],
+        dislikesUsers: [...action.comment.dislikesUsers],
+      },
+    };
+    return adapter.updateOne(update, state);
   }),
   // on(CommentActions.clearComments, (state) => adapter.removeAll(state)),
 );

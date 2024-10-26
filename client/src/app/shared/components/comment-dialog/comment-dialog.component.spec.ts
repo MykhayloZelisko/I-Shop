@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CommentDialogComponent } from './comment-dialog.component';
 
-describe('NewCommentComponent', () => {
+describe('CommentDialogComponent', () => {
   let component: CommentDialogComponent;
   let fixture: ComponentFixture<CommentDialogComponent>;
 

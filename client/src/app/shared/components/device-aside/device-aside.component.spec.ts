@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DeviceAsideComponent } from './device-aside.component';
 
-describe('PropertiesAsideComponent', () => {
+describe('DeviceAsideComponent', () => {
   let component: DeviceAsideComponent;
   let fixture: ComponentFixture<DeviceAsideComponent>;
 

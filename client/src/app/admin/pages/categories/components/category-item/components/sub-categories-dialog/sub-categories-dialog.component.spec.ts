@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SubCategoriesDialogComponent } from './sub-categories-dialog.component';
 
 describe('SubCategoryDialogComponent', () => {

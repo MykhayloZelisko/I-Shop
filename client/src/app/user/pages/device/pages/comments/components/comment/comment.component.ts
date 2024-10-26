@@ -19,15 +19,9 @@ import { PopupTypeEnum } from '../../../../../../../shared/models/enums/popup-ty
 import { PopupDataInterface } from '../../../../../../../shared/models/interfaces/popup-data.interface';
 import { selectPopup } from '../../../../../../../+store/popup/selectors/popup.selectors';
 import { PopupActions } from '../../../../../../../+store/popup/actions/popup.actions';
-import {
-  selectCurrentComment
-} from '../../../../../../../+store/comments/selectors/comment.selectors';
-import {
-  CommentsListStatusInterface
-} from '../../../../../../../shared/models/interfaces/comments-list-status.interface';
-import {
-  CommentDialogComponent
-} from '../../../../../../../shared/components/comment-dialog/comment-dialog.component';
+import { selectCurrentComment } from '../../../../../../../+store/comments/selectors/comment.selectors';
+import { CommentsListStatusInterface } from '../../../../../../../shared/models/interfaces/comments-list-status.interface';
+import { CommentDialogComponent } from '../../../../../../../shared/components/comment-dialog/comment-dialog.component';
 
 @Component({
   selector: 'app-comment',

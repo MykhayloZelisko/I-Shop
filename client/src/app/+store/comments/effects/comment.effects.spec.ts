@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { CommentEffects } from './comment.effects';
 
 describe('CommentEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: CommentEffects;
 
   beforeEach(() => {

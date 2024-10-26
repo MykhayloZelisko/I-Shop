@@ -11,8 +11,6 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { CommentFormComponent } from '../comment-form/comment-form.component';
-import { Observable } from 'rxjs';
-import { UserInterface } from '../../models/interfaces/user.interface';
 import { CommentInterface } from '../../models/interfaces/comment.interface';
 
 @Component({

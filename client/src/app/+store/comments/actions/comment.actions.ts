@@ -1,11 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Update } from '@ngrx/entity';
 import { CreateCommentInterface } from '../../../shared/models/interfaces/create-comment.interface';
 import { CommentInterface } from '../../../shared/models/interfaces/comment.interface';
 import { CommentsListInterface } from '../../../shared/models/interfaces/comments-list.interface';
-import {
-  DeletedCommentInterface
-} from '../../../shared/models/interfaces/deleted-comment.interface';
+import { DeletedCommentInterface } from '../../../shared/models/interfaces/deleted-comment.interface';
 
 export const CommentActions = createActionGroup({
   source: 'Comment/API',

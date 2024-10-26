@@ -58,6 +58,7 @@
 
   &__logo-icon {
     @include icon-style($size: 40px, $lift: false);
+
     height: 40px;
   }
 

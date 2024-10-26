@@ -21,7 +21,6 @@ import { ratingValidator, requiredValidator } from '../../utils/validators';
 import { TextareaComponent } from '../textarea/textarea.component';
 import { PopupDataInterface } from '../../models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../models/enums/popup-type.enum';
-import { UserInterface } from '../../models/interfaces/user.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { AsyncPipe } from '@angular/common';

@@ -3,7 +3,6 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { DeviceActions } from '../actions/device.actions';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
 import { DEVICES_PAGE_SIZE } from '../../../shared/models/constants/page-size';
-import { UpdateStr } from '@ngrx/entity/src/models';
 
 export const devicesFeatureKey = 'devices';
 

@@ -37,15 +37,36 @@
               </div>
               <div class="comments__list">
                 @for (comment of comments; track comment) {
-                  <app-comment [comment]="comment"></app-comment>
+                  <app-comment
+                    [comment]="comment"
+                    [user$]="user$"
+                    [commentsStatus$]="commentsStatus$"
+                  ></app-comment>
+                }
+                @if (commentsStatus$ | async; as status) {
+                  @if (status.cursor) {
+                    <button
+                      class="comments__more"
+                      (click)="loadMore(device.id, status.cursor)"
+                    >
+                      Показати ще
+                    </button>
+                  }
                 }
               </div>
             </div>
           } @else {
-            <app-new-comment-form
-              [deviceId]="device.id"
-              [user$]="user$"
-            ></app-new-comment-form>
+            @if (user$ | async; as user) {
+              <app-comment-form
+                [deviceId]="device.id"
+                [userId]="user.id"
+              ></app-comment-form>
+            } @else {
+              <app-comment-form
+                [deviceId]="device.id"
+                [userId]="null"
+              ></app-comment-form>
+            }
           }
         }
       </div>
@@ -56,13 +77,15 @@
     </div>
   </div>
 
-  @if (dialog$ | async; as dialog) {
-    @if (dialog.popupType === popupEnum.Comment) {
-      <app-new-comment-dialog
-        [dialog]="dialog"
-        [deviceId]="device.id"
-        [user$]='user$'
-      ></app-new-comment-dialog>
+  @if (user$ | async; as user) {
+    @if (dialog$ | async; as dialog) {
+      @if (dialog.popupType === popupEnum.NewComment) {
+        <app-comment-dialog
+          [dialog]="dialog"
+          [deviceId]="device.id"
+          [userId]="user.id"
+        ></app-comment-dialog>
+      }
     }
   }
 }

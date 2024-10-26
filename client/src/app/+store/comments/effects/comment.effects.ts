@@ -10,6 +10,7 @@ import { CommentInterface } from '../../../shared/models/interfaces/comment.inte
 import { DeviceActions } from '../../devices/actions/device.actions';
 import { CommentsListInterface } from '../../../shared/models/interfaces/comments-list.interface';
 import { PopupActions } from '../../popup/actions/popup.actions';
+import { DeletedCommentInterface } from '../../../shared/models/interfaces/deleted-comment.interface';
 
 @Injectable()
 export class CommentEffects {
@@ -28,11 +29,6 @@ export class CommentEffects {
           mergeMap((comment: CommentInterface) => [
             LoaderActions.toggleLoader(),
             CommentActions.addCommentSuccess({ comment }),
-            DeviceActions.updateDeviceRating({
-              id: comment.device.id,
-              votes: comment.device.votes,
-              rating: comment.device.rating,
-            }),
             DeviceActions.updateCurrentDeviceRating({
               votes: comment.device.votes,
               rating: comment.device.rating,
@@ -120,6 +116,111 @@ export class CommentEffects {
     () =>
       this.actions$.pipe(
         ofType(CommentActions.updateLikesFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public upsertComments$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CommentActions.upsertComments),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.commentsService
+          .getAllCommentsByDeviceId(
+            action.deviceId,
+            action.cursor,
+            action.limit,
+          )
+          .pipe(
+            mergeMap((comments: CommentsListInterface) => [
+              LoaderActions.toggleLoader(),
+              CommentActions.upsertCommentsSuccess({ comments }),
+            ]),
+            catchError(() => {
+              this.store.dispatch(LoaderActions.toggleLoader());
+              return of(CommentActions.upsertCommentsFailure());
+            }),
+          ),
+      ),
+    ),
+  );
+
+  public upsertCommentsFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CommentActions.upsertCommentsFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public deleteComment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CommentActions.deleteComment),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.commentsService.deleteComment(action.id, action.cursor).pipe(
+          mergeMap((payload: DeletedCommentInterface) => [
+            LoaderActions.toggleLoader(),
+            CommentActions.deleteCommentSuccess({ payload }),
+            DeviceActions.updateCurrentDeviceRating({
+              votes: payload.device.votes,
+              rating: payload.device.rating,
+            }),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CommentActions.deleteCommentFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public deleteCommentFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CommentActions.deleteCommentFailure),
+        tap(() => {
+          // TODO: add dialog
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  public updateComment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CommentActions.updateComment),
+      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        this.commentsService.updateComment(action.id, action.comment).pipe(
+          mergeMap((comment: CommentInterface) => [
+            LoaderActions.toggleLoader(),
+            CommentActions.updateCommentSuccess({ comment }),
+            DeviceActions.updateCurrentDeviceRating({
+              votes: comment.device.votes,
+              rating: comment.device.rating,
+            }),
+            PopupActions.closePopup(),
+          ]),
+          catchError(() => {
+            this.store.dispatch(LoaderActions.toggleLoader());
+            return of(CommentActions.updateCommentFailure());
+          }),
+        ),
+      ),
+    ),
+  );
+
+  public updateCommentFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CommentActions.updateCommentFailure),
         tap(() => {
           // TODO: add dialog
         }),

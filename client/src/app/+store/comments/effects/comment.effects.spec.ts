@@ -10,10 +10,7 @@ describe('CommentEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CommentEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [CommentEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(CommentEffects);

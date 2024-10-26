@@ -22,16 +22,16 @@ import { TextareaComponent } from '../textarea/textarea.component';
 import { PopupDataInterface } from '../../models/interfaces/popup-data.interface';
 import { PopupTypeEnum } from '../../models/enums/popup-type.enum';
 import { UserInterface } from '../../models/interfaces/user.interface';
-import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { AsyncPipe } from '@angular/common';
 import { CreateCommentInterface } from '../../models/interfaces/create-comment.interface';
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { CommentActions } from '../../../+store/comments/actions/comment.actions';
+import { CommentInterface } from '../../models/interfaces/comment.interface';
 
 @Component({
-  selector: 'app-new-comment-form',
+  selector: 'app-comment-form',
   standalone: true,
   imports: [
     InputComponent,
@@ -40,11 +40,11 @@ import { CommentActions } from '../../../+store/comments/actions/comment.actions
     TextareaComponent,
     AsyncPipe,
   ],
-  templateUrl: './new-comment-form.component.html',
-  styleUrl: './new-comment-form.component.scss',
+  templateUrl: './comment-form.component.html',
+  styleUrl: './comment-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewCommentFormComponent implements OnInit {
+export class CommentFormComponent implements OnInit {
   @ViewChildren(InputComponent) public inputs!: QueryList<InputComponent>;
 
   @ViewChild(TextareaComponent) public textarea!: TextareaComponent;
@@ -55,7 +55,9 @@ export class NewCommentFormComponent implements OnInit {
 
   @Input({ required: true }) public deviceId!: string;
 
-  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
+  @Input({ required: true }) public userId!: string | null;
+
+  @Input() public comment!: CommentInterface;
 
   protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
 
@@ -73,16 +75,26 @@ export class NewCommentFormComponent implements OnInit {
 
   public initForm(): void {
     this.commentForm = this.fb.group<CommentFormInterface>({
-      rating: this.fb.nonNullable.control<number>(0, [ratingValidator()]),
-      advantages: this.fb.nonNullable.control<string>('', [
-        requiredValidator(),
-      ]),
-      disadvantages: this.fb.nonNullable.control<string>('', []),
-      content: this.fb.nonNullable.control<string>('', []),
+      rating: this.fb.nonNullable.control<number>(
+        this.comment ? this.comment.rating : 0,
+        [ratingValidator()],
+      ),
+      advantages: this.fb.nonNullable.control<string>(
+        this.comment ? this.comment.advantages : '',
+        [],
+      ),
+      disadvantages: this.fb.nonNullable.control<string>(
+        this.comment ? this.comment.disadvantages : '',
+        [],
+      ),
+      content: this.fb.nonNullable.control<string>(
+        this.comment ? this.comment.content : '',
+        [],
+      ),
     });
   }
 
-  public sendComment(id: string): void {
+  public sendComment(userId: string): void {
     this.inputs.forEach((input: InputComponent) => input.markAsDirty());
     this.textarea.markAsDirty();
     this.ratingCtrl.markAsDirty();
@@ -91,7 +103,7 @@ export class NewCommentFormComponent implements OnInit {
       const comment: CreateCommentInterface = {
         ...formData,
         deviceId: this.deviceId,
-        userId: id,
+        userId,
       };
       this.store.dispatch(CommentActions.addComment({ comment }));
     }
@@ -107,5 +119,22 @@ export class NewCommentFormComponent implements OnInit {
 
   public cancelSending(): void {
     this.store.dispatch(PopupActions.closePopup());
+  }
+
+  public updateComment(): void {
+    this.inputs.forEach((input: InputComponent) => input.markAsDirty());
+    this.textarea.markAsDirty();
+    this.ratingCtrl.markAsDirty();
+    if (this.commentForm.valid) {
+      const formData = this.commentForm.getRawValue();
+      const comment: CreateCommentInterface = {
+        ...formData,
+        deviceId: this.comment.device.id,
+        userId: this.comment.user.id,
+      };
+      this.store.dispatch(
+        CommentActions.updateComment({ id: this.comment.id, comment }),
+      );
+    }
   }
 }

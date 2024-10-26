@@ -16,7 +16,6 @@ export const DeviceActions = createActionGroup({
     AddDevices: props<{ id: string; page: number; size: number }>(),
     AddDevicesSuccess: props<{ devicesList: DevicesListInterface }>(),
     AddDevicesFailure: emptyProps(),
-    UpdateDeviceRating: props<{ id: string; rating: number; votes: number }>(),
     // 'Upsert Devices': props<{ devices: Device[] }>(),
     // 'Update Device': props<{ device: Update<Device> }>(),
     // 'Update Devices': props<{ devices: Update<Device>[] }>(),

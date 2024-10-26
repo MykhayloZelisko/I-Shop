@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewCommentFormComponent } from './new-comment-form.component';
+import { NewCommentFormComponent } from './comment-form.component';
 
 describe('NewCommentFormComponent', () => {
   let component: NewCommentFormComponent;

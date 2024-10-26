@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Rating, RatingDocument } from './schemas/rating.schema';
@@ -35,19 +39,27 @@ export class RatingsService {
     );
   }
 
-  // findAll() {
-  //   return `This action returns all rating`;
-  // }
-  //
-  // findOne(id: number) {
-  //   return `This action returns a #${id} rating`;
-  // }
-  //
-  // update(id: number, updateRatingInput: UpdateRatingInput) {
-  //   return `This action updates a #${id} rating`;
-  // }
-  //
-  // remove(id: number) {
-  //   return `This action removes a #${id} rating`;
-  // }
+  public async deleteRating(userId: string, deviceId: string): Promise<void> {
+    const rating = await this.ratingModel
+      .findOneAndDelete({ userId, deviceId })
+      .exec();
+    if (!rating) {
+      throw new NotFoundException('Rating not found');
+    }
+    await this.recalculateDeviceRating(deviceId);
+  }
+
+  public async updateRating(
+    userId: string,
+    deviceId: string,
+    rate: number,
+  ): Promise<void> {
+    const rating = await this.ratingModel
+      .findOneAndUpdate({ userId, deviceId }, { rate })
+      .exec();
+    if (!rating) {
+      throw new NotFoundException('Rating not found');
+    }
+    await this.recalculateDeviceRating(deviceId);
+  }
 }

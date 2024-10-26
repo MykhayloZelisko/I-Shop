@@ -25,11 +25,11 @@ export class Comment {
   @Field(() => Device, { description: 'Device' })
   public device: Device;
 
-  @Field({ description: 'Creating timestamp' })
-  public createdAt: string;
+  @Field(() => Date, { description: 'Creating timestamp' })
+  public createdAt: Date;
 
-  @Field({ description: 'Updating timestamp' })
-  public updatedAt: string;
+  @Field(() => Date, { description: 'Updating timestamp' })
+  public updatedAt: Date;
 
   @Field(() => [User], {
     description: 'Array of user ids who liked the comment',

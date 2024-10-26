@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import '../../../../assets/style/variables';
+@import '../../../../assets/style/mixins';
 
 .new-comment-dialog {
   position: relative;
@@ -42,6 +42,8 @@
 
   &__body {
     padding: 24px;
+    background-color: $brown-4;
+    border-radius: 0 0 10px 10px;
   }
 
   &__icon {
@@ -53,6 +55,24 @@
 
     &:hover {
       @include icon-style($red-1);
+    }
+  }
+}
+
+@media screen and (width <= 768px) {
+  .new-comment-dialog {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    top: 0;
+
+    &__header {
+      border-radius: 0;
+    }
+
+    &__body {
+      height: calc(100% - 72px);
+      border-radius: 0;
     }
   }
 }

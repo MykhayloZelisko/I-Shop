@@ -2,7 +2,7 @@
 @import 'variables';
 
 .comments {
-  padding: 12px;
+  padding: 12px 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -50,6 +50,16 @@
     @include button-style($blue-1, $white-1, 6px 12px, $blue-2);
 
     white-space: nowrap;
+  }
+
+  &__more {
+    @include button-style(transparent, $brown-2, 6px 12px, transparent);
+
+    width: 100%;
+
+    &:hover {
+      color: $blue-2;
+    }
   }
 
   &__list-wrapper {

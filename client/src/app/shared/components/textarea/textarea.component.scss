@@ -9,7 +9,7 @@
     font-weight: 600;
   }
 
-  &__textarea{
+  &__textarea {
     @include input-style(9px 12px);
 
     margin-top: 8px;

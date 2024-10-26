@@ -5,7 +5,7 @@ import {
   Args,
   ResolveField,
   Parent,
-  Int,
+  Int, ID,
 } from '@nestjs/graphql';
 import { DevicesService } from './devices.service';
 import { Device } from './models/device.model';
@@ -34,7 +34,7 @@ export class DevicesResolver {
 
   @Query(() => DevicesList, { name: 'devices' })
   public async getAllDevicesByCategoryIdWithPagination(
-    @Args('categoryId', ParseObjectIdPipe) categoryId: string,
+    @Args('categoryId', { type: () => ID }, ParseObjectIdPipe) categoryId: string,
     @Args('page', { type: () => Int }, ParseIntegerPipe) page: number,
     @Args('size', { type: () => Int }, ParseIntegerPipe) size: number,
   ): Promise<DevicesList> {
@@ -47,7 +47,7 @@ export class DevicesResolver {
 
   @Query(() => Device, { name: 'device' })
   public async getDeviceById(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<Device> {
     return this.devicesService.getDeviceById(id);
   }

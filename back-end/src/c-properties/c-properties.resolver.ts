@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, ID } from '@nestjs/graphql';
 import { CPropertiesService } from './c-properties.service';
 import { CProperty } from './models/c-property.model';
 import { CreateCPropertyInput } from './inputs/create-c-property.input';
@@ -17,7 +17,7 @@ export class CPropertiesResolver {
 
   @Query(() => [CProperty], { name: 'allProperties' })
   public async getFilteredCProperties(
-    @Args('ids', { type: () => [String] }, ParseObjectIdArrayPipe)
+    @Args('ids', { type: () => [ID] }, ParseObjectIdArrayPipe)
     ids: string[],
   ): Promise<CProperty[]> {
     return this.cPropertiesService.getFilteredCProperties(ids);
@@ -25,7 +25,7 @@ export class CPropertiesResolver {
 
   @Query(() => [CProperty], { name: 'propertiesByGroupsIds' })
   public async getCPropertiesByGroupsIds(
-    @Args('ids', { type: () => [String] }, ParseObjectIdArrayPipe)
+    @Args('ids', { type: () => [ID] }, ParseObjectIdArrayPipe)
     ids: string[],
   ): Promise<CProperty[]> {
     return this.cPropertiesService.getCPropertiesByGroupsIds(ids);
@@ -33,7 +33,7 @@ export class CPropertiesResolver {
 
   @Query(() => [CProperty], { name: 'propertiesByGroupId' })
   public async getCPropertiesByGroupId(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<CProperty[]> {
     return this.cPropertiesService.getCPropertiesByGroupId(id);
   }
@@ -49,7 +49,7 @@ export class CPropertiesResolver {
 
   @Mutation(() => CProperty)
   public async updateCProperty(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
     @Args('updateCPropertyInput', ValidationPipe)
     updateCPropertyInput: UpdateCPropertyInput,
   ): Promise<CProperty> {
@@ -58,7 +58,7 @@ export class CPropertiesResolver {
 
   @Mutation(() => Deleted)
   public async deleteCProperty(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<Deleted> {
     return this.cPropertiesService.deleteCProperty(id);
   }

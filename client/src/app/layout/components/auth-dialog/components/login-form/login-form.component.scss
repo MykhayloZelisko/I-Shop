@@ -16,15 +16,16 @@
   }
 
   &__password {
-    font-size: 14px;
-    text-align: end;
-    font-family: $source;
-    color: $blue-1;
+    display: flex;
+    justify-content: flex-end;
   }
 
-  &__link:hover {
-    text-decoration: underline;
-    color: $red-1;
-    cursor: pointer;
+  &__link {
+    @include button-style(transparent, $blue-1, 0, transparent, false, 0, 14px);
+
+    &:hover {
+      text-decoration: underline;
+      color: $red-1;
+    }
   }
 }

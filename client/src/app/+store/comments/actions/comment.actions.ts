@@ -3,10 +3,14 @@ import { Update } from '@ngrx/entity';
 import { CreateCommentInterface } from '../../../shared/models/interfaces/create-comment.interface';
 import { CommentInterface } from '../../../shared/models/interfaces/comment.interface';
 import { CommentsListInterface } from '../../../shared/models/interfaces/comments-list.interface';
+import {
+  DeletedCommentInterface
+} from '../../../shared/models/interfaces/deleted-comment.interface';
 
 export const CommentActions = createActionGroup({
   source: 'Comment/API',
   events: {
+    // entity actions
     LoadComments: props<{
       deviceId: string;
       cursor: string | null;
@@ -17,8 +21,6 @@ export const CommentActions = createActionGroup({
     AddComment: props<{ comment: CreateCommentInterface }>(),
     AddCommentSuccess: props<{ comment: CommentInterface }>(),
     AddCommentFailure: emptyProps(),
-    // 'Upsert Comment': props<{ comment: Comment }>(),
-    // AddComments: props<{ comments: Comment[] }>(),
     UpsertComments: props<{
       deviceId: string;
       cursor: string | null;
@@ -29,10 +31,13 @@ export const CommentActions = createActionGroup({
     UpdateLikes: props<{ commentId: string; status: 1 | -1 }>(),
     UpdateLikesSuccess: props<{ comment: CommentInterface }>(),
     UpdateLikesFailure: emptyProps(),
-    // 'Update Comment': props<{ comment: Update<Comment> }>(),
-    // 'Update Comments': props<{ comments: Update<Comment>[] }>(),
-    // 'Delete Comment': props<{ id: string }>(),
-    // 'Delete Comments': props<{ ids: string[] }>(),
-    // 'Clear Comments': emptyProps(),
+    UpdateComment: props<{ id: string; comment: CreateCommentInterface }>(),
+    UpdateCommentSuccess: props<{ comment: CommentInterface }>(),
+    UpdateCommentFailure: emptyProps(),
+    DeleteComment: props<{ id: string; cursor: string | null }>(),
+    DeleteCommentSuccess: props<{ payload: DeletedCommentInterface }>(),
+    DeleteCommentFailure: emptyProps(),
+    // other actions
+    UpdateCurrentComment: props<{ id: string }>(),
   },
 });

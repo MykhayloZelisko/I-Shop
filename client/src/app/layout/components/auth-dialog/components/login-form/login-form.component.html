@@ -17,9 +17,11 @@
       [withErrors]="true"
     ></app-input>
   </div>
-  <p class="login-form__password" (click)="restorePassword()">
-    <span class="login-form__link">Забули пароль?</span>
-  </p>
+  <div class="login-form__password">
+    <button class="login-form__link" (click)="restorePassword()">
+      Забули пароль?
+    </button>
+  </div>
   <button
     class="login-form__button"
     [disabled]="loginForm.invalid"

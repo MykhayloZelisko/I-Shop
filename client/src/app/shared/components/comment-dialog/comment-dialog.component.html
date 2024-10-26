@@ -1,5 +1,5 @@
-<div class="new-comment-dialog__wrapper" appClickOutside>
-  <div class="new-comment-dialog">
+<div class="new-comment-dialog__wrapper">
+  <div class="new-comment-dialog" appClickOutside>
     <div class="new-comment-dialog__header">
       <h3 class="new-comment-dialog__title">{{ dialog.title }}</h3>
       <button class="new-comment-dialog__close" (click)="closeDialog()">
@@ -10,11 +10,12 @@
       </button>
     </div>
     <div class="new-comment-dialog__body">
-      <app-new-comment-form
-        [user$]='user$'
+      <app-comment-form
+        [userId]="userId"
         [dialog]="dialog"
         [deviceId]="deviceId"
-      ></app-new-comment-form>
+        [comment]='comment'
+      ></app-comment-form>
     </div>
   </div>
 </div>

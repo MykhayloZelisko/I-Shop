@@ -1,13 +1,13 @@
 <div class="input" [ngStyle]="setHeight()">
   <label class="input__label">{{ label }}</label>
   <input
-    #input
     class="input__input"
     [ngClass]="{
       'input__input--invalid': isInvalid() && withErrors
     }"
     [type]="inputType"
     [placeholder]="placeholder"
+    [value]="internalValue || ''"
     (input)="changeValue($event)"
     (blur)="onBlur()"
   />

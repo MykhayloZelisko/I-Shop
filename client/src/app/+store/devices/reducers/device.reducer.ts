@@ -29,12 +29,6 @@ export const initialState: State = adapter.getInitialState({
 export const reducer = createReducer(
   initialState,
   // entity actions
-  // on(DeviceActions.addDevice, (state, action) =>
-  //   adapter.addOne(action.device, state),
-  // ),
-  // on(DeviceActions.upsertDevice, (state, action) =>
-  //   adapter.upsertOne(action.device, state),
-  // ),
   on(DeviceActions.addDevicesSuccess, (state, action) => {
     const updatedState = adapter.addMany(action.devicesList.devices, state);
     return {
@@ -46,30 +40,11 @@ export const reducer = createReducer(
       maxPage: Math.ceil(action.devicesList.total / action.devicesList.size),
     };
   }),
-  on(DeviceActions.updateDeviceRating, (state, action) => {
-    const update: UpdateStr<DeviceInterface> = {
-      id: action.id,
-      changes: {
-        rating: action.rating,
-        votes: action.votes,
-      },
-    };
-    return adapter.updateOne(update, state);
-  }),
-  // on(DeviceActions.upsertDevices, (state, action) =>
-  //   adapter.upsertMany(action.devices, state),
-  // ),
   // on(DeviceActions.updateDevice, (state, action) =>
   //   adapter.updateOne(action.device, state),
   // ),
-  // on(DeviceActions.updateDevices, (state, action) =>
-  //   adapter.updateMany(action.devices, state),
-  // ),
   // on(DeviceActions.deleteDevice, (state, action) =>
   //   adapter.removeOne(action.id, state),
-  // ),
-  // on(DeviceActions.deleteDevices, (state, action) =>
-  //   adapter.removeMany(action.ids, state),
   // ),
   on(DeviceActions.loadDevicesSuccess, (state, action) => {
     const updatedState = adapter.setAll(action.devicesList.devices, state);
@@ -82,7 +57,6 @@ export const reducer = createReducer(
       maxPage: Math.ceil(action.devicesList.total / action.devicesList.size),
     };
   }),
-  // on(DeviceActions.clearDevices, (state) => adapter.removeAll(state)),
   // other actions
   on(DeviceActions.loadDeviceSuccess, (state, action) => ({
     ...state,

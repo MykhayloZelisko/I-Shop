@@ -44,7 +44,7 @@
           comment.dislikesUsers.length
         }}</span>
       </div>
-      <button class="comment__icon-button">
+      <button class="comment__icon-button" (click)="openMenu()">
         <svg-icon
           class="comment__icon-more"
           src="assets/images/navigation-more_vert.svg"
@@ -52,4 +52,29 @@
       </button>
     </div>
   </div>
+  @if (dialog$ | async; as dialog) {
+    @if (currentComment$ | async; as currentComment) {
+      @if (
+        dialog.popupType === popupEnum.CommentMenu &&
+        currentComment === comment.id
+      ) {
+        <app-comment-menu
+          [comment]="comment"
+          [user$]="user$"
+          [commentsStatus$]="commentsStatus$"
+        ></app-comment-menu>
+      }
+      @if (
+        dialog.popupType === popupEnum.EditComment &&
+        currentComment === comment.id
+      ) {
+        <app-comment-dialog
+          [dialog]="dialog"
+          [comment]="comment"
+          [deviceId]="comment.device.id"
+          [userId]="comment.user.id"
+        ></app-comment-dialog>
+      }
+    }
+  }
 </div>

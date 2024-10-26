@@ -19,7 +19,7 @@ export class CPropertiesGroupsService {
       .use('withCredentials')
       .query<{ allGroups: CPropertiesGroupInterface[] }>({
         query: gql`
-          query AllGroups($ids: [String!]!) {
+          query AllGroups($ids: [ID!]!) {
             allGroups(ids: $ids) {
               id
               groupName
@@ -55,7 +55,7 @@ export class CPropertiesGroupsService {
       .use('withCredentials')
       .query<{ groupsByCategoryId: CPropertiesGroupInterface[] }>({
         query: gql`
-          query GroupsByCategoryId($id: String!) {
+          query GroupsByCategoryId($id: ID!) {
             groupsByCategoryId(id: $id) {
               id
               groupName
@@ -127,7 +127,7 @@ export class CPropertiesGroupsService {
       .mutate({
         mutation: gql`
           mutation UpdateCPropertiesGroup(
-            $id: String!
+            $id: ID!
             $updateCPropertiesGroupInput: UpdateCPropertiesGroupInput!
           ) {
             updateCPropertiesGroup(
@@ -163,7 +163,7 @@ export class CPropertiesGroupsService {
       .use('withCredentials')
       .mutate({
         mutation: gql`
-          mutation DeleteCPropertiesGroup($id: String!) {
+          mutation DeleteCPropertiesGroup($id: ID!) {
             deleteCPropertiesGroup(id: $id) {
               categoriesIds
               groupsIds

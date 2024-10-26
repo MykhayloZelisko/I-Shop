@@ -8,6 +8,7 @@
     }"
     [ngStyle]="setStyle()"
     [placeholder]="placeholder"
+    [value]="internalValue || ''"
     (input)="changeValue($event)"
     (blur)="onBlur()"
   ></textarea>

@@ -15,12 +15,14 @@ import { User } from '../users/models/user.model';
 import { DeletedComment } from './models/deleted-comment.model';
 import { RatingsService } from '../ratings/ratings.service';
 import { UpdateLikeDislikeInput } from './inputs/update-like-dislike.input';
+import { DevicesService } from '../devices/devices.service';
 
 @Injectable()
 export class CommentsService {
   public constructor(
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
     private ratingsService: RatingsService,
+    private devicesService: DevicesService,
   ) {}
 
   public async createComment(
@@ -62,7 +64,7 @@ export class CommentsService {
     const query: Record<string, unknown> = { device: deviceId };
 
     if (cursor) {
-      query.id = { $gt: cursor };
+      query._id = { $gt: cursor };
     }
 
     const comments = await this.commentModel
@@ -163,60 +165,72 @@ export class CommentsService {
     return updatedComment.toObject();
   }
 
-  // public async updateComment(
-  //   id: string,
-  //   updateCommentInput: UpdateCommentInput,
-  //   user: User,
-  // ): Promise<CommentGQL> {
-  //   const comment = await this.commentModel.findById(id).exec();
-  //   if (!comment) {
-  //     throw new BadRequestException('Comment not found');
-  //   }
-  //
-  //   const userId = comment.user.toString();
-  //   if (!user || userId !== user.id) {
-  //     throw new ForbiddenException('This user cannot update this comment');
-  //   }
-  //
-  //   const updatedComment = await this.commentModel
-  //     .findByIdAndUpdate(id, updateCommentInput, { new: true })
-  //     .populate(['user', 'device'])
-  //     .exec();
-  //   if (updatedComment) {
-  //     return updatedComment.toObject();
-  //   }
-  //   throw new BadRequestException('A comment is not updated');
-  // }
-  //
-  // public async deleteComment(
-  //   id: string,
-  //   cursor: string,
-  //   user: User,
-  // ): Promise<DeletedComment> {
-  //   const comment = await this.commentModel.findById(id).exec();
-  //   if (!comment) {
-  //     throw new BadRequestException('Comment not found');
-  //   }
-  //
-  //   const userId = comment.user.toString();
-  //   if (!user || userId !== user.id) {
-  //     throw new ForbiddenException('This user cannot update this comment');
-  //   }
-  //
-  //   await this.commentModel.findByIdAndDelete(id);
-  //
-  //   if (id === cursor) {
-  //     const prevComment = await this.commentModel
-  //       .findOne({
-  //         device: comment.device,
-  //         id: { $lt: comment.id },
-  //       })
-  //       .sort({ id: -1 })
-  //       .exec();
-  //     const newCursor = prevComment ? prevComment.id.toString() : null;
-  //     return { id, cursor: newCursor };
-  //   }
-  //
-  //   return { id, cursor };
-  // }
+  public async updateComment(
+    id: string,
+    updateCommentInput: UpdateCommentInput,
+    user: User,
+  ): Promise<CommentGQL> {
+    const comment = await this.commentModel.findById(id).exec();
+    if (!comment) {
+      throw new BadRequestException('Comment not found');
+    }
+
+    const userId = comment.user.toString();
+    const deviceId = comment.device.toString();
+    if (userId !== user.id) {
+      throw new ForbiddenException('This user cannot update this comment');
+    }
+
+    await this.ratingsService.updateRating(
+      userId,
+      deviceId,
+      updateCommentInput.rating,
+    );
+    const updatedComment = await this.commentModel
+      .findByIdAndUpdate(id, updateCommentInput, { new: true })
+      .populate(['user', 'device'])
+      .exec();
+    if (updatedComment) {
+      return updatedComment.toObject();
+    }
+    throw new BadRequestException('A comment is not updated');
+  }
+
+  public async deleteComment(
+    id: string,
+    cursor: string | null,
+    user: User,
+  ): Promise<DeletedComment> {
+    const comment = await this.commentModel.findById(id).exec();
+    if (!comment) {
+      throw new BadRequestException('Comment not found');
+    }
+
+    const isAdmin = user.roles.some((role) => role.role === 'administrator');
+
+    const userId = comment.user.toString();
+    const deviceId = comment.device.toString();
+    if (userId !== user.id && !isAdmin) {
+      throw new ForbiddenException('This user cannot delete this comment');
+    }
+
+    await this.commentModel.findByIdAndDelete(id);
+    await this.ratingsService.deleteRating(userId, deviceId);
+
+    const updatedDevice = await this.devicesService.getDeviceById(deviceId);
+
+    if (id === cursor) {
+      const prevComment = await this.commentModel
+        .findOne({
+          device: comment.device,
+          id: { $lt: comment.id },
+        })
+        .sort({ id: -1 })
+        .exec();
+      const newCursor = prevComment ? prevComment.id.toString() : null;
+      return { id, cursor: newCursor, device: updatedDevice };
+    }
+
+    return { id, cursor, device: updatedDevice };
+  }
 }

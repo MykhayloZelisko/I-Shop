@@ -23,19 +23,29 @@
     ></app-textarea>
   </div>
   <div class="new-comment-form__buttons-wrapper">
-    @if (user$ | async; as user) {
-      @if (dialog && dialog.popupType === popupEnum.Comment) {
+    @if (userId) {
+      @if (dialog && dialog.popupType === popupEnum.NewComment) {
         <button
           class="new-comment-form__button--cancel"
           (click)="cancelSending()"
         >
           Скасувати
         </button>
-        <button class="new-comment-form__button" (click)="sendComment(user.id)">
+        <button class="new-comment-form__button" (click)="sendComment(userId)">
           Залишити відгук
         </button>
+      } @else if (dialog && dialog.popupType === popupEnum.EditComment) {
+        <button
+          class="new-comment-form__button--cancel"
+          (click)="cancelSending()"
+        >
+          Скасувати
+        </button>
+        <button class="new-comment-form__button" (click)="updateComment()">
+          Зберегти
+        </button>
       } @else {
-        <button class="new-comment-form__button" (click)="sendComment(user.id)">
+        <button class="new-comment-form__button" (click)="sendComment(userId)">
           Залишити відгук
         </button>
       }

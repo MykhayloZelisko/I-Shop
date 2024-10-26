@@ -1,0 +1,31 @@
+@import 'variables';
+@import 'mixins';
+
+:host {
+  position: absolute;
+  right: 0;
+  bottom: -55px;
+  z-index: 1;
+}
+
+.comment-menu {
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
+  drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+
+  &__button {
+    @include button-style($white-1, $brown-2, 6px 12px, $gray-4, true, 0);
+
+    &:hover {
+      color: $blue-2;
+    }
+
+    &:disabled,
+    &:disabled:hover {
+      background-color: $white-1;
+      color: $gray-3;
+      cursor: default;
+    }
+  }
+}

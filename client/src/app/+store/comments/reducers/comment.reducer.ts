@@ -9,6 +9,7 @@ export const commentsFeatureKey = 'comments';
 export interface State extends EntityState<CommentInterface> {
   cursor: string | null;
   hasMore: boolean;
+  currentComment: string | null;
 }
 
 export const adapter: EntityAdapter<CommentInterface> =
@@ -20,34 +21,46 @@ export const adapter: EntityAdapter<CommentInterface> =
 export const initialState: State = adapter.getInitialState({
   cursor: null,
   hasMore: true,
+  currentComment: null,
 });
 
 export const reducer = createReducer(
   initialState,
+  // entity actions
   on(CommentActions.addCommentSuccess, (state, action) =>
     adapter.addOne(action.comment, state),
   ),
-  // on(CommentActions.upsertComment, (state, action) =>
-  //   adapter.upsertOne(action.comment, state),
-  // ),
-  // on(CommentActions.addComments, (state, action) =>
-  //   adapter.addMany(action.comments, state),
-  // ),
-  // on(CommentActions.upsertComments, (state, action) =>
-  //   adapter.upsertMany(action.comments, state),
-  // ),
-  // on(CommentActions.updateComment, (state, action) =>
-  //   adapter.updateOne(action.comment, state),
-  // ),
-  // on(CommentActions.updateComments, (state, action) =>
-  //   adapter.updateMany(action.comments, state),
-  // ),
-  // on(CommentActions.deleteComment, (state, action) =>
-  //   adapter.removeOne(action.id, state),
-  // ),
-  // on(CommentActions.deleteComments, (state, action) =>
-  //   adapter.removeMany(action.ids, state),
-  // ),
+  on(CommentActions.upsertCommentsSuccess, (state, action) => {
+    const updatedState = adapter.upsertMany(action.comments.comments, state);
+    return {
+      ...state,
+      ...updatedState,
+      cursor: action.comments.cursor,
+      hasMore: action.comments.hasMore,
+    };
+  }),
+  on(CommentActions.updateCommentSuccess, (state, action) => {
+    const update: UpdateStr<CommentInterface> = {
+      id: action.comment.id,
+      changes: {
+        content: action.comment.content,
+        advantages: action.comment.advantages,
+        disadvantages: action.comment.disadvantages,
+        rating: action.comment.rating,
+        updatedAt: action.comment.updatedAt,
+        device: action.comment.device,
+      },
+    };
+    return adapter.updateOne(update, state);
+  }),
+  on(CommentActions.deleteCommentSuccess, (state, action) => {
+    const updatedState = adapter.removeOne(action.payload.id, state);
+    return {
+      ...state,
+      ...updatedState,
+      cursor: action.payload.cursor,
+    };
+  }),
   on(CommentActions.loadCommentsSuccess, (state, action) => {
     const updatedState = adapter.setAll(action.comments.comments, state);
     return {
@@ -67,5 +80,9 @@ export const reducer = createReducer(
     };
     return adapter.updateOne(update, state);
   }),
-  // on(CommentActions.clearComments, (state) => adapter.removeAll(state)),
+  // other actions
+  on(CommentActions.updateCurrentComment, (state, action) => ({
+    ...state,
+    currentComment: action.id,
+  })),
 );

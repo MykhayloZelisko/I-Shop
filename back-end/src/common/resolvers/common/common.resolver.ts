@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 import { CPropertiesGroupsService } from '../../../c-properties-groups/c-properties-groups.service';
 import { CPropertiesService } from '../../../c-properties/c-properties.service';
 import { GP } from '../../models/g-p.model';
@@ -16,7 +16,7 @@ export class CommonResolver {
   @Query(() => GP, { name: 'GP' })
   @UseGuards(GqlAdminGuard)
   public async getGPByCategoryId(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<GP> {
     const groups =
       await this.cPropertiesGroupsService.getCPGroupsByCategoryId(id);

@@ -68,7 +68,7 @@ export class BrandsService {
       .use('withCredentials')
       .mutate({
         mutation: gql`
-          mutation DeleteBrand($id: String!) {
+          mutation DeleteBrand($id: ID!) {
             deleteBrand(id: $id)
           }
         `,
@@ -96,10 +96,7 @@ export class BrandsService {
       .use('withCredentials')
       .mutate({
         mutation: gql`
-          mutation UpdateBrand(
-            $id: String!
-            $updateBrandInput: UpdateBrandInput!
-          ) {
+          mutation UpdateBrand($id: ID!, $updateBrandInput: UpdateBrandInput!) {
             updateBrand(id: $id, updateBrandInput: $updateBrandInput) {
               id
               brandName

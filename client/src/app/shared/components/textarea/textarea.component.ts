@@ -36,8 +36,6 @@ export class TextareaComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  @ViewChild('textarea') public textarea!: ElementRef;
-
   @Input() public placeholder = '';
 
   @Input({ required: true }) public label!: string;
@@ -49,6 +47,8 @@ export class TextareaComponent
   @Input({ required: true }) public resizeX!: boolean;
 
   @Input({ required: true }) public resizeY!: boolean;
+
+  public internalValue: string | null = null;
 
   public onChange = (_: unknown): void => {};
 
@@ -72,11 +72,7 @@ export class TextareaComponent
   }
 
   public writeValue(value: unknown): void {
-    if (this.textarea) {
-      this.textarea.nativeElement.value = value;
-    }
-    this.control.updateValueAndValidity();
-    this.cdr.detectChanges();
+    this.internalValue = value as string;
   }
 
   public showMessage(): string {

@@ -40,7 +40,7 @@ export class CommentsResolver {
 
   @Query(() => CommentsList, { name: 'comments' })
   public async getCommentsByDeviceIdAfterCursor(
-    @Args('deviceId', ParseObjectIdPipe) deviceId: string,
+    @Args('deviceId', { type: () => ID }, ParseObjectIdPipe) deviceId: string,
     @Args(
       'cursor',
       { type: () => ID, nullable: true },
@@ -69,30 +69,35 @@ export class CommentsResolver {
     );
   }
 
-  // @Mutation(() => Comment)
-  // @UseGuards(GqlAuthGuard)
-  // public async updateComment(
-  //   @Args('id', ParseObjectIdPipe) id: string,
-  //   @Args('updateCommentInput', ValidationPipe)
-  //   updateCommentInput: UpdateCommentInput,
-  //   @Context() context: { req: { user: User } },
-  // ): Promise<Comment> {
-  //   return this.commentsService.updateComment(
-  //     id,
-  //     updateCommentInput,
-  //     context.req.user,
-  //   );
-  // }
-  //
-  // @Mutation(() => DeletedComment)
-  // @UseGuards(GqlAuthGuard)
-  // public async removeComment(
-  //   @Args('id', ParseObjectIdPipe) id: string,
-  //   @Args('cursor', ParseObjectIdPipe) cursor: string,
-  //   @Context() context: { req: { user: User } },
-  // ): Promise<DeletedComment> {
-  //   return this.commentsService.deleteComment(id, cursor, context.req.user);
-  // }
+  @Mutation(() => Comment)
+  @UseGuards(GqlAuthGuard)
+  public async updateComment(
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
+    @Args('updateCommentInput', ValidationPipe)
+    updateCommentInput: UpdateCommentInput,
+    @Context() context: { req: { user: User } },
+  ): Promise<Comment> {
+    return this.commentsService.updateComment(
+      id,
+      updateCommentInput,
+      context.req.user,
+    );
+  }
+
+  @Mutation(() => DeletedComment)
+  @UseGuards(GqlAuthGuard)
+  public async deleteComment(
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
+    @Args(
+      'cursor',
+      { type: () => ID, nullable: true },
+      ParseObjectIdNullablePipe,
+    )
+    cursor: string | null,
+    @Context() context: { req: { user: User } },
+  ): Promise<DeletedComment> {
+    return this.commentsService.deleteComment(id, cursor, context.req.user);
+  }
 
   @ResolveField(() => User)
   public async user(@Parent() comment: Comment): Promise<User> {

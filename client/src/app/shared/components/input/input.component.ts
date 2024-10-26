@@ -37,8 +37,6 @@ export class InputComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  @ViewChild('input') public input!: ElementRef;
-
   @Input() public placeholder = '';
 
   @Input() public inputType = 'text';
@@ -48,6 +46,8 @@ export class InputComponent
   @Input() public validators: ValidatorFn[] = [];
 
   @Input({ required: true }) public withErrors!: boolean;
+
+  public internalValue: string | null = null;
 
   public onChange = (_: unknown): void => {};
 
@@ -71,10 +71,7 @@ export class InputComponent
   }
 
   public writeValue(value: unknown): void {
-    if (this.input) {
-      this.input.nativeElement.value = value;
-    }
-    this.cdr.detectChanges();
+    this.internalValue = value as string;
   }
 
   public showMessage(): string {

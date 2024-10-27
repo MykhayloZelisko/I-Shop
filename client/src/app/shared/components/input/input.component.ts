@@ -1,10 +1,14 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, ElementRef, EventEmitter,
+  Component,
+  ElementRef,
+  EventEmitter,
   inject,
   Input,
-  OnInit, Output, ViewChild,
+  OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,

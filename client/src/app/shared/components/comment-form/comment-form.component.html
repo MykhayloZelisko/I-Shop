@@ -25,20 +25,14 @@
   <div class="comment-form__buttons-wrapper">
     @if (userId) {
       @if (dialog && dialog.popupType === popupEnum.NewComment) {
-        <button
-          class="comment-form__button--cancel"
-          (click)="cancelSending()"
-        >
+        <button class="comment-form__button--cancel" (click)="cancelSending()">
           Скасувати
         </button>
         <button class="comment-form__button" (click)="sendComment(userId)">
           Залишити відгук
         </button>
       } @else if (dialog && dialog.popupType === popupEnum.EditComment) {
-        <button
-          class="comment-form__button--cancel"
-          (click)="cancelSending()"
-        >
+        <button class="comment-form__button--cancel" (click)="cancelSending()">
           Скасувати
         </button>
         <button class="comment-form__button" (click)="updateComment()">

@@ -15,7 +15,7 @@ export class SharedService {
       .use('withCredentials')
       .query<{ GP: GPInterface }>({
         query: gql`
-          query GP($id: String!) {
+          query GP($id: ID!) {
             GP(id: $id) {
               groups {
                 id

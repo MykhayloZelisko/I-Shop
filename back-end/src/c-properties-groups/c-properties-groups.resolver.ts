@@ -1,4 +1,4 @@
-import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
+import { Args, Query, Resolver, Mutation, ID } from '@nestjs/graphql';
 import { CPropertiesGroupsService } from './c-properties-groups.service';
 import { CPropertiesGroup } from './models/c-properties-group.model';
 import { UseGuards, UsePipes } from '@nestjs/common';
@@ -19,7 +19,7 @@ export class CPropertiesGroupsResolver {
 
   @Query(() => [CPropertiesGroup], { name: 'allGroups' })
   public async getFilteredCPropertiesGroups(
-    @Args('ids', { type: () => [String] }, ParseObjectIdArrayPipe)
+    @Args('ids', { type: () => [ID] }, ParseObjectIdArrayPipe)
     ids: string[],
   ): Promise<CPropertiesGroup[]> {
     return this.cPropertiesGroupsService.getFilteredCPropertiesGroups(ids);
@@ -27,7 +27,7 @@ export class CPropertiesGroupsResolver {
 
   @Query(() => [CPropertiesGroup], { name: 'groupsByCategoryId' })
   public async getCPGroupsByCategoryId(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<CPropertiesGroup[]> {
     return this.cPropertiesGroupsService.getCPGroupsByCategoryId(id);
   }
@@ -47,7 +47,7 @@ export class CPropertiesGroupsResolver {
 
   @Mutation(() => CPropertiesGroup)
   public async updateCPropertiesGroup(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
     @Args('updateCPropertiesGroupInput', ValidationPipe)
     updateCPropertiesGroupInput: UpdateCPropertiesGroupInput,
   ): Promise<CPropertiesGroup> {
@@ -59,7 +59,7 @@ export class CPropertiesGroupsResolver {
 
   @Mutation(() => Deleted)
   public async deleteCPropertiesGroup(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<Deleted> {
     return this.cPropertiesGroupsService.deleteCPropertiesGroup(id);
   }

@@ -10,7 +10,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
 import { PaginationParamsInterface } from '../../../../../shared/models/interfaces/pagination-params.interface';
 import { NgClass } from '@angular/common';
 import { DeviceActions } from '../../../../../+store/devices/actions/device.actions';
-import { PAGE_SIZE } from '../../../../../shared/models/constants/page-size';
+import { DEVICES_PAGE_SIZE } from '../../../../../shared/models/constants/page-size';
 import { RouterParamsInterface } from '../../../../../shared/models/interfaces/router-params.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
@@ -43,7 +43,7 @@ export class PaginatorComponent {
         this.store.dispatch(
           DeviceActions.loadDevices({
             id: this.routerParams.id,
-            size: PAGE_SIZE,
+            size: DEVICES_PAGE_SIZE,
             page: this.routerParams.page,
           }),
         );
@@ -63,7 +63,7 @@ export class PaginatorComponent {
       this.store.dispatch(
         DeviceActions.addDevices({
           id: this.routerParams.id,
-          size: PAGE_SIZE,
+          size: DEVICES_PAGE_SIZE,
           page: this.routerParams.page,
         }),
       );

@@ -1,0 +1,81 @@
+<div class="comment-item">
+  <div class="comment-item__header">
+    <p class="comment-item__user">
+      {{ comment.user.firstName }} {{ comment.user.lastName }}
+    </p>
+    <p class="comment-item__date">
+      {{ comment.createdAt | date: 'dd.MM.YYYY HH:mm' }}
+    </p>
+  </div>
+  <app-rating
+    [deviceId]="comment.device.id"
+    [rating]="comment.rating"
+  ></app-rating>
+  <div class="comment-item__text">{{ comment.content }}</div>
+  <div class="comment-item__text">
+    <span class="comment-item__text--bold">Переваги: </span
+    >{{ comment.advantages }}
+  </div>
+  <div class="comment-item__text">
+    <span class="comment-item__text--bold">Недоліки: </span
+    >{{ comment.disadvantages }}
+  </div>
+  <div class="comment-item__footer">
+    <button class="comment-item__button">Відповісти</button>
+    <div class="comment-item__footer-right">
+      <div class="comment-item__like">
+        <button class="comment-item__icon-button" (click)="likeComment(1)">
+          <svg-icon
+            class="comment-item__icon-like"
+            src="assets/images/like.svg"
+          ></svg-icon>
+        </button>
+        <span class="comment-item__number-likes">{{
+          comment.likesUsers.length
+        }}</span>
+      </div>
+      <div class="comment-item__like">
+        <button class="comment-item__icon-button" (click)="likeComment(-1)">
+          <svg-icon
+            class="comment-item__icon-like"
+            src="assets/images/dislike.svg"
+          ></svg-icon>
+        </button>
+        <span class="comment-item__number-likes">{{
+          comment.dislikesUsers.length
+        }}</span>
+      </div>
+      <button class="comment-item__icon-button" (click)="openMenu()">
+        <svg-icon
+          class="comment-item__icon-more"
+          src="assets/images/navigation-more_vert.svg"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+  @if (dialog$ | async; as dialog) {
+    @if (currentComment$ | async; as currentComment) {
+      @if (
+        dialog.popupType === popupEnum.CommentMenu &&
+        currentComment === comment.id
+      ) {
+        <app-comment-menu
+          [comment]="comment"
+          [user$]="user$"
+          [commentsStatus$]="commentsStatus$"
+        ></app-comment-menu>
+      }
+      @if (
+        dialog.popupType === popupEnum.EditComment &&
+        currentComment === comment.id
+      ) {
+        <app-comment-dialog
+          [dialog]="dialog"
+          [comment]="comment"
+          [deviceId]="comment.device.id"
+          [userId]="comment.user.id"
+        ></app-comment-dialog>
+      }
+    }
+  }
+</div>

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DndFileControlComponent } from './dnd-file-control.component';
 
 describe('DndFileControlComponent', () => {

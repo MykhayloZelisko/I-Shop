@@ -4,7 +4,7 @@
       label="Електронна пошта"
       placeholder="Введіть електронну пошту"
       [validators]="emailValidators"
-      [inputType]="'email'"
+      inputType="email"
       formControlName="email"
       [withErrors]="true"
     ></app-input>
@@ -12,14 +12,16 @@
       label="Пароль"
       placeholder="Введіть пароль"
       [validators]="passwordValidators"
-      [inputType]="'password'"
+      inputType="password"
       formControlName="password"
       [withErrors]="true"
     ></app-input>
   </div>
-  <p class="login-form__password" (click)="restorePassword()">
-    <span class="login-form__link">Забули пароль?</span>
-  </p>
+  <div class="login-form__password">
+    <button class="login-form__link" (click)="restorePassword()">
+      Забули пароль?
+    </button>
+  </div>
   <button
     class="login-form__button"
     [disabled]="loginForm.invalid"

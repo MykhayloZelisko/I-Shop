@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { CPropertiesGroupsService } from './c-properties-groups.service';
 
 describe('CPropertiesGroupsService', () => {

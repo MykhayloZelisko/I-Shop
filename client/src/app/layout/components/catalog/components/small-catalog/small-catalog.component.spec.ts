@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SmallCatalogComponent } from './small-catalog.component';
 
 describe('SmallCatalogComponent', () => {

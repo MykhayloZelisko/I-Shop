@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoriesService } from './categories.service';
 import { Category } from './models/category.model';
 import { UseGuards, UsePipes } from '@nestjs/common';
@@ -40,7 +40,7 @@ export class CategoriesResolver {
   @Mutation(() => Category)
   @UseGuards(GqlAdminGuard)
   public async updateCategory(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
     @Args('updateCategoryInput', ValidationPipe)
     updateCategoryInput: UpdateCategoryInput,
   ): Promise<Category> {
@@ -50,7 +50,7 @@ export class CategoriesResolver {
   @Mutation(() => Deleted)
   @UseGuards(GqlAdminGuard)
   public async deleteCategory(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<Deleted> {
     return this.categoriesService.deleteCategory(id);
   }

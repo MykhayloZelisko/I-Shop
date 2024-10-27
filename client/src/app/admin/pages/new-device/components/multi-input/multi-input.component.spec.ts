@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MultiInputComponent } from './multi-input.component';
 
 describe('MultiInputComponent', () => {

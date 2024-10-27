@@ -17,13 +17,7 @@
     @include icon-button-style(24px, transparent, 12px);
 
     &:hover {
-      .small-catalog {
-        &__icon {
-          &--header-icon {
-            @include icon-style($red-1);
-          }
-        }
-      }
+      @include icon-style($red-1);
     }
   }
 
@@ -111,13 +105,9 @@
     padding: 0;
 
     &:hover {
-      color: $blue-2;
+      @include icon-style($blue-2);
 
-      .small-catalog {
-        &__icon {
-          @include icon-style($blue-2);
-        }
-      }
+      color: $blue-2;
     }
   }
 
@@ -136,14 +126,10 @@
     text-decoration: none;
 
     &:hover {
+      @include icon-style($blue-2);
+
       color: $blue-2;
       text-decoration: underline;
-
-      .small-catalog {
-        &__icon {
-          @include icon-style($blue-2);
-        }
-      }
     }
   }
 

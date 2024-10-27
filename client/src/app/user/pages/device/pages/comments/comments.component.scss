@@ -1,0 +1,96 @@
+@import 'mixins';
+@import 'variables';
+
+.comments {
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__title-text {
+    font-family: $source;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  &__inner {
+    display: flex;
+    gap: 24px;
+  }
+
+  &__main {
+    flex: 2;
+  }
+
+  &__aside {
+    flex: 1;
+  }
+
+  &__create {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid $gray-4;
+  }
+
+  &__create-text {
+    font-family: $source;
+    font-size: 16px;
+  }
+
+  &__create-button {
+    @include button-style($blue-1, $white-1, 6px 12px, $blue-2);
+
+    white-space: nowrap;
+  }
+
+  &__more {
+    @include button-style(transparent, $brown-2, 6px 12px, transparent);
+
+    width: 100%;
+
+    &:hover {
+      color: $blue-2;
+    }
+  }
+
+  &__list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media screen and (width <= 1280px) {
+  .comments {
+    &__aside {
+      flex: 0;
+    }
+
+    &__inner {
+      gap: 0;
+    }
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .comments {
+    &__title-text {
+      font-size: 20px;
+    }
+  }
+}

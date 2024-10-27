@@ -8,4 +8,7 @@ export enum PopupTypeEnum {
   Catalog = 'Catalog',
   CProperties = 'CProperties',
   CPropertiesGroups = 'CPropertiesGroups',
+  NewComment = 'NewComment',
+  EditComment = 'EditComment',
+  CommentMenu = 'CommentMenu',
 }

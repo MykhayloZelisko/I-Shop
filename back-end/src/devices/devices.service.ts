@@ -93,4 +93,17 @@ export class DevicesService {
     }
     return device.toObject();
   }
+
+  public async recalculateDeviceRating(
+    id: string,
+    votes: number,
+    rating: number,
+  ): Promise<void> {
+    const device = await this.deviceModel
+      .findByIdAndUpdate(id, { votes, rating }, { new: true })
+      .exec();
+    if (!device) {
+      throw new NotFoundException('Device not found');
+    }
+  }
 }

@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { NgxMaskDirective } from 'ngx-mask';
 import {
@@ -20,6 +22,7 @@ import {
   NewDeviceFormInterface,
 } from '../../../shared/models/interfaces/new-device-form.interface';
 import {
+  intRangeValidator,
   maxArrayLengthValidator,
   nonEmptyArrayValidator,
   positiveNumberValidator,
@@ -75,6 +78,8 @@ import { MultiInputComponent } from './components/multi-input/multi-input.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewDeviceComponent implements OnInit, OnDestroy {
+  @ViewChild('input') public input!: ElementRef;
+
   protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
 
   public newDeviceForm!: FormGroup<NewDeviceFormInterface>;
@@ -119,6 +124,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       count: this.fb.nonNullable.control<number | null>(null, [
         requiredValidator(),
         positiveNumberValidator(),
+        intRangeValidator(),
       ]),
       images: this.fb.array<FormControl<File>>(
         [],
@@ -358,6 +364,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           this.clearBase64Ctrl();
           this.clearImagesCtrl();
           this.clearGroupsCtrl();
+          this.input.nativeElement.value = null;
           this.newDeviceForm.markAsPristine();
           this.store.dispatch(FormActions.clearFormOff());
         }

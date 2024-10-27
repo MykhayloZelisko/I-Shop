@@ -47,11 +47,7 @@
 
     &__link {
       &:hover {
-        & .breadcrumbs {
-          &__icon {
-            @include icon-style($blue-2, $lift: false);
-          }
-        }
+        @include icon-style($blue-2, $lift: false);
       }
     }
   }

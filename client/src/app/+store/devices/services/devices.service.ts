@@ -44,7 +44,7 @@ export class DevicesService {
     return this.apollo
       .query<{ devices: DevicesListInterface }>({
         query: gql`
-          query Devices($categoryId: String!, $page: Int!, $size: Int!) {
+          query Devices($categoryId: ID!, $page: Int!, $size: Int!) {
             devices(categoryId: $categoryId, page: $page, size: $size) {
               total
               page
@@ -108,7 +108,7 @@ export class DevicesService {
     return this.apollo
       .query<{ device: DeviceInterface }>({
         query: gql`
-          query Device($id: String!) {
+          query Device($id: ID!) {
             device(id: $id) {
               id
               deviceName

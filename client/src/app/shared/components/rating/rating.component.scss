@@ -5,9 +5,24 @@
   display: flex;
   gap: 10px;
 
+  &--hover {
+    &:hover {
+      cursor: pointer;
+
+      & .rating {
+        &__votes {
+          color: $blue-2;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
   &__votes {
     font-family: $source;
     font-size: 14px;
+    color: $black;
+    text-decoration: none;
   }
 
   &__info {
@@ -17,5 +32,10 @@
 
   &__comment {
     @include icon-style($gray-5, 14px);
+  }
+
+  &__stars {
+    display: flex;
+    flex-direction: row-reverse;
   }
 }

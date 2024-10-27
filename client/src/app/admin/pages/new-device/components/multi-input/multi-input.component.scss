@@ -28,12 +28,9 @@
   &__button {
     @include icon-button-style(30px, transparent, $disabled: true);
 
-    &:disabled {
-      & .multi-input {
-        &__icon {
-          @include icon-style($gray-5);
-        }
-      }
+    &:disabled,
+    &:disabled:hover {
+      @include icon-style($gray-5);
     }
   }
 

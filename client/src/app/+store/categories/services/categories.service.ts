@@ -60,7 +60,7 @@ export class CategoriesService {
       .mutate({
         mutation: gql`
           mutation UpdateCategory(
-            $id: String!
+            $id: ID!
             $updateCategoryInput: UpdateCategoryInput!
           ) {
             updateCategory(id: $id, updateCategoryInput: $updateCategoryInput) {
@@ -180,7 +180,7 @@ export class CategoriesService {
       .use('withCredentials')
       .mutate({
         mutation: gql`
-          mutation DeleteCategory($id: String!) {
+          mutation DeleteCategory($id: ID!) {
             deleteCategory(id: $id) {
               categoriesIds
               groupsIds

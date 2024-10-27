@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AuthDialogComponent } from './auth-dialog.component';
 
-describe('DialogComponent', () => {
+describe('AuthDialogComponent', () => {
   let component: AuthDialogComponent;
   let fixture: ComponentFixture<AuthDialogComponent>;
 

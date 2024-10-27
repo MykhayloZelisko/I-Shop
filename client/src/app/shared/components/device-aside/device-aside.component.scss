@@ -1,11 +1,7 @@
 @import 'mixins';
 @import 'variables';
 
-:host {
-  flex: 1;
-}
-
-.properties-aside {
+.device-aside {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -94,7 +90,7 @@
 }
 
 @media screen and (width <= 1280px) {
-  .properties-aside {
+  .device-aside {
     position: fixed;
     inset: auto 0 0;
     flex-direction: row;
@@ -143,7 +139,7 @@
 }
 
 @media screen and (width <= 1024px) {
-  .properties-aside {
+  .device-aside {
     &__price {
       font-size: 20px;
     }
@@ -151,7 +147,7 @@
 }
 
 @media screen and (width <= 768px) {
-  .properties-aside {
+  .device-aside {
     padding: 6px 8px;
 
     &__device {

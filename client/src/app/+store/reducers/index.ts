@@ -11,6 +11,7 @@ import * as cPropertiesGroups from '../c-properties-groups/reducers/c-properties
 import * as cProperties from '../c-properties/reducers/c-property.reducer';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { RouterStateUrlInterface } from '../router/serializer/custom-route-serializer';
+import * as comments from '../comments/reducers/comment.reducer';
 
 export interface State {
   auth: auth.State;
@@ -22,6 +23,7 @@ export interface State {
   devices: devices.State;
   cPropertiesGroups: cPropertiesGroups.State;
   cProperties: cProperties.State;
+  comments: comments.State;
   router: RouterReducerState<RouterStateUrlInterface>;
 }
 
@@ -35,6 +37,7 @@ export const reducers: ActionReducerMap<State> = {
   devices: devices.reducer,
   cPropertiesGroups: cPropertiesGroups.reducer,
   cProperties: cProperties.reducer,
+  comments: comments.reducer,
   router: routerReducer,
 };
 

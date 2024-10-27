@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { BrandsService } from './brands.service';
 import { Brand } from './models/brand.model';
 import { CreateBrandInput } from './inputs/create-brand.input';
@@ -28,16 +28,16 @@ export class BrandsResolver {
 
   @Mutation(() => Brand)
   public async updateBrand(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
     @Args('updateBrandInput', ValidationPipe)
     updateBrandInput: UpdateBrandInput,
   ): Promise<Brand> {
     return this.brandsService.updateBrand(id, updateBrandInput);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => ID)
   public async deleteBrand(
-    @Args('id', ParseObjectIdPipe) id: string,
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<string> {
     return this.brandsService.deleteBrand(id);
   }

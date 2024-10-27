@@ -8,7 +8,7 @@ import { RouterOutlet } from '@angular/router';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { MenuItem } from 'primeng/api';
 import { DEVICE_MENU } from '../../../shared/models/constants/device-menu';
-import { Observable, take } from 'rxjs';
+import { Observable, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
@@ -20,6 +20,7 @@ import {
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { AsyncPipe } from '@angular/common';
 import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/breadcrumbs.component';
+import { DeviceRouteNameEnum } from '../../../shared/models/enums/device-route-name.enum';
 
 @Component({
   selector: 'app-device',
@@ -36,14 +37,30 @@ import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/bre
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceComponent implements OnInit {
-  public readonly items: MenuItem[] = DEVICE_MENU;
+  public items: MenuItem[] = DEVICE_MENU;
 
   public device$!: Observable<DeviceInterface | null>;
 
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.device$ = this.store.select(selectDevice);
+    this.device$ = this.store.select(selectDevice).pipe(
+      tap((device) => {
+        if (!device || !device.votes) {
+          this.items = this.items.map((item: MenuItem) =>
+            item.routerLink === DeviceRouteNameEnum.Comments
+              ? { label: 'Залишити відгук', routerLink: item.routerLink }
+              : item,
+          );
+        } else {
+          this.items = this.items.map((item: MenuItem) =>
+            item.routerLink === DeviceRouteNameEnum.Comments
+              ? { label: 'Відгуки', routerLink: item.routerLink }
+              : item,
+          );
+        }
+      }),
+    );
     this.initDevice();
   }
 

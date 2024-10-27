@@ -19,7 +19,7 @@ export class CPropertiesService {
       .use('withCredentials')
       .query<{ allProperties: CPropertyInterface[] }>({
         query: gql`
-          query AllProperties($ids: [String!]!) {
+          query AllProperties($ids: [ID!]!) {
             allProperties(ids: $ids) {
               id
               propertyName
@@ -54,7 +54,7 @@ export class CPropertiesService {
       .use('withCredentials')
       .query<{ propertiesByGroupsIds: CPropertyInterface[] }>({
         query: gql`
-          query propertiesByGroupsIds($ids: [String!]!) {
+          query propertiesByGroupsIds($ids: [ID!]!) {
             propertiesByGroupsIds(ids: $ids) {
               id
               propertyName
@@ -74,7 +74,6 @@ export class CPropertiesService {
             if (response.errors) {
               throw response.errors[0];
             } else {
-              // console.log(response.data.propertiesByGroupsIds);
               return response.data.propertiesByGroupsIds;
             }
           },
@@ -88,7 +87,7 @@ export class CPropertiesService {
       .use('withCredentials')
       .query<{ propertiesByGroupId: CPropertyInterface[] }>({
         query: gql`
-          query PropertiesByGroupId($id: String!) {
+          query PropertiesByGroupId($id: ID!) {
             propertiesByGroupId(id: $id) {
               id
               propertyName
@@ -156,7 +155,7 @@ export class CPropertiesService {
       .mutate({
         mutation: gql`
           mutation UpdateCProperty(
-            $id: String!
+            $id: ID!
             $updateCPropertyInput: UpdateCPropertyInput!
           ) {
             updateCProperty(
@@ -191,7 +190,7 @@ export class CPropertiesService {
       .use('withCredentials')
       .mutate({
         mutation: gql`
-          mutation DeleteCProperty($id: String!) {
+          mutation DeleteCProperty($id: ID!) {
             deleteCProperty(id: $id) {
               categoriesIds
               groupsIds

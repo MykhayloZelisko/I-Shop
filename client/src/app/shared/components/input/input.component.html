@@ -8,8 +8,10 @@
     }"
     [type]="inputType"
     [placeholder]="placeholder"
+    [value]="internalValue || ''"
     (input)="changeValue($event)"
     (blur)="onBlur()"
+    (focus)="onFocus()"
   />
   @if (isInvalid() && withErrors) {
     <p class="input__error">{{ showMessage() }}</p>

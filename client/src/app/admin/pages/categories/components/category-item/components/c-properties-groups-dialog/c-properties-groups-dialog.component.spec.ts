@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CPropertiesGroupsDialogComponent } from './c-properties-groups-dialog.component';
 
 describe('CPropertiesGroupsDialogComponent', () => {

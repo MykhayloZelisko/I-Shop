@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CPropertyItemComponent } from './c-property-item.component';
 
 describe('CPropertyItemComponent', () => {

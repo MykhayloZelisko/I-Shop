@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DeviceCarouselComponent } from './device-carousel.component';
 
 describe('DeviceCarouselComponent', () => {

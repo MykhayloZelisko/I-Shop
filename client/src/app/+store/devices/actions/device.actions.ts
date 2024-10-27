@@ -29,5 +29,6 @@ export const DeviceActions = createActionGroup({
     LoadDevice: props<{ id: string }>(),
     LoadDeviceSuccess: props<{ device: DeviceInterface }>(),
     LoadDeviceFailure: emptyProps(),
+    UpdateCurrentDeviceRating: props<{ rating: number; votes: number }>(),
   },
 });

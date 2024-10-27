@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { DeviceActions } from '../actions/device.actions';
 import { DeviceInterface } from '../../../shared/models/interfaces/device.interface';
-import { PAGE_SIZE } from '../../../shared/models/constants/page-size';
+import { DEVICES_PAGE_SIZE } from '../../../shared/models/constants/page-size';
 
 export const devicesFeatureKey = 'devices';
 
@@ -20,7 +20,7 @@ export const adapter: EntityAdapter<DeviceInterface> =
 export const initialState: State = adapter.getInitialState({
   total: 0,
   currentPage: 0,
-  size: PAGE_SIZE,
+  size: DEVICES_PAGE_SIZE,
   maxPage: 0,
   currentDevice: null,
 });
@@ -28,12 +28,6 @@ export const initialState: State = adapter.getInitialState({
 export const reducer = createReducer(
   initialState,
   // entity actions
-  // on(DeviceActions.addDevice, (state, action) =>
-  //   adapter.addOne(action.device, state),
-  // ),
-  // on(DeviceActions.upsertDevice, (state, action) =>
-  //   adapter.upsertOne(action.device, state),
-  // ),
   on(DeviceActions.addDevicesSuccess, (state, action) => {
     const updatedState = adapter.addMany(action.devicesList.devices, state);
     return {
@@ -45,20 +39,11 @@ export const reducer = createReducer(
       maxPage: Math.ceil(action.devicesList.total / action.devicesList.size),
     };
   }),
-  // on(DeviceActions.upsertDevices, (state, action) =>
-  //   adapter.upsertMany(action.devices, state),
-  // ),
   // on(DeviceActions.updateDevice, (state, action) =>
   //   adapter.updateOne(action.device, state),
   // ),
-  // on(DeviceActions.updateDevices, (state, action) =>
-  //   adapter.updateMany(action.devices, state),
-  // ),
   // on(DeviceActions.deleteDevice, (state, action) =>
   //   adapter.removeOne(action.id, state),
-  // ),
-  // on(DeviceActions.deleteDevices, (state, action) =>
-  //   adapter.removeMany(action.ids, state),
   // ),
   on(DeviceActions.loadDevicesSuccess, (state, action) => {
     const updatedState = adapter.setAll(action.devicesList.devices, state);
@@ -71,10 +56,23 @@ export const reducer = createReducer(
       maxPage: Math.ceil(action.devicesList.total / action.devicesList.size),
     };
   }),
-  // on(DeviceActions.clearDevices, (state) => adapter.removeAll(state)),
   // other actions
   on(DeviceActions.loadDeviceSuccess, (state, action) => ({
     ...state,
     currentDevice: action.device,
   })),
+  on(DeviceActions.updateCurrentDeviceRating, (state, action) => {
+    if (state.currentDevice) {
+      return {
+        ...state,
+        currentDevice: {
+          ...state.currentDevice,
+          votes: action.votes,
+          rating: action.rating,
+        },
+      };
+    } else {
+      return state;
+    }
+  }),
 );

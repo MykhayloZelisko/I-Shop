@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RestorePasswordFormComponent } from './restore-password-form.component';
 
 describe('RestorePasswordFormComponent', () => {

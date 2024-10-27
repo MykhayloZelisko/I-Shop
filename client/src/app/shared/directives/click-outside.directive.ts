@@ -14,13 +14,17 @@ export class ClickOutsideDirective {
 
   @HostListener('document:click', ['$event'])
   private onClick(event: MouseEvent): void {
-    const targetElement = event.target as HTMLElement;
-
-    if (
-      this.elementRef.nativeElement.contains(targetElement) &&
-      this.elementRef.nativeElement === targetElement
-    ) {
+    const target = event.target as HTMLElement;
+    const isButtonOrLink = target.closest('button') ?? target.closest('a');
+    if (!this.inside(target) && !isButtonOrLink) {
       this.store.dispatch(PopupActions.closePopup());
     }
+  }
+
+  public inside(element: HTMLElement): boolean {
+    return (
+      element === this.elementRef.nativeElement ||
+      this.elementRef.nativeElement.contains(element)
+    );
   }
 }

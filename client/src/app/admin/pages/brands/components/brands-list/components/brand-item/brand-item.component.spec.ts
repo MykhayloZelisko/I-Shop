@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BrandItemComponent } from './brand-item.component';
 
 describe('BrandItemComponent', () => {

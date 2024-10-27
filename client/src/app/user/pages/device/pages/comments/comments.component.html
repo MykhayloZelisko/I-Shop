@@ -1,1 +1,91 @@
-<p>comments works!</p>
+@if (device$ | async; as device) {
+  <div class="comments">
+    <div class="comments__title">
+      <h3 class="comments__title-text">
+        Відгуки покупців про {{ device.deviceName }}
+      </h3>
+      <app-rating
+        [rating]="device.rating"
+        [votes]="device.votes"
+        [deviceId]="device.id"
+      ></app-rating>
+    </div>
+    <div class="comments__inner">
+      <div class="comments__main">
+        @if (comments$ | async; as comments) {
+          @if (comments.length) {
+            <div class="comments__list-wrapper">
+              <div class="comments__create">
+                <p class="comments__create-text">
+                  Залиште свій відгук про цей товар
+                </p>
+                @if (user$ | async; as user) {
+                  <button
+                    class="comments__create-button"
+                    (click)="openDialog(user)"
+                  >
+                    Написати відгук
+                  </button>
+                } @else {
+                  <button
+                    class="comments__create-button"
+                    (click)="openDialog(null)"
+                  >
+                    Написати відгук
+                  </button>
+                }
+              </div>
+              <div class="comments__list">
+                @for (comment of comments; track comment) {
+                  <app-comment-item
+                    [comment]="comment"
+                    [user$]="user$"
+                    [commentsStatus$]="commentsStatus$"
+                  ></app-comment-item>
+                }
+                @if (commentsStatus$ | async; as status) {
+                  @if (status.cursor) {
+                    <button
+                      class="comments__more"
+                      (click)="loadMore(device.id, status.cursor)"
+                    >
+                      Показати ще
+                    </button>
+                  }
+                }
+              </div>
+            </div>
+          } @else {
+            @if (user$ | async; as user) {
+              <app-comment-form
+                [deviceId]="device.id"
+                [userId]="user.id"
+              ></app-comment-form>
+            } @else {
+              <app-comment-form
+                [deviceId]="device.id"
+                [userId]="null"
+              ></app-comment-form>
+            }
+          }
+        }
+      </div>
+      <app-device-aside
+        class="comments__aside"
+        [device]="device"
+      ></app-device-aside>
+    </div>
+  </div>
+
+  @if (user$ | async; as user) {
+    @if (dialog$ | async; as dialog) {
+      @if (dialog.popupType === popupEnum.NewComment) {
+        <app-comment-dialog
+          [dialog]="dialog"
+          [deviceId]="device.id"
+          [userId]="user.id"
+        ></app-comment-dialog>
+      }
+    }
+  }
+}

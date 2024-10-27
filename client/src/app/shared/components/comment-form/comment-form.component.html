@@ -1,0 +1,52 @@
+<div class="comment-form">
+  <div class="comment-form__form" [formGroup]="commentForm">
+    <app-rating-control formControlName="rating"></app-rating-control>
+    <app-input
+      label="Переваги"
+      [withErrors]="true"
+      formControlName="advantages"
+      [validators]="requiredValidators"
+    ></app-input>
+    <app-input
+      label="Недоліки"
+      [withErrors]="true"
+      formControlName="disadvantages"
+      [validators]="requiredValidators"
+    ></app-input>
+    <app-textarea
+      label="Коментар"
+      [withErrors]="true"
+      formControlName="content"
+      [validators]="requiredValidators"
+      [resizeX]="false"
+      [resizeY]="true"
+    ></app-textarea>
+  </div>
+  <div class="comment-form__buttons-wrapper">
+    @if (userId) {
+      @if (dialog && dialog.popupType === popupEnum.NewComment) {
+        <button class="comment-form__button--cancel" (click)="cancelSending()">
+          Скасувати
+        </button>
+        <button class="comment-form__button" (click)="sendComment(userId)">
+          Залишити відгук
+        </button>
+      } @else if (dialog && dialog.popupType === popupEnum.EditComment) {
+        <button class="comment-form__button--cancel" (click)="cancelSending()">
+          Скасувати
+        </button>
+        <button class="comment-form__button" (click)="updateComment()">
+          Зберегти
+        </button>
+      } @else {
+        <button class="comment-form__button" (click)="sendComment(userId)">
+          Залишити відгук
+        </button>
+      }
+    } @else {
+      <button class="comment-form__button" (click)="login()">
+        Увійти в особистий кабінет
+      </button>
+    }
+  </div>
+</div>

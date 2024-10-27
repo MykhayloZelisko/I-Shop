@@ -37,11 +37,11 @@
               </div>
               <div class="comments__list">
                 @for (comment of comments; track comment) {
-                  <app-comment
+                  <app-comment-item
                     [comment]="comment"
                     [user$]="user$"
                     [commentsStatus$]="commentsStatus$"
-                  ></app-comment>
+                  ></app-comment-item>
                 }
                 @if (commentsStatus$ | async; as status) {
                   @if (status.cursor) {

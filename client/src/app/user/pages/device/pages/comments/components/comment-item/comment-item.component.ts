@@ -24,7 +24,7 @@ import { CommentsListStatusInterface } from '../../../../../../../shared/models/
 import { CommentDialogComponent } from '../../../../../../../shared/components/comment-dialog/comment-dialog.component';
 
 @Component({
-  selector: 'app-comment',
+  selector: 'app-comment-item',
   standalone: true,
   imports: [
     DatePipe,
@@ -34,11 +34,11 @@ import { CommentDialogComponent } from '../../../../../../../shared/components/c
     AsyncPipe,
     CommentDialogComponent,
   ],
-  templateUrl: './comment.component.html',
-  styleUrl: './comment.component.scss',
+  templateUrl: './comment-item.component.html',
+  styleUrl: './comment-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentComponent implements OnInit {
+export class CommentItemComponent implements OnInit {
   @Input({ required: true }) public comment!: CommentInterface;
 
   @Input({ required: true }) public user$!: Observable<UserInterface | null>;

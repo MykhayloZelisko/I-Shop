@@ -1,15 +1,15 @@
-<div class="new-comment-dialog__wrapper">
-  <div class="new-comment-dialog" appClickOutside>
-    <div class="new-comment-dialog__header">
-      <h3 class="new-comment-dialog__title">{{ dialog.title }}</h3>
-      <button class="new-comment-dialog__close" (click)="closeDialog()">
+<div class="comment-dialog__wrapper">
+  <div class="comment-dialog" appClickOutside>
+    <div class="comment-dialog__header">
+      <h3 class="comment-dialog__title">{{ dialog.title }}</h3>
+      <button class="comment-dialog__close" (click)="closeDialog()">
         <svg-icon
-          class="new-comment-dialog__icon"
+          class="comment-dialog__icon"
           src="assets/images/close-round-line-icon.svg"
         ></svg-icon>
       </button>
     </div>
-    <div class="new-comment-dialog__body">
+    <div class="comment-dialog__body">
       <app-comment-form
         [userId]="userId"
         [dialog]="dialog"

@@ -1,7 +1,7 @@
 @import 'variables';
 @import 'mixins';
 
-.comment {
+.comment-item {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid $gray-4;
@@ -75,7 +75,7 @@
     @include icon-button-style(30px, transparent);
 
     &:hover {
-      .comment {
+      .comment-item {
         &__icon-like {
           @include icon-style($brown-2);
         }

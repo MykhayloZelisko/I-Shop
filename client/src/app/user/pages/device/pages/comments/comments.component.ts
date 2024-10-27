@@ -27,7 +27,7 @@ import { COMMENTS_PAGE_SIZE } from '../../../../../shared/models/constants/page-
 import { UserInterface } from '../../../../../shared/models/interfaces/user.interface';
 import { selectUser } from '../../../../../+store/auth/selectors/auth.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
-import { CommentComponent } from './components/comment/comment.component';
+import { CommentItemComponent } from './components/comment-item/comment-item.component';
 import { selectIdAndPage } from '../../../../../+store/router/selectors/router.selectors';
 import { RouterParamsInterface } from '../../../../../shared/models/interfaces/router-params.interface';
 import { CommentsListStatusInterface } from '../../../../../shared/models/interfaces/comments-list-status.interface';
@@ -41,7 +41,7 @@ import { CommentsListStatusInterface } from '../../../../../shared/models/interf
     CommentFormComponent,
     RatingComponent,
     DeviceAsideComponent,
-    CommentComponent,
+    CommentItemComponent,
   ],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',

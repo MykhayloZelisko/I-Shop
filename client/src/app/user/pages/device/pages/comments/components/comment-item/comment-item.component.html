@@ -1,9 +1,9 @@
-<div class="comment">
-  <div class="comment__header">
-    <p class="comment__user">
+<div class="comment-item">
+  <div class="comment-item__header">
+    <p class="comment-item__user">
       {{ comment.user.firstName }} {{ comment.user.lastName }}
     </p>
-    <p class="comment__date">
+    <p class="comment-item__date">
       {{ comment.createdAt | date: 'dd.MM.YYYY HH:mm' }}
     </p>
   </div>
@@ -11,42 +11,42 @@
     [deviceId]="comment.device.id"
     [rating]="comment.rating"
   ></app-rating>
-  <div class="comment__text">{{ comment.content }}</div>
-  <div class="comment__text">
-    <span class="comment__text--bold">Переваги: </span>{{ comment.advantages }}
+  <div class="comment-item__text">{{ comment.content }}</div>
+  <div class="comment-item__text">
+    <span class="comment-item__text--bold">Переваги: </span>{{ comment.advantages }}
   </div>
-  <div class="comment__text">
-    <span class="comment__text--bold">Недоліки: </span
+  <div class="comment-item__text">
+    <span class="comment-item__text--bold">Недоліки: </span
     >{{ comment.disadvantages }}
   </div>
-  <div class="comment__footer">
-    <button class="comment__button">Відповісти</button>
-    <div class="comment__footer-right">
-      <div class="comment__like">
-        <button class="comment__icon-button" (click)="likeComment(1)">
+  <div class="comment-item__footer">
+    <button class="comment-item__button">Відповісти</button>
+    <div class="comment-item__footer-right">
+      <div class="comment-item__like">
+        <button class="comment-item__icon-button" (click)="likeComment(1)">
           <svg-icon
-            class="comment__icon-like"
+            class="comment-item__icon-like"
             src="assets/images/like.svg"
           ></svg-icon>
         </button>
-        <span class="comment__number-likes">{{
+        <span class="comment-item__number-likes">{{
           comment.likesUsers.length
         }}</span>
       </div>
-      <div class="comment__like">
-        <button class="comment__icon-button" (click)="likeComment(-1)">
+      <div class="comment-item__like">
+        <button class="comment-item__icon-button" (click)="likeComment(-1)">
           <svg-icon
-            class="comment__icon-like"
+            class="comment-item__icon-like"
             src="assets/images/dislike.svg"
           ></svg-icon>
         </button>
-        <span class="comment__number-likes">{{
+        <span class="comment-item__number-likes">{{
           comment.dislikesUsers.length
         }}</span>
       </div>
-      <button class="comment__icon-button" (click)="openMenu()">
+      <button class="comment-item__icon-button" (click)="openMenu()">
         <svg-icon
-          class="comment__icon-more"
+          class="comment-item__icon-more"
           src="assets/images/navigation-more_vert.svg"
         ></svg-icon>
       </button>

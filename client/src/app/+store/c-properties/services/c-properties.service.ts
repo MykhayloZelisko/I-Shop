@@ -74,7 +74,6 @@ export class CPropertiesService {
             if (response.errors) {
               throw response.errors[0];
             } else {
-              // console.log(response.data.propertiesByGroupsIds);
               return response.data.propertiesByGroupsIds;
             }
           },

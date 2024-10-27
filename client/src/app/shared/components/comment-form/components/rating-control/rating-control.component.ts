@@ -46,7 +46,6 @@ export class RatingControlComponent
 
   public ngOnInit(): void {
     this.setComponentControl();
-    console.log(this.control.value);
   }
 
   public registerOnChange(fn: () => void): void {

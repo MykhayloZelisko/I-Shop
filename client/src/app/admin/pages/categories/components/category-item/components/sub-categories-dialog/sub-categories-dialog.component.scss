@@ -63,11 +63,7 @@
 
     &:disabled,
     &:disabled:hover {
-      & .sub-categories-dialog {
-        &__icon {
-          @include icon-style($gray-5);
-        }
-      }
+      @include icon-style($gray-5);
     }
   }
 

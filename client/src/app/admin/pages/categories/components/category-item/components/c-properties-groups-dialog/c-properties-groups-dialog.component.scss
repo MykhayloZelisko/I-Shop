@@ -52,11 +52,7 @@
 
     &:disabled,
     &:disabled:hover {
-      & .c-properties-groups-dialog {
-        &__icon {
-          @include icon-style($gray-5);
-        }
-      }
+      @include icon-style($gray-5);
     }
   }
 

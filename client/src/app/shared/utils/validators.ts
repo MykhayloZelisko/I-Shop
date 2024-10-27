@@ -174,6 +174,18 @@ export function ratingValidator(): ValidatorFn {
   };
 }
 
+export function intRangeValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    const value = control.value;
+    const min = -2147483648;
+    const max = 2147483647;
+    if (value < min || value > max) {
+      return { outOfRange: 'Число не ціле або дуже велике' };
+    }
+    return null;
+  };
+}
+
 export function showErrorMessage(control: AbstractControl): string {
   return control.errors ? Object.values(control.errors)[0] : null;
 }

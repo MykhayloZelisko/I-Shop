@@ -108,11 +108,7 @@
   .p-paginator-last {
     &:hover {
       & .p-paginator-icon {
-        & .category {
-          &__icon {
-            @include icon-style($blue-1, $lift: false);
-          }
-        }
+        @include icon-style($blue-1, $lift: false);
       }
     }
   }

@@ -9,7 +9,7 @@
     &:hover {
       cursor: pointer;
 
-      .rating {
+      & .rating {
         &__votes {
           color: $blue-2;
           text-decoration: underline;

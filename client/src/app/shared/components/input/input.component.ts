@@ -1,10 +1,10 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, ElementRef, EventEmitter,
   inject,
   Input,
-  OnInit,
+  OnInit, Output, ViewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -35,6 +35,8 @@ export class InputComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
+  @ViewChild('input') public input!: ElementRef;
+
   @Input() public placeholder = '';
 
   @Input() public inputType = 'text';
@@ -44,6 +46,8 @@ export class InputComponent
   @Input() public validators: ValidatorFn[] = [];
 
   @Input({ required: true }) public withErrors!: boolean;
+
+  @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
 
   public internalValue: string | null = null;
 
@@ -69,7 +73,11 @@ export class InputComponent
   }
 
   public writeValue(value: unknown): void {
-    this.internalValue = value as string;
+    this.internalValue = value as string | null;
+    if (this.input) {
+      this.input.nativeElement.value = this.internalValue;
+    }
+    this.cdr.detectChanges();
   }
 
   public showMessage(): string {
@@ -90,11 +98,15 @@ export class InputComponent
   }
 
   public setHeight(): Record<string, string> {
-    return this.withErrors ? { height: '78px' } : { height: '66px' };
+    return this.withErrors ? { height: '78px' } : { height: '62px' };
   }
 
   public markAsDirty(): void {
     this.control.markAsDirty();
     this.cdr.detectChanges();
+  }
+
+  public onFocus(): void {
+    this.focusEvent.emit();
   }
 }

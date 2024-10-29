@@ -5,7 +5,9 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  QueryList,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { NgxMaskDirective } from 'ngx-mask';
 import {
@@ -14,7 +16,6 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidatorFn,
 } from '@angular/forms';
 import {
   DPropertiesGroupFormInterface,
@@ -78,9 +79,12 @@ import { MultiInputComponent } from './components/multi-input/multi-input.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewDeviceComponent implements OnInit, OnDestroy {
-  @ViewChild('input') public input!: ElementRef;
+  @ViewChild('input') public fileInput!: ElementRef<HTMLInputElement>;
 
-  protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
+  @ViewChild(InputComponent) public input!: InputComponent;
+
+  @ViewChildren(MultiInputComponent)
+  public multiInputs!: QueryList<MultiInputComponent>;
 
   public newDeviceForm!: FormGroup<NewDeviceFormInterface>;
 
@@ -116,7 +120,9 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public initDeviceForm(): void {
     this.newDeviceForm = this.fb.group<NewDeviceFormInterface>({
-      deviceName: this.fb.nonNullable.control<string>('', []),
+      deviceName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+      ]),
       price: this.fb.control<number | null>(null, [
         requiredValidator(),
         positiveNumberValidator(),
@@ -337,17 +343,20 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   }
 
   public saveDevice(): void {
-    const formData = this.newDeviceForm.getRawValue();
-    const device: CreateDeviceInterface = {
-      brandId: formData.brandId,
-      categoryId: formData.categoryId,
-      count: Number(formData.count),
-      deviceName: formData.deviceName,
-      images: formData.base64images,
-      price: Number(formData.price),
-      groups: formData.groups,
-    };
-    this.store.dispatch(DeviceActions.createDevice({ device }));
+    this.markAsDirty();
+    if (this.newDeviceForm.valid) {
+      const formData = this.newDeviceForm.getRawValue();
+      const device: CreateDeviceInterface = {
+        brandId: formData.brandId,
+        categoryId: formData.categoryId,
+        count: Number(formData.count),
+        deviceName: formData.deviceName,
+        images: formData.base64images,
+        price: Number(formData.price),
+        groups: formData.groups,
+      };
+      this.store.dispatch(DeviceActions.createDevice({ device }));
+    }
   }
 
   public setBase64Image(image: string, index: number): void {
@@ -364,7 +373,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           this.clearBase64Ctrl();
           this.clearImagesCtrl();
           this.clearGroupsCtrl();
-          this.input.nativeElement.value = null;
+          this.fileInput.nativeElement.value = '';
           this.newDeviceForm.markAsPristine();
           this.store.dispatch(FormActions.clearFormOff());
         }
@@ -380,5 +389,22 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     propertyIndex: number,
   ): FormGroup<DPropertyFormInterface> {
     return this.getPropertiesCtrl(groupIndex).at(propertyIndex);
+  }
+
+  public markAsDirty(): void {
+    Object.values(this.newDeviceForm.controls).forEach((control) => {
+      control.markAsDirty();
+    });
+    if (this.multiInputs) {
+      for (const multiInput of this.multiInputs) {
+        multiInput.multiInputForm.markAsDirty();
+        const valueArray = multiInput.multiInputForm.controls.value;
+        valueArray.controls.forEach((control) => {
+          control.markAsDirty();
+          multiInput.updateState();
+        });
+      }
+    }
+    this.input.markAsDirty();
   }
 }

@@ -1,4 +1,4 @@
-import { Directive, inject, Injector, OnDestroy } from '@angular/core';
+import { Directive, inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormControlDirective,
@@ -10,16 +10,24 @@ import {
 import { Subject, takeUntil, tap } from 'rxjs';
 
 @Directive()
-export class GetControlDirective implements OnDestroy {
+export class GetControlDirective implements OnInit, OnDestroy {
   public control!: FormControl<string | null>;
 
   private destroy$: Subject<void> = new Subject<void>();
 
   private injector = inject(Injector);
 
+  public ngOnInit(): void {
+    this.setComponentControl();
+  }
+
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  public isInvalid(): boolean {
+    return this.control.invalid && (this.control.dirty || this.control.touched);
   }
 
   public setComponentControl(): void {

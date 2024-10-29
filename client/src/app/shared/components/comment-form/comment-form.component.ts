@@ -10,12 +10,7 @@ import {
 } from '@angular/core';
 import { InputComponent } from '../input/input.component';
 import { RatingControlComponent } from './components/rating-control/rating-control.component';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidatorFn,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommentFormInterface } from '../../models/interfaces/comment-form.interface';
 import { ratingValidator, requiredValidator } from '../../utils/validators';
 import { TextareaComponent } from '../textarea/textarea.component';
@@ -58,8 +53,6 @@ export class CommentFormComponent implements OnInit {
 
   @Input() public comment!: CommentInterface;
 
-  protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
-
   public readonly popupEnum = PopupTypeEnum;
 
   public commentForm!: FormGroup<CommentFormInterface>;
@@ -80,21 +73,23 @@ export class CommentFormComponent implements OnInit {
       ),
       advantages: this.fb.nonNullable.control<string>(
         this.comment ? this.comment.advantages : '',
-        [],
+        [requiredValidator()],
       ),
       disadvantages: this.fb.nonNullable.control<string>(
         this.comment ? this.comment.disadvantages : '',
-        [],
+        [requiredValidator()],
       ),
       content: this.fb.nonNullable.control<string>(
         this.comment ? this.comment.content : '',
-        [],
+        [requiredValidator()],
       ),
     });
   }
 
   public sendComment(userId: string): void {
-    this.inputs.forEach((input: InputComponent) => input.markAsDirty());
+    this.inputs.forEach((input: InputComponent) => {
+      input.markAsDirty();
+    });
     this.textarea.markAsDirty();
     this.ratingCtrl.markAsDirty();
     if (this.commentForm.valid) {
@@ -121,9 +116,6 @@ export class CommentFormComponent implements OnInit {
   }
 
   public updateComment(): void {
-    this.inputs.forEach((input: InputComponent) => input.markAsDirty());
-    this.textarea.markAsDirty();
-    this.ratingCtrl.markAsDirty();
     if (this.commentForm.valid) {
       const formData = this.commentForm.getRawValue();
       const comment: CreateCommentInterface = {

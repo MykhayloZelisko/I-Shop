@@ -85,7 +85,7 @@ export class FileControlComponent
         this.uploadFile.emit(this.imageUrl);
       }
       this.onChange(file);
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
     };
 
     reader.readAsDataURL(file);

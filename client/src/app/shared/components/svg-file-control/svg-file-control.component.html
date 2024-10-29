@@ -8,8 +8,7 @@
   <div
     class="svg-file-control__icon-container"
     [ngClass]="{
-      'svg-file-control__icon-container--invalid':
-        control.invalid && (control.touched || control.dirty)
+      'svg-file-control__icon-container--invalid': isInvalid()
     }"
   >
     @if (imageUrl) {

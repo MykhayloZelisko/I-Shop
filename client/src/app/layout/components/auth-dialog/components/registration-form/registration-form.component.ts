@@ -3,13 +3,14 @@ import {
   Component,
   inject,
   OnInit,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidatorFn,
 } from '@angular/forms';
 import {
   emailPatternValidator,
@@ -44,22 +45,7 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationFormComponent implements OnInit {
-  protected readonly emailValidators: ValidatorFn[] = [
-    requiredValidator(),
-    emailPatternValidator(REG_EMAIL),
-  ];
-
-  protected readonly passwordValidators: ValidatorFn[] = [
-    requiredValidator(),
-    minMaxLengthValidator(8, 32),
-    passwordPatternValidator(REG_PASSWORD),
-  ];
-
-  protected readonly nameValidators: ValidatorFn[] = [
-    requiredValidator(),
-    minMaxLengthValidator(3, null),
-    namePatternValidator(REG_NAME),
-  ];
+  @ViewChildren(InputComponent) public inputs!: QueryList<InputComponent>;
 
   public registrationForm!: FormGroup<RegistrationFormInterface>;
 
@@ -73,14 +59,29 @@ export class RegistrationFormComponent implements OnInit {
 
   public initRegistrationForm(): void {
     this.registrationForm = this.fb.group<RegistrationFormInterface>({
-      email: this.fb.nonNullable.control<string>('', []),
-      firstName: this.fb.nonNullable.control<string>('', []),
-      lastName: this.fb.nonNullable.control<string>('', []),
+      email: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        emailPatternValidator(REG_EMAIL),
+      ]),
+      firstName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        minMaxLengthValidator(3, null),
+        namePatternValidator(REG_NAME),
+      ]),
+      lastName: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        minMaxLengthValidator(3, null),
+        namePatternValidator(REG_NAME),
+      ]),
       phone: this.fb.nonNullable.control<string>('', [
         requiredValidator(),
         phoneNumberValidator(REG_PHONE),
       ]),
-      password: this.fb.nonNullable.control<string>('', []),
+      password: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        minMaxLengthValidator(8, 32),
+        passwordPatternValidator(REG_PASSWORD),
+      ]),
     });
   }
 
@@ -101,9 +102,15 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   public registration(): void {
-    const registrationData = this.registrationForm.getRawValue();
-    this.store.dispatch(
-      AuthActions.registration({ registration: registrationData }),
-    );
+    this.inputs.forEach((input: InputComponent) => {
+      input.markAsDirty();
+    });
+    this.registrationForm.controls.phone.markAsDirty();
+    if (this.registrationForm.valid) {
+      const registrationData = this.registrationForm.getRawValue();
+      this.store.dispatch(
+        AuthActions.registration({ registration: registrationData }),
+      );
+    }
   }
 }

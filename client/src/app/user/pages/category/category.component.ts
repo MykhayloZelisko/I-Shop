@@ -66,20 +66,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.initSubscribes();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  public initSubscribes(): void {
     this.paginationParams$ = this.store.select(selectPaginationParams);
     this.cascadeCategories$ = this.store.select(selectCascadeSubCategories);
     this.hasChildChain$ = this.store.select(selectHasChildChain);
     this.devices$ = this.store.select(selectAllDevices);
     this.initDevicesList();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public initDevicesList(): void {

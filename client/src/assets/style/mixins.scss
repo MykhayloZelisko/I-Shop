@@ -40,7 +40,7 @@
     }
 
     @if $invalid {
-      &.ng-invalid.ng-touched {
+      &.ng-invalid.ng-dirty {
         border-color: $red-1;
       }
     }

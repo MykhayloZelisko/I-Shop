@@ -6,7 +6,6 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -14,7 +13,6 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
-  ValidatorFn,
 } from '@angular/forms';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
@@ -37,17 +35,15 @@ import { GetControlDirective } from '../../directives/get-control.directive';
 })
 export class InputComponent
   extends GetControlDirective
-  implements OnInit, ControlValueAccessor
+  implements ControlValueAccessor
 {
-  @ViewChild('input') public input!: ElementRef;
+  @ViewChild('input') public input!: ElementRef<HTMLInputElement>;
 
   @Input() public placeholder = '';
 
   @Input() public inputType = 'text';
 
   @Input({ required: true }) public label!: string;
-
-  @Input() public validators: ValidatorFn[] = [];
 
   @Input({ required: true }) public withErrors!: boolean;
 
@@ -61,13 +57,6 @@ export class InputComponent
 
   private cdr = inject(ChangeDetectorRef);
 
-  public ngOnInit(): void {
-    this.setComponentControl();
-    if (this.validators.length) {
-      this.control.setValidators(this.validators);
-    }
-  }
-
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
   }
@@ -76,12 +65,12 @@ export class InputComponent
     this.onTouched = fn;
   }
 
-  public writeValue(value: unknown): void {
-    this.internalValue = value as string | null;
+  public writeValue(value: string): void {
+    this.internalValue = value;
     if (this.input) {
       this.input.nativeElement.value = this.internalValue;
     }
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   public showMessage(): string {
@@ -97,17 +86,13 @@ export class InputComponent
     this.onTouched();
   }
 
-  public isInvalid(): boolean {
-    return this.control.invalid && (this.control.dirty || this.control.touched);
-  }
-
   public setHeight(): Record<string, string> {
     return this.withErrors ? { height: '78px' } : { height: '62px' };
   }
 
   public markAsDirty(): void {
     this.control.markAsDirty();
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   public onFocus(): void {

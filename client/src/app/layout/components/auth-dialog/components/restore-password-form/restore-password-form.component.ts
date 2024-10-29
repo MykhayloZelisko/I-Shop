@@ -3,13 +3,9 @@ import {
   Component,
   inject,
   OnInit,
+  ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  ReactiveFormsModule,
-  ValidatorFn,
-} from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   emailPatternValidator,
   requiredValidator,
@@ -30,10 +26,7 @@ import { REG_EMAIL } from '../../../../../shared/models/constants/reg-exp-patter
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RestorePasswordFormComponent implements OnInit {
-  protected readonly emailValidators: ValidatorFn[] = [
-    requiredValidator(),
-    emailPatternValidator(REG_EMAIL),
-  ];
+  @ViewChild(InputComponent) public input!: InputComponent;
 
   public restorePasswordCtrl!: FormControl<string>;
 
@@ -42,7 +35,10 @@ export class RestorePasswordFormComponent implements OnInit {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.restorePasswordCtrl = this.fb.nonNullable.control<string>('', []);
+    this.restorePasswordCtrl = this.fb.nonNullable.control<string>('', [
+      requiredValidator(),
+      emailPatternValidator(REG_EMAIL),
+    ]);
   }
 
   public login(): void {
@@ -54,5 +50,9 @@ export class RestorePasswordFormComponent implements OnInit {
         },
       }),
     );
+  }
+
+  public restorePassword(): void {
+    this.input.markAsDirty();
   }
 }

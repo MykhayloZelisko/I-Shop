@@ -76,7 +76,7 @@
   }
 
   &__save-button {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
+    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
   }
 
   &__cancel-button {
@@ -281,8 +281,8 @@
     background-color: $brown-1;
   }
 
-  .invalid-dropdown.ng-invalid.ng-touched,
-  .invalid-dropdown.ng-invalid.ng-touched:hover {
+  .invalid-dropdown.ng-invalid.ng-dirty,
+  .invalid-dropdown.ng-invalid.ng-dirty:hover {
     & .p-dropdown,
     & .p-cascadeselect {
       border: 1px solid $red-1 !important;

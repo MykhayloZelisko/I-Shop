@@ -33,7 +33,7 @@ export class DndFileControlComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  @ViewChild('fileUpload') public fileUpload!: ElementRef;
+  @ViewChild('fileUpload') public fileUpload!: ElementRef<HTMLInputElement>;
 
   @HostListener('change', ['$event.target.files'])
   private emitFiles(event: FileList): void {
@@ -68,8 +68,8 @@ export class DndFileControlComponent
 
   private cdr = inject(ChangeDetectorRef);
 
-  public ngOnInit(): void {
-    this.setComponentControl();
+  public override ngOnInit(): void {
+    super.ngOnInit();
     this.imageUrl = this.control.value;
   }
 
@@ -137,7 +137,7 @@ export class DndFileControlComponent
       reader.onload = (): void => {
         this.imageUrl = reader.result as string;
         this.onChange(this.imageUrl);
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       };
       reader.readAsDataURL(file);
     } else {

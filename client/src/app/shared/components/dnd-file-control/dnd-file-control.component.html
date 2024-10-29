@@ -17,8 +17,7 @@
   <div
     class="dnd-file-control__drop"
     [ngClass]="{
-      'dnd-file-control__drop--invalid':
-        control.invalid && (control.dirty || control.touched)
+      'dnd-file-control__drop--invalid': isInvalid()
     }"
     appDnd
     (click)="triggerFileInput()"

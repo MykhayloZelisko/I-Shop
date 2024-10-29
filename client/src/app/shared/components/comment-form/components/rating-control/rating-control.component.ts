@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
-  OnInit,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -28,7 +27,7 @@ import { showErrorMessage } from '../../../../utils/validators';
 })
 export class RatingControlComponent
   extends GetControlDirective
-  implements ControlValueAccessor, OnInit
+  implements ControlValueAccessor
 {
   public readonly ratingValues: number[] = [5, 4, 3, 2, 1];
 
@@ -43,10 +42,6 @@ export class RatingControlComponent
   public onTouched = (): void => {};
 
   private cdr = inject(ChangeDetectorRef);
-
-  public ngOnInit(): void {
-    this.setComponentControl();
-  }
 
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
@@ -77,16 +72,12 @@ export class RatingControlComponent
     this.activeRating = this.rating;
   }
 
-  public isInvalid(): boolean {
-    return this.control.invalid && (this.control.dirty || this.control.touched);
-  }
-
   public showMessage(): string {
     return showErrorMessage(this.control);
   }
 
   public markAsDirty(): void {
     this.control.markAsDirty();
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 }

@@ -3,15 +3,8 @@
     class="new-brand__input"
     label="Введіть назву нового бренду"
     [withErrors]="false"
-    [validators]="requiredValidators"
     [formControl]="brandCtrl"
     (focusEvent)="clearBrandId()"
   ></app-input>
-  <button
-    class="new-brand__add-btn"
-    [disabled]="brandCtrl.invalid"
-    (click)="addBrand()"
-  >
-    Додати
-  </button>
+  <button class="new-brand__add-btn" (click)="addBrand()">Додати</button>
 </div>

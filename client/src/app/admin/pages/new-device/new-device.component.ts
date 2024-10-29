@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -105,8 +104,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   private store = inject(Store<State>);
 
   private destroy$: Subject<void> = new Subject<void>();
-
-  private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.brands$ = this.store.select(selectAllBrands);

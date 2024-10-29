@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit, QueryList, ViewChildren,
+  OnInit,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import {
   FormBuilder,

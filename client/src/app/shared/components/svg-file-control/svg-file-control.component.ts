@@ -32,7 +32,7 @@ export class SvgFileControlComponent
   extends GetControlDirective
   implements ControlValueAccessor, OnInit
 {
-  @ViewChild('fileUpload') public fileUpload!: ElementRef;
+  @ViewChild('fileUpload') public fileUpload!: ElementRef<HTMLInputElement>;
 
   @HostListener('change', ['$event.target.files'])
   private handleFileInput(event: FileList): void {
@@ -46,7 +46,7 @@ export class SvgFileControlComponent
       reader.onload = (): void => {
         this.imageUrl = reader.result as string;
         this.onChange(this.imageUrl);
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       };
       reader.readAsDataURL(file);
     } else {
@@ -64,8 +64,8 @@ export class SvgFileControlComponent
 
   private cdr = inject(ChangeDetectorRef);
 
-  public ngOnInit(): void {
-    this.setComponentControl();
+  public override ngOnInit(): void {
+    super.ngOnInit();
     this.imageUrl = this.control.value;
   }
 

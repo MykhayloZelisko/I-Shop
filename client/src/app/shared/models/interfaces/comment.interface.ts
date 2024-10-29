@@ -9,8 +9,8 @@ export interface CommentInterface {
   disadvantages: string;
   content: string;
   user: UserInterface;
-  updatedAt: string;
-  createdAt: string;
+  updatedAt: Date;
+  createdAt: Date;
   likesUsers: UserInterface[];
   dislikesUsers: UserInterface[];
 }

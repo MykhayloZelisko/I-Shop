@@ -2,15 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   inject,
   Input,
-  OnInit,
+  ViewChild,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  ValidatorFn,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { GetControlDirective } from '../../directives/get-control.directive';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
@@ -32,13 +29,13 @@ import { NgClass, NgStyle } from '@angular/common';
 })
 export class TextareaComponent
   extends GetControlDirective
-  implements OnInit, ControlValueAccessor
+  implements ControlValueAccessor
 {
+  @ViewChild('textarea') public textarea!: ElementRef<HTMLTextAreaElement>;
+
   @Input() public placeholder = '';
 
   @Input({ required: true }) public label!: string;
-
-  @Input() public validators: ValidatorFn[] = [];
 
   @Input({ required: true }) public withErrors!: boolean;
 
@@ -54,13 +51,6 @@ export class TextareaComponent
 
   private cdr = inject(ChangeDetectorRef);
 
-  public ngOnInit(): void {
-    this.setComponentControl();
-    if (this.validators.length) {
-      this.control.setValidators(this.validators);
-    }
-  }
-
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
   }
@@ -69,8 +59,12 @@ export class TextareaComponent
     this.onTouched = fn;
   }
 
-  public writeValue(value: unknown): void {
-    this.internalValue = value as string;
+  public writeValue(value: string): void {
+    this.internalValue = value;
+    if (this.textarea) {
+      this.textarea.nativeElement.value = this.internalValue;
+    }
+    this.cdr.markForCheck();
   }
 
   public showMessage(): string {
@@ -86,10 +80,6 @@ export class TextareaComponent
     this.onTouched();
   }
 
-  public isInvalid(): boolean {
-    return this.control.invalid && (this.control.dirty || this.control.touched);
-  }
-
   public setStyle(): Record<string, string> {
     const resize = this.resizeX
       ? this.resizeY
@@ -103,6 +93,6 @@ export class TextareaComponent
 
   public markAsDirty(): void {
     this.control.markAsDirty();
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 }

@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   Input,
@@ -11,11 +12,13 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidatorFn,
 } from '@angular/forms';
 import { DPropertyFormInterface } from '../../../../../shared/models/interfaces/new-device-form.interface';
 import { NgClass, NgStyle } from '@angular/common';
-import { showErrorMessage } from '../../../../../shared/utils/validators';
+import {
+  requiredValidator,
+  showErrorMessage,
+} from '../../../../../shared/utils/validators';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
@@ -29,14 +32,14 @@ import { SvgIconComponent } from 'angular-svg-icon';
 export class MultiInputComponent implements OnInit {
   @Input({ required: true }) public label!: string;
 
-  @Input() public validators: ValidatorFn[] = [];
-
   @Input({ required: true }) public withErrors!: boolean;
 
   @Input({ required: true })
   public multiInputForm!: FormGroup<DPropertyFormInterface>;
 
   private fb = inject(FormBuilder);
+
+  private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.addValueCtrl();
@@ -55,9 +58,7 @@ export class MultiInputComponent implements OnInit {
   }
 
   public newValueCtrl(): FormControl<string> {
-    const control = this.fb.nonNullable.control<string>('', []);
-    control.setValidators(this.validators);
-    return control;
+    return this.fb.nonNullable.control<string>('', [requiredValidator()]);
   }
 
   public addValueCtrl(): void {
@@ -78,5 +79,9 @@ export class MultiInputComponent implements OnInit {
       (this.getValueCtrlByIndex(index).dirty ||
         this.getValueCtrlByIndex(index).touched)
     );
+  }
+
+  public updateState(): void {
+    this.cdr.markForCheck();
   }
 }

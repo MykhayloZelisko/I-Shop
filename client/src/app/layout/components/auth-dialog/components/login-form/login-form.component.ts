@@ -2,14 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
+  OnInit, QueryList, ViewChildren,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidatorFn,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   emailPatternValidator,
   minMaxLengthValidator,
@@ -38,16 +33,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnInit {
-  protected readonly emailValidators: ValidatorFn[] = [
-    requiredValidator(),
-    emailPatternValidator(REG_EMAIL),
-  ];
-
-  protected readonly passwordValidators: ValidatorFn[] = [
-    requiredValidator(),
-    minMaxLengthValidator(8, 32),
-    passwordPatternValidator(REG_PASSWORD),
-  ];
+  @ViewChildren(InputComponent) public inputs!: QueryList<InputComponent>;
 
   public loginForm!: FormGroup<LoginFormInterface>;
 
@@ -61,8 +47,15 @@ export class LoginFormComponent implements OnInit {
 
   public initLoginForm(): void {
     this.loginForm = this.fb.group<LoginFormInterface>({
-      email: this.fb.nonNullable.control<string>('', []),
-      password: this.fb.nonNullable.control<string>('', []),
+      email: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        emailPatternValidator(REG_EMAIL),
+      ]),
+      password: this.fb.nonNullable.control<string>('', [
+        requiredValidator(),
+        minMaxLengthValidator(8, 32),
+        passwordPatternValidator(REG_PASSWORD),
+      ]),
     });
   }
 
@@ -89,7 +82,12 @@ export class LoginFormComponent implements OnInit {
   }
 
   public login(): void {
-    const loginData: LoginInterface = this.loginForm.getRawValue();
-    this.store.dispatch(AuthActions.login({ login: loginData }));
+    this.inputs.forEach((input: InputComponent) => {
+      input.markAsDirty();
+    });
+    if (this.loginForm.valid) {
+      const loginData: LoginInterface = this.loginForm.getRawValue();
+      this.store.dispatch(AuthActions.login({ login: loginData }));
+    }
   }
 }

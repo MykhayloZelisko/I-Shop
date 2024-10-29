@@ -3,7 +3,6 @@
     <app-input
       label="Електронна пошта"
       placeholder="Введіть електронну пошту"
-      [validators]="emailValidators"
       inputType="email"
       formControlName="email"
       [withErrors]="true"
@@ -11,14 +10,12 @@
     <app-input
       label="Ім'я"
       placeholder="Введіть ім'я"
-      [validators]="nameValidators"
       formControlName="firstName"
       [withErrors]="true"
     ></app-input>
     <app-input
       label="Прізвище"
       placeholder="Введіть прізвище"
-      [validators]="nameValidators"
       formControlName="lastName"
       [withErrors]="true"
     ></app-input>
@@ -45,17 +42,12 @@
     <app-input
       label="Пароль"
       placeholder="Введіть пароль"
-      [validators]="passwordValidators"
       inputType="password"
       formControlName="password"
       [withErrors]="true"
     ></app-input>
   </div>
-  <button
-    class="registration-form__button"
-    [disabled]="registrationForm.invalid"
-    (click)="registration()"
-  >
+  <button class="registration-form__button" (click)="registration()">
     Зареєструватися
   </button>
   <button class="registration-form__button--login" (click)="login()">

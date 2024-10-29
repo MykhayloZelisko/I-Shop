@@ -1,16 +1,12 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  ReactiveFormsModule,
-  ValidatorFn,
-} from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { requiredValidator } from '../../../../../shared/utils/validators';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
@@ -29,8 +25,6 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewBrandComponent implements OnInit, OnDestroy {
-  protected readonly requiredValidators: ValidatorFn[] = [requiredValidator()];
-
   public brandCtrl!: FormControl<string>;
 
   public isFormCleared$!: Observable<boolean>;
@@ -40,6 +34,8 @@ export class NewBrandComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
 
   private store = inject(Store<State>);
+
+  private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.brandCtrl = this.fb.nonNullable.control<string>('', [
@@ -55,8 +51,10 @@ export class NewBrandComponent implements OnInit, OnDestroy {
   }
 
   public addBrand(): void {
-    const brandName = this.brandCtrl.getRawValue();
-    this.store.dispatch(BrandActions.addBrand({ brandName }));
+    if (this.brandCtrl.valid) {
+      const brandName = this.brandCtrl.getRawValue();
+      this.store.dispatch(BrandActions.addBrand({ brandName }));
+    }
   }
 
   public clearBrandId(): void {
@@ -70,6 +68,7 @@ export class NewBrandComponent implements OnInit, OnDestroy {
         if (isFormCleared) {
           this.brandCtrl.reset();
           this.store.dispatch(FormActions.clearFormOff());
+          this.cdr.markForCheck();
         }
       });
   }

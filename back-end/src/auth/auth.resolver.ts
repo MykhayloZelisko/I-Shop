@@ -1,13 +1,14 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from '../users/inputs/create-user.input';
 import { AuthService } from './auth.service';
-import { UseGuards, UsePipes } from '@nestjs/common';
+import { UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { User } from '../users/models/user.model';
 import { GqlLocalAuthGuard } from './guards/gql-local-auth/gql-local-auth.guard';
 import { LoginInput } from './inputs/login.input';
 import { GqlAuthGuard } from '../common/guards/gql-auth/gql-auth.guard';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { Request } from 'express';
+import { UpdateUserInSessionInterceptor } from './interceptors/update-user-in-session/update-user-in-session.interceptor';
 
 @Resolver()
 export class AuthResolver {
@@ -32,6 +33,7 @@ export class AuthResolver {
   }
 
   @UseGuards(GqlAuthGuard)
+  @UseInterceptors(UpdateUserInSessionInterceptor)
   @Query(() => User, { name: 'me' })
   public async getCurrentUser(
     @Context() context: { req: { user: User } },

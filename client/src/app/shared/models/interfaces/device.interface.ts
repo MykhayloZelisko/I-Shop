@@ -6,7 +6,7 @@ export interface DeviceInterface {
   id: string;
   deviceName: string;
   price: number;
-  count: number;
+  quantity: number;
   rating: number;
   votes: number;
   images: string[];

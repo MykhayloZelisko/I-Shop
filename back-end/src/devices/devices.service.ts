@@ -45,7 +45,7 @@ export class DevicesService {
       await this.deviceModel.create({
         deviceName: createDeviceInput.deviceName,
         price: createDeviceInput.price,
-        count: createDeviceInput.count,
+        quantity: createDeviceInput.quantity,
         images: fileNames,
         category: category.id,
         categories: categoriesIds,

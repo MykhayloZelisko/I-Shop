@@ -47,6 +47,10 @@
     }
   }
 
+  &__multicolor-icon {
+    @include icon-style($size: 24px);
+  }
+
   &__button {
     @include icon-button-style(40px, $white-2, 5px, $blue-3);
   }

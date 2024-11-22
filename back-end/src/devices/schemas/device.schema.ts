@@ -15,7 +15,7 @@ export class Device {
   public price: number;
 
   @Prop()
-  public count: number;
+  public quantity: number;
 
   @Prop({ default: 0 })
   public rating: number;

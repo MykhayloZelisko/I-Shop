@@ -6,6 +6,7 @@ import { CPropertiesGroupEffects } from '../c-properties-groups/effects/c-proper
 import { CPropertyEffects } from '../c-properties/effects/c-property.effects';
 import { SharedEffects } from '../shared/effects/shared.effects';
 import { CommentEffects } from '../comments/effects/comment.effects';
+import { CartEffects } from '../cart/effects/cart.effects';
 
 export const AppEffects = [
   AuthEffects,
@@ -16,4 +17,5 @@ export const AppEffects = [
   CPropertyEffects,
   SharedEffects,
   CommentEffects,
+  CartEffects,
 ];

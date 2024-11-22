@@ -1,6 +1,6 @@
 <div
   class="rating"
-  [ngClass]="{ 'rating--hover': !!votes }"
+  [ngClass]="{ 'rating--hover': votes >= 0 }"
   [routerLink]="['/devices', deviceId, 'comments']"
 >
   @if (rating) {

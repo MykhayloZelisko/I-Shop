@@ -5,6 +5,8 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { LoginInterface } from '../../../shared/models/interfaces/login.interface';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { ApolloQueryResult } from '@apollo/client';
+import { environment } from '../../../../environments/environment';
+import { CartDeviceInterface } from '../../../shared/models/interfaces/cart-device.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +56,22 @@ export class AuthService {
                 id
                 role
               }
+              cart {
+                id
+                devices {
+                  id
+                  quantity
+                  priceAtAdd
+                  isInOrder
+                  device {
+                    id
+                    deviceName
+                    price
+                    quantity
+                    images
+                  }
+                }
+              }
             }
           }
         `,
@@ -66,7 +84,26 @@ export class AuthService {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return response.data.login;
+            return {
+              ...response.data.login,
+              cart: response.data.login.cart
+                ? {
+                    ...response.data.login.cart,
+                    devices: response.data.login.cart.devices.map(
+                      (cartDevice: CartDeviceInterface) => ({
+                        ...cartDevice,
+                        device: {
+                          ...cartDevice.device,
+                          images: cartDevice.device.images.map(
+                            (image: string) =>
+                              `${environment.baseUrl}/${image}`,
+                          ),
+                        },
+                      }),
+                    ),
+                  }
+                : null,
+            };
           }
         }),
         catchError((error) => throwError(() => error)),
@@ -89,16 +126,52 @@ export class AuthService {
                 id
                 role
               }
+              cart {
+                id
+                devices {
+                  id
+                  quantity
+                  priceAtAdd
+                  isInOrder
+                  device {
+                    id
+                    deviceName
+                    price
+                    quantity
+                    images
+                  }
+                }
+              }
             }
           }
         `,
+        fetchPolicy: 'network-only',
       })
       .pipe(
         map((response: ApolloQueryResult<{ me: UserInterface }>) => {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return response.data.me;
+            return {
+              ...response.data.me,
+              cart: response.data.me.cart
+                ? {
+                    ...response.data.me.cart,
+                    devices: response.data.me.cart.devices.map(
+                      (cartDevice: CartDeviceInterface) => ({
+                        ...cartDevice,
+                        device: {
+                          ...cartDevice.device,
+                          images: cartDevice.device.images.map(
+                            (image: string) =>
+                              `${environment.baseUrl}/${image}`,
+                          ),
+                        },
+                      }),
+                    ),
+                  }
+                : null,
+            };
           }
         }),
         catchError((error) => throwError(() => error)),

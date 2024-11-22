@@ -86,6 +86,30 @@
 
       white-space: nowrap;
     }
+
+    &--cart {
+      @include button-style($white-1, $brown-1, 6px 12px, $white-1);
+
+      &:hover {
+        color: $blue-2;
+
+        .device-aside {
+          &__button-text {
+            border-bottom: 1px dotted $blue-2;
+          }
+        }
+      }
+    }
+  }
+
+  &__button-text {
+    line-height: 1.2;
+    border-bottom: 1px dotted $brown-1;
+    white-space: nowrap;
+  }
+
+  &__multicolor-icon {
+    @include icon-style($size: 24px);
   }
 }
 

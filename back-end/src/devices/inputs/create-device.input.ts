@@ -34,7 +34,7 @@ export class CreateDeviceInput {
   @Field(() => Int, { description: 'Devices count' })
   @IsInt({ message: 'Must be an integer number' })
   @IsPositive({ message: 'Must be a positive number' })
-  public count: number;
+  public quantity: number;
 
   @Field(() => [String], { description: 'Device pictures links' })
   @IsArray({ message: 'Must be an array' })

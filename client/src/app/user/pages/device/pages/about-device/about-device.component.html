@@ -11,13 +11,26 @@
       <div class="about-device__buying">
         <span class="about-device__price">{{ device.price }} &#8372;</span>
         <div class="about-device__buttons--large">
-          <button class="about-device__button">
-            <svg-icon
-              class="about-device__icon about-device__icon--yellow"
-              src="assets/images/shopping-cart-icon.svg"
-            ></svg-icon>
-            Купити
-          </button>
+          @if (isCartDevice$ | async) {
+            <button
+              class="about-device__button about-device__button--cart"
+              (click)="openCart()"
+            >
+              <svg-icon
+                class="about-device__multicolor-icon"
+                src="assets/images/check-out-icon.svg"
+              ></svg-icon>
+              <span class="about-device__button-text">В кошику</span>
+            </button>
+          } @else {
+            <button class="about-device__button" (click)="addDevice(device.id)">
+              <svg-icon
+                class="about-device__icon about-device__icon--yellow"
+                src="assets/images/shopping-cart-icon.svg"
+              ></svg-icon>
+              Купити
+            </button>
+          }
           <button class="about-device__button--credit">Купити в кредит</button>
         </div>
         <div class="about-device__icon-buttons">
@@ -36,13 +49,26 @@
         </div>
       </div>
       <div class="about-device__buttons--small">
-        <button class="about-device__button">
-          <svg-icon
-            class="about-device__icon about-device__icon--yellow"
-            src="assets/images/shopping-cart-icon.svg"
-          ></svg-icon>
-          Купити
-        </button>
+        @if (isCartDevice$ | async) {
+          <button
+            class="about-device__button about-device__button--cart"
+            (click)="openCart()"
+          >
+            <svg-icon
+              class="about-device__multicolor-icon"
+              src="assets/images/check-out-icon.svg"
+            ></svg-icon>
+            <span class="about-device__button-text">В кошику</span>
+          </button>
+        } @else {
+          <button class="about-device__button" (click)="addDevice(device.id)">
+            <svg-icon
+              class="about-device__icon about-device__icon--yellow"
+              src="assets/images/shopping-cart-icon.svg"
+            ></svg-icon>
+            Купити
+          </button>
+        }
         <button class="about-device__button--credit">Купити в кредит</button>
       </div>
       <div class="about-device__delivery">

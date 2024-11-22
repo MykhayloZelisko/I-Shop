@@ -2,13 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { MenuItem } from 'primeng/api';
 import { DEVICE_MENU } from '../../../shared/models/constants/device-menu';
-import { Observable, take, tap } from 'rxjs';
+import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { DeviceActions } from '../../../+store/devices/actions/device.actions';
@@ -36,10 +37,12 @@ import { DeviceRouteNameEnum } from '../../../shared/models/enums/device-route-n
   styleUrl: './device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeviceComponent implements OnInit {
+export class DeviceComponent implements OnInit, OnDestroy {
   public items: MenuItem[] = DEVICE_MENU;
 
   public device$!: Observable<DeviceInterface | null>;
+
+  private destroy$: Subject<void> = new Subject<void>();
 
   private store = inject(Store<State>);
 
@@ -64,10 +67,15 @@ export class DeviceComponent implements OnInit {
     this.initDevice();
   }
 
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   public initDevice(): void {
     this.store
       .select(selectIsCurrentDevice)
-      .pipe(take(1))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         if (!params.isCurrent && params.id) {
           this.store.dispatch(DeviceActions.loadDevice({ id: params.id }));

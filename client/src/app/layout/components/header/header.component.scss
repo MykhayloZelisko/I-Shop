@@ -33,6 +33,26 @@
 
   &__icon-btn {
     @include icon-button-style(40px, transparent, 5px, $brown-2);
+
+    position: relative;
+  }
+
+  &__cart-count {
+    border-radius: 8px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 15px;
+    font-family: $source;
+    color: $white-1;
+
+    &--full {
+      background-color: $blue-1;
+    }
+
+    &--empty {
+      background-color: $gray-5;
+    }
   }
 
   &__button {

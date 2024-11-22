@@ -1,0 +1,80 @@
+<div class="cart__wrapper">
+  <div class="cart" appClickOutside>
+    <div class="cart__header">
+      <h3 class="cart__title">{{ dialog.title }}</h3>
+      <button class="cart__close" (click)="closeDialog()">
+        <svg-icon
+          class="cart__icon cart__icon--yellow"
+          src="assets/images/close-round-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+    <div class="cart__body">
+      @if (devices$ | async; as devices) {
+        @if (totalCount$ | async; as totalCount) {
+          @if (totalCount > 1) {
+            <div class="cart__devices-header">
+              <div class="cart__select-all">
+                <app-checkbox [formControl]="selectAllCtrl"></app-checkbox>
+                <p class="cart__select-all-text">
+                  Вибрано {{ orderedCount$ | async }} з {{ totalCount }}
+                </p>
+              </div>
+              <div class="cart__icon-buttons">
+                <!--              <button class="cart__button">-->
+                <!--                <svg-icon-->
+                <!--                  class="cart__icon cart__icon&#45;&#45;yellow"-->
+                <!--                  src="assets/images/heart-thin-icon.svg"-->
+                <!--                ></svg-icon>-->
+                <!--              </button>-->
+                <button
+                  class="cart__icon-button cart__icon-button--delete"
+                  (click)="deleteDevices(devices)"
+                >
+                  <svg-icon
+                    class="cart__icon cart__icon--delete"
+                    src="assets/images/trash-bin-icon.svg"
+                  ></svg-icon>
+                </button>
+              </div>
+            </div>
+          }
+        }
+        @if (devices.length) {
+          <div class="cart__devices">
+            @for (device of devices; track device) {
+              <app-cart-device
+                [device]="device"
+                [cartId$]="cartId$"
+              ></app-cart-device>
+            }
+          </div>
+          <div class="cart__footer">
+            <button
+              class="cart__button cart__button--continue"
+              (click)="closeDialog()"
+            >
+              Продовжити покупки
+            </button>
+            @if (totalPrice$ | async; as totalPrice) {
+              <div class="cart__total">
+                <div class="cart__total-inner">
+                  <span class="cart__total-text">Разом</span>
+                  <span class="cart__total-price"
+                    >{{ totalPrice }} &#8372;</span
+                  >
+                </div>
+                <button class="cart__button cart__button--order">
+                  Оформити замовлення
+                </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <p>Cart is empty</p>
+        }
+      }
+    </div>
+    <div class="cart__empty-space"></div>
+  </div>
+</div>

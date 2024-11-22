@@ -16,6 +16,7 @@ import { DeletedComment } from './models/deleted-comment.model';
 import { RatingsService } from '../ratings/ratings.service';
 import { UpdateLikeDislikeInput } from './inputs/update-like-dislike.input';
 import { DevicesService } from '../devices/devices.service';
+import { UserDocument } from '../users/schemas/user.schema';
 
 @Injectable()
 export class CommentsService {
@@ -100,11 +101,10 @@ export class CommentsService {
       throw new NotFoundException('Comment not found');
     }
 
-    const commentObj = comment.toObject();
     let updatedComment: CommentDocument | null = null;
     if (status === 1) {
-      const isLiked = commentObj.likesUsers.some(
-        (likeUser: User) => likeUser.id.toString() === user.id,
+      const isLiked = comment.likesUsers.some(
+        (likeUser: UserDocument) => likeUser.id.toString() === user.id,
       );
 
       if (isLiked) {
@@ -130,8 +130,8 @@ export class CommentsService {
           .exec();
       }
     } else if (status === -1) {
-      const isDisliked = commentObj.dislikesUsers.some(
-        (dislikeUser: User) => dislikeUser.id.toString() === user.id,
+      const isDisliked = comment.dislikesUsers.some(
+        (dislikeUser: UserDocument) => dislikeUser.id.toString() === user.id,
       );
 
       if (isDisliked) {

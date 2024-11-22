@@ -12,6 +12,7 @@ import { State } from '../../reducers';
 import { Store } from '@ngrx/store';
 import { LoaderActions } from '../../loader/actions/loader.actions';
 import { PopupActions } from '../../popup/actions/popup.actions';
+import { CartActions } from '../../cart/actions/cart.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -28,11 +29,26 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.getMe),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
-      switchMap(() => this.authService.getCurrentUser()),
-      mergeMap((user: UserInterface) => [
-        LoaderActions.toggleLoader(),
-        AuthActions.getMeSuccess({ user }),
-      ]),
+      switchMap(() =>
+        this.authService.getCurrentUser().pipe(
+          mergeMap((user: UserInterface) => {
+            const actions: ReturnType<
+              | typeof CartActions.loadCart
+              | typeof AuthActions.getMeSuccess
+              | typeof LoaderActions.toggleLoader
+            >[] = [
+              LoaderActions.toggleLoader(),
+              AuthActions.getMeSuccess({ user }),
+            ];
+
+            if (user.cart) {
+              actions.push(CartActions.loadCart({ cart: user.cart }));
+            }
+
+            return actions;
+          }),
+        ),
+      ),
       catchError(() => {
         this.store.dispatch(LoaderActions.toggleLoader());
         return of(AuthActions.getMeFailure());
@@ -47,11 +63,24 @@ export class AuthEffects {
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
         this.authService.login(action.login).pipe(
-          mergeMap((user: UserInterface) => [
-            LoaderActions.toggleLoader(),
-            AuthActions.loginSuccess({ user }),
-            PopupActions.closePopup(),
-          ]),
+          mergeMap((user: UserInterface) => {
+            const actions: ReturnType<
+              | typeof CartActions.loadCart
+              | typeof AuthActions.loginSuccess
+              | typeof LoaderActions.toggleLoader
+              | typeof PopupActions.closePopup
+            >[] = [
+              LoaderActions.toggleLoader(),
+              AuthActions.loginSuccess({ user }),
+              PopupActions.closePopup(),
+            ];
+
+            if (user.cart) {
+              actions.push(CartActions.loadCart({ cart: user.cart }));
+            }
+
+            return actions;
+          }),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());
             return of(AuthActions.loginFailure());
@@ -82,6 +111,7 @@ export class AuthEffects {
           mergeMap(() => [
             LoaderActions.toggleLoader(),
             AuthActions.logoutSuccess(),
+            CartActions.clearCart(),
           ]),
           catchError(() => {
             this.store.dispatch(LoaderActions.toggleLoader());

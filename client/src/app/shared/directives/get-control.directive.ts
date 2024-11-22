@@ -11,7 +11,7 @@ import { Subject, takeUntil, tap } from 'rxjs';
 
 @Directive()
 export class GetControlDirective implements OnInit, OnDestroy {
-  public control!: FormControl<string | null>;
+  public control!: FormControl<string | boolean | null>;
 
   private destroy$: Subject<void> = new Subject<void>();
 

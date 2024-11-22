@@ -15,7 +15,7 @@ export class Device {
   public price: number;
 
   @Field(() => Int, { description: 'Devices count' })
-  public count: number;
+  public quantity: number;
 
   @Field(() => Float, { description: 'Device rating' })
   public rating: number;

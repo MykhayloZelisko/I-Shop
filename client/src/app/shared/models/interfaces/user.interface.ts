@@ -1,4 +1,5 @@
 import { RoleInterface } from './role.interface';
+import { CartInterface } from './cart.interface';
 
 export interface UserInterface {
   id: string;
@@ -7,4 +8,5 @@ export interface UserInterface {
   phone: string;
   email: string;
   roles: RoleInterface[];
+  cart: CartInterface | null;
 }

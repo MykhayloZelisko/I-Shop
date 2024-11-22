@@ -25,13 +25,26 @@
         </button>
       </div>
     </div>
-    <button class="device-aside__button">
-      <svg-icon
-        class="device-aside__icon device-aside__icon--yellow"
-        src="assets/images/shopping-cart-icon.svg"
-      ></svg-icon>
-      Купити
-    </button>
+    @if (isCartDevice$ | async) {
+      <button
+        class="device-aside__button device-aside__button--cart"
+        (click)="openCart()"
+      >
+        <svg-icon
+          class="device-aside__multicolor-icon"
+          src="assets/images/check-out-icon.svg"
+        ></svg-icon>
+        <span class="device-aside__button-text">В кошику</span>
+      </button>
+    } @else {
+      <button class="device-aside__button" (click)="addDevice(device.id)">
+        <svg-icon
+          class="device-aside__icon device-aside__icon--yellow"
+          src="assets/images/shopping-cart-icon.svg"
+        ></svg-icon>
+        Купити
+      </button>
+    }
     <button class="device-aside__button--credit">Купити в кредит</button>
   </div>
 </aside>

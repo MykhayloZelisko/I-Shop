@@ -25,6 +25,10 @@
     }
   }
 
+  &__multicolor-icon {
+    @include icon-style($size: 24px);
+  }
+
   &__icon-button {
     @include icon-button-style(40px, $white-2, 5px, $blue-3);
   }
@@ -65,6 +69,26 @@
       flex: 1;
       white-space: nowrap;
     }
+
+    &--cart {
+      @include button-style($white-1, $brown-1, 6px 12px, $white-1);
+
+      &:hover {
+        color: $blue-2;
+
+        .about-device {
+          &__button-text {
+            border-bottom: 1px dotted $blue-2;
+          }
+        }
+      }
+    }
+  }
+
+  &__button-text {
+    line-height: 1.2;
+    border-bottom: 1px dotted $brown-1;
+    white-space: nowrap;
   }
 
   &__buttons {

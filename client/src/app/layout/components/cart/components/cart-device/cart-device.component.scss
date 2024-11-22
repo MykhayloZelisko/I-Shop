@@ -1,0 +1,93 @@
+@import 'variables';
+@import 'mixins';
+
+.cart-device {
+  padding: 24px;
+  border: 1px solid $gray-4;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  &__device {
+    display: flex;
+    align-items: center;
+  }
+
+  &__image {
+    width: 96px;
+    height: 96px;
+    aspect-ratio: 1;
+    object-fit: contain;
+    margin: 0 16px;
+  }
+
+  &__link {
+    font-family: $source;
+    font-size: 16px;
+    flex-grow: 1;
+    color: $black;
+    text-decoration: none;
+
+    &:hover {
+      color: $blue-2;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  &__icon {
+    @include icon-style($brown-1, 24px);
+  }
+
+  &__button {
+    @include icon-button-style(30px, transparent, $disabled: true);
+
+    &:disabled {
+      @include icon-style($gray-5);
+    }
+
+    &--more {
+      align-self: flex-start;
+
+      &:hover {
+        @include icon-style($red-1);
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &__counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__input {
+    @include input-style(9px);
+
+    width: 60px;
+    text-align: center;
+  }
+
+  &__price {
+    font-size: 24px;
+    font-family: $source;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (width <= 768px) {
+  .cart-device {
+    gap: 24px;
+
+    &__footer {
+      justify-content: space-between;
+    }
+  }
+}

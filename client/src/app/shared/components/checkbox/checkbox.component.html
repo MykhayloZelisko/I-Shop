@@ -1,0 +1,29 @@
+<div class="checkbox">
+  <input
+    #checkbox
+    class="checkbox__input"
+    type="checkbox"
+    [id]="checkboxId"
+    [checked]="control.value === true"
+    [indeterminate]="control.value === null"
+    (change)="changeValue($event)"
+  />
+  <label class="checkbox__label" [for]="checkboxId">
+    @if (control.value === null) {
+      <svg-icon
+        class="checkbox__icon"
+        src="assets/images/checkbox-indeterminate-icon.svg"
+      ></svg-icon>
+    } @else if (control.value === true) {
+      <svg-icon
+        class="checkbox__icon"
+        src="assets/images/checkbox-checked-icon.svg"
+      ></svg-icon>
+    } @else {
+      <svg-icon
+        class="checkbox__icon"
+        src="assets/images/checkbox-unchecked-icon.svg"
+      ></svg-icon>
+    }
+  </label>
+</div>

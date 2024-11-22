@@ -15,8 +15,11 @@ export class ClickOutsideDirective {
   @HostListener('document:click', ['$event'])
   private onClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const isButtonOrLink = target.closest('button') ?? target.closest('a');
-    if (!this.inside(target) && !isButtonOrLink) {
+    const isButtonOrLinkOrLoader =
+      target.closest('button') ??
+      target.closest('a') ??
+      target.closest('.loading-spinner');
+    if (!this.inside(target) && !isButtonOrLinkOrLoader) {
       this.store.dispatch(PopupActions.closePopup());
     }
   }

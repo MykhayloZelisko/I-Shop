@@ -53,7 +53,7 @@ export class DevicesService {
                 id
                 deviceName
                 price
-                count
+                quantity
                 rating
                 votes
                 images
@@ -113,7 +113,7 @@ export class DevicesService {
               id
               deviceName
               price
-              count
+              quantity
               rating
               votes
               images

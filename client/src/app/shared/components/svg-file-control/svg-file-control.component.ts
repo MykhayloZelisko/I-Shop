@@ -66,7 +66,8 @@ export class SvgFileControlComponent
 
   public override ngOnInit(): void {
     super.ngOnInit();
-    this.imageUrl = this.control.value;
+    this.imageUrl =
+      typeof this.control.value === 'string' ? this.control.value : null;
   }
 
   public registerOnChange(fn: () => void): void {

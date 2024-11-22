@@ -22,6 +22,7 @@ import {
   selectUser,
 } from '../+store/auth/selectors/auth.selectors';
 import { CatalogComponent } from './components/catalog/catalog.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @Component({
   selector: 'app-layout',
@@ -34,6 +35,7 @@ import { CatalogComponent } from './components/catalog/catalog.component';
     AuthDialogComponent,
     MainMenuComponent,
     CatalogComponent,
+    CartComponent,
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',

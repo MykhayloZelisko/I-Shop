@@ -13,6 +13,7 @@ import {
 import { CategoryInterface } from '../../../shared/models/interfaces/category.interface';
 import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 import { selectIdAndPage } from '../../router/selectors/router.selectors';
+import { RouterParamsInterface } from '../../../shared/models/interfaces/router-params.interface';
 
 const selectCategoryState = createFeatureSelector<State>(categoriesFeatureKey);
 
@@ -48,7 +49,7 @@ export const selectHasChildren = (
   createSelector(
     selectAllCategories,
     selectIdAndPage,
-    (categories: CategoryInterface[], params) => {
+    (categories: CategoryInterface[], params: RouterParamsInterface) => {
       const newId = categoryId ?? params.id;
       return categories.some(
         (category: CategoryInterface) => category.parentId === newId,
@@ -84,7 +85,7 @@ export const selectCascadeCategories = createSelector(
 export const selectHasChildChain = createSelector(
   selectAllCategories,
   selectIdAndPage,
-  (categories: CategoryInterface[], params) => {
+  (categories: CategoryInterface[], params: RouterParamsInterface) => {
     const childCategories = categories.filter(
       (category: CategoryInterface) => category.parentId === params.id,
     );
@@ -100,7 +101,7 @@ export const selectHasChildChain = createSelector(
 export const selectCascadeSubCategories = createSelector(
   selectCascadeCategories,
   selectIdAndPage,
-  (categories: CascadeCategoryInterface[], params) => {
+  (categories: CascadeCategoryInterface[], params: RouterParamsInterface) => {
     const findSubtree = (
       categoryId: string | null,
       nodes: CascadeCategoryInterface[],

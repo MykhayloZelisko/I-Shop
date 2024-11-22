@@ -17,12 +17,21 @@
     ></app-rating>
     <div class="device-item__price-wrapper">
       <p class="device-item__price">{{ device.price }} &#8372;</p>
-      <button class="device-item__button">
-        <svg-icon
-          class="device-item__icon"
-          src="assets/images/shopping-cart-icon.svg"
-        ></svg-icon>
-      </button>
+      @if (isCartDevice$ | async) {
+        <button class="device-item__button" (click)="openCart()">
+          <svg-icon
+            class="device-item__multicolor-icon"
+            src="assets/images/check-out-icon.svg"
+          ></svg-icon>
+        </button>
+      } @else {
+        <button class="device-item__button" (click)="addDevice()">
+          <svg-icon
+            class="device-item__icon"
+            src="assets/images/shopping-cart-icon.svg"
+          ></svg-icon>
+        </button>
+      }
     </div>
   </div>
   <div class="device-item__buttons">

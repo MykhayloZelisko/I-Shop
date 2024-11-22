@@ -11,4 +11,5 @@ export enum PopupTypeEnum {
   NewComment = 'NewComment',
   EditComment = 'EditComment',
   CommentMenu = 'CommentMenu',
+  Cart = 'Cart',
 }

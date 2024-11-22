@@ -1,11 +1,11 @@
 import { InputType, Field, ID, Int } from '@nestjs/graphql';
 import {
   IsInt,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsPositive,
   IsString,
-  Matches,
   Max,
   ValidateIf,
 } from 'class-validator';
@@ -21,8 +21,11 @@ export class CreateCategoryInput {
   public categoryName: string;
 
   @Field(() => ID, { description: 'Parent category id', nullable: true })
-  @IsString({ message: 'Must be a string' })
-  @Matches(/^[0-9a-fA-F]{24}$/, { message: 'Parent id is incorrect' })
+  @IsMongoId({
+    message:
+      'String must be a valid hex-encoded representation of a MongoDB ObjectId.',
+  })
+  @IsNotEmpty({ message: 'Must be a not empty string' })
   @ValidateIf(
     (object) =>
       object.parentId !== null && object.image !== null && object.icon === null,

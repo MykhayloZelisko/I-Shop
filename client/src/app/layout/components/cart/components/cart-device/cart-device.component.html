@@ -1,0 +1,60 @@
+<div class="cart-device" [formGroup]="cartDeviceForm">
+  <div class="cart-device__device">
+    <app-checkbox
+      formControlName="isInOrder"
+      (changeEvent)="submitData()"
+    ></app-checkbox>
+    <img
+      class="cart-device__image"
+      [src]="device.device.images[0]"
+      [alt]="device.device.deviceName"
+    />
+    <a class="cart-device__link" href="#" (click)="redirectToDevice($event)">{{
+      device.device.deviceName
+    }}</a>
+    <button
+      class="cart-device__button cart-device__button--more"
+      (click)="deleteDevice()"
+    >
+      <svg-icon
+        class="cart-device__icon"
+        src="assets/images/trash-bin-icon.svg"
+      ></svg-icon>
+    </button>
+  </div>
+  <div class="cart-device__footer">
+    <div class="cart-device__counter">
+      <button
+        class="cart-device__button"
+        [disabled]="device.quantity === 1"
+        (click)="changeQuantity(-1)"
+      >
+        <svg-icon
+          class="cart-device__icon"
+          src="assets/images/minus-line-icon.svg"
+        ></svg-icon>
+      </button>
+      <input
+        class="cart-device__input"
+        type="text"
+        formControlName="quantity"
+        mask="0*"
+        thousandSeparator=""
+        (input)="onInput()"
+      />
+      <button
+        class="cart-device__button"
+        [disabled]="device.quantity === device.device.quantity"
+        (click)="changeQuantity(1)"
+      >
+        <svg-icon
+          class="cart-device__icon"
+          src="assets/images/plus-line-icon.svg"
+        ></svg-icon>
+      </button>
+    </div>
+    <div class="cart-device__price">
+      {{ device.priceAtAdd * device.quantity }} &#8372;
+    </div>
+  </div>
+</div>

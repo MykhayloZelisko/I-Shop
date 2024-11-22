@@ -4,11 +4,13 @@ import { UsersResolver } from './users.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { RolesModule } from '../roles/roles.module';
+import { CartsModule } from '../carts/carts.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     RolesModule,
+    CartsModule,
   ],
   providers: [UsersResolver, UsersService],
   exports: [UsersService],

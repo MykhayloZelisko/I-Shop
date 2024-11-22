@@ -63,11 +63,30 @@
         src="assets/images/scale-icon.svg"
       ></svg-icon>
     </button>
-    <button class="header__icon-btn">
-      <svg-icon
-        class="header__icon"
-        src="assets/images/shopping-cart-icon.svg"
-      ></svg-icon>
+    <button class="header__icon-btn" (click)="openCart($event)">
+      @if (cartInfo$ | async; as cartInfo) {
+        @if (cartInfo.count) {
+          <svg-icon
+            class="header__icon"
+            src="assets/images/shopping-cart-full-icon.svg"
+          ></svg-icon>
+          <div
+            class="header__cart-count"
+            [ngClass]="
+              cartInfo.isOrder
+                ? 'header__cart-count--full'
+                : 'header__cart-count--empty'
+            "
+          >
+            {{ cartInfo.count }}
+          </div>
+        } @else {
+          <svg-icon
+            class="header__icon"
+            src="assets/images/shopping-cart-icon.svg"
+          ></svg-icon>
+        }
+      }
     </button>
     @if (isAdmin$ | async) {
       <button

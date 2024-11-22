@@ -34,16 +34,16 @@
         mask="0*"
         thousandSeparator=""
         class="new-device__input"
-        formControlName="count"
+        formControlName="quantity"
         type="text"
         placeholder="Кількість"
       />
       @if (
-        newDeviceForm.controls.count.invalid &&
-        (newDeviceForm.controls.count.dirty ||
-          newDeviceForm.controls.count.touched)
+        newDeviceForm.controls.quantity.invalid &&
+        (newDeviceForm.controls.quantity.dirty ||
+          newDeviceForm.controls.quantity.touched)
       ) {
-        <p class="new-device__error">{{ showMessage('count') }}</p>
+        <p class="new-device__error">{{ showMessage('quantity') }}</p>
       }
     </div>
     @if (brands$ | async; as brands) {

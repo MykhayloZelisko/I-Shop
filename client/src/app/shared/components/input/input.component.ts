@@ -67,9 +67,6 @@ export class InputComponent
 
   public writeValue(value: string): void {
     this.internalValue = value;
-    if (this.input) {
-      this.input.nativeElement.value = this.internalValue;
-    }
     this.cdr.markForCheck();
   }
 

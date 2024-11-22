@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Role } from '../../roles/models/role.model';
+import { Cart } from '../../carts/models/cart.model';
 
 @ObjectType()
 export class User {
@@ -23,4 +24,7 @@ export class User {
 
   @Field(() => [Role], { description: 'List of roles' })
   public roles: Role[];
+
+  @Field(() => Cart, { description: 'Cart', nullable: true })
+  public cart: Cart | null;
 }

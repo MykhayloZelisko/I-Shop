@@ -15,6 +15,9 @@
       @if (popup.popupType === popupEnum.Catalog) {
         <app-catalog [dialog]="popup"></app-catalog>
       }
+      @if (popup.popupType === popupEnum.Cart) {
+        <app-cart [dialog]="popup"></app-cart>
+      }
     }
 
     <router-outlet></router-outlet>

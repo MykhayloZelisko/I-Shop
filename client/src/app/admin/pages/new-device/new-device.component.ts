@@ -127,7 +127,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         requiredValidator(),
         positiveNumberValidator(),
       ]),
-      count: this.fb.nonNullable.control<number | null>(null, [
+      quantity: this.fb.nonNullable.control<number | null>(null, [
         requiredValidator(),
         positiveNumberValidator(),
         intRangeValidator(),
@@ -349,7 +349,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       const device: CreateDeviceInterface = {
         brandId: formData.brandId,
         categoryId: formData.categoryId,
-        count: Number(formData.count),
+        quantity: Number(formData.quantity),
         deviceName: formData.deviceName,
         images: formData.base64images,
         price: Number(formData.price),

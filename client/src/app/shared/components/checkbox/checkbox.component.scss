@@ -1,0 +1,16 @@
+@import 'variables';
+@import 'mixins';
+
+.checkbox {
+  &__icon {
+    @include icon-style($size: 24px, $lift: false);
+  }
+
+  &__input {
+    display: none;
+  }
+
+  &__label {
+    cursor: pointer;
+  }
+}

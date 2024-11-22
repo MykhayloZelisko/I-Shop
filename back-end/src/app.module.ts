@@ -19,6 +19,8 @@ import { CPropertiesGroupsModule } from './c-properties-groups/c-properties-grou
 import { CommonModule } from './common/common.module';
 import { CommentsModule } from './comments/comments.module';
 import { RatingsModule } from './ratings/ratings.module';
+import { CartsModule } from './carts/carts.module';
+import { CartDevicesModule } from './cart-devices/cart-devices.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { RatingsModule } from './ratings/ratings.module';
     CommonModule,
     CommentsModule,
     RatingsModule,
+    CartsModule,
+    CartDevicesModule,
   ],
 })
 export class AppModule {}

@@ -6,6 +6,7 @@ import { State } from '../../reducers';
 import { CartActions } from '../actions/cart.actions';
 import {
   catchError,
+  debounceTime,
   map,
   mergeMap,
   of,
@@ -141,6 +142,7 @@ export class CartEffects {
   public updateCartDevice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CartActions.updateCartDevice),
+      debounceTime(500),
       tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
         this.cartsService.updateCartDevice(action.id, action.device).pipe(

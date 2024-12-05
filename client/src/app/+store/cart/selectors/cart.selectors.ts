@@ -30,7 +30,7 @@ export const selectEntitiesCDevices = cartDevicesFeature.selectEntities;
 
 export const selectIdsCDevices = cartDevicesFeature.selectIds;
 
-export const selectTotalCDevices = cartDevicesFeature.selectTotal;
+export const selectTotalUniqueCDevices = cartDevicesFeature.selectTotal;
 
 export const selectCartId = createSelector(
   selectCartState,
@@ -53,10 +53,24 @@ export const selectDeviceInCart = (
     },
   );
 
-export const selectOrderedItemsCount = createSelector(
+export const selectUniqueOrderedItemsCount = createSelector(
   selectAllCDevices,
   (devices: CartDeviceInterface[]) =>
     devices.filter((device: CartDeviceInterface) => device.isInOrder).length,
+);
+
+export const selectTotalCDevices = createSelector(
+  selectAllCDevices,
+  (devices: CartDeviceInterface[]) =>
+    devices.reduce((acc, device) => acc + device.quantity, 0),
+);
+
+export const selectOrderedItemsCount = createSelector(
+  selectAllCDevices,
+  (devices: CartDeviceInterface[]) =>
+    devices
+      .filter((device) => device.isInOrder)
+      .reduce((acc, device) => acc + device.quantity, 0),
 );
 
 export const selectCartInfo = createSelector(

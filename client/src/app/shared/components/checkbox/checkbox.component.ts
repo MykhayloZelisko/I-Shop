@@ -59,7 +59,7 @@ export class CheckboxComponent
   }
 
   public writeValue(_: boolean | null): void {
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   public changeValue(event: Event): void {

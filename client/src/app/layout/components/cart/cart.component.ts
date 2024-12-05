@@ -19,8 +19,8 @@ import {
   selectAllCDevices,
   selectCartId,
   selectIdsCDevices,
-  selectOrderedItemsCount,
-  selectTotalCDevices,
+  selectUniqueOrderedItemsCount,
+  selectTotalUniqueCDevices,
   selectTotalPrice,
 } from '../../../+store/cart/selectors/cart.selectors';
 import { AsyncPipe } from '@angular/common';
@@ -68,8 +68,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.selectAllCtrl = this.fb.control<boolean | null>(null);
-    this.totalCount$ = this.store.select(selectTotalCDevices);
-    this.orderedCount$ = this.store.select(selectOrderedItemsCount);
+    this.totalCount$ = this.store.select(selectTotalUniqueCDevices);
+    this.orderedCount$ = this.store.select(selectUniqueOrderedItemsCount);
     this.devices$ = this.store.select(selectAllCDevices);
     this.devicesIds$ = this.store.select(selectIdsCDevices);
     this.totalPrice$ = this.store.select(selectTotalPrice);

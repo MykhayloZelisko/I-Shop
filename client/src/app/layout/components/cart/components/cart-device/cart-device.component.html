@@ -26,7 +26,7 @@
     <div class="cart-device__counter">
       <button
         class="cart-device__button"
-        [disabled]="device.quantity === 1"
+        [disabled]="isMinQuantityReached"
         (click)="changeQuantity(-1)"
       >
         <svg-icon
@@ -44,7 +44,7 @@
       />
       <button
         class="cart-device__button"
-        [disabled]="device.quantity === device.device.quantity"
+        [disabled]="isMaxQuantityReached"
         (click)="changeQuantity(1)"
       >
         <svg-icon

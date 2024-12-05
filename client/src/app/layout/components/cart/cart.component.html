@@ -42,7 +42,7 @@
         }
         @if (devices.length) {
           <div class="cart__devices">
-            @for (device of devices; track device) {
+            @for (device of devices; track device.id) {
               <app-cart-device
                 [device]="device"
                 [cartId$]="cartId$"
@@ -71,7 +71,13 @@
             }
           </div>
         } @else {
-          <p>Cart is empty</p>
+          <div class="cart__empty">
+            <svg-icon
+              class="cart__icon--large"
+              src="assets/images/shopping-cart-icon.svg"
+            ></svg-icon>
+            <p class="cart__empty-text">Кошик порожній</p>
+          </div>
         }
       }
     </div>

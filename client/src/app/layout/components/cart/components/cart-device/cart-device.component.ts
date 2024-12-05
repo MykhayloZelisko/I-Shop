@@ -3,7 +3,9 @@ import {
   Component,
   inject,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { CartDeviceInterface } from '../../../../../shared/models/interfaces/cart-device.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -31,12 +33,16 @@ import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
   styleUrl: './cart-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartDeviceComponent implements OnInit {
+export class CartDeviceComponent implements OnInit, OnChanges {
   @Input({ required: true }) public device!: CartDeviceInterface;
 
   @Input({ required: true }) public cartId$!: Observable<string | null>;
 
   public cartDeviceForm!: FormGroup<CartDeviceFormInterface>;
+
+  public isMaxQuantityReached = false;
+
+  public isMinQuantityReached = false;
 
   private fb = inject(FormBuilder);
 
@@ -46,6 +52,28 @@ export class CartDeviceComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initForm();
+    this.updateQuantityStatus();
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['device'] && !changes['device'].firstChange) {
+      this.cartDeviceForm.controls.isInOrder.setValue(this.device.isInOrder);
+    }
+  }
+
+  public updateQuantityStatus(): void {
+    const control = this.cartDeviceForm.controls.quantity;
+    const value = control.value;
+    const maxQuantity = this.device.device.quantity;
+
+    if (!value || value <= 0) {
+      control.setValue(1);
+    } else if (value > maxQuantity) {
+      control.setValue(maxQuantity);
+    }
+
+    this.isMaxQuantityReached = control.value >= maxQuantity;
+    this.isMinQuantityReached = control.value <= 1;
   }
 
   public initForm(): void {
@@ -56,17 +84,7 @@ export class CartDeviceComponent implements OnInit {
   }
 
   public onInput(): void {
-    const maxQuantity = this.device.device.quantity;
-    const control = this.cartDeviceForm.controls.quantity;
-    if (control) {
-      const value = control.value;
-      if (!value) {
-        control.setValue(1);
-      }
-      if (value > maxQuantity) {
-        control.setValue(maxQuantity);
-      }
-    }
+    this.updateQuantityStatus();
     this.submitData();
   }
 
@@ -94,6 +112,7 @@ export class CartDeviceComponent implements OnInit {
   public changeQuantity(value: 1 | -1): void {
     const control = this.cartDeviceForm.controls.quantity;
     control.setValue(control.value + value);
+    this.updateQuantityStatus();
     this.submitData();
   }
 

@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@use 'mixins';
+@use 'variables';
 
 :host {
   flex: 1;
@@ -23,11 +23,16 @@
   }
 
   &__icon {
-    @include icon-style($brown-2, 24px);
+    @include mixins.icon-style(variables.$brown-2, 24px);
   }
 
   &__button {
-    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+    @include mixins.icon-button-style(
+      40px,
+      variables.$white-2,
+      5px,
+      variables.$blue-3
+    );
   }
 
   &__buttons {
@@ -54,7 +59,7 @@
     cursor: pointer;
 
     &--border {
-      border: 1px solid $blue-1;
+      border: 1px solid variables.$blue-1;
     }
   }
 }

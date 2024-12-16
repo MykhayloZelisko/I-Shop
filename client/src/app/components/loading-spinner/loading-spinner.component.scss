@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 @keyframes spinner {
   0% {
@@ -38,7 +38,7 @@
     top: 48px;
     position: absolute;
     animation: spinner linear 1s infinite;
-    background: $blue-1;
+    background: variables.$blue-1;
     width: 12px;
     height: 24px;
     border-radius: 6px / 12px;

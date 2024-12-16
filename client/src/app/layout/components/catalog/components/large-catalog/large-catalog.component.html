@@ -13,7 +13,7 @@
                 class="large-catalog__icon"
                 [ngClass]="{
                   'large-catalog__icon--active':
-                    category.id === currentCategory.id
+                    category.id === currentCategory.id,
                 }"
                 [src]="category.icon"
               ></svg-icon>
@@ -22,7 +22,7 @@
               class="large-catalog__core-category-name"
               [ngClass]="{
                 'large-catalog__core-category-name--active':
-                  category.id === currentCategory.id
+                  category.id === currentCategory.id,
               }"
               >{{ category.categoryName }}</span
             >
@@ -32,7 +32,7 @@
               class="large-catalog__icon--right"
               [ngClass]="{
                 'large-catalog__icon--active':
-                  category.id === currentCategory.id
+                  category.id === currentCategory.id,
               }"
               src="assets/images/line-angle-right-icon.svg"
             ></svg-icon>

@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 .catalog {
   top: 0;
@@ -7,7 +7,7 @@
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  background-color: $brown-3;
+  background-color: variables.$brown-3;
   display: flex;
   justify-content: center;
   align-items: flex-start;

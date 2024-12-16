@@ -35,7 +35,7 @@
     <div
       class="c-properties-group-item"
       [ngClass]="{
-        'c-properties-group-item--empty': !group.hasProperties
+        'c-properties-group-item--empty': !group.hasProperties,
       }"
     >
       <p class="c-properties-group-item__name">
@@ -72,10 +72,7 @@
       dialog.popupType === dialogEnum.CProperties &&
       currentGroup.id === group.id
     ) {
-      <app-c-properties-dialog
-        [dialog]="dialog"
-        [group]="group"
-      ></app-c-properties-dialog>
+      <app-c-properties-dialog [dialog]="dialog" [group]="group" />
     }
   }
 }

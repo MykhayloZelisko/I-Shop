@@ -68,7 +68,9 @@ export class FileControlComponent
     this.onTouched = fn;
   }
 
-  public writeValue(): void {}
+  public writeValue(): void {
+    return;
+  }
 
   public ngOnInit(): void {
     if (this.file) {
@@ -80,7 +82,7 @@ export class FileControlComponent
     const reader = new FileReader();
 
     reader.onload = (e: ProgressEvent<FileReader>): void => {
-      this.imageUrl = e.target!.result as string;
+      this.imageUrl = e.target ? (e.target.result as string) : '';
       if (this.file.type.startsWith('image')) {
         this.uploadFile.emit(this.imageUrl);
       }

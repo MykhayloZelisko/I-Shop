@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .category {
   padding: 12px;
@@ -7,7 +7,7 @@
   &__title {
     font-size: 36px;
     font-weight: bold;
-    font-family: $source;
+    font-family: variables.$source;
     margin: 12px 0 24px;
   }
 
@@ -29,14 +29,14 @@
   }
 
   &__link {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 18px;
     line-height: 1.5;
-    color: $blue-1;
+    color: variables.$blue-1;
     text-decoration: none;
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
       text-decoration: underline;
     }
 
@@ -48,7 +48,7 @@
   &__divider {
     height: 0;
     width: 100%;
-    border-top: 1px solid $gray-4;
+    border-top: 1px solid variables.$gray-4;
   }
 
   &__devices-filter-wrapper {
@@ -65,23 +65,23 @@
   }
 
   &__device {
-    border-right: 1px solid $gray-4;
-    border-bottom: 1px solid $gray-4;
+    border-right: 1px solid variables.$gray-4;
+    border-bottom: 1px solid variables.$gray-4;
     padding: 16px;
 
     &:hover {
       border: none;
-      box-shadow: 0 16px 16px $blue-3;
+      box-shadow: 0 16px 16px variables.$blue-3;
     }
   }
 
   &__device-name {
     font-size: 16px;
-    font-family: $source;
+    font-family: variables.$source;
   }
 
   &__icon {
-    @include icon-style($brown-1, 12px, false);
+    @include mixins.icon-style(variables.$brown-1, 12px, false);
   }
 }
 

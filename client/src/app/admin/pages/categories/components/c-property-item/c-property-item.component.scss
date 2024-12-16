@@ -1,15 +1,15 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .c-property-item {
   display: flex;
   gap: 12px;
   align-items: center;
   justify-content: space-between;
-  background-color: $blue-3;
-  font-family: $source;
+  background-color: variables.$blue-3;
+  font-family: variables.$source;
   border-radius: 5px;
-  color: $brown-1;
+  color: variables.$brown-1;
   font-size: 16px;
   padding: 5px 10px;
   min-height: 40px;
@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    background-color: $blue-3;
+    background-color: variables.$blue-3;
     border-radius: 5px;
   }
 
@@ -27,11 +27,11 @@
   }
 
   &__button {
-    @include icon-button-style(30px, transparent, $disabled: true);
+    @include mixins.icon-button-style(30px, transparent, $disabled: true);
 
     &:disabled,
     &:disabled:hover {
-      @include icon-style($gray-5);
+      @include mixins.icon-style(variables.$gray-5);
     }
   }
 
@@ -50,20 +50,20 @@
   }
 
   &__icon {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
 
     &--save:hover,
     &--edit:hover {
-      @include icon-style($blue-1);
+      @include mixins.icon-style(variables.$blue-1);
     }
 
     &--cancel:hover,
     &--delete:hover {
-      @include icon-style($red-1);
+      @include mixins.icon-style(variables.$red-1);
     }
   }
 
   &__input {
-    @include input-style(9px 12px);
+    @include mixins.input-style(9px 12px);
   }
 }

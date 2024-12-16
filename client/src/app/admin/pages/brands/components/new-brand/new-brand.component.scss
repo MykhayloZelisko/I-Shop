@@ -1,14 +1,19 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .new-brand {
-  font-family: $source;
+  font-family: variables.$source;
   display: flex;
   align-items: flex-end;
   gap: 10px;
 
   &__add-btn {
-    @include button-style($brown-1, $yellow, 10px 24px, $brown-2);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      10px 24px,
+      variables.$brown-2
+    );
   }
 
   &__input {

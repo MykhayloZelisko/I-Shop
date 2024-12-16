@@ -1,11 +1,17 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .paginator {
   margin-top: 36px;
 
   &__load-more {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2, true);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      8px 24px,
+      variables.$brown-2,
+      true
+    );
 
     width: 100%;
 
@@ -25,7 +31,7 @@
   }
 
   &__icon {
-    @include icon-style($brown-1, 12px, false);
+    @include mixins.icon-style(variables.$brown-1, 12px, false);
   }
 }
 
@@ -63,9 +69,9 @@
 
         & .p-paginator-current {
           order: 3;
-          font-family: $source;
+          font-family: variables.$source;
           font-size: 16px;
-          color: $brown-1;
+          color: variables.$brown-1;
         }
 
         & .p-paginator-prev {
@@ -80,36 +86,36 @@
     }
   }
 
-  .p-link {
-    font-family: $source;
-    font-size: 20px;
-    min-width: 40px;
-    height: 40px;
-    color: $brown-1;
+  .p-paginator-page {
+    border: none;
+    color: variables.$brown-1;
+    font-family: variables.$source;
+    font-size: 16px;
 
-    &:hover {
-      border: 1px solid $brown-1;
-      border-radius: 10px;
-      color: $blue-2;
+    &:not(.p-disabled, .p-paginator-page-selected):hover {
+      border: 1px solid variables.$brown-1;
       background-color: transparent;
+      color: variables.$brown-1;
     }
   }
 
-  .p-highlight {
-    border: 1px solid $brown-1;
-    border-radius: 10px;
-    color: $blue-1;
-    background-color: transparent;
+  .p-paginator-page.p-paginator-page-selected {
+    background-color: variables.$brown-4;
+
+    &:hover {
+      color: variables.$brown-1;
+    }
   }
 
   .p-paginator-first,
   .p-paginator-prev,
   .p-paginator-next,
   .p-paginator-last {
-    &:hover {
-      & .p-paginator-icon {
-        @include icon-style($blue-1, $lift: false);
-      }
+    @include mixins.icon-style(variables.$brown-1);
+
+    &:not(.p-disabled):hover {
+      border: 1px solid variables.$brown-1;
+      background-color: transparent;
     }
   }
 }

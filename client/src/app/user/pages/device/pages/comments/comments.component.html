@@ -8,7 +8,7 @@
         [rating]="device.rating"
         [votes]="device.votes"
         [deviceId]="device.id"
-      ></app-rating>
+      />
     </div>
     <div class="comments__inner">
       <div class="comments__main">
@@ -41,7 +41,7 @@
                     [comment]="comment"
                     [user$]="user$"
                     [commentsStatus$]="commentsStatus$"
-                  ></app-comment-item>
+                  />
                 }
                 @if (commentsStatus$ | async; as status) {
                   @if (status.cursor) {
@@ -57,23 +57,14 @@
             </div>
           } @else {
             @if (user$ | async; as user) {
-              <app-comment-form
-                [deviceId]="device.id"
-                [userId]="user.id"
-              ></app-comment-form>
+              <app-comment-form [deviceId]="device.id" [userId]="user.id" />
             } @else {
-              <app-comment-form
-                [deviceId]="device.id"
-                [userId]="null"
-              ></app-comment-form>
+              <app-comment-form [deviceId]="device.id" [userId]="null" />
             }
           }
         }
       </div>
-      <app-device-aside
-        class="comments__aside"
-        [device]="device"
-      ></app-device-aside>
+      <app-device-aside class="comments__aside" [device]="device" />
     </div>
   </div>
 
@@ -84,7 +75,7 @@
           [dialog]="dialog"
           [deviceId]="device.id"
           [userId]="user.id"
-        ></app-comment-dialog>
+        />
       }
     }
   }

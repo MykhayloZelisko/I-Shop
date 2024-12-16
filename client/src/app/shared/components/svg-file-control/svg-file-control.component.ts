@@ -78,7 +78,9 @@ export class SvgFileControlComponent
     this.onTouched = fn;
   }
 
-  public writeValue(): void {}
+  public writeValue(): void {
+    // Required for ControlValueAccessor but not implemented here
+  }
 
   public triggerFileInput(): void {
     this.fileUpload.nativeElement.click();

@@ -15,7 +15,7 @@
           @if (totalCount > 1) {
             <div class="cart__devices-header">
               <div class="cart__select-all">
-                <app-checkbox [formControl]="selectAllCtrl"></app-checkbox>
+                <app-checkbox [formControl]="selectAllCtrl" />
                 <p class="cart__select-all-text">
                   Вибрано {{ orderedCount$ | async }} з {{ totalCount }}
                 </p>
@@ -43,10 +43,7 @@
         @if (devices.length) {
           <div class="cart__devices">
             @for (device of devices; track device.id) {
-              <app-cart-device
-                [device]="device"
-                [cartId$]="cartId$"
-              ></app-cart-device>
+              <app-cart-device [device]="device" [cartId$]="cartId$" />
             }
           </div>
           <div class="cart__footer">

@@ -1,25 +1,30 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .new-category {
   &__button {
-    @include button-style($blue-1, $white-1, 10px 18px, $blue-2);
+    @include mixins.button-style(
+      variables.$blue-1,
+      variables.$white-1,
+      10px 18px,
+      variables.$blue-2
+    );
 
     width: 100%;
   }
 
   &__input {
-    @include input-style(9px 12px);
+    @include mixins.input-style(9px 12px);
   }
 
   &__icon-button {
-    @include icon-button-style(30px, transparent, $disabled: true);
+    @include mixins.icon-button-style(30px, transparent, $disabled: true);
 
     &:disabled {
       & .new-category {
         &__icon {
           &--save {
-            @include icon-style($gray-5);
+            @include mixins.icon-style(variables.$gray-5);
           }
         }
       }
@@ -27,14 +32,14 @@
   }
 
   &__icon {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
 
     &--save:hover {
-      @include icon-style($blue-1);
+      @include mixins.icon-style(variables.$blue-1);
     }
 
     &--cancel:hover {
-      @include icon-style($red-1);
+      @include mixins.icon-style(variables.$red-1);
     }
   }
 
@@ -43,7 +48,7 @@
   }
 
   &__wrapper {
-    background-color: $red-2;
+    background-color: variables.$red-2;
     display: flex;
     gap: 5px;
     align-items: center;

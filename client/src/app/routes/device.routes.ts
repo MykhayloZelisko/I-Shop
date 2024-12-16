@@ -8,7 +8,6 @@ export const deviceRoutes: Routes = [
       import(
         '../user/pages/device/pages/about-device/about-device.component'
       ).then((m) => m.AboutDeviceComponent),
-    pathMatch: 'full',
   },
   {
     path: DeviceRouteNameEnum.Comments,

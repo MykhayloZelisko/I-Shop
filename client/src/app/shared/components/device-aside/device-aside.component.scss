@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@use 'variables';
+@use 'mixins';
 
 .device-aside {
   flex: 1;
@@ -9,7 +9,7 @@
   position: sticky;
   top: 140px;
   align-self: flex-start;
-  background-color: $white-1;
+  background-color: variables.$white-1;
 
   &__device-photo {
     aspect-ratio: 1;
@@ -20,7 +20,7 @@
   &__device {
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid $gray-4;
+    border: 1px solid variables.$gray-4;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -29,14 +29,14 @@
   &__buying {
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid $gray-4;
+    border: 1px solid variables.$gray-4;
     display: flex;
     gap: 12px;
     flex-direction: column;
   }
 
   &__device-title {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
     line-height: 1.2;
   }
@@ -50,8 +50,8 @@
   &__price {
     font-size: 28px;
     font-weight: bold;
-    font-family: $source;
-    color: $brown-1;
+    font-family: variables.$source;
+    color: variables.$brown-1;
     white-space: nowrap;
   }
 
@@ -61,19 +61,29 @@
   }
 
   &__icon-button {
-    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+    @include mixins.icon-button-style(
+      40px,
+      variables.$white-2,
+      5px,
+      variables.$blue-3
+    );
   }
 
   &__icon {
-    @include icon-style($brown-2, 24px);
+    @include mixins.icon-style(variables.$brown-2, 24px);
 
     &--yellow {
-      @include icon-style($yellow);
+      @include mixins.icon-style(variables.$yellow);
     }
   }
 
   &__button {
-    @include button-style($brown-1, $yellow, 0 12px, $brown-2);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      0 12px,
+      variables.$brown-2
+    );
 
     display: flex;
     align-items: center;
@@ -82,20 +92,30 @@
     height: 40px;
 
     &--credit {
-      @include button-style($blue-1, $white-1, 10px 12px, $blue-2);
+      @include mixins.button-style(
+        variables.$blue-1,
+        variables.$white-1,
+        10px 12px,
+        variables.$blue-2
+      );
 
       white-space: nowrap;
     }
 
     &--cart {
-      @include button-style($white-1, $brown-1, 6px 12px, $white-1);
+      @include mixins.button-style(
+        variables.$white-1,
+        variables.$brown-1,
+        6px 12px,
+        variables.$white-1
+      );
 
       &:hover {
-        color: $blue-2;
+        color: variables.$blue-2;
 
         .device-aside {
           &__button-text {
-            border-bottom: 1px dotted $blue-2;
+            border-bottom: 1px dotted variables.$blue-2;
           }
         }
       }
@@ -104,12 +124,12 @@
 
   &__button-text {
     line-height: 1.2;
-    border-bottom: 1px dotted $brown-1;
+    border-bottom: 1px dotted variables.$brown-1;
     white-space: nowrap;
   }
 
   &__multicolor-icon {
-    @include icon-style($size: 24px);
+    @include mixins.icon-style($size: 24px);
   }
 }
 
@@ -120,7 +140,7 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 12px 24px;
-    box-shadow: 0 -2px 8px $blue-3;
+    box-shadow: 0 -2px 8px variables.$blue-3;
 
     &__device-photo {
       width: 40px;

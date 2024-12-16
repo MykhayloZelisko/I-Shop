@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { AsyncPipe } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
@@ -21,7 +21,7 @@ import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 @Component({
   selector: 'app-main-menu',
   standalone: true,
-  imports: [AsyncPipe, RouterLink, SvgIconComponent, ClickOutsideDirective],
+  imports: [AsyncPipe, SvgIconComponent, ClickOutsideDirective],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,22 +1,22 @@
 @if (cascadeCategories$ | async; as category) {
   <div class="category">
-    <app-breadcrumbs></app-breadcrumbs>
+    <app-breadcrumbs />
     <h1 class="category__title">{{ category.categoryName }}</h1>
     <div class="category__subcategories">
       @for (subCategory of category.children; track subCategory) {
-        <app-sub-category-item [category]="subCategory"></app-sub-category-item>
+        <app-sub-category-item [category]="subCategory" />
       }
     </div>
     <!--    <div>Container with filtering and sorting</div>-->
     <div class="category__divider"></div>
     @if ((hasChildChain$ | async) === false) {
       <div class="category__devices-filter-wrapper">
-        <app-filter class="category__devices-filter"></app-filter>
+        <app-filter class="category__devices-filter" />
         @if (devices$ | async; as devices) {
           <div class="category__devices-wrapper">
             <div class="category__devices">
               @for (device of devices; track device) {
-                <app-device-item [device]="device"></app-device-item>
+                <app-device-item [device]="device" />
               }
             </div>
             @if (devices.length) {
@@ -24,7 +24,7 @@
                 <app-paginator
                   [paginationParams]="paginationParams"
                   [routerParams]="routerParams"
-                ></app-paginator>
+                />
               }
             }
           </div>
@@ -33,5 +33,5 @@
     }
   </div>
 } @else {
-  <app-page-not-found></app-page-not-found>
+  <app-page-not-found />
 }

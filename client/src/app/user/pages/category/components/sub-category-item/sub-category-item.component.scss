@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 .sub-category-item {
   padding-bottom: 10px;
@@ -11,14 +11,14 @@
   }
 
   &__link {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 18px;
     line-height: 1.5;
-    color: $blue-1;
+    color: variables.$blue-1;
     text-decoration: none;
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
       text-decoration: underline;
     }
 

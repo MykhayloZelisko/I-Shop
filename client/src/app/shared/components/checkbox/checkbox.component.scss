@@ -1,9 +1,9 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .checkbox {
   &__icon {
-    @include icon-style($size: 24px, $lift: false);
+    @include mixins.icon-style($size: 24px, $lift: false);
   }
 
   &__input {

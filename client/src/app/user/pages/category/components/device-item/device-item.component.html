@@ -14,7 +14,7 @@
       [rating]="device.rating"
       [votes]="device.votes"
       [deviceId]="device.id"
-    ></app-rating>
+    />
     <div class="device-item__price-wrapper">
       <p class="device-item__price">{{ device.price }} &#8372;</p>
       @if (isCartDevice$ | async) {

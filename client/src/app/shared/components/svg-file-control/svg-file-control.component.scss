@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .svg-file-control {
   display: flex;
@@ -11,26 +11,26 @@
     width: 40px;
     height: 40px;
     box-sizing: border-box;
-    border: 1px solid $brown-2;
+    border: 1px solid variables.$brown-2;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: $white-1;
+    background-color: variables.$white-1;
 
     &--invalid {
-      border: 1px solid $red-1;
+      border: 1px solid variables.$red-1;
     }
   }
 
   &__icon {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
   }
 
   &__icon-button {
-    @include icon-button-style(30px, transparent);
+    @include mixins.icon-button-style(30px, transparent);
 
     &:hover {
-      @include icon-style($blue-1);
+      @include mixins.icon-style(variables.$blue-1);
     }
   }
 

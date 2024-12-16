@@ -1,7 +1,7 @@
 <div class="new-category">
   @if (isNewCategory$ | async) {
     <div class="new-category__wrapper" [formGroup]="newCategoryForm">
-      <app-svg-file-control formControlName="icon"></app-svg-file-control>
+      <app-svg-file-control formControlName="icon" />
       <input
         class="new-category__input"
         type="text"

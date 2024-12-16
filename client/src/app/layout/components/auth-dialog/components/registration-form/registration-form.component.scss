@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .registration-form {
   display: flex;
@@ -14,28 +14,38 @@
   &__label {
     font-size: 14px;
     display: block;
-    font-family: $source;
+    font-family: variables.$source;
     font-weight: 600;
   }
 
   &__input {
-    @include input-style(9px 12px);
+    @include mixins.input-style(9px 12px);
 
     margin-top: 8px;
   }
 
   &__error {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 12px;
-    color: $red-1;
+    color: variables.$red-1;
     font-weight: 700;
   }
 
   &__button {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      8px 24px,
+      variables.$brown-2
+    );
 
     &--login {
-      @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
+      @include mixins.button-style(
+        variables.$blue-1,
+        variables.$white-1,
+        8px 24px,
+        variables.$blue-2
+      );
     }
   }
 }

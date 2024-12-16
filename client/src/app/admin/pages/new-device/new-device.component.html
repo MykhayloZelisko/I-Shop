@@ -5,7 +5,7 @@
       placeholder="Введіть назву товару"
       formControlName="deviceName"
       [withErrors]="true"
-    ></app-input>
+    />
     <div class="new-device__field">
       <label class="new-device__label" for="price">Ціна в гривнях</label>
       <input
@@ -18,6 +18,7 @@
         formControlName="price"
         type="text"
         placeholder="Ціна в гривнях"
+        (blur)="markAsDirtyCtrl('price')"
       />
       @if (
         newDeviceForm.controls.price.invalid &&
@@ -37,6 +38,7 @@
         formControlName="quantity"
         type="text"
         placeholder="Кількість"
+        (blur)="markAsDirtyCtrl('quantity')"
       />
       @if (
         newDeviceForm.controls.quantity.invalid &&
@@ -51,7 +53,7 @@
         <label class="new-device__label" for="brand-id">Бренд</label>
         <p-dropdown
           [ngClass]="{
-            'invalid-dropdown': newDeviceForm.controls.brandId.invalid
+            'invalid-dropdown': newDeviceForm.controls.brandId.invalid,
           }"
           id="brand-id"
           [options]="brands"
@@ -74,14 +76,14 @@
         <label class="new-device__label" for="category-id">Категорія</label>
         <p-cascadeSelect
           [ngClass]="{
-            'invalid-dropdown': newDeviceForm.controls.categoryId.invalid
+            'invalid-dropdown': newDeviceForm.controls.categoryId.invalid,
           }"
           id="category-id"
           [options]="categories"
           optionLabel="categoryName"
           optionValue="id"
           optionGroupLabel="categoryName"
-          [optionGroupChildren]="['children', 'children']"
+          [optionGroupChildren]="optionGroupChildrenValue"
           placeholder="Виберіть категорію"
           formControlName="categoryId"
           (onChange)="changeValue($event)"
@@ -97,9 +99,10 @@
       </div>
     }
     <div>
-      <label class="new-device__label">Зображення</label>
+      <label class="new-device__label" for="file">Зображення</label>
       <input
         #input
+        id="file"
         type="file"
         accept="image/*"
         multiple
@@ -118,14 +121,14 @@
             <div
               class="new-device__file"
               [ngClass]="{
-                'new-device__file--invalid': getImagesCtrl().at(index).invalid
+                'new-device__file--invalid': getImagesCtrl().at(index).invalid,
               }"
             >
               <app-file-control
                 [file]="file"
                 [formControlName]="index"
                 (uploadFile)="setBase64Image($event, index)"
-              ></app-file-control>
+              />
               <button
                 class="new-device__delete-button"
                 (click)="deleteImageCtrl(index)"
@@ -156,7 +159,7 @@
               class="new-device__sub-title"
               [ngClass]="{
                 'new-device__sub-title--invalid':
-                  !getPropertiesCtrl(groupIndex).length
+                  !getPropertiesCtrl(groupIndex).length,
               }"
             >
               {{ group.groupName }}
@@ -179,7 +182,7 @@
                       getPropertyCtrl(groupIndex, propertyIndex)
                     "
                     [withErrors]="true"
-                  ></app-multi-input>
+                  />
                 </ng-container>
               }
             </ng-container>

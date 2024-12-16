@@ -10,14 +10,14 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DndDirective } from '../../directives/dnd.directive';
-import { JsonPipe, NgClass, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { ImageConfigInterface } from '../../models/interfaces/image-config.interface';
 import { GetControlDirective } from '../../directives/get-control.directive';
 
 @Component({
   selector: 'app-dnd-file-control',
   standalone: true,
-  imports: [DndDirective, JsonPipe, NgStyle, NgClass],
+  imports: [DndDirective, NgStyle, NgClass],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -82,7 +82,9 @@ export class DndFileControlComponent
     this.onTouched = fn;
   }
 
-  public writeValue(): void {}
+  public writeValue(): void {
+    return;
+  }
 
   public setInputFile(files: FileList): void {
     const filesArray: File[] = [];

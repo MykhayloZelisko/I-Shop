@@ -6,19 +6,19 @@
       inputType="email"
       formControlName="email"
       [withErrors]="true"
-    ></app-input>
+    />
     <app-input
       label="Ім'я"
       placeholder="Введіть ім'я"
       formControlName="firstName"
       [withErrors]="true"
-    ></app-input>
+    />
     <app-input
       label="Прізвище"
       placeholder="Введіть прізвище"
       formControlName="lastName"
       [withErrors]="true"
-    ></app-input>
+    />
     <div class="registration-form__field">
       <label class="registration-form__label" for="phone">Номер телефону</label>
       <input
@@ -32,9 +32,9 @@
         [showMaskTyped]="true"
       />
       @if (
-        registrationForm.controls['phone'].invalid &&
-        (registrationForm.controls['phone'].dirty ||
-          registrationForm.controls['phone'].touched)
+        registrationForm.controls.phone.invalid &&
+        (registrationForm.controls.phone.dirty ||
+          registrationForm.controls.phone.touched)
       ) {
         <p class="registration-form__error">{{ showMessage('phone') }}</p>
       }
@@ -45,7 +45,7 @@
       inputType="password"
       formControlName="password"
       [withErrors]="true"
-    ></app-input>
+    />
   </div>
   <button class="registration-form__button" (click)="registration()">
     Зареєструватися

@@ -86,6 +86,9 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
   @ViewChildren(MultiInputComponent)
   public multiInputs!: QueryList<MultiInputComponent>;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public readonly optionGroupChildrenValue: any = ['children', 'children'];
+
   public newDeviceForm!: FormGroup<NewDeviceFormInterface>;
 
   public brands$!: Observable<BrandInterface[]>;
@@ -406,5 +409,9 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       }
     }
     this.input.markAsDirty();
+  }
+
+  public markAsDirtyCtrl(ctrlName: keyof NewDeviceFormInterface): void {
+    this.newDeviceForm.controls[ctrlName].markAsDirty();
   }
 }

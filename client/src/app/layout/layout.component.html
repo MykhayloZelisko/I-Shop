@@ -1,5 +1,5 @@
 <div class="layout">
-  <app-header [user$]="user$" [isAdmin$]="isAdmin$"></app-header>
+  <app-header [user$]="user$" [isAdmin$]="isAdmin$" />
   <div class="layout__container">
     @if (popup$ | async; as popup) {
       @if (
@@ -7,20 +7,20 @@
         popup.popupType === popupEnum.Registration ||
         popup.popupType === popupEnum.RestorePassword
       ) {
-        <app-auth-dialog [dialog]="popup"></app-auth-dialog>
+        <app-auth-dialog [dialog]="popup" />
       }
       @if (popup.popupType === popupEnum.MainMenu) {
-        <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$"></app-main-menu>
+        <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$" />
       }
       @if (popup.popupType === popupEnum.Catalog) {
-        <app-catalog [dialog]="popup"></app-catalog>
+        <app-catalog [dialog]="popup" />
       }
       @if (popup.popupType === popupEnum.Cart) {
-        <app-cart [dialog]="popup"></app-cart>
+        <app-cart [dialog]="popup" />
       }
     }
 
-    <router-outlet></router-outlet>
+    <router-outlet />
   </div>
 </div>
-<app-footer></app-footer>
+<app-footer />

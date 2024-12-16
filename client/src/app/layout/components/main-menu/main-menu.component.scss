@@ -1,11 +1,11 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .main-menu {
-  background-color: $white-1;
+  background-color: variables.$white-1;
   box-shadow:
-    0 1px 2px 0 $gray-1,
-    0 2px 10px 0 $gray-2;
+    0 1px 2px 0 variables.$gray-1,
+    0 2px 10px 0 variables.$gray-2;
   width: 320px;
   height: 100%;
 
@@ -16,11 +16,11 @@
     width: 100vw;
     height: 100vh;
     z-index: 1000;
-    background-color: $brown-3;
+    background-color: variables.$brown-3;
   }
 
   &__logo-icon {
-    @include icon-style($size: 30px);
+    @include mixins.icon-style($size: 30px);
   }
 
   &__logo {
@@ -32,44 +32,44 @@
   }
 
   &__logo-text {
-    font-family: $source;
+    font-family: variables.$source;
     font-weight: bolder;
     font-size: 30px;
-    background: linear-gradient(to right, $yellow, $blue-1);
+    background: linear-gradient(to right, variables.$yellow, variables.$blue-1);
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: $yellow;
+    color: variables.$yellow;
     white-space: nowrap;
   }
 
   &__logo-wrapper {
     padding: 16px 16px 8px;
-    background-color: $brown-1;
+    background-color: variables.$brown-1;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
   &__close {
-    @include icon-button-style(24px, transparent, 12px);
+    @include mixins.icon-button-style(24px, transparent, 12px);
   }
 
   &__close-icon {
-    @include icon-style($yellow, 24px);
+    @include mixins.icon-style(variables.$yellow, 24px);
 
     &:hover {
-      @include icon-style($red-1);
+      @include mixins.icon-style(variables.$red-1);
     }
   }
 
   &__login-wrapper {
-    font-family: $source;
+    font-family: variables.$source;
     padding: 8px 16px 16px;
-    background-color: $brown-1;
+    background-color: variables.$brown-1;
     display: flex;
     align-items: center;
     gap: 18px;
-    color: $yellow;
+    color: variables.$yellow;
   }
 
   &__login {
@@ -84,11 +84,11 @@
   }
 
   &__login-button {
-    @include button-style(
-      $brown-1,
-      $yellow,
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
       1px 6px,
-      $brown-2,
+      variables.$brown-2,
       $font-size: 14px
     );
   }
@@ -100,25 +100,25 @@
 
   &__login-divider {
     height: 20px;
-    border-left: 1px solid $yellow;
+    border-left: 1px solid variables.$yellow;
   }
 
   &__user {
     min-width: 40px;
     height: 40px;
     border-radius: 20px;
-    background-color: $yellow;
+    background-color: variables.$yellow;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   &__user-icon {
-    @include icon-style($brown-1, 24px, false);
+    @include mixins.icon-style(variables.$brown-1, 24px, false);
   }
 
   &__user-first-letter {
-    color: $brown-1;
+    color: variables.$brown-1;
     font-size: 24px;
   }
 
@@ -134,16 +134,16 @@
     padding: 2px 8px;
 
     &--underlined {
-      border-bottom: 1px solid $gray-4;
+      border-bottom: 1px solid variables.$gray-4;
     }
   }
 
   &__list-button {
-    @include button-style(
+    @include mixins.button-style(
       transparent,
-      $brown-1,
+      variables.$brown-1,
       9px 18px,
-      $brown-2,
+      variables.$brown-2,
       $border-radius: 10px,
       $font-size: 14px
     );
@@ -154,12 +154,12 @@
     gap: 18px;
 
     &:hover {
-      background-color: $brown-4;
+      background-color: variables.$brown-4;
     }
   }
 
   &__list-button-icon {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
   }
 }
 

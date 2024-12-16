@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .large-catalog {
   border-radius: 0 0 10px 10px;
@@ -9,10 +9,10 @@
   top: 66px;
   display: flex;
   flex-direction: row;
-  background-color: $white-1;
+  background-color: variables.$white-1;
   box-shadow:
-    0 1px 2px 0 $gray-1,
-    0 2px 10px 0 $gray-2;
+    0 1px 2px 0 variables.$gray-1,
+    0 2px 10px 0 variables.$gray-2;
   position: relative;
 
   &__core-categories {
@@ -33,13 +33,13 @@
 
     &::-webkit-scrollbar:vertical {
       width: 7px;
-      background-color: $white-1;
+      background-color: variables.$white-1;
     }
 
     &::-webkit-scrollbar-thumb {
       border-radius: 3px;
-      border: 2px solid $white-1 !important;
-      background-color: $brown-1;
+      border: 2px solid variables.$white-1 !important;
+      background-color: variables.$brown-1;
     }
   }
 
@@ -48,16 +48,16 @@
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
-    color: $black;
+    color: variables.$black;
     width: 100%;
   }
 
   &__core-category-name {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
 
     &--active {
-      color: $blue-2;
+      color: variables.$blue-2;
     }
   }
 
@@ -69,14 +69,14 @@
   }
 
   &__icon {
-    @include icon-style($size: 24px);
+    @include mixins.icon-style($size: 24px);
 
     &--right {
-      @include icon-style($size: 10px, $lift: false);
+      @include mixins.icon-style($size: 10px, $lift: false);
     }
 
     &--active {
-      @include icon-style($blue-2, $lift: false);
+      @include mixins.icon-style(variables.$blue-2, $lift: false);
     }
   }
 
@@ -114,36 +114,36 @@
 
     &::-webkit-scrollbar:vertical {
       width: 7px;
-      background-color: $white-1;
+      background-color: variables.$white-1;
     }
 
     &::-webkit-scrollbar-thumb {
       border-radius: 3px;
-      border: 2px solid $white-1 !important;
-      background-color: $brown-1;
+      border: 2px solid variables.$white-1 !important;
+      background-color: variables.$brown-1;
     }
   }
 
   &__sub-category {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 18px;
     line-height: 1.5;
-    color: $blue-1;
+    color: variables.$blue-1;
     break-inside: avoid;
     margin-bottom: 8px;
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
     }
   }
 
   &__sub-sub-category {
     font-size: 16px;
     line-height: 1.2;
-    color: $black;
+    color: variables.$black;
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
     }
   }
 }

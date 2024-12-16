@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@use 'variables';
+@use 'mixins';
 
 .rating-control {
   display: flex;
@@ -14,10 +14,10 @@
   }
 
   &__icon {
-    @include icon-style($gray-5);
+    @include mixins.icon-style(variables.$gray-5);
 
     &--active {
-      @include icon-style($brown-1);
+      @include mixins.icon-style(variables.$brown-1);
     }
   }
 
@@ -31,7 +31,7 @@
   }
 
   &__title {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 14px;
   }
 
@@ -44,9 +44,9 @@
   }
 
   &__error {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 12px;
-    color: $red-1;
+    color: variables.$red-1;
     font-weight: 700;
 
     &--empty {

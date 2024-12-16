@@ -1,17 +1,17 @@
-import { MenuItem } from 'primeng/api';
 import { DeviceRouteNameEnum } from '../enums/device-route-name.enum';
+import { TabMenuItemInterface } from '../interfaces/tab-menu-item.interface';
 
-export const DEVICE_MENU: MenuItem[] = [
+export const DEVICE_MENU: TabMenuItemInterface[] = [
   {
     label: 'Усе про товар',
-    routerLink: DeviceRouteNameEnum.About,
+    route: DeviceRouteNameEnum.About,
   },
   {
     label: 'Характеристики',
-    routerLink: DeviceRouteNameEnum.Properties,
+    route: DeviceRouteNameEnum.Properties,
   },
   {
     label: '',
-    routerLink: DeviceRouteNameEnum.Comments,
+    route: DeviceRouteNameEnum.Comments,
   },
 ];

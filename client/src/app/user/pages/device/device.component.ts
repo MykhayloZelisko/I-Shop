@@ -6,7 +6,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TabMenuModule } from 'primeng/tabmenu';
 import { DEVICE_MENU } from '../../../shared/models/constants/device-menu';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -29,7 +28,6 @@ import { TabMenuComponent } from '../../../shared/components/tab-menu/tab-menu.c
   standalone: true,
   imports: [
     RouterOutlet,
-    TabMenuModule,
     PageNotFoundComponent,
     AsyncPipe,
     BreadcrumbsComponent,

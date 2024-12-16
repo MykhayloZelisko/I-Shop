@@ -79,7 +79,7 @@ export class SvgFileControlComponent
   }
 
   public writeValue(): void {
-    // Required for ControlValueAccessor but not implemented here
+    return;
   }
 
   public triggerFileInput(): void {

@@ -70,8 +70,11 @@ export class InputComponent
   }
 
   public writeValue(value: string): void {
-    this.internalValue = value;
-    this.cdr.markForCheck();
+    if (this.input) {
+      this.input.nativeElement.value = value;
+      this.internalValue = value;
+      this.cdr.markForCheck();
+    }
   }
 
   public showMessage(): string {

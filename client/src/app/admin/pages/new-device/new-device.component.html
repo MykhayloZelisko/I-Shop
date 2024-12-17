@@ -153,7 +153,7 @@
         <h3 class="new-device__title">Характеристики</h3>
       }
       <ng-container formArrayName="groups">
-        @for (group of groups; track group; let groupIndex = $index) {
+        @for (group of groups; track group.id; let groupIndex = $index) {
           <ng-container [formGroupName]="groupIndex">
             <h4
               class="new-device__sub-title"
@@ -172,7 +172,7 @@
             <ng-container formArrayName="properties">
               @for (
                 property of group.properties;
-                track property;
+                track property.id;
                 let propertyIndex = $index
               ) {
                 <ng-container [formGroupName]="propertyIndex">

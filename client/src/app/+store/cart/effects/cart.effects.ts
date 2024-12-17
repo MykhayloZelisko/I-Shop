@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CartsService } from '../services/carts.service';
 import { Store } from '@ngrx/store';
@@ -17,92 +17,103 @@ import {
 import { LoaderActions } from '../../loader/actions/loader.actions';
 import { selectCartId } from '../selectors/cart.selectors';
 
-@Injectable()
-export class CartEffects {
-  private actions$ = inject(Actions);
-
-  private cartsService = inject(CartsService);
-
-  private store = inject(Store<State>);
-
-  public checkCart$ = createEffect(() =>
-    this.actions$.pipe(
+export const checkCart$ = createEffect(
+  (actions$ = inject(Actions), store = inject(Store<State>)) =>
+    actions$.pipe(
       ofType(CartActions.checkCart),
-      withLatestFrom(this.store.select(selectCartId)),
+      withLatestFrom(store.select(selectCartId)),
       map(([action, cartId]) =>
         cartId
           ? CartActions.addCartDevice({ deviceId: action.deviceId, cartId })
           : CartActions.createCart({ deviceId: action.deviceId }),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public createCart$ = createEffect(() =>
-    this.actions$.pipe(
+export const createCart$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cartsService = inject(CartsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CartActions.createCart),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cartsService.createCart(action.deviceId).pipe(
+        cartsService.createCart(action.deviceId).pipe(
           mergeMap((cart) => [
             LoaderActions.toggleLoader(),
             CartActions.createCartSuccess({ cart }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CartActions.createCartFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public createCartFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CartActions.createCartFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const createCartFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.createCartFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public addCartDevice$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCartDevice$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cartsService = inject(CartsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CartActions.addCartDevice),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cartsService.addDeviceToCart(action.deviceId, action.cartId).pipe(
+        cartsService.addDeviceToCart(action.deviceId, action.cartId).pipe(
           mergeMap((device) => [
             LoaderActions.toggleLoader(),
             CartActions.addCartDeviceSuccess({ device }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CartActions.addCartDeviceFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCartDeviceFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CartActions.addCartDeviceFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addCartDeviceFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.addCartDeviceFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public deleteCartDevices$ = createEffect(() =>
-    this.actions$.pipe(
+export const deleteCartDevices$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cartsService = inject(CartsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CartActions.deleteCartDevices),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cartsService
+        cartsService
           .deleteDevicesFromCart(action.deviceIds, action.cartId)
           .pipe(
             mergeMap((response) => {
@@ -120,83 +131,95 @@ export class CartEffects {
               return actions;
             }),
             catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
+              store.dispatch(LoaderActions.toggleLoader());
               return of(CartActions.deleteCartDevicesFailure());
             }),
           ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public deleteCartDevicesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CartActions.deleteCartDevicesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const deleteCartDevicesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.deleteCartDevicesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public updateCartDevice$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateCartDevice$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cartsService = inject(CartsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CartActions.updateCartDevice),
       debounceTime(500),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cartsService.updateCartDevice(action.id, action.device).pipe(
+        cartsService.updateCartDevice(action.id, action.device).pipe(
           mergeMap((device) => [
             LoaderActions.toggleLoader(),
             CartActions.updateCartDeviceSuccess({ device }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CartActions.updateCartDeviceFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public updateCartDeviceFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CartActions.updateCartDeviceFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const updateCartDeviceFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.updateCartDeviceFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public updateCartDevices$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateCartDevices$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cartsService = inject(CartsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CartActions.updateCartDevices),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cartsService.updateCartDevices(action.payload).pipe(
+        cartsService.updateCartDevices(action.payload).pipe(
           mergeMap((isInOrder) => [
             LoaderActions.toggleLoader(),
             CartActions.updateCartDevicesSuccess({ isInOrder }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CartActions.updateCartDevicesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public updateCartDevicesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CartActions.updateCartDevicesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const updateCartDevicesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.updateCartDevicesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

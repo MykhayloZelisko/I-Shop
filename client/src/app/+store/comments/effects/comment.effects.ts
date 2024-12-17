@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CommentsService } from '../services/comments.service';
 import { Store } from '@ngrx/store';
@@ -12,20 +12,17 @@ import { CommentsListInterface } from '../../../shared/models/interfaces/comment
 import { PopupActions } from '../../popup/actions/popup.actions';
 import { DeletedCommentInterface } from '../../../shared/models/interfaces/deleted-comment.interface';
 
-@Injectable()
-export class CommentEffects {
-  private actions$ = inject(Actions);
-
-  private commentsService = inject(CommentsService);
-
-  private store = inject(Store<State>);
-
-  public addComment$ = createEffect(() =>
-    this.actions$.pipe(
+export const addComment$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    commentsService = inject(CommentsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CommentActions.addComment),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.commentsService.addComment(action.comment).pipe(
+        commentsService.addComment(action.comment).pipe(
           mergeMap((comment: CommentInterface) => [
             LoaderActions.toggleLoader(),
             CommentActions.addCommentSuccess({ comment }),
@@ -36,31 +33,37 @@ export class CommentEffects {
             PopupActions.closePopup(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CommentActions.addCommentFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCommentFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CommentActions.addCommentFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addCommentFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CommentActions.addCommentFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public loadComments$ = createEffect(() =>
-    this.actions$.pipe(
+export const loadComments$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    commentsService = inject(CommentsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CommentActions.loadComments),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.commentsService
+        commentsService
           .getAllCommentsByDeviceId(
             action.deviceId,
             action.cursor,
@@ -72,63 +75,73 @@ export class CommentEffects {
               CommentActions.loadCommentsSuccess({ comments }),
             ]),
             catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
+              store.dispatch(LoaderActions.toggleLoader());
               return of(CommentActions.loadCommentsFailure());
             }),
           ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public loadCommentsFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CommentActions.loadCommentsFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const loadCommentsFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CommentActions.loadCommentsFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public updateLikes$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateLikes$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    commentsService = inject(CommentsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CommentActions.updateLikes),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.commentsService
-          .updateLikeDislike(action.commentId, action.status)
-          .pipe(
-            mergeMap((comment: CommentInterface) => [
-              LoaderActions.toggleLoader(),
-              CommentActions.updateLikesSuccess({ comment }),
-            ]),
-            catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
-              return of(CommentActions.updateLikesFailure());
-            }),
-          ),
+        commentsService.updateLikeDislike(action.commentId, action.status).pipe(
+          mergeMap((comment: CommentInterface) => [
+            LoaderActions.toggleLoader(),
+            CommentActions.updateLikesSuccess({ comment }),
+          ]),
+          catchError(() => {
+            store.dispatch(LoaderActions.toggleLoader());
+            return of(CommentActions.updateLikesFailure());
+          }),
+        ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public updateLikesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CommentActions.updateLikesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const updateLikesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CommentActions.updateLikesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public upsertComments$ = createEffect(() =>
-    this.actions$.pipe(
+export const upsertComments$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    commentsService = inject(CommentsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CommentActions.upsertComments),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.commentsService
+        commentsService
           .getAllCommentsByDeviceId(
             action.deviceId,
             action.cursor,
@@ -140,31 +153,37 @@ export class CommentEffects {
               CommentActions.upsertCommentsSuccess({ comments }),
             ]),
             catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
+              store.dispatch(LoaderActions.toggleLoader());
               return of(CommentActions.upsertCommentsFailure());
             }),
           ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public upsertCommentsFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CommentActions.upsertCommentsFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const upsertCommentsFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CommentActions.upsertCommentsFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public deleteComment$ = createEffect(() =>
-    this.actions$.pipe(
+export const deleteComment$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    commentsService = inject(CommentsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CommentActions.deleteComment),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.commentsService.deleteComment(action.id, action.cursor).pipe(
+        commentsService.deleteComment(action.id, action.cursor).pipe(
           mergeMap((payload: DeletedCommentInterface) => [
             LoaderActions.toggleLoader(),
             CommentActions.deleteCommentSuccess({ payload }),
@@ -174,31 +193,37 @@ export class CommentEffects {
             }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CommentActions.deleteCommentFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public deleteCommentFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CommentActions.deleteCommentFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const deleteCommentFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CommentActions.deleteCommentFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public updateComment$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateComment$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    commentsService = inject(CommentsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CommentActions.updateComment),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.commentsService.updateComment(action.id, action.comment).pipe(
+        commentsService.updateComment(action.id, action.comment).pipe(
           mergeMap((comment: CommentInterface) => [
             LoaderActions.toggleLoader(),
             CommentActions.updateCommentSuccess({ comment }),
@@ -209,22 +234,22 @@ export class CommentEffects {
             PopupActions.closePopup(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CommentActions.updateCommentFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public updateCommentFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CommentActions.updateCommentFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const updateCommentFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CommentActions.updateCommentFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CPropertiesService } from '../services/c-properties.service';
 import { Store } from '@ngrx/store';
@@ -10,58 +10,67 @@ import { CPropertiesGroupActions } from '../../c-properties-groups/actions/c-pro
 import { PopupActions } from '../../popup/actions/popup.actions';
 import { SharedActions } from '../../shared/actions/shared.actions';
 
-@Injectable()
-export class CPropertyEffects {
-  private actions$ = inject(Actions);
-
-  private cPropertiesService = inject(CPropertiesService);
-
-  private store = inject(Store<State>);
-
-  public addFilteredProperties$ = createEffect(() =>
-    this.actions$.pipe(
+export const addFilteredProperties$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cPropertiesService = inject(CPropertiesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CPropertyActions.addFilteredProperties),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cPropertiesService.getFilteredCProperties(action.ids).pipe(
+        cPropertiesService.getFilteredCProperties(action.ids).pipe(
           mergeMap((properties) => [
             LoaderActions.toggleLoader(),
             CPropertyActions.addCPropertiesSuccess({ properties }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CPropertyActions.addCPropertiesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCPropertiesByGroupsIds$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCPropertiesByGroupsIds$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cPropertiesService = inject(CPropertiesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CPropertyActions.addCPropertiesByGroupsIds),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cPropertiesService.addCPropertiesByGroupsIds(action.ids).pipe(
+        cPropertiesService.addCPropertiesByGroupsIds(action.ids).pipe(
           mergeMap((properties) => [
             LoaderActions.toggleLoader(),
             CPropertyActions.addCPropertiesSuccess({ properties }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CPropertyActions.addCPropertiesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCProperties$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCProperties$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cPropertiesService = inject(CPropertiesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CPropertyActions.addCProperties),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cPropertiesService.addCProperties(action.properties).pipe(
+        cPropertiesService.addCProperties(action.properties).pipe(
           mergeMap((properties) => [
             LoaderActions.toggleLoader(),
             CPropertyActions.addCPropertiesSuccess({ properties }),
@@ -71,31 +80,37 @@ export class CPropertyEffects {
             PopupActions.closePopup(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CPropertyActions.addCPropertiesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCPropertiesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CPropertyActions.addCPropertiesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addCPropertiesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CPropertyActions.addCPropertiesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public addCPropertiesByGroupId$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCPropertiesByGroupId$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cPropertiesService = inject(CPropertiesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CPropertyActions.addCPropertiesByGroupId),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cPropertiesService.getCPropertiesByGroupId(action.group.id).pipe(
+        cPropertiesService.getCPropertiesByGroupId(action.group.id).pipe(
           mergeMap((properties) => [
             LoaderActions.toggleLoader(),
             CPropertyActions.addCPropertiesByGroupIdSuccess({
@@ -104,16 +119,18 @@ export class CPropertyEffects {
             }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CPropertyActions.addCPropertiesByGroupIdFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCPropertiesByGroupIdSuccess$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCPropertiesByGroupIdSuccess$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
       ofType(CPropertyActions.addCPropertiesByGroupIdSuccess),
       map((action) =>
         CPropertiesGroupActions.updateCPropertiesGroupSuccess({
@@ -121,58 +138,68 @@ export class CPropertyEffects {
         }),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCPropertiesByGroupIdFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CPropertyActions.addCPropertiesByGroupIdFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addCPropertiesByGroupIdFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CPropertyActions.addCPropertiesByGroupIdFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public updateCProperty$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateCProperty$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cPropertiesService = inject(CPropertiesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CPropertyActions.updateCProperty),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cPropertiesService
-          .updateCProperty(action.id, action.propertyName)
-          .pipe(
-            mergeMap((property) => [
-              LoaderActions.toggleLoader(),
-              CPropertyActions.updateCPropertySuccess({ property }),
-              SharedActions.clearCGPState(),
-            ]),
-            catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
-              return of(CPropertyActions.updateCPropertyFailure());
-            }),
-          ),
+        cPropertiesService.updateCProperty(action.id, action.propertyName).pipe(
+          mergeMap((property) => [
+            LoaderActions.toggleLoader(),
+            CPropertyActions.updateCPropertySuccess({ property }),
+            SharedActions.clearCGPState(),
+          ]),
+          catchError(() => {
+            store.dispatch(LoaderActions.toggleLoader());
+            return of(CPropertyActions.updateCPropertyFailure());
+          }),
+        ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public updateCPropertyFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CPropertyActions.updateCPropertyFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const updateCPropertyFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CPropertyActions.updateCPropertyFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public deleteCProperty$ = createEffect(() =>
-    this.actions$.pipe(
+export const deleteCProperty$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cPropertiesService = inject(CPropertiesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CPropertyActions.deleteCProperty),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.cPropertiesService.deleteCProperty(action.id).pipe(
+        cPropertiesService.deleteCProperty(action.id).pipe(
           mergeMap((deleted) => {
             const actions: ReturnType<
               | typeof CPropertyActions.deleteCPropertySuccess
@@ -199,22 +226,22 @@ export class CPropertyEffects {
             return actions;
           }),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CPropertyActions.deleteCPropertyFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public deleteCPropertyFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CPropertyActions.deleteCPropertyFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const deleteCPropertyFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CPropertyActions.deleteCPropertyFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

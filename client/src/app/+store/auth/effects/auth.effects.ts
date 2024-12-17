@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
@@ -14,23 +14,18 @@ import { LoaderActions } from '../../loader/actions/loader.actions';
 import { PopupActions } from '../../popup/actions/popup.actions';
 import { CartActions } from '../../cart/actions/cart.actions';
 
-@Injectable()
-export class AuthEffects {
-  private actions$ = inject(Actions);
-
-  private authService = inject(AuthService);
-
-  private router = inject(Router);
-
-  private store = inject(Store<State>);
-
-  // GetMe
-  public getMe$ = createEffect(() =>
-    this.actions$.pipe(
+// GetMe
+export const getMe$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(AuthActions.getMe),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap(() =>
-        this.authService.getCurrentUser().pipe(
+        authService.getCurrentUser().pipe(
           mergeMap((user: UserInterface) => {
             const actions: ReturnType<
               | typeof CartActions.loadCart
@@ -50,19 +45,25 @@ export class AuthEffects {
         ),
       ),
       catchError(() => {
-        this.store.dispatch(LoaderActions.toggleLoader());
+        store.dispatch(LoaderActions.toggleLoader());
         return of(AuthActions.getMeFailure());
       }),
     ),
-  );
+  { functional: true },
+);
 
-  // Login
-  public login$ = createEffect(() =>
-    this.actions$.pipe(
+// Login
+export const login$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(AuthActions.login),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.authService.login(action.login).pipe(
+        authService.login(action.login).pipe(
           mergeMap((user: UserInterface) => {
             const actions: ReturnType<
               | typeof CartActions.loadCart
@@ -82,92 +83,106 @@ export class AuthEffects {
             return actions;
           }),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(AuthActions.loginFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public loginFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.loginFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const loginFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(AuthActions.loginFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  // Logout
-  public logout$ = createEffect(() =>
-    this.actions$.pipe(
+// Logout
+export const logout$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(AuthActions.logout),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap(() =>
-        this.authService.logout().pipe(
+        authService.logout().pipe(
           mergeMap(() => [
             LoaderActions.toggleLoader(),
             AuthActions.logoutSuccess(),
             CartActions.clearCart(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(AuthActions.logoutFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public logoutFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.logoutFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const logoutFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(AuthActions.logoutFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public logoutSuccess$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.logoutSuccess),
-        tap(() => {
-          if (this.router.url.includes(LayoutRouteNameEnum.Admin)) {
-            this.router.navigateByUrl(UserRouteNameEnum.Home);
-          }
-        }),
-      ),
-    { dispatch: false },
-  );
+export const logoutSuccess$ = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) =>
+    actions$.pipe(
+      ofType(AuthActions.logoutSuccess),
+      tap(() => {
+        if (router.url.includes(LayoutRouteNameEnum.Admin)) {
+          router.navigateByUrl(UserRouteNameEnum.Home);
+        }
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  // Registration
-  public registration$ = createEffect(() =>
-    this.actions$.pipe(
+// Registration
+export const registration$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(AuthActions.registration),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.authService.registration(action.registration).pipe(
+        authService.registration(action.registration).pipe(
           mergeMap(() => [
             LoaderActions.toggleLoader(),
             AuthActions.registrationSuccess(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(AuthActions.registrationFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public registrationSuccess$ = createEffect(() =>
-    this.actions$.pipe(
+export const registrationSuccess$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
       ofType(AuthActions.registrationSuccess),
       map(() =>
         PopupActions.openPopup({
@@ -178,16 +193,16 @@ export class AuthEffects {
         }),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public registrationFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.registrationFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const registrationFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(AuthActions.registrationFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

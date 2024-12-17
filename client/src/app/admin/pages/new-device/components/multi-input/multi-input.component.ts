@@ -42,7 +42,7 @@ export class MultiInputComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
-    this.addValueCtrl();
+    this.addValueCtrlAtEnd();
   }
 
   public setHeight(): Record<string, string> {
@@ -61,7 +61,11 @@ export class MultiInputComponent implements OnInit {
     return this.fb.nonNullable.control<string>('', [requiredValidator()]);
   }
 
-  public addValueCtrl(): void {
+  public addValueCtrlAfterIndex(index: number): void {
+    this.getValueArrayCtrl().insert(index + 1, this.newValueCtrl());
+  }
+
+  public addValueCtrlAtEnd(): void {
     this.getValueArrayCtrl().push(this.newValueCtrl());
   }
 

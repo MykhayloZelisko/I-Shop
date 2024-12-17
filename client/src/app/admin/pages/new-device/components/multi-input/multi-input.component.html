@@ -16,7 +16,10 @@
             [formControlName]="index"
           />
           <div class="multi-input__buttons">
-            <button class="multi-input__button" (click)="addValueCtrl()">
+            <button
+              class="multi-input__button"
+              (click)="addValueCtrlAfterIndex(index)"
+            >
               <svg-icon
                 class="multi-input__icon multi-input__icon--add"
                 src="assets/images/plus-round-line-icon.svg"

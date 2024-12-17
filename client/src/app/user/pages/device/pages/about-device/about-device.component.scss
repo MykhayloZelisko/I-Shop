@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@use 'variables';
+@use 'mixins';
 
 .about-device {
   padding: 12px 0;
@@ -14,27 +14,32 @@
   }
 
   &__icon {
-    @include icon-style($brown-2, 24px);
+    @include mixins.icon-style(variables.$brown-2, 24px);
 
     &--yellow {
-      @include icon-style($yellow);
+      @include mixins.icon-style(variables.$yellow);
     }
 
     &--small {
-      @include icon-style($size: 14px);
+      @include mixins.icon-style($size: 14px);
     }
   }
 
   &__multicolor-icon {
-    @include icon-style($size: 24px);
+    @include mixins.icon-style($size: 24px);
   }
 
   &__icon-button {
-    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+    @include mixins.icon-button-style(
+      40px,
+      variables.$white-2,
+      5px,
+      variables.$blue-3
+    );
   }
 
   &__title {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 24px;
     line-height: 1.2;
   }
@@ -42,8 +47,8 @@
   &__price {
     font-size: 28px;
     font-weight: bold;
-    font-family: $source;
-    color: $brown-1;
+    font-family: variables.$source;
+    color: variables.$brown-1;
     white-space: nowrap;
   }
 
@@ -54,7 +59,12 @@
   }
 
   &__button {
-    @include button-style($brown-1, $yellow, 6px 12px, $brown-2);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      6px 12px,
+      variables.$brown-2
+    );
 
     display: flex;
     align-items: center;
@@ -64,21 +74,31 @@
     height: 40px;
 
     &--credit {
-      @include button-style($blue-1, $white-1, 10px 12px, $blue-2);
+      @include mixins.button-style(
+        variables.$blue-1,
+        variables.$white-1,
+        10px 12px,
+        variables.$blue-2
+      );
 
       flex: 1;
       white-space: nowrap;
     }
 
     &--cart {
-      @include button-style($white-1, $brown-1, 6px 12px, $white-1);
+      @include mixins.button-style(
+        variables.$white-1,
+        variables.$brown-1,
+        6px 12px,
+        variables.$white-1
+      );
 
       &:hover {
-        color: $blue-2;
+        color: variables.$blue-2;
 
         .about-device {
           &__button-text {
-            border-bottom: 1px dotted $blue-2;
+            border-bottom: 1px dotted variables.$blue-2;
           }
         }
       }
@@ -87,7 +107,7 @@
 
   &__button-text {
     line-height: 1.2;
-    border-bottom: 1px dotted $brown-1;
+    border-bottom: 1px dotted variables.$brown-1;
     white-space: nowrap;
   }
 
@@ -110,7 +130,7 @@
 
   &__delivery {
     padding: 12px 16px;
-    border: 1px solid $gray-5;
+    border: 1px solid variables.$gray-5;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
@@ -126,8 +146,8 @@
 
   &__text {
     font-size: 16px;
-    font-family: $source;
-    color: $brown-2;
+    font-family: variables.$source;
+    color: variables.$brown-2;
 
     &--city {
       font-weight: bold;

@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .breadcrumbs {
   display: flex;
@@ -10,15 +10,15 @@
   }
 
   &__icon {
-    @include icon-style($brown-1, 12px, false);
+    @include mixins.icon-style(variables.$brown-1, 12px, false);
 
     &:hover {
-      @include icon-style($blue-2, $lift: false);
+      @include mixins.icon-style(variables.$blue-2, $lift: false);
     }
   }
 
   &__text {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
     display: flex;
     gap: 5px;
@@ -28,11 +28,11 @@
     display: flex;
     gap: 5px;
     text-decoration: none;
-    color: $black;
+    color: variables.$black;
 
     &:hover {
       text-decoration: underline;
-      color: $blue-2;
+      color: variables.$blue-2;
     }
   }
 }
@@ -47,7 +47,7 @@
 
     &__link {
       &:hover {
-        @include icon-style($blue-2, $lift: false);
+        @include mixins.icon-style(variables.$blue-2, $lift: false);
       }
     }
   }

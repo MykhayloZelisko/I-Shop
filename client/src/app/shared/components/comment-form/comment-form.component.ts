@@ -18,7 +18,6 @@ import { PopupDataInterface } from '../../models/interfaces/popup-data.interface
 import { PopupTypeEnum } from '../../models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
-import { AsyncPipe } from '@angular/common';
 import { CreateCommentInterface } from '../../models/interfaces/create-comment.interface';
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { CommentActions } from '../../../+store/comments/actions/comment.actions';
@@ -32,7 +31,6 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
     RatingControlComponent,
     ReactiveFormsModule,
     TextareaComponent,
-    AsyncPipe,
   ],
   templateUrl: './comment-form.component.html',
   styleUrl: './comment-form.component.scss',

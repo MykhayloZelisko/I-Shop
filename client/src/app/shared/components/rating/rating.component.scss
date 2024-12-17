@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@use 'variables';
+@use 'mixins';
 
 .rating {
   display: flex;
@@ -11,7 +11,7 @@
 
       & .rating {
         &__votes {
-          color: $blue-2;
+          color: variables.$blue-2;
           text-decoration: underline;
         }
       }
@@ -19,9 +19,9 @@
   }
 
   &__votes {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 14px;
-    color: $black;
+    color: variables.$black;
     text-decoration: none;
   }
 
@@ -31,7 +31,7 @@
   }
 
   &__comment {
-    @include icon-style($gray-5, 14px);
+    @include mixins.icon-style(variables.$gray-5, 14px);
   }
 
   &__stars {

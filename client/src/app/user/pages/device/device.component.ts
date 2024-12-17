@@ -6,8 +6,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { MenuItem } from 'primeng/api';
 import { DEVICE_MENU } from '../../../shared/models/constants/device-menu';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -22,23 +20,25 @@ import { PageNotFoundComponent } from '../page-not-found/page-not-found.componen
 import { AsyncPipe } from '@angular/common';
 import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/breadcrumbs.component';
 import { DeviceRouteNameEnum } from '../../../shared/models/enums/device-route-name.enum';
+import { TabMenuItemInterface } from '../../../shared/models/interfaces/tab-menu-item.interface';
+import { TabMenuComponent } from '../../../shared/components/tab-menu/tab-menu.component';
 
 @Component({
   selector: 'app-device',
   standalone: true,
   imports: [
     RouterOutlet,
-    TabMenuModule,
     PageNotFoundComponent,
     AsyncPipe,
     BreadcrumbsComponent,
+    TabMenuComponent,
   ],
   templateUrl: './device.component.html',
   styleUrl: './device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceComponent implements OnInit, OnDestroy {
-  public items: MenuItem[] = DEVICE_MENU;
+  public items: TabMenuItemInterface[] = DEVICE_MENU;
 
   public device$!: Observable<DeviceInterface | null>;
 
@@ -50,15 +50,15 @@ export class DeviceComponent implements OnInit, OnDestroy {
     this.device$ = this.store.select(selectDevice).pipe(
       tap((device) => {
         if (!device || !device.votes) {
-          this.items = this.items.map((item: MenuItem) =>
-            item.routerLink === DeviceRouteNameEnum.Comments
-              ? { label: 'Залишити відгук', routerLink: item.routerLink }
+          this.items = this.items.map((item: TabMenuItemInterface) =>
+            item.route === DeviceRouteNameEnum.Comments
+              ? { label: 'Залишити відгук', route: item.route }
               : item,
           );
         } else {
-          this.items = this.items.map((item: MenuItem) =>
-            item.routerLink === DeviceRouteNameEnum.Comments
-              ? { label: 'Відгуки', routerLink: item.routerLink }
+          this.items = this.items.map((item: TabMenuItemInterface) =>
+            item.route === DeviceRouteNameEnum.Comments
+              ? { label: 'Відгуки', route: item.route }
               : item,
           );
         }

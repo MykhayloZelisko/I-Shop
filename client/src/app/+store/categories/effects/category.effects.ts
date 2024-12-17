@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CategoriesService } from '../services/categories.service';
 import { CategoryActions } from '../actions/category.actions';
@@ -12,143 +12,164 @@ import { SharedActions } from '../../shared/actions/shared.actions';
 import { CPropertyActions } from '../../c-properties/actions/c-property.actions';
 import { CPropertiesGroupActions } from '../../c-properties-groups/actions/c-properties-group.actions';
 
-@Injectable()
-export class CategoryEffects {
-  private actions$ = inject(Actions);
-
-  private categoriesService = inject(CategoriesService);
-
-  private store = inject(Store<State>);
-
-  public loadCategories$ = createEffect(() =>
-    this.actions$.pipe(
+export const loadCategories$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    categoriesService = inject(CategoriesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CategoryActions.loadCategories),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap(() =>
-        this.categoriesService.getAllCategories().pipe(
+        categoriesService.getAllCategories().pipe(
           mergeMap((categories: CategoryInterface[]) => [
             LoaderActions.toggleLoader(),
             CategoryActions.loadCategoriesSuccess({ categories }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CategoryActions.loadCategoriesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public loadCategoriesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CategoryActions.loadCategoriesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const loadCategoriesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CategoryActions.loadCategoriesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public updateCategory$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateCategory$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    categoriesService = inject(CategoriesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CategoryActions.updateCategory),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.updateCategory(action.id, action.category).pipe(
+        categoriesService.updateCategory(action.id, action.category).pipe(
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.updateCategorySuccess({ category }),
             SharedActions.clearCGPState(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CategoryActions.updateCategoryFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public updateCategoryFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CategoryActions.updateCategoryFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const updateCategoryFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CategoryActions.updateCategoryFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public addCategory$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCategory$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    categoriesService = inject(CategoriesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CategoryActions.addCategory),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.createCategory(action.category).pipe(
+        categoriesService.createCategory(action.category).pipe(
           mergeMap((category) => [
             LoaderActions.toggleLoader(),
             CategoryActions.addCategorySuccess({ category }),
             SharedActions.clearCGPState(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CategoryActions.addCategoryFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCategoryFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CategoryActions.addCategoryFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addCategoryFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CategoryActions.addCategoryFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public addCategories$ = createEffect(() =>
-    this.actions$.pipe(
+export const addCategories$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    categoriesService = inject(CategoriesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CategoryActions.addCategories),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.addSubCategories(action.categories).pipe(
+        categoriesService.addSubCategories(action.categories).pipe(
           mergeMap((categories) => [
             LoaderActions.toggleLoader(),
             CategoryActions.addCategoriesSuccess({ categories }),
             PopupActions.closePopup(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CategoryActions.addCategoriesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addCategoriesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CategoryActions.addCategoriesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addCategoriesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CategoryActions.addCategoriesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public deleteCategory$ = createEffect(() =>
-    this.actions$.pipe(
+export const deleteCategory$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    categoriesService = inject(CategoriesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(CategoryActions.deleteCategory),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.categoriesService.deleteCategory(action.id).pipe(
+        categoriesService.deleteCategory(action.id).pipe(
           mergeMap((deleted) => {
             const actions: ReturnType<
               | typeof LoaderActions.toggleLoader
@@ -180,22 +201,22 @@ export class CategoryEffects {
             return actions;
           }),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(CategoryActions.deleteCategoryFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public deleteCategoryFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(CategoryActions.deleteCategoryFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const deleteCategoryFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CategoryActions.deleteCategoryFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

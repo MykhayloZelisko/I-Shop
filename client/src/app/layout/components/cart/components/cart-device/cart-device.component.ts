@@ -50,15 +50,15 @@ export class CartDeviceComponent implements OnInit, OnChanges {
 
   private store = inject(Store<State>);
 
-  public ngOnInit(): void {
-    this.initForm();
-    this.updateQuantityStatus();
-  }
-
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['device'] && !changes['device'].firstChange) {
       this.cartDeviceForm.controls.isInOrder.setValue(this.device.isInOrder);
     }
+  }
+
+  public ngOnInit(): void {
+    this.initForm();
+    this.updateQuantityStatus();
   }
 
   public updateQuantityStatus(): void {

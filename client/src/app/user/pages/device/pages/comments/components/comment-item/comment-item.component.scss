@@ -1,10 +1,10 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .comment-item {
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid $gray-4;
+  border: 1px solid variables.$gray-4;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -17,19 +17,19 @@
   }
 
   &__user {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
     font-weight: bold;
   }
 
   &__date {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 14px;
-    color: $gray-5;
+    color: variables.$gray-5;
   }
 
   &__text {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
     line-height: 1.2;
 
@@ -56,35 +56,40 @@
   }
 
   &__button {
-    @include button-style(transparent, $brown-2, 6px 12px, transparent);
+    @include mixins.button-style(
+      transparent,
+      variables.$brown-2,
+      6px 12px,
+      transparent
+    );
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
     }
   }
 
   &__icon-like {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
   }
 
   &__icon-more {
-    @include icon-style($gray-5, 24px);
+    @include mixins.icon-style(variables.$gray-5, 24px);
   }
 
   &__icon-button {
-    @include icon-button-style(30px, transparent);
+    @include mixins.icon-button-style(30px, transparent);
 
     &:hover {
       .comment-item {
         &__icon-like {
-          @include icon-style($brown-2);
+          @include mixins.icon-style(variables.$brown-2);
         }
       }
     }
   }
 
   &__number-likes {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
   }
 }

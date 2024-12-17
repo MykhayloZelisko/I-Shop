@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DevicesService } from '../services/devices.service';
 import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
@@ -8,136 +8,147 @@ import { DeviceActions } from '../actions/device.actions';
 import { Store } from '@ngrx/store';
 import { State } from '../../reducers';
 
-@Injectable()
-export class DeviceEffects {
-  private actions$ = inject(Actions);
-
-  private devicesService = inject(DevicesService);
-
-  private store = inject(Store<State>);
-
-  public createDevice$ = createEffect(() =>
-    this.actions$.pipe(
+export const createDevice$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    devicesService = inject(DevicesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(DeviceActions.createDevice),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.devicesService.createDevice(action.device).pipe(
+        devicesService.createDevice(action.device).pipe(
           mergeMap(() => [
             LoaderActions.toggleLoader(),
             DeviceActions.createDeviceSuccess(),
             FormActions.clearFormOn(),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(DeviceActions.createDeviceFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public createDeviceFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(DeviceActions.createDeviceFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const createDeviceFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(DeviceActions.createDeviceFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public loadDevices$ = createEffect(() =>
-    this.actions$.pipe(
+export const loadDevices$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    devicesService = inject(DevicesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(DeviceActions.loadDevices),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.devicesService
-          .getDevices(action.id, action.page, action.size)
-          .pipe(
-            mergeMap((devicesList) => [
-              LoaderActions.toggleLoader(),
-              DeviceActions.loadDevicesSuccess({ devicesList }),
-            ]),
-            catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
-              return of(DeviceActions.loadDevicesFailure());
-            }),
-          ),
+        devicesService.getDevices(action.id, action.page, action.size).pipe(
+          mergeMap((devicesList) => [
+            LoaderActions.toggleLoader(),
+            DeviceActions.loadDevicesSuccess({ devicesList }),
+          ]),
+          catchError(() => {
+            store.dispatch(LoaderActions.toggleLoader());
+            return of(DeviceActions.loadDevicesFailure());
+          }),
+        ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public loadDevicesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(DeviceActions.loadDevicesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const loadDevicesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(DeviceActions.loadDevicesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public addDevices$ = createEffect(() =>
-    this.actions$.pipe(
+export const addDevices$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    devicesService = inject(DevicesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(DeviceActions.addDevices),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.devicesService
-          .getDevices(action.id, action.page, action.size)
-          .pipe(
-            mergeMap((devicesList) => [
-              LoaderActions.toggleLoader(),
-              DeviceActions.addDevicesSuccess({ devicesList }),
-            ]),
-            catchError(() => {
-              this.store.dispatch(LoaderActions.toggleLoader());
-              return of(DeviceActions.addDevicesFailure());
-            }),
-          ),
+        devicesService.getDevices(action.id, action.page, action.size).pipe(
+          mergeMap((devicesList) => [
+            LoaderActions.toggleLoader(),
+            DeviceActions.addDevicesSuccess({ devicesList }),
+          ]),
+          catchError(() => {
+            store.dispatch(LoaderActions.toggleLoader());
+            return of(DeviceActions.addDevicesFailure());
+          }),
+        ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addDevicesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(DeviceActions.addDevicesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
+export const addDevicesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(DeviceActions.addDevicesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);
 
-  public loadDevice$ = createEffect(() =>
-    this.actions$.pipe(
+export const loadDevice$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    devicesService = inject(DevicesService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(DeviceActions.loadDevice),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.devicesService.getDeviceById(action.id).pipe(
+        devicesService.getDeviceById(action.id).pipe(
           mergeMap((device) => [
             LoaderActions.toggleLoader(),
             DeviceActions.loadDeviceSuccess({ device }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(DeviceActions.loadDeviceFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public loadDeviceFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(DeviceActions.loadDeviceFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const loadDeviceFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(DeviceActions.loadDeviceFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

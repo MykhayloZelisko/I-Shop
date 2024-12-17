@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { SharedService } from '../services/shared.service';
 import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
@@ -10,20 +10,17 @@ import { CPropertyActions } from '../../c-properties/actions/c-property.actions'
 import { CPropertiesGroupActions } from '../../c-properties-groups/actions/c-properties-group.actions';
 import { GPInterface } from '../../../shared/models/interfaces/g-p.interface';
 
-@Injectable()
-export class SharedEffects {
-  private actions$ = inject(Actions);
-
-  private sharedService = inject(SharedService);
-
-  private store = inject(Store<State>);
-
-  public addGroupsWithProperties$ = createEffect(() =>
-    this.actions$.pipe(
+export const addGroupsWithProperties$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    sharedService = inject(SharedService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
       ofType(SharedActions.addGroupsWithProperties),
-      tap(() => this.store.dispatch(LoaderActions.toggleLoader())),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
       switchMap((action) =>
-        this.sharedService.getGroupsWithProperties(action.id).pipe(
+        sharedService.getGroupsWithProperties(action.id).pipe(
           mergeMap((response: GPInterface) => [
             LoaderActions.toggleLoader(),
             CPropertiesGroupActions.addCPropertiesGroupsSuccess({
@@ -34,22 +31,22 @@ export class SharedEffects {
             }),
           ]),
           catchError(() => {
-            this.store.dispatch(LoaderActions.toggleLoader());
+            store.dispatch(LoaderActions.toggleLoader());
             return of(SharedActions.addGroupsWithPropertiesFailure());
           }),
         ),
       ),
     ),
-  );
+  { functional: true },
+);
 
-  public addGroupsWithPropertiesFailure$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(SharedActions.addGroupsWithPropertiesFailure),
-        tap(() => {
-          // TODO: add dialog
-        }),
-      ),
-    { dispatch: false },
-  );
-}
+export const addGroupsWithPropertiesFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(SharedActions.addGroupsWithPropertiesFailure),
+      tap(() => {
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

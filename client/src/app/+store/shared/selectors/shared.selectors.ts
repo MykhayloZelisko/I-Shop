@@ -56,16 +56,16 @@ export const selectCGPTree = createSelector(
     });
     groups.forEach((group) => {
       const category = categoryMap[group.categoryId];
-      if (category) {
-        category.children!.push(groupMap[group.id]);
+      if (category.children) {
+        category.children.push(groupMap[group.id]);
       }
     });
 
     categories.forEach((category) => {
       if (category.parentId) {
         const parentCategory = categoryMap[category.parentId];
-        if (parentCategory) {
-          parentCategory.children!.push(categoryMap[category.id]);
+        if (parentCategory.children) {
+          parentCategory.children.push(categoryMap[category.id]);
         }
       }
     });

@@ -1,8 +1,4 @@
 <div class="admin">
-  <p-tabMenu
-    class="admin__menu"
-    [scrollable]="true"
-    [model]="items"
-  ></p-tabMenu>
-  <router-outlet></router-outlet>
+  <app-tab-menu [items]="items" />
+  <router-outlet />
 </div>

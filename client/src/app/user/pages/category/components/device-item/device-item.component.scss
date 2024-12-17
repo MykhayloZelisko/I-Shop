@@ -1,16 +1,16 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .device-item {
-  border-right: 1px solid $gray-4;
-  border-bottom: 1px solid $gray-4;
+  border-right: 1px solid variables.$gray-4;
+  border-bottom: 1px solid variables.$gray-4;
   padding: 16px;
   height: 100%;
   position: relative;
 
   &:hover {
     border: none;
-    box-shadow: 0 16px 16px $blue-3;
+    box-shadow: 0 16px 16px variables.$blue-3;
   }
 
   &__image {
@@ -22,15 +22,15 @@
 
   &__name {
     font-size: 18px;
-    font-family: $source;
+    font-family: variables.$source;
     text-decoration: none;
-    color: $black;
+    color: variables.$black;
   }
 
   &__price {
     font-size: 22px;
-    font-family: $source;
-    color: $brown-2;
+    font-family: variables.$source;
+    color: variables.$brown-2;
   }
 
   &__price-wrapper {
@@ -40,19 +40,24 @@
   }
 
   &__icon {
-    @include icon-style($brown-2, 24px);
+    @include mixins.icon-style(variables.$brown-2, 24px);
 
     &--heart {
-      @include icon-style($yellow, 24px);
+      @include mixins.icon-style(variables.$yellow, 24px);
     }
   }
 
   &__multicolor-icon {
-    @include icon-style($size: 24px);
+    @include mixins.icon-style($size: 24px);
   }
 
   &__button {
-    @include icon-button-style(40px, $white-2, 5px, $blue-3);
+    @include mixins.icon-button-style(
+      40px,
+      variables.$white-2,
+      5px,
+      variables.$blue-3
+    );
   }
 
   &__buttons {

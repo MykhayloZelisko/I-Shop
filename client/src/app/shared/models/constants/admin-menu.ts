@@ -1,21 +1,21 @@
-import { MenuItem } from 'primeng/api';
 import { AdminRouteNameEnum } from '../enums/admin-route-name.enum';
+import { TabMenuItemInterface } from '../interfaces/tab-menu-item.interface';
 
-export const ADMIN_MENU: MenuItem[] = [
+export const ADMIN_MENU: TabMenuItemInterface[] = [
   {
     label: 'Категорії',
-    routerLink: AdminRouteNameEnum.Categories,
+    route: AdminRouteNameEnum.Categories,
   },
   {
     label: 'Новий товар',
-    routerLink: AdminRouteNameEnum.NewDevice,
+    route: AdminRouteNameEnum.NewDevice,
   },
   {
     label: 'Користувачі',
-    routerLink: AdminRouteNameEnum.Users,
+    route: AdminRouteNameEnum.Users,
   },
   {
     label: 'Бренди',
-    routerLink: AdminRouteNameEnum.Brands,
+    route: AdminRouteNameEnum.Brands,
   },
 ];

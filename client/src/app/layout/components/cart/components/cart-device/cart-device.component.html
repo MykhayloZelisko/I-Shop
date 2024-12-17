@@ -1,9 +1,6 @@
 <div class="cart-device" [formGroup]="cartDeviceForm">
   <div class="cart-device__device">
-    <app-checkbox
-      formControlName="isInOrder"
-      (changeEvent)="submitData()"
-    ></app-checkbox>
+    <app-checkbox formControlName="isInOrder" (changeEvent)="submitData()" />
     <img
       class="cart-device__image"
       [src]="device.device.images[0]"

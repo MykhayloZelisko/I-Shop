@@ -41,18 +41,16 @@
         (onNodeCollapse)="nodeCollapse($event)"
       >
         <ng-template let-node pTemplate="category">
-          <app-category-item [category]="node.data"></app-category-item>
+          <app-category-item [category]="node.data" />
         </ng-template>
         <ng-template let-node pTemplate="group">
-          <app-c-properties-group-item
-            [group]="node.data"
-          ></app-c-properties-group-item>
+          <app-c-properties-group-item [group]="node.data" />
         </ng-template>
         <ng-template pTemplate="default">
-          <app-new-category></app-new-category>
+          <app-new-category />
         </ng-template>
         <ng-template let-node pTemplate="property">
-          <app-c-property-item [property]="node.data"></app-c-property-item>
+          <app-c-property-item [property]="node.data" />
         </ng-template>
       </p-tree>
     </div>

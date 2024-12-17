@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@use 'variables';
+@use 'mixins';
 
 .comments {
   padding: 12px 0;
@@ -14,7 +14,7 @@
   }
 
   &__title-text {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 24px;
     line-height: 1.2;
   }
@@ -38,27 +38,37 @@
     align-items: center;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid $gray-4;
+    border: 1px solid variables.$gray-4;
   }
 
   &__create-text {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
   }
 
   &__create-button {
-    @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
+    @include mixins.button-style(
+      variables.$blue-1,
+      variables.$white-1,
+      8px 24px,
+      variables.$blue-2
+    );
 
     white-space: nowrap;
   }
 
   &__more {
-    @include button-style(transparent, $brown-2, 8px 24px, transparent);
+    @include mixins.button-style(
+      transparent,
+      variables.$brown-2,
+      8px 24px,
+      transparent
+    );
 
     width: 100%;
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
     }
   }
 

@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .new-device {
   padding: 12px;
@@ -10,14 +10,14 @@
     align-items: center;
     filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
       drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
-    border: 1px solid $white-1;
+    border: 1px solid variables.$white-1;
     border-radius: 4px;
     padding: 10px;
     gap: 10px;
-    background-color: $white-1;
+    background-color: variables.$white-1;
 
     &--invalid {
-      border-color: $red-1;
+      border-color: variables.$red-1;
     }
   }
 
@@ -39,12 +39,12 @@
   &__label {
     font-size: 14px;
     display: block;
-    font-family: $source;
+    font-family: variables.$source;
     font-weight: 600;
   }
 
   &__input {
-    @include input-style(9px 12px);
+    @include mixins.input-style(9px 12px);
 
     margin-top: 8px;
 
@@ -54,9 +54,9 @@
   }
 
   &__error {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 12px;
-    color: $red-1;
+    color: variables.$red-1;
     font-weight: 700;
 
     &--images {
@@ -69,48 +69,63 @@
   }
 
   &__upload-button {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      8px 24px,
+      variables.$brown-2
+    );
 
     margin-top: 8px;
     white-space: nowrap;
   }
 
   &__save-button {
-    @include button-style($brown-1, $yellow, 8px 24px, $brown-2);
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      8px 24px,
+      variables.$brown-2
+    );
   }
 
   &__cancel-button {
-    @include button-style($blue-1, $white-1, 8px 24px, $blue-2);
+    @include mixins.button-style(
+      variables.$blue-1,
+      variables.$white-1,
+      8px 24px,
+      variables.$blue-2
+    );
   }
 
   &__icon {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
 
     &:hover {
-      @include icon-style($red-1);
+      @include mixins.icon-style(variables.$red-1);
     }
   }
 
   &__delete-button {
-    @include icon-button-style(30px, transparent);
+    @include mixins.icon-button-style(30px, transparent);
   }
 
   &__title {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 22px;
     text-align: center;
     font-weight: bold;
   }
 
   &__sub-title {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
 
     &--invalid {
       margin-bottom: 0;
-      color: $red-1;
+      color: variables.$red-1;
     }
   }
 
@@ -122,32 +137,32 @@
 }
 
 :host ::ng-deep {
-  .p-dropdown-label,
+  .p-select-label,
   .p-cascadeselect-label {
     padding: 11px 12px;
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
-    color: $black;
+    color: variables.$black;
+
+    &.p-placeholder {
+      color: variables.$gray-6;
+    }
   }
 
-  .p-dropdown-trigger,
-  .p-cascadeselect-trigger {
+  .p-select-dropdown,
+  .p-cascadeselect-dropdown {
     display: none;
   }
 
-  .p-placeholder {
-    color: $gray-6;
-  }
-
-  .p-dropdown,
+  .p-select,
   .p-cascadeselect {
     border-radius: 3px;
-    border: 1px solid $brown-5;
+    border: 1px solid variables.$brown-5;
     width: 100%;
     margin-top: 8px;
 
     &:hover {
-      border-color: $brown-1 !important;
+      border-color: variables.$brown-1 !important;
     }
 
     &::after {
@@ -162,130 +177,96 @@
     }
   }
 
-  .p-cascadeselect-sublist {
-    max-width: 525px;
-    min-width: auto;
-    width: calc(33.33vw - 8px);
-    left: calc(min(33.33vw - 8px, 525px));
-  }
-
-  .p-cascadeselect .p-overlay-content {
-    max-width: 525px;
-    width: calc(33.33vw - 8px);
-    min-width: auto;
-  }
-
   .p-focus {
-    border-color: $brown-2 !important;
+    border-color: variables.$brown-2 !important;
   }
 
-  .p-dropdown:not(.p-disabled).p-focus,
-  .p-cascadeselect:not(.p-disabled).p-focus {
-    box-shadow: none;
-  }
-
-  .p-dropdown-panel {
+  .p-overlay {
     filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
       drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+    max-width: 525px;
+    min-width: 0 !important;
+    width: 33.33%;
+  }
+
+  .p-select-list-container {
     border-radius: 4px;
 
-    & .p-dropdown-items {
-      & .p-dropdown-item:not(.p-highlight, .p-disabled).p-focus {
-        background-color: $brown-4 !important;
-      }
-
-      & .p-dropdown-item {
-        padding: 5px 12px;
-        font-family: $source;
+    & .p-select-list {
+      & .p-select-option {
+        padding: 8px 12px;
+        font-family: variables.$source;
         font-size: 16px;
-        color: $black;
+        color: variables.$black;
+
+        &:not(.p-disabled).p-focus {
+          background-color: variables.$brown-4;
+        }
 
         &:hover {
-          background-color: $brown-4 !important;
-          color: $black !important;
+          background-color: variables.$brown-4;
+          color: variables.$black;
         }
-      }
-
-      & .p-element:first-child {
-        & .p-dropdown-item {
-          border-radius: 4px 4px 0 0;
-        }
-      }
-
-      & .p-element:last-child {
-        & .p-dropdown-item {
-          border-radius: 0 0 4px 4px;
-        }
-      }
-
-      & .p-dropdown-item.p-highlight {
-        color: $black;
-        background-color: $brown-4;
       }
     }
   }
 
-  .p-cascadeselect-panel {
-    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+  .p-cascadeselect-option-text {
+    color: variables.$black;
+  }
+
+  .p-cascadeselect-overlay {
+    padding: 0;
+  }
+
+  .p-cascadeselect-list-container {
     border-radius: 4px;
 
-    & .p-cascadeselect-items {
-      & .p-cascadeselect-item:not(.p-highlight, .p-disabled).p-focus {
-        background-color: $brown-4 !important;
-      }
+    & .p-cascadeselect-option-active > .p-cascadeselect-option-content {
+      background-color: variables.$brown-4;
+    }
 
-      & .p-cascadeselect-item {
-        padding: 5px 12px;
-        font-family: $source;
-        font-size: 16px;
-        color: $black;
+    & .p-cascadeselect-option-active.p-focus > .p-cascadeselect-option-content {
+      background-color: variables.$brown-4;
+    }
 
-        &:hover {
-          background-color: $brown-4 !important;
-          color: $black !important;
-        }
+    & .p-cascadeselect-option.p-focus > .p-cascadeselect-option-content {
+      background-color: variables.$brown-4 !important;
+    }
 
-        & .p-cascadeselect-item-content {
-          padding: 0;
-        }
-      }
-
-      & .p-cascadeselect-item:first-child {
-        border-radius: 4px 4px 0 0;
-      }
-
-      & .p-cascadeselect-item:last-child {
-        border-radius: 0 0 4px 4px;
-      }
-
-      & .p-cascadeselect-item.p-highlight {
-        color: $black;
-        background-color: $brown-4;
-      }
+    & .p-cascadeselect-option {
+      font-family: variables.$source;
+      font-size: 16px;
+      color: variables.$black;
     }
   }
 
-  .p-dropdown-items-wrapper::-webkit-scrollbar {
+  .p-select-list-container::-webkit-scrollbar {
     appearance: none;
   }
 
-  .p-dropdown-items-wrapper::-webkit-scrollbar:vertical {
+  .p-select-list-container::-webkit-scrollbar:vertical {
     width: 7px;
-    background-color: $white-1;
+    background-color: variables.$white-1;
   }
 
-  .p-dropdown-items-wrapper::-webkit-scrollbar-thumb {
+  .p-select-list-container::-webkit-scrollbar-thumb {
     border-radius: 3px;
-    border: 2px solid $white-1 !important;
-    background-color: $brown-1;
+    border: 2px solid variables.$white-1;
+    background-color: variables.$brown-1;
   }
 
-  .invalid-dropdown.ng-invalid.ng-dirty,
-  .invalid-dropdown.ng-invalid.ng-dirty:hover {
-    & .p-dropdown,
-    & .p-cascadeselect {
-      border: 1px solid $red-1 !important;
+  .p-select.invalid-dropdown.ng-invalid.ng-touched,
+  .invalid-dropdown.ng-invalid.ng-touched .p-cascadeselect {
+    border: 1px solid variables.$red-1 !important;
+  }
+}
+
+@media screen and (width <= 960px) {
+  :host ::ng-deep {
+    .p-overlay {
+      max-width: 100%;
+      width: 100%;
     }
   }
 }

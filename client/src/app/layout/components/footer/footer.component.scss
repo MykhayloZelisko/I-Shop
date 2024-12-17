@@ -1,9 +1,9 @@
-@import 'variables';
+@use 'variables';
 
 .footer {
-  background-color: $brown-1;
-  font-family: $source;
-  color: $yellow;
+  background-color: variables.$brown-1;
+  font-family: variables.$source;
+  color: variables.$yellow;
   padding: 0 10px;
 
   &__inner {

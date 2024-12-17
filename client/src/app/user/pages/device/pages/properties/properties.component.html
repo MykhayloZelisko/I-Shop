@@ -8,14 +8,11 @@
         [rating]="device.rating"
         [votes]="device.votes"
         [deviceId]="device.id"
-      ></app-rating>
+      />
     </div>
     <div class="properties__inner">
-      <app-properties-list [device]="device"></app-properties-list>
-      <app-device-aside
-        class="properties__aside"
-        [device]="device"
-      ></app-device-aside>
+      <app-properties-list [device]="device" />
+      <app-device-aside class="properties__aside" [device]="device" />
     </div>
   </div>
 }

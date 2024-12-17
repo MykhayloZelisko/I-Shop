@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 .properties {
   padding: 12px 0;
@@ -13,7 +13,7 @@
   }
 
   &__title-text {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 24px;
     line-height: 1.2;
   }

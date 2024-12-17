@@ -7,10 +7,7 @@
       {{ comment.createdAt | date: 'dd.MM.YYYY HH:mm' }}
     </p>
   </div>
-  <app-rating
-    [deviceId]="comment.device.id"
-    [rating]="comment.rating"
-  ></app-rating>
+  <app-rating [deviceId]="comment.device.id" [rating]="comment.rating" />
   <div class="comment-item__text">{{ comment.content }}</div>
   <div class="comment-item__text">
     <span class="comment-item__text--bold">Переваги: </span
@@ -63,7 +60,7 @@
           [comment]="comment"
           [user$]="user$"
           [commentsStatus$]="commentsStatus$"
-        ></app-comment-menu>
+        />
       }
       @if (
         dialog.popupType === popupEnum.EditComment &&
@@ -74,7 +71,7 @@
           [comment]="comment"
           [deviceId]="comment.device.id"
           [userId]="comment.user.id"
-        ></app-comment-dialog>
+        />
       }
     }
   }

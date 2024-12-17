@@ -1,7 +1,7 @@
 <div class="brands-list">
   @if (brands$ | async; as brandsList) {
     @for (brand of brandsList; track brand) {
-      <app-brand-item class="item" [brand]="brand"></app-brand-item>
+      <app-brand-item class="item" [brand]="brand" />
     }
   }
 </div>

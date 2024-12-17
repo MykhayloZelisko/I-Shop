@@ -1,10 +1,11 @@
 <div class="textarea">
-  <label class="textarea__label">{{ label }}</label>
+  <label class="textarea__label" for="textarea">{{ label }}</label>
   <textarea
     #textarea
+    id="textarea"
     class="textarea__textarea"
     [ngClass]="{
-      'textarea__textarea--invalid': isInvalid() && withErrors
+      'textarea__textarea--invalid': isInvalid() && withErrors,
     }"
     [ngStyle]="setStyle()"
     [placeholder]="placeholder"

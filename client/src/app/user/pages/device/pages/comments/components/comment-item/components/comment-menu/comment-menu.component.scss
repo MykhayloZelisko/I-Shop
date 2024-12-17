@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 :host {
   position: absolute;
@@ -15,16 +15,23 @@
     drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
 
   &__button {
-    @include button-style($white-1, $brown-2, 6px 12px, $gray-4, true, 0);
+    @include mixins.button-style(
+      variables.$white-1,
+      variables.$brown-2,
+      6px 12px,
+      variables.$gray-4,
+      true,
+      0
+    );
 
     &:hover {
-      color: $blue-2;
+      color: variables.$blue-2;
     }
 
     &:disabled,
     &:disabled:hover {
-      background-color: $white-1;
-      color: $gray-3;
+      background-color: variables.$white-1;
+      color: variables.$gray-3;
       cursor: default;
     }
   }

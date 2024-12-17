@@ -1,13 +1,13 @@
 @if (device$ | async; as device) {
   <div class="about-device">
-    <app-device-carousel [carousel]="device.images"></app-device-carousel>
+    <app-device-carousel [carousel]="device.images" />
     <div class="about-device__info">
       <h2 class="about-device__title">{{ device.deviceName }}</h2>
       <app-rating
         [rating]="device.rating"
         [votes]="device.votes"
         [deviceId]="device.id"
-      ></app-rating>
+      />
       <div class="about-device__buying">
         <span class="about-device__price">{{ device.price }} &#8372;</span>
         <div class="about-device__buttons--large">

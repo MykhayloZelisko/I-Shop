@@ -1,9 +1,9 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .header {
-  background-color: $brown-1;
-  font-family: $source;
+  background-color: variables.$brown-1;
+  font-family: variables.$source;
   padding: 0 10px;
   position: sticky;
   top: 0;
@@ -20,19 +20,24 @@
   }
 
   &__icon {
-    @include icon-style($yellow, 24px);
+    @include mixins.icon-style(variables.$yellow, 24px);
 
     &--search {
       display: none;
     }
 
     &--catalog {
-      @include icon-style($white-1);
+      @include mixins.icon-style(variables.$white-1);
     }
   }
 
   &__icon-btn {
-    @include icon-button-style(40px, transparent, 5px, $brown-2);
+    @include mixins.icon-button-style(
+      40px,
+      transparent,
+      5px,
+      variables.$brown-2
+    );
 
     position: relative;
   }
@@ -43,20 +48,25 @@
     top: 0;
     right: 0;
     min-width: 15px;
-    font-family: $source;
-    color: $white-1;
+    font-family: variables.$source;
+    color: variables.$white-1;
 
     &--full {
-      background-color: $blue-1;
+      background-color: variables.$blue-1;
     }
 
     &--empty {
-      background-color: $gray-5;
+      background-color: variables.$gray-5;
     }
   }
 
   &__button {
-    @include button-style($blue-1, $white-1, 0 18px, $blue-2);
+    @include mixins.button-style(
+      variables.$blue-1,
+      variables.$white-1,
+      0 18px,
+      variables.$blue-2
+    );
 
     display: flex;
     align-items: center;
@@ -66,18 +76,18 @@
     height: 40px;
 
     &--search {
-      @include button-style(
-        $blue-1,
-        $white-1,
+      @include mixins.button-style(
+        variables.$blue-1,
+        variables.$white-1,
         0 18px,
-        $blue-2,
+        variables.$blue-2,
         $border-radius: 0 5px 5px 0
       );
     }
   }
 
   &__logo-icon {
-    @include icon-style($size: 40px, $lift: false);
+    @include mixins.icon-style($size: 40px, $lift: false);
 
     height: 40px;
   }
@@ -91,20 +101,20 @@
   }
 
   &__logo-text {
-    font-family: $source;
+    font-family: variables.$source;
     font-weight: bolder;
     font-size: 40px;
-    background: linear-gradient(to right, $yellow, $blue-1);
+    background: linear-gradient(to right, variables.$yellow, variables.$blue-1);
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: $yellow;
+    color: variables.$yellow;
     white-space: nowrap;
   }
 
   &__language {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 16px;
-    color: $yellow;
+    color: variables.$yellow;
   }
 
   &__search {
@@ -114,7 +124,7 @@
   }
 
   &__input {
-    @include input-style(
+    @include mixins.input-style(
       10px 16px,
       false,
       $radius: 5px 0 0 5px,
@@ -153,7 +163,7 @@
   .header {
     &__icon {
       &--search {
-        @include icon-style($white-1);
+        @include mixins.icon-style(variables.$white-1);
 
         display: block;
       }

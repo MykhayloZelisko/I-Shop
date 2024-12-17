@@ -3,7 +3,7 @@
     class="paginator__load-more"
     [ngClass]="{
       'paginator__load-more--last':
-        paginationParams.currentPage === paginationParams.maxPage
+        paginationParams.currentPage === paginationParams.maxPage,
     }"
     (click)="loadMore()"
   >

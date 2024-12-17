@@ -17,6 +17,15 @@ export const selectIdAndPage = createSelector(
     };
   },
 );
+
+export const selectActiveRouteLastPart = createSelector(
+  selectRouter,
+  (state: RouterReducerState<RouterStateUrlInterface>): string | undefined => {
+    const url = state.state.url;
+    return url.split('/').pop();
+  },
+);
+
 // export const {
 //   selectCurrentRoute, // select the current route
 //   selectFragment, // select the current route fragment

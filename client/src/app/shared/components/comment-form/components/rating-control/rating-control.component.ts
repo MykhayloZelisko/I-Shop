@@ -52,7 +52,7 @@ export class RatingControlComponent
   }
 
   public writeValue(): void {
-    this.rating = Number(this.control.value) ?? 0;
+    this.rating = (this.control.value as number) || 0;
     this.activeRating = this.rating;
   }
 

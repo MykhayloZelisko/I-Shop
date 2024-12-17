@@ -72,7 +72,9 @@ export const selectCascadeCategories = createSelector(
         const category = categoriesWithChildren.find(
           (parent) => parent.id === child.parentId,
         );
-        category!.children.push(child);
+        if (category) {
+          category.children.push(child);
+        }
       }
     }
 

@@ -1,21 +1,21 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .multi-input {
   &__label {
     font-size: 14px;
     display: block;
-    font-family: $source;
+    font-family: variables.$source;
     font-weight: 600;
   }
 
   &__input {
-    @include input-style(9px 12px);
+    @include mixins.input-style(9px 12px);
 
     &--invalid,
     &--invalid:hover,
     &--invalid:focus {
-      border-color: $red-1;
+      border-color: variables.$red-1;
     }
   }
 
@@ -26,23 +26,23 @@
   }
 
   &__button {
-    @include icon-button-style(30px, transparent, $disabled: true);
+    @include mixins.icon-button-style(30px, transparent, $disabled: true);
 
     &:disabled,
     &:disabled:hover {
-      @include icon-style($gray-5);
+      @include mixins.icon-style(variables.$gray-5);
     }
   }
 
   &__icon {
-    @include icon-style($brown-1, 24px);
+    @include mixins.icon-style(variables.$brown-1, 24px);
 
     &--add:hover {
-      @include icon-style($blue-1);
+      @include mixins.icon-style(variables.$blue-1);
     }
 
     &--delete:hover {
-      @include icon-style($red-1);
+      @include mixins.icon-style(variables.$red-1);
     }
   }
 
@@ -52,9 +52,9 @@
   }
 
   &__error {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 12px;
-    color: $red-1;
+    color: variables.$red-1;
     font-weight: 700;
   }
 }

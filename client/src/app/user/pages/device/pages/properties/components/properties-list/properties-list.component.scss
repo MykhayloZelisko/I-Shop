@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 :host {
   flex: 2;
@@ -10,7 +10,7 @@
   gap: 16px;
 
   &__group-name {
-    font-family: $source;
+    font-family: variables.$source;
     font-weight: bold;
     font-size: 20px;
     line-height: 1.2;
@@ -39,16 +39,16 @@
       left: 0;
       right: 0;
       bottom: 3px;
-      border-bottom: 1px dotted $gray-5;
+      border-bottom: 1px dotted variables.$gray-5;
       z-index: -1;
     }
   }
 
   &__property-name {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 14px;
     line-height: 1.2;
-    background-color: $white-1;
+    background-color: variables.$white-1;
     word-break: break-word;
     padding-right: 10px;
   }
@@ -61,7 +61,7 @@
   }
 
   &__value-name {
-    font-family: $source;
+    font-family: variables.$source;
     font-size: 14px;
     line-height: 1.2;
   }

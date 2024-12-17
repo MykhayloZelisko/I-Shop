@@ -18,6 +18,8 @@ import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
 import { GetControlDirective } from '../../directives/get-control.directive';
 
+import { v4 as uuidV4 } from 'uuid';
+
 @Component({
   selector: 'app-input',
   standalone: true,
@@ -48,6 +50,8 @@ export class InputComponent
   @Input({ required: true }) public withErrors!: boolean;
 
   @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
+
+  public readonly id = uuidV4();
 
   public internalValue: string | null = null;
 

@@ -1,8 +1,8 @@
 <div class="input" [ngStyle]="setHeight()">
-  <label class="input__label" for="input">{{ label }}</label>
+  <label class="input__label" [for]="id">{{ label }}</label>
   <input
     #input
-    id="input"
+    [id]="id"
     class="input__input"
     [ngClass]="{
       'input__input--invalid': isInvalid() && withErrors,

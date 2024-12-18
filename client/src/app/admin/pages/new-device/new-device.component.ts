@@ -29,7 +29,6 @@ import {
   requiredValidator,
   showErrorMessage,
 } from '../../../shared/utils/validators';
-import { DropdownModule } from 'primeng/dropdown';
 import { Observable, Subject, take, takeUntil, tap } from 'rxjs';
 import { BrandInterface } from '../../../shared/models/interfaces/brand.interface';
 import { Store } from '@ngrx/store';
@@ -57,6 +56,7 @@ import {
 import { SharedActions } from '../../../+store/shared/actions/shared.actions';
 import { CPropertyActions } from '../../../+store/c-properties/actions/c-property.actions';
 import { MultiInputComponent } from './components/multi-input/multi-input.component';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-new-device',
@@ -64,7 +64,6 @@ import { MultiInputComponent } from './components/multi-input/multi-input.compon
   imports: [
     NgxMaskDirective,
     ReactiveFormsModule,
-    DropdownModule,
     AsyncPipe,
     NgClass,
     CascadeSelectModule,
@@ -72,6 +71,7 @@ import { MultiInputComponent } from './components/multi-input/multi-input.compon
     SvgIconComponent,
     InputComponent,
     MultiInputComponent,
+    SelectModule,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',

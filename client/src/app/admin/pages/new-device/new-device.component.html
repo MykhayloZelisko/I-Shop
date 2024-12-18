@@ -51,7 +51,7 @@
     @if (brands$ | async; as brands) {
       <div class="new-device__field">
         <label class="new-device__label" for="brand-id">Бренд</label>
-        <p-dropdown
+        <p-select
           [ngClass]="{
             'invalid-dropdown': newDeviceForm.controls.brandId.invalid,
           }"
@@ -61,7 +61,7 @@
           optionValue="id"
           placeholder="Виберіть бренд"
           formControlName="brandId"
-        ></p-dropdown>
+        ></p-select>
         @if (
           newDeviceForm.controls.brandId.invalid &&
           (newDeviceForm.controls.brandId.dirty ||

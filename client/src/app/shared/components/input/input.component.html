@@ -1,20 +1,20 @@
 <div class="input" [ngStyle]="setHeight()">
-  <label class="input__label" [for]="id">{{ label }}</label>
+  <label class="input__label" [for]="id">{{ label() }}</label>
   <input
     #input
     [id]="id"
     class="input__input"
     [ngClass]="{
-      'input__input--invalid': isInvalid() && withErrors,
+      'input__input--invalid': isInvalid() && withErrors(),
     }"
-    [type]="inputType"
-    [placeholder]="placeholder"
+    [type]="inputType()"
+    [placeholder]="placeholder()"
     [value]="internalValue || ''"
     (input)="changeValue($event)"
     (blur)="onBlur()"
     (focus)="onFocus()"
   />
-  @if (isInvalid() && withErrors) {
+  @if (isInvalid() && withErrors()) {
     <p class="input__error">{{ showMessage() }}</p>
   }
 </div>

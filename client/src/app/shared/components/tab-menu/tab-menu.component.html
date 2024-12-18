@@ -1,7 +1,7 @@
 @if (activeTab$ | async; as activeTab) {
   <p-tabs class="tab-menu" scrollable [value]="activeTab">
     <p-tablist>
-      @for (tab of items; track tab.route) {
+      @for (tab of items(); track tab.route) {
         <p-tab [value]="tab.route" [routerLink]="tab.route">
           <span>{{ tab.label }}</span>
         </p-tab>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { NgClass } from '@angular/common';
 
@@ -11,7 +11,7 @@ import { NgClass } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceCarouselComponent {
-  @Input({ required: true }) public carousel!: string[];
+  public carousel = input.required<string[]>();
 
   public currentImageIndex = 0;
 

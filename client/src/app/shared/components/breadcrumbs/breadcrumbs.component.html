@@ -6,7 +6,7 @@
         src="assets/images/home-icon.svg"
       ></svg-icon>
     </a>
-    @for (param of params.categoryPath; track param; let last = $last) {
+    @for (param of params.categoryPath; track param.id; let last = $last) {
       <p class="breadcrumbs__text">
         /
         @if (last && params.isCategory) {

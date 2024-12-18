@@ -11,7 +11,7 @@ import { Observable, take } from 'rxjs';
 import { selectCGPTree } from '../../../+store/shared/selectors/shared.selectors';
 import { TreeNode } from 'primeng/api';
 import {
-  TreeModule,
+  Tree,
   TreeNodeCollapseEvent,
   TreeNodeExpandEvent,
 } from 'primeng/tree';
@@ -32,7 +32,7 @@ import { CPropertyActions } from '../../../+store/c-properties/actions/c-propert
   selector: 'app-categories',
   standalone: true,
   imports: [
-    TreeModule,
+    Tree,
     AsyncPipe,
     CategoryItemComponent,
     NewCategoryComponent,

@@ -56,11 +56,7 @@ export const reducer = createReducer(
         if (action.expanded !== undefined) {
           changes.expanded = action.expanded;
         }
-        if (
-          action.loadedGroups !== undefined &&
-          category &&
-          category.hasGroups
-        ) {
+        if (action.loadedGroups !== undefined && category?.hasGroups) {
           changes.loadedGroups = action.loadedGroups;
         }
 

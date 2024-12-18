@@ -1,6 +1,6 @@
 <div class="brands-list">
   @if (brands$ | async; as brandsList) {
-    @for (brand of brandsList; track brand) {
+    @for (brand of brandsList; track brand.id) {
       <app-brand-item class="item" [brand]="brand" />
     }
   }

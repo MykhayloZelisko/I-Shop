@@ -4,8 +4,8 @@ import {
   Component,
   ElementRef,
   inject,
-  Input,
-  ViewChild,
+  input,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { GetControlDirective } from '../../directives/get-control.directive';
@@ -31,17 +31,18 @@ export class TextareaComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
-  @ViewChild('textarea') public textarea!: ElementRef<HTMLTextAreaElement>;
+  public textarea =
+    viewChild.required<ElementRef<HTMLTextAreaElement>>('textarea');
 
-  @Input() public placeholder = '';
+  public placeholder = input<string>('');
 
-  @Input({ required: true }) public label!: string;
+  public label = input.required<string>();
 
-  @Input({ required: true }) public withErrors!: boolean;
+  public withErrors = input.required<boolean>();
 
-  @Input({ required: true }) public resizeX!: boolean;
+  public resizeX = input.required<boolean>();
 
-  @Input({ required: true }) public resizeY!: boolean;
+  public resizeY = input.required<boolean>();
 
   public internalValue: string | null = null;
 
@@ -61,8 +62,8 @@ export class TextareaComponent
 
   public writeValue(value: string): void {
     this.internalValue = value;
-    if (this.textarea) {
-      this.textarea.nativeElement.value = this.internalValue;
+    if (this.textarea()) {
+      this.textarea().nativeElement.value = this.internalValue;
     }
     this.cdr.markForCheck();
   }
@@ -81,11 +82,11 @@ export class TextareaComponent
   }
 
   public setStyle(): Record<string, string> {
-    const resize = this.resizeX
-      ? this.resizeY
+    const resize = this.resizeX()
+      ? this.resizeY()
         ? 'both'
         : 'horizontal'
-      : this.resizeY
+      : this.resizeY()
         ? 'vertical'
         : 'none';
     return { resize };

@@ -1,6 +1,6 @@
 <div class="small-catalog">
   <div class="small-catalog__header">
-    <h3 class="small-catalog__title">{{ dialog.title }}</h3>
+    <h3 class="small-catalog__title">{{ dialog().title }}</h3>
     <button class="small-catalog__close" (click)="closeCatalog()">
       <svg-icon
         class="small-catalog__icon small-catalog__icon--header-icon"
@@ -11,7 +11,7 @@
   <div class="small-catalog__body">
     @if (isCoreList) {
       <ul class="small-catalog__core-categories">
-        @for (category of categories; track category) {
+        @for (category of categories(); track category.id) {
           <li class="small-catalog__core-category">
             @if (category.children.length) {
               <button
@@ -63,7 +63,7 @@
         </div>
       </button>
       <ul class="small-catalog__sub-categories">
-        @for (category of currentCategory.children; track category) {
+        @for (category of currentCategory.children; track category.id) {
           <li class="small-catalog__sub-category">
             <a
               class="small-catalog__sub-link"
@@ -72,7 +72,10 @@
               >{{ category.categoryName }}</a
             >
             <ul>
-              @for (childCategory of category.children; track childCategory) {
+              @for (
+                childCategory of category.children;
+                track childCategory.id
+              ) {
                 <li class="small-catalog__sub-sub-category">
                   <a
                     class="small-catalog__sub-link"

@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { CommentInterface } from '../../../../../../../shared/models/interfaces/comment.interface';
@@ -39,12 +39,12 @@ import { CommentDialogComponent } from '../../../../../../../shared/components/c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentItemComponent implements OnInit {
-  @Input({ required: true }) public comment!: CommentInterface;
+  public comment = input.required<CommentInterface>();
 
-  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
+  public user$ = input.required<Observable<UserInterface | null>>();
 
-  @Input({ required: true })
-  public commentsStatus$!: Observable<CommentsListStatusInterface>;
+  public commentsStatus$ =
+    input.required<Observable<CommentsListStatusInterface>>();
 
   public readonly popupEnum = PopupTypeEnum;
 
@@ -61,7 +61,7 @@ export class CommentItemComponent implements OnInit {
 
   public likeComment(status: 1 | -1): void {
     this.store.dispatch(
-      CommentActions.updateLikes({ commentId: this.comment.id, status }),
+      CommentActions.updateLikes({ commentId: this.comment().id, status }),
     );
   }
 
@@ -72,7 +72,7 @@ export class CommentItemComponent implements OnInit {
       }),
     );
     this.store.dispatch(
-      CommentActions.updateCurrentComment({ id: this.comment.id }),
+      CommentActions.updateCurrentComment({ id: this.comment().id }),
     );
   }
 }

@@ -97,7 +97,7 @@ export const selectGPTreeById = (
     selectAllCProperties,
     (categoryEntities, groups, properties) => {
       const category = categoryEntities[categoryId];
-      if (!category || !category.hasGroups) {
+      if (!category?.hasGroups) {
         return [];
       }
       const categoryGroups = groups.filter(

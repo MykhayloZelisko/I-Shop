@@ -1,5 +1,5 @@
 @if (currentGroup$ | async; as currentGroup) {
-  @if (currentGroup.id === group.id && currentGroup.isEditable) {
+  @if (currentGroup.id === group().id && currentGroup.isEditable) {
     <div class="c-properties-group-item--editable">
       <input
         class="c-properties-group-item__input"
@@ -35,11 +35,11 @@
     <div
       class="c-properties-group-item"
       [ngClass]="{
-        'c-properties-group-item--empty': !group.hasProperties,
+        'c-properties-group-item--empty': !group().hasProperties,
       }"
     >
       <p class="c-properties-group-item__name">
-        {{ group.groupName }}
+        {{ group().groupName }}
       </p>
       <div class="c-properties-group-item__buttons">
         <button
@@ -70,9 +70,9 @@
   @if (dialog$ | async; as dialog) {
     @if (
       dialog.popupType === dialogEnum.CProperties &&
-      currentGroup.id === group.id
+      currentGroup.id === group().id
     ) {
-      <app-c-properties-dialog [dialog]="dialog" [group]="group" />
+      <app-c-properties-dialog [dialog]="dialog" [group]="group()" />
     }
   }
 }

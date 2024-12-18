@@ -1,23 +1,27 @@
 @if (currentCategory$ | async; as currentCategory) {
-  @if (currentCategory.id === category.id && currentCategory.isEditable) {
+  @if (currentCategory.id === category().id && currentCategory.isEditable) {
     <div
       class="category-item category-item--editable"
       [ngClass]="{
-        'category-item--empty': !(category.hasGroups || (hasChildren$ | async)),
+        'category-item--empty': !(
+          category().hasGroups || (hasChildren$ | async)
+        ),
       }"
       [formGroup]="categoryForm"
     >
       <div
         class="category-item__content"
-        [ngClass]="{ 'category-item__content--subcategory': category.parentId }"
+        [ngClass]="{
+          'category-item__content--subcategory': category().parentId,
+        }"
       >
-        @if (category.image) {
+        @if (category().image) {
           <div class="category-item__dnd">
             <app-dnd-file-control formControlName="image" />
           </div>
         }
         <div class="category-item__name-wrapper--editable">
-          @if (category.icon) {
+          @if (category().icon) {
             <app-svg-file-control formControlName="icon" />
           }
           <input
@@ -30,7 +34,7 @@
       </div>
       <div
         class="category-item__buttons--editable"
-        [ngClass]="{ 'category-item__buttons--not-first': category.parentId }"
+        [ngClass]="{ 'category-item__buttons--not-first': category().parentId }"
       >
         <button
           class="category-item__button"
@@ -54,39 +58,40 @@
     <div
       class="category-item"
       [ngClass]="{
-        'category-item--empty': !(category.hasGroups || (hasChildren$ | async)),
+        'category-item--empty': !(
+          category().hasGroups || (hasChildren$ | async)
+        ),
       }"
     >
       <div
         class="category-item__content"
-        [ngClass]="{ 'category-item__content--subcategory': category.parentId }"
+        [ngClass]="{
+          'category-item__content--subcategory': category().parentId,
+        }"
       >
-        @if (category.image) {
+        @if (category().image) {
           <img
             class="category-item__image"
-            [src]="category.image"
+            [src]="category().image"
             alt="image"
             [ngStyle]="getImageStyle()"
-            [alt]="category.image"
+            [alt]="category().image"
             (load)="onImageLoad($event)"
           />
         }
         <div class="category-item__name-wrapper">
-          @if (category.icon) {
-            <svg-icon
-              class="category-item__icon"
-              [src]="category.icon"
-            ></svg-icon>
+          @if (category().icon; as icon) {
+            <svg-icon class="category-item__icon" [src]="icon"></svg-icon>
           }
           <p class="category-item__name">
-            {{ category.categoryName }}
+            {{ category().categoryName }}
           </p>
         </div>
       </div>
       <div
         class="category-item__buttons"
         [ngClass]="{
-          'category-item__buttons--not-first': category.parentId,
+          'category-item__buttons--not-first': category().parentId,
         }"
       >
         <button
@@ -102,7 +107,7 @@
         <button
           class="category-item__button"
           (click)="openSubCategoriesDialog()"
-          [disabled]="category.hasGroups || category.level === 3"
+          [disabled]="category().hasGroups || category().level === 3"
         >
           <svg-icon
             class="category-item__icon category-item__icon--add"
@@ -128,20 +133,23 @@
   @if (dialog$ | async; as dialog) {
     @if (
       dialog.popupType === dialogEnum.SubCategories &&
-      currentCategory.id === category.id
+      currentCategory.id === category().id
     ) {
       <app-sub-categories-dialog
         [dialog]="dialog"
-        [parentId]="category.id"
-        [level]="category.level + 1"
+        [parentId]="category().id"
+        [level]="category().level + 1"
       />
     }
 
     @if (
       dialog.popupType === dialogEnum.CPropertiesGroups &&
-      currentCategory.id === category.id
+      currentCategory.id === category().id
     ) {
-      <app-c-properties-groups-dialog [dialog]="dialog" [category]="category" />
+      <app-c-properties-groups-dialog
+        [dialog]="dialog"
+        [category]="category()"
+      />
     }
   }
 }

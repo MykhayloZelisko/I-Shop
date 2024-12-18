@@ -2,8 +2,8 @@
   <div class="device-carousel__current">
     <img
       class="device-carousel__image"
-      [src]="carousel[currentImageIndex]"
-      [alt]="carousel[currentImageIndex]"
+      [src]="carousel()[currentImageIndex]"
+      [alt]="carousel()[currentImageIndex]"
     />
     <div class="device-carousel__buttons">
       <button class="device-carousel__button" (click)="prevImage()">
@@ -21,7 +21,7 @@
     </div>
   </div>
   <ul class="device-carousel__list">
-    @for (image of carousel; track image; let index = $index) {
+    @for (image of carousel(); track image; let index = $index) {
       <li
         class="device-carousel__list-item"
         [ngClass]="{
@@ -31,8 +31,8 @@
       >
         <img
           class="device-carousel__image"
-          [src]="carousel[index]"
-          [alt]="carousel[index]"
+          [src]="carousel()[index]"
+          [alt]="carousel()[index]"
         />
       </li>
     }

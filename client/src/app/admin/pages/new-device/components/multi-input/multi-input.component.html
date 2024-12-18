@@ -1,5 +1,5 @@
-<div class="multi-input" [formGroup]="multiInputForm">
-  <label class="multi-input__label" for="multi-input">{{ label }}</label>
+<div class="multi-input" [formGroup]="multiInputForm()">
+  <label class="multi-input__label" for="multi-input">{{ label() }}</label>
   <ng-container formArrayName="value" id="multi-input">
     @for (
       control of getValueArrayCtrl().controls;
@@ -11,7 +11,7 @@
           <input
             class="multi-input__input"
             [ngClass]="{
-              'multi-input__input--invalid': isInvalid(index) && withErrors,
+              'multi-input__input--invalid': isInvalid(index) && withErrors(),
             }"
             [formControlName]="index"
           />
@@ -37,7 +37,7 @@
             </button>
           </div>
         </div>
-        @if (isInvalid(index) && withErrors) {
+        @if (isInvalid(index) && withErrors()) {
           <p class="multi-input__error">
             {{ showMessage(getValueCtrlByIndex(index)) }}
           </p>

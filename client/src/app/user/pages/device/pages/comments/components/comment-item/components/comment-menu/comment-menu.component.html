@@ -1,16 +1,16 @@
-@if (user$ | async; as user) {
+@if (user$() | async; as user) {
   <div class="comment-menu" appClickOutside>
     <button
       class="comment-menu__button"
       (click)="editComment()"
-      [disabled]="user.id !== comment.user.id"
+      [disabled]="user.id !== comment().user.id"
     >
       Змінити
     </button>
     <button
       class="comment-menu__button"
-      (click)="deleteComment(comment.id)"
-      [disabled]="user.id !== comment.user.id && (isAdmin$ | async) === false"
+      (click)="deleteComment(comment().id)"
+      [disabled]="user.id !== comment().user.id && (isAdmin$ | async) === false"
     >
       Видалити
     </button>

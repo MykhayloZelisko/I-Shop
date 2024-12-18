@@ -2,11 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren,
+  viewChild,
+  viewChildren,
 } from '@angular/core';
 import { InputComponent } from '../input/input.component';
 import { RatingControlComponent } from './components/rating-control/rating-control.component';
@@ -37,19 +36,19 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentFormComponent implements OnInit {
-  @ViewChildren(InputComponent) public inputs!: QueryList<InputComponent>;
+  public inputs = viewChildren(InputComponent);
 
-  @ViewChild(TextareaComponent) public textarea!: TextareaComponent;
+  public textarea = viewChild.required(TextareaComponent);
 
-  @ViewChild(RatingControlComponent) public ratingCtrl!: RatingControlComponent;
+  public ratingCtrl = viewChild.required(RatingControlComponent);
 
-  @Input() public dialog!: PopupDataInterface;
+  public dialog = input<PopupDataInterface>();
 
-  @Input({ required: true }) public deviceId!: string;
+  public deviceId = input.required<string>();
 
-  @Input({ required: true }) public userId!: string | null;
+  public userId = input.required<string | null>();
 
-  @Input() public comment!: CommentInterface;
+  public comment = input<CommentInterface>();
 
   public readonly popupEnum = PopupTypeEnum;
 
@@ -64,37 +63,38 @@ export class CommentFormComponent implements OnInit {
   }
 
   public initForm(): void {
+    const comment = this.comment();
     this.commentForm = this.fb.group<CommentFormInterface>({
       rating: this.fb.nonNullable.control<number>(
-        this.comment ? this.comment.rating : 0,
+        comment ? comment.rating : 0,
         [ratingValidator()],
       ),
       advantages: this.fb.nonNullable.control<string>(
-        this.comment ? this.comment.advantages : '',
+        comment ? comment.advantages : '',
         [requiredValidator()],
       ),
       disadvantages: this.fb.nonNullable.control<string>(
-        this.comment ? this.comment.disadvantages : '',
+        comment ? comment.disadvantages : '',
         [requiredValidator()],
       ),
       content: this.fb.nonNullable.control<string>(
-        this.comment ? this.comment.content : '',
+        comment ? comment.content : '',
         [requiredValidator()],
       ),
     });
   }
 
-  public sendComment(userId: string): void {
-    this.inputs.forEach((input: InputComponent) => {
-      input.markAsDirty();
+  public sendComment(userId: string | null): void {
+    this.inputs().forEach((item: InputComponent) => {
+      item.markAsDirty();
     });
-    this.textarea.markAsDirty();
-    this.ratingCtrl.markAsDirty();
-    if (this.commentForm.valid) {
+    this.textarea().markAsDirty();
+    this.ratingCtrl().markAsDirty();
+    if (this.commentForm.valid && userId) {
       const formData = this.commentForm.getRawValue();
       const comment: CreateCommentInterface = {
         ...formData,
-        deviceId: this.deviceId,
+        deviceId: this.deviceId(),
         userId,
       };
       this.store.dispatch(CommentActions.addComment({ comment }));
@@ -114,15 +114,16 @@ export class CommentFormComponent implements OnInit {
   }
 
   public updateComment(): void {
-    if (this.commentForm.valid) {
+    const oldComment = this.comment();
+    if (this.commentForm.valid && oldComment) {
       const formData = this.commentForm.getRawValue();
       const comment: CreateCommentInterface = {
         ...formData,
-        deviceId: this.comment.device.id,
-        userId: this.comment.user.id,
+        deviceId: oldComment.device.id,
+        userId: oldComment.user.id,
       };
       this.store.dispatch(
-        CommentActions.updateComment({ id: this.comment.id, comment }),
+        CommentActions.updateComment({ id: oldComment.id, comment }),
       );
     }
   }

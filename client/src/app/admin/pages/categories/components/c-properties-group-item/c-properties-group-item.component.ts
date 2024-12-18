@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { CPropertiesGroupInterface } from '../../../../../shared/models/interfaces/c-properties-group.interface';
@@ -38,7 +38,7 @@ import { SharedActions } from '../../../../../+store/shared/actions/shared.actio
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CPropertiesGroupItemComponent implements OnInit {
-  @Input({ required: true }) public group!: CPropertiesGroupInterface;
+  public group = input.required<CPropertiesGroupInterface>();
 
   public readonly dialogEnum = PopupTypeEnum;
 
@@ -55,9 +55,10 @@ export class CPropertiesGroupItemComponent implements OnInit {
   public ngOnInit(): void {
     this.currentGroup$ = this.store.select(selectCurrentGroup);
     this.dialog$ = this.store.select(selectPopup);
-    this.groupCtrl = this.fb.nonNullable.control<string>(this.group.groupName, [
-      requiredValidator(),
-    ]);
+    this.groupCtrl = this.fb.nonNullable.control<string>(
+      this.group().groupName,
+      [requiredValidator()],
+    );
   }
 
   public editGroup(): void {
@@ -67,7 +68,7 @@ export class CPropertiesGroupItemComponent implements OnInit {
           currentPropertyId: null,
           isNewCategory: false,
           currentCategory: { id: null, isEditable: false },
-          currentGroup: { id: this.group.id, isEditable: true },
+          currentGroup: { id: this.group().id, isEditable: true },
         },
       }),
     );
@@ -77,7 +78,7 @@ export class CPropertiesGroupItemComponent implements OnInit {
     const groupName = this.groupCtrl.getRawValue();
     this.store.dispatch(
       CPropertiesGroupActions.updateCPropertiesGroup({
-        id: this.group.id,
+        id: this.group().id,
         groupName,
       }),
     );
@@ -85,12 +86,12 @@ export class CPropertiesGroupItemComponent implements OnInit {
 
   public cancelEditGroup(): void {
     this.store.dispatch(SharedActions.clearCGPState());
-    this.groupCtrl.setValue(this.group.groupName);
+    this.groupCtrl.setValue(this.group().groupName);
   }
 
   public deleteGroup(): void {
     this.store.dispatch(
-      CPropertiesGroupActions.deleteCPropertiesGroup({ id: this.group.id }),
+      CPropertiesGroupActions.deleteCPropertiesGroup({ id: this.group().id }),
     );
   }
 
@@ -109,7 +110,7 @@ export class CPropertiesGroupItemComponent implements OnInit {
           currentPropertyId: null,
           isNewCategory: false,
           currentCategory: { id: null, isEditable: false },
-          currentGroup: { id: this.group.id, isEditable: false },
+          currentGroup: { id: this.group().id, isEditable: false },
         },
       }),
     );

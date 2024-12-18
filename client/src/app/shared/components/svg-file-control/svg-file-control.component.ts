@@ -6,7 +6,7 @@ import {
   HostListener,
   inject,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -32,7 +32,8 @@ export class SvgFileControlComponent
   extends GetControlDirective
   implements ControlValueAccessor, OnInit
 {
-  @ViewChild('fileUpload') public fileUpload!: ElementRef<HTMLInputElement>;
+  public fileUpload =
+    viewChild.required<ElementRef<HTMLInputElement>>('fileUpload');
 
   @HostListener('change', ['$event.target.files'])
   private handleFileInput(event: FileList): void {
@@ -83,7 +84,7 @@ export class SvgFileControlComponent
   }
 
   public triggerFileInput(): void {
-    this.fileUpload.nativeElement.click();
+    this.fileUpload().nativeElement.click();
     if (!this.control.value) {
       this.onChange('');
     }

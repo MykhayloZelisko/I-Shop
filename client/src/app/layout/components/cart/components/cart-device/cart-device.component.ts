@@ -1,11 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
-  Input,
-  OnChanges,
+  input,
   OnInit,
-  SimpleChanges,
 } from '@angular/core';
 import { CartDeviceInterface } from '../../../../../shared/models/interfaces/cart-device.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -33,10 +32,10 @@ import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
   styleUrl: './cart-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartDeviceComponent implements OnInit, OnChanges {
-  @Input({ required: true }) public device!: CartDeviceInterface;
+export class CartDeviceComponent implements OnInit {
+  public device = input.required<CartDeviceInterface>();
 
-  @Input({ required: true }) public cartId$!: Observable<string | null>;
+  public cartId$ = input.required<Observable<string | null>>();
 
   public cartDeviceForm!: FormGroup<CartDeviceFormInterface>;
 
@@ -50,10 +49,10 @@ export class CartDeviceComponent implements OnInit, OnChanges {
 
   private store = inject(Store<State>);
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['device'] && !changes['device'].firstChange) {
-      this.cartDeviceForm.controls.isInOrder.setValue(this.device.isInOrder);
-    }
+  public constructor() {
+    effect(() => {
+      this.cartDeviceForm.controls.isInOrder.setValue(this.device().isInOrder);
+    });
   }
 
   public ngOnInit(): void {
@@ -64,7 +63,7 @@ export class CartDeviceComponent implements OnInit, OnChanges {
   public updateQuantityStatus(): void {
     const control = this.cartDeviceForm.controls.quantity;
     const value = control.value;
-    const maxQuantity = this.device.device.quantity;
+    const maxQuantity = this.device().device.quantity;
 
     if (!value || value <= 0) {
       control.setValue(1);
@@ -78,8 +77,8 @@ export class CartDeviceComponent implements OnInit, OnChanges {
 
   public initForm(): void {
     this.cartDeviceForm = this.fb.group<CartDeviceFormInterface>({
-      quantity: this.fb.nonNullable.control<number>(this.device.quantity),
-      isInOrder: this.fb.nonNullable.control<boolean>(this.device.isInOrder),
+      quantity: this.fb.nonNullable.control<number>(this.device().quantity),
+      isInOrder: this.fb.nonNullable.control<boolean>(this.device().isInOrder),
     });
   }
 
@@ -90,23 +89,25 @@ export class CartDeviceComponent implements OnInit, OnChanges {
 
   public redirectToDevice(event: MouseEvent): void {
     event.preventDefault();
-    this.router.navigate(['devices', this.device.device.id]);
+    this.router.navigate(['devices', this.device().device.id]);
     this.store.dispatch(PopupActions.closePopup());
   }
 
   public deleteDevice(): void {
-    this.cartId$.pipe(take(1)).subscribe({
-      next: (id: string | null) => {
-        if (id) {
-          this.store.dispatch(
-            CartActions.deleteCartDevices({
-              deviceIds: [this.device.id],
-              cartId: id,
-            }),
-          );
-        }
-      },
-    });
+    this.cartId$()
+      .pipe(take(1))
+      .subscribe({
+        next: (id: string | null) => {
+          if (id) {
+            this.store.dispatch(
+              CartActions.deleteCartDevices({
+                deviceIds: [this.device().id],
+                cartId: id,
+              }),
+            );
+          }
+        },
+      });
   }
 
   public changeQuantity(value: 1 | -1): void {
@@ -119,7 +120,7 @@ export class CartDeviceComponent implements OnInit, OnChanges {
   public submitData(): void {
     const device = this.cartDeviceForm.getRawValue();
     this.store.dispatch(
-      CartActions.updateCartDevice({ id: this.device.id, device }),
+      CartActions.updateCartDevice({ id: this.device().id, device }),
     );
   }
 }

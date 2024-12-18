@@ -1,4 +1,4 @@
-@if ((currentPropertyId$ | async) === property.id) {
+@if ((currentPropertyId$ | async) === property().id) {
   <div class="c-property-item--editable">
     <input
       class="c-property-item__input"
@@ -28,7 +28,7 @@
 } @else {
   <div class="c-property-item">
     <p class="c-property-item__name">
-      {{ property.propertyName }}
+      {{ property().propertyName }}
     </p>
     <div class="c-property-item__buttons">
       <button class="c-property-item__button" (click)="editProperty()">

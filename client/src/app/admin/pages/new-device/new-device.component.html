@@ -51,7 +51,7 @@
     @if (brands$ | async; as brands) {
       <div class="new-device__field">
         <label class="new-device__label" for="brand-id">Бренд</label>
-        <p-dropdown
+        <p-select
           [ngClass]="{
             'invalid-dropdown': newDeviceForm.controls.brandId.invalid,
           }"
@@ -61,7 +61,7 @@
           optionValue="id"
           placeholder="Виберіть бренд"
           formControlName="brandId"
-        ></p-dropdown>
+        ></p-select>
         @if (
           newDeviceForm.controls.brandId.invalid &&
           (newDeviceForm.controls.brandId.dirty ||
@@ -153,7 +153,7 @@
         <h3 class="new-device__title">Характеристики</h3>
       }
       <ng-container formArrayName="groups">
-        @for (group of groups; track group; let groupIndex = $index) {
+        @for (group of groups; track group.id; let groupIndex = $index) {
           <ng-container [formGroupName]="groupIndex">
             <h4
               class="new-device__sub-title"
@@ -172,7 +172,7 @@
             <ng-container formArrayName="properties">
               @for (
                 property of group.properties;
-                track property;
+                track property.id;
                 let propertyIndex = $index
               ) {
                 <ng-container [formGroupName]="propertyIndex">

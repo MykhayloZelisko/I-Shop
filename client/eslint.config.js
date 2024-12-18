@@ -51,6 +51,7 @@ module.exports = tseslint.config(
       '@typescript-eslint/no-duplicate-enum-values': 'off',
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/no-mixed-enums': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_' },

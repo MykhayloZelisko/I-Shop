@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { PopupDataInterface } from '../../models/interfaces/popup-data.interface';
@@ -22,13 +22,13 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentDialogComponent {
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
-  @Input({ required: true }) public deviceId!: string;
+  public deviceId = input.required<string>();
 
-  @Input({ required: true }) public userId!: string;
+  public userId = input.required<string>();
 
-  @Input() public comment!: CommentInterface;
+  public comment = input<CommentInterface>();
 
   private store = inject(Store<State>);
 

@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../../../../../../../shared/directives/click-outside.directive';
@@ -27,12 +27,12 @@ import { PopupTypeEnum } from '../../../../../../../../../shared/models/enums/po
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentMenuComponent implements OnInit {
-  @Input({ required: true }) public comment!: CommentInterface;
+  public comment = input.required<CommentInterface>();
 
-  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
+  public user$ = input.required<Observable<UserInterface | null>>();
 
-  @Input({ required: true })
-  public commentsStatus$!: Observable<CommentsListStatusInterface>;
+  public commentsStatus$ =
+    input.required<Observable<CommentsListStatusInterface>>();
 
   public isAdmin$!: Observable<boolean>;
 
@@ -54,15 +54,17 @@ export class CommentMenuComponent implements OnInit {
   }
 
   public deleteComment(id: string): void {
-    this.commentsStatus$.pipe(take(1)).subscribe({
-      next: (status: CommentsListStatusInterface) => {
-        this.store.dispatch(
-          CommentActions.deleteComment({
-            id,
-            cursor: status.cursor,
-          }),
-        );
-      },
-    });
+    this.commentsStatus$()
+      .pipe(take(1))
+      .subscribe({
+        next: (status: CommentsListStatusInterface) => {
+          this.store.dispatch(
+            CommentActions.deleteComment({
+              id,
+              cursor: status.cursor,
+            }),
+          );
+        },
+      });
   }
 }

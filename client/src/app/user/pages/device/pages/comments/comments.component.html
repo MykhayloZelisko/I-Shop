@@ -36,7 +36,7 @@
                 }
               </div>
               <div class="comments__list">
-                @for (comment of comments; track comment) {
+                @for (comment of comments; track comment.id) {
                   <app-comment-item
                     [comment]="comment"
                     [user$]="user$"

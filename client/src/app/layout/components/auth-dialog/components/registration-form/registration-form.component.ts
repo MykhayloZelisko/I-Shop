@@ -3,8 +3,7 @@ import {
   Component,
   inject,
   OnInit,
-  QueryList,
-  ViewChildren,
+  viewChildren,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -45,7 +44,7 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationFormComponent implements OnInit {
-  @ViewChildren(InputComponent) public inputs!: QueryList<InputComponent>;
+  public inputs = viewChildren(InputComponent);
 
   public registrationForm!: FormGroup<RegistrationFormInterface>;
 
@@ -102,7 +101,7 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   public registration(): void {
-    this.inputs.forEach((input: InputComponent) => {
+    this.inputs().forEach((input: InputComponent) => {
       input.markAsDirty();
     });
     this.registrationForm.controls.phone.markAsDirty();

@@ -5,9 +5,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren,
+  viewChild,
+  viewChildren,
 } from '@angular/core';
 import { NgxMaskDirective } from 'ngx-mask';
 import {
@@ -30,7 +29,6 @@ import {
   requiredValidator,
   showErrorMessage,
 } from '../../../shared/utils/validators';
-import { DropdownModule } from 'primeng/dropdown';
 import { Observable, Subject, take, takeUntil, tap } from 'rxjs';
 import { BrandInterface } from '../../../shared/models/interfaces/brand.interface';
 import { Store } from '@ngrx/store';
@@ -40,7 +38,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { selectCascadeCategories } from '../../../+store/categories/selectors/category.selectors';
 import {
   CascadeSelectChangeEvent,
-  CascadeSelectModule,
+  CascadeSelect,
 } from 'primeng/cascadeselect';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
 import { FileControlComponent } from './components/file-control/file-control.component';
@@ -58,6 +56,7 @@ import {
 import { SharedActions } from '../../../+store/shared/actions/shared.actions';
 import { CPropertyActions } from '../../../+store/c-properties/actions/c-property.actions';
 import { MultiInputComponent } from './components/multi-input/multi-input.component';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-new-device',
@@ -65,26 +64,25 @@ import { MultiInputComponent } from './components/multi-input/multi-input.compon
   imports: [
     NgxMaskDirective,
     ReactiveFormsModule,
-    DropdownModule,
     AsyncPipe,
     NgClass,
-    CascadeSelectModule,
+    CascadeSelect,
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
     MultiInputComponent,
+    Select,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewDeviceComponent implements OnInit, OnDestroy {
-  @ViewChild('input') public fileInput!: ElementRef<HTMLInputElement>;
+  public fileInput = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
-  @ViewChild(InputComponent) public input!: InputComponent;
+  public inputComp = viewChild.required(InputComponent);
 
-  @ViewChildren(MultiInputComponent)
-  public multiInputs!: QueryList<MultiInputComponent>;
+  public multiInputs = viewChildren(MultiInputComponent);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public readonly optionGroupChildrenValue: any = ['children', 'children'];
@@ -376,7 +374,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           this.clearBase64Ctrl();
           this.clearImagesCtrl();
           this.clearGroupsCtrl();
-          this.fileInput.nativeElement.value = '';
+          this.fileInput().nativeElement.value = '';
           this.newDeviceForm.markAsPristine();
           this.store.dispatch(FormActions.clearFormOff());
         }
@@ -399,16 +397,16 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       control.markAsDirty();
     });
     if (this.multiInputs) {
-      for (const multiInput of this.multiInputs) {
-        multiInput.multiInputForm.markAsDirty();
-        const valueArray = multiInput.multiInputForm.controls.value;
+      for (const multiInput of this.multiInputs()) {
+        multiInput.multiInputForm().markAsDirty();
+        const valueArray = multiInput.multiInputForm().controls.value;
         valueArray.controls.forEach((control) => {
           control.markAsDirty();
           multiInput.updateState();
         });
       }
     }
-    this.input.markAsDirty();
+    this.inputComp().markAsDirty();
   }
 
   public markAsDirtyCtrl(ctrlName: keyof NewDeviceFormInterface): void {

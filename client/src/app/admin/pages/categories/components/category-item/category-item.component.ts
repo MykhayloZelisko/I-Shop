@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
@@ -56,7 +56,7 @@ import { CPropertiesGroupsDialogComponent } from './components/c-properties-grou
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryItemComponent implements OnInit {
-  @Input({ required: true }) public category!: CategoryInterface;
+  public category = input.required<CategoryInterface>();
 
   public readonly dialogEnum = PopupTypeEnum;
 
@@ -80,23 +80,25 @@ export class CategoryItemComponent implements OnInit {
   public ngOnInit(): void {
     this.currentCategory$ = this.store.select(selectCurrentCategory);
     this.dialog$ = this.store.select(selectPopup);
-    this.hasChildren$ = this.store.select(selectHasChildren(this.category.id));
+    this.hasChildren$ = this.store.select(
+      selectHasChildren(this.category().id),
+    );
   }
 
   public initCategoryForm(): void {
     this.categoryForm = this.fb.group<CategoryFormInterface>({
       categoryName: this.fb.nonNullable.control<string>(
-        this.category.categoryName,
+        this.category().categoryName,
         [requiredValidator()],
       ),
-      image: this.fb.nonNullable.control<string | null>(this.category.image),
-      icon: this.fb.control<string | null>(this.category.icon),
-      parentId: this.fb.control<string | null>(this.category.parentId),
-      level: this.fb.nonNullable.control<number>(this.category.level, [
+      image: this.fb.nonNullable.control<string | null>(this.category().image),
+      icon: this.fb.control<string | null>(this.category().icon),
+      parentId: this.fb.control<string | null>(this.category().parentId),
+      level: this.fb.nonNullable.control<number>(this.category().level, [
         requiredValidator(),
       ]),
     });
-    if (this.category.parentId) {
+    if (this.category().parentId) {
       this.categoryForm.controls.image.setValidators(requiredValidator());
       this.categoryForm.controls.parentId.setValidators(requiredValidator());
     } else {
@@ -106,7 +108,7 @@ export class CategoryItemComponent implements OnInit {
 
   public deleteCategory(): void {
     this.store.dispatch(
-      CategoryActions.deleteCategory({ id: this.category.id }),
+      CategoryActions.deleteCategory({ id: this.category().id }),
     );
   }
 
@@ -117,7 +119,7 @@ export class CategoryItemComponent implements OnInit {
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
-          currentCategory: { id: this.category.id, isEditable: true },
+          currentCategory: { id: this.category().id, isEditable: true },
           currentGroup: { id: null, isEditable: false },
         },
       }),
@@ -132,7 +134,7 @@ export class CategoryItemComponent implements OnInit {
     const newCategoryData = this.categoryForm.getRawValue();
     this.store.dispatch(
       CategoryActions.updateCategory({
-        id: this.category.id,
+        id: this.category().id,
         category: {
           categoryName: newCategoryData.categoryName,
           image: newCategoryData.image,
@@ -156,7 +158,7 @@ export class CategoryItemComponent implements OnInit {
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
-          currentCategory: { id: this.category.id, isEditable: false },
+          currentCategory: { id: this.category().id, isEditable: false },
           currentGroup: { id: null, isEditable: false },
         },
       }),
@@ -195,7 +197,7 @@ export class CategoryItemComponent implements OnInit {
         payload: {
           currentPropertyId: null,
           isNewCategory: false,
-          currentCategory: { id: this.category.id, isEditable: false },
+          currentCategory: { id: this.category().id, isEditable: false },
           currentGroup: { id: null, isEditable: false },
         },
       }),

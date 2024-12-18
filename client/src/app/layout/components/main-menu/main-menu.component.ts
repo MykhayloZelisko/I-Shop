@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
@@ -27,9 +27,9 @@ import { PopupActions } from '../../../+store/popup/actions/popup.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainMenuComponent {
-  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
+  public user$ = input.required<Observable<UserInterface | null>>();
 
-  @Input({ required: true }) public isAdmin$!: Observable<boolean>;
+  public isAdmin$ = input.required<Observable<boolean>>();
 
   private store = inject(Store<State>);
 

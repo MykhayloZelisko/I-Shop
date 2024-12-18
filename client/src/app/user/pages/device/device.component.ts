@@ -49,7 +49,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.device$ = this.store.select(selectDevice).pipe(
       tap((device) => {
-        if (!device || !device.votes) {
+        if (!device?.votes) {
           this.items = this.items.map((item: TabMenuItemInterface) =>
             item.route === DeviceRouteNameEnum.Comments
               ? { label: 'Залишити відгук', route: item.route }

@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -31,9 +31,9 @@ import { selectCartInfo } from '../../../+store/cart/selectors/cart.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
-  @Input({ required: true }) public user$!: Observable<UserInterface | null>;
+  public user$ = input.required<Observable<UserInterface | null>>();
 
-  @Input({ required: true }) public isAdmin$!: Observable<boolean>;
+  public isAdmin$ = input.required<Observable<boolean>>();
 
   public readonly popupType = PopupTypeEnum;
 

@@ -15,7 +15,7 @@
         ></svg-icon>
       </button>
     </div>
-    @if (user$ | async; as user) {
+    @if (user$() | async; as user) {
       <div class="main-menu__login-wrapper">
         <div class="main-menu__user">
           <span class="main-menu__user-first-letter">{{
@@ -63,7 +63,7 @@
           Каталог
         </button>
       </li>
-      @if (isAdmin$ | async) {
+      @if (isAdmin$() | async) {
         <li class="main-menu__list-item main-menu__list-item--underlined">
           <button class="main-menu__list-button" (click)="goAdmin()">
             <svg-icon
@@ -110,7 +110,7 @@
           Місто
         </button>
       </li>
-      @if (user$ | async) {
+      @if (user$() | async) {
         <li class="main-menu__list-item">
           <button class="main-menu__list-button">
             <svg-icon

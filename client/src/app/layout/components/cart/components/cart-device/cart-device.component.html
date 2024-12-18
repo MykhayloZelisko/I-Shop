@@ -3,11 +3,11 @@
     <app-checkbox formControlName="isInOrder" (changeEvent)="submitData()" />
     <img
       class="cart-device__image"
-      [src]="device.device.images[0]"
-      [alt]="device.device.deviceName"
+      [src]="device().device.images[0]"
+      [alt]="device().device.deviceName"
     />
     <a class="cart-device__link" href="#" (click)="redirectToDevice($event)">{{
-      device.device.deviceName
+      device().device.deviceName
     }}</a>
     <button
       class="cart-device__button cart-device__button--more"
@@ -51,7 +51,7 @@
       </button>
     </div>
     <div class="cart-device__price">
-      {{ device.priceAtAdd * device.quantity }} &#8372;
+      {{ device().priceAtAdd * device().quantity }} &#8372;
     </div>
   </div>
 </div>

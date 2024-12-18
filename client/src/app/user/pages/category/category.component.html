@@ -3,7 +3,7 @@
     <app-breadcrumbs />
     <h1 class="category__title">{{ category.categoryName }}</h1>
     <div class="category__subcategories">
-      @for (subCategory of category.children; track subCategory) {
+      @for (subCategory of category.children; track subCategory.id) {
         <app-sub-category-item [category]="subCategory" />
       }
     </div>
@@ -15,7 +15,7 @@
         @if (devices$ | async; as devices) {
           <div class="category__devices-wrapper">
             <div class="category__devices">
-              @for (device of devices; track device) {
+              @for (device of devices; track device.id) {
                 <app-device-item [device]="device" />
               }
             </div>

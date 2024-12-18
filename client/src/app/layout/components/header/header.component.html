@@ -46,7 +46,7 @@
       </button>
     </div>
     <div class="header__language">UA</div>
-    @if ((user$ | async) === null) {
+    @if ((user$() | async) === null) {
       <button
         class="header__icon-btn header__icon-btn--large-scr-btn"
         (click)="login($event)"
@@ -88,7 +88,7 @@
         }
       }
     </button>
-    @if (isAdmin$ | async) {
+    @if (isAdmin$() | async) {
       <button
         class="header__icon-btn header__icon-btn--small-scr-btn"
         (click)="goAdmin()"

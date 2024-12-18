@@ -1,34 +1,34 @@
 <div class="comment-form">
   <div class="comment-form__form" [formGroup]="commentForm">
-    <app-rating-control formControlName="rating"></app-rating-control>
+    <app-rating-control formControlName="rating" />
     <app-input
       label="Переваги"
       [withErrors]="true"
       formControlName="advantages"
-    ></app-input>
+    />
     <app-input
       label="Недоліки"
       [withErrors]="true"
       formControlName="disadvantages"
-    ></app-input>
+    />
     <app-textarea
       label="Коментар"
       [withErrors]="true"
       formControlName="content"
       [resizeX]="false"
       [resizeY]="true"
-    ></app-textarea>
+    />
   </div>
   <div class="comment-form__buttons-wrapper">
-    @if (userId) {
-      @if (dialog && dialog.popupType === popupEnum.NewComment) {
+    @if (userId()) {
+      @if (dialog()?.popupType === popupEnum.NewComment) {
         <button class="comment-form__button--cancel" (click)="cancelSending()">
           Скасувати
         </button>
-        <button class="comment-form__button" (click)="sendComment(userId)">
+        <button class="comment-form__button" (click)="sendComment(userId())">
           Залишити відгук
         </button>
-      } @else if (dialog && dialog.popupType === popupEnum.EditComment) {
+      } @else if (dialog()?.popupType === popupEnum.EditComment) {
         <button class="comment-form__button--cancel" (click)="cancelSending()">
           Скасувати
         </button>
@@ -36,7 +36,7 @@
           Зберегти
         </button>
       } @else {
-        <button class="comment-form__button" (click)="sendComment(userId)">
+        <button class="comment-form__button" (click)="sendComment(userId())">
           Залишити відгук
         </button>
       }

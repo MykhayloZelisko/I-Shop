@@ -38,7 +38,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { selectCascadeCategories } from '../../../+store/categories/selectors/category.selectors';
 import {
   CascadeSelectChangeEvent,
-  CascadeSelectModule,
+  CascadeSelect,
 } from 'primeng/cascadeselect';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
 import { FileControlComponent } from './components/file-control/file-control.component';
@@ -56,7 +56,7 @@ import {
 import { SharedActions } from '../../../+store/shared/actions/shared.actions';
 import { CPropertyActions } from '../../../+store/c-properties/actions/c-property.actions';
 import { MultiInputComponent } from './components/multi-input/multi-input.component';
-import { SelectModule } from 'primeng/select';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-new-device',
@@ -66,12 +66,12 @@ import { SelectModule } from 'primeng/select';
     ReactiveFormsModule,
     AsyncPipe,
     NgClass,
-    CascadeSelectModule,
+    CascadeSelect,
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
     MultiInputComponent,
-    SelectModule,
+    Select,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',

@@ -4,8 +4,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { SharedModule } from 'primeng/api';
+import { Paginator, PaginatorState } from 'primeng/paginator';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { PaginationParamsInterface } from '../../../../../shared/models/interfaces/pagination-params.interface';
 import { NgClass } from '@angular/common';
@@ -19,7 +18,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-paginator',
   standalone: true,
-  imports: [PaginatorModule, SharedModule, SvgIconComponent, NgClass],
+  imports: [Paginator, SvgIconComponent, NgClass],
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

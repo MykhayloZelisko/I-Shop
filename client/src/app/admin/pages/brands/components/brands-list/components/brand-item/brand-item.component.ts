@@ -12,7 +12,6 @@ import { State } from '../../../../../../../+store/reducers';
 import { selectCurrentBrandId } from '../../../../../../../+store/brands/selectors/brand.selectors';
 import { AsyncPipe } from '@angular/common';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { PaginatorModule } from 'primeng/paginator';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BrandActions } from '../../../../../../../+store/brands/actions/brand.actions';
 import { requiredValidator } from '../../../../../../../shared/utils/validators';
@@ -20,7 +19,7 @@ import { requiredValidator } from '../../../../../../../shared/utils/validators'
 @Component({
   selector: 'app-brand-item',
   standalone: true,
-  imports: [AsyncPipe, SvgIconComponent, PaginatorModule, ReactiveFormsModule],
+  imports: [AsyncPipe, SvgIconComponent, ReactiveFormsModule],
   templateUrl: './brand-item.component.html',
   styleUrl: './brand-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

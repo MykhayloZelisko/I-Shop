@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { PopupDataInterface } from '../../../../../../../shared/models/interfaces/popup-data.interface';
@@ -36,9 +36,9 @@ import { CategoryInterface } from '../../../../../../../shared/models/interfaces
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CPropertiesGroupsDialogComponent implements OnInit {
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
-  @Input({ required: true }) public category!: CategoryInterface;
+  public category = input.required<CategoryInterface>();
 
   public cPropertiesGroupsForm!: FormGroup<CPropertiesGroupsFormInterface>;
 
@@ -70,7 +70,7 @@ export class CPropertiesGroupsDialogComponent implements OnInit {
   public newGroup(): FormGroup<CPropertiesGroupFormInterface> {
     return this.fb.group<CPropertiesGroupFormInterface>({
       groupName: this.fb.nonNullable.control<string>('', [requiredValidator()]),
-      categoryId: this.fb.nonNullable.control<string>(this.category.id, [
+      categoryId: this.fb.nonNullable.control<string>(this.category().id, [
         requiredValidator(),
       ]),
     });
@@ -91,7 +91,7 @@ export class CPropertiesGroupsDialogComponent implements OnInit {
     this.store.dispatch(
       CPropertiesGroupActions.addCPropertiesGroups({
         groups,
-        category: this.category,
+        category: this.category(),
       }),
     );
   }

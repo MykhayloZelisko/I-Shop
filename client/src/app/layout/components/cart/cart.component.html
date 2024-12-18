@@ -1,7 +1,7 @@
 <div class="cart__wrapper">
   <div class="cart" appClickOutside>
     <div class="cart__header">
-      <h3 class="cart__title">{{ dialog.title }}</h3>
+      <h3 class="cart__title">{{ dialog().title }}</h3>
       <button class="cart__close" (click)="closeDialog()">
         <svg-icon
           class="cart__icon cart__icon--yellow"

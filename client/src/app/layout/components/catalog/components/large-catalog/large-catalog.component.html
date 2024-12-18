@@ -1,6 +1,6 @@
 <div class="large-catalog">
   <ul class="large-catalog__core-categories">
-    @for (category of categories; track category.id) {
+    @for (category of categories(); track category.id) {
       <li class="large-catalog__core-category" (mouseover)="onHover(category)">
         <a
           class="large-catalog__link"
@@ -53,7 +53,10 @@
               >{{ category.categoryName }}</a
             >
             <ul>
-              @for (childCategory of category.children; track childCategory.id) {
+              @for (
+                childCategory of category.children;
+                track childCategory.id
+              ) {
                 <li class="large-catalog__sub-sub-category">
                   <a
                     class="large-catalog__sub-link"

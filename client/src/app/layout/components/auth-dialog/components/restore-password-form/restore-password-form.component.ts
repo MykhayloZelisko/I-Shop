@@ -3,7 +3,7 @@ import {
   Component,
   inject,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -26,7 +26,7 @@ import { REG_EMAIL } from '../../../../../shared/models/constants/reg-exp-patter
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RestorePasswordFormComponent implements OnInit {
-  @ViewChild(InputComponent) public input!: InputComponent;
+  public input = viewChild.required(InputComponent);
 
   public restorePasswordCtrl!: FormControl<string>;
 
@@ -53,6 +53,6 @@ export class RestorePasswordFormComponent implements OnInit {
   }
 
   public restorePassword(): void {
-    this.input.markAsDirty();
+    this.input().markAsDirty();
   }
 }

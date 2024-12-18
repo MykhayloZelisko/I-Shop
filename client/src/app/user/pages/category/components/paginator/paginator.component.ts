@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SharedModule } from 'primeng/api';
@@ -25,52 +25,52 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatorComponent {
-  @Input({ required: true })
-  public paginationParams!: PaginationParamsInterface;
+  public paginationParams = input.required<PaginationParamsInterface>();
 
-  @Input({ required: true })
-  public routerParams!: RouterParamsInterface;
+  public routerParams = input.required<RouterParamsInterface>();
 
   private store = inject(Store<State>);
 
   private router = inject(Router);
 
   public pageChange(event: PaginatorState): void {
-    if (event.page !== this.routerParams.page - 1) {
-      this.routerParams.page = event.page ? event.page + 1 : 1;
+    if (event.page !== this.routerParams().page - 1) {
+      this.routerParams().page = event.page ? event.page + 1 : 1;
+      const routeId = this.routerParams().id;
 
-      if (this.routerParams.id) {
+      if (routeId) {
         this.store.dispatch(
           DeviceActions.loadDevices({
-            id: this.routerParams.id,
+            id: routeId,
             size: DEVICES_PAGE_SIZE,
-            page: this.routerParams.page,
+            page: this.routerParams().page,
           }),
         );
       }
 
       this.router.navigate([], {
-        queryParams: { page: this.routerParams.page },
+        queryParams: { page: this.routerParams().page },
         queryParamsHandling: 'merge',
       });
     }
   }
 
   public loadMore(): void {
-    this.routerParams.page += 1;
+    this.routerParams().page += 1;
+    const routeId = this.routerParams().id;
 
-    if (this.routerParams.id) {
+    if (routeId) {
       this.store.dispatch(
         DeviceActions.addDevices({
-          id: this.routerParams.id,
+          id: routeId,
           size: DEVICES_PAGE_SIZE,
-          page: this.routerParams.page,
+          page: this.routerParams().page,
         }),
       );
     }
 
     this.router.navigate([], {
-      queryParams: { page: this.routerParams.page },
+      queryParams: { page: this.routerParams().page },
       queryParamsHandling: 'merge',
     });
   }

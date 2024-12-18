@@ -1,22 +1,22 @@
 <div class="device-item">
-  <a [routerLink]="['/devices', device.id]">
+  <a [routerLink]="['/devices', device().id]">
     <img
       class="device-item__image"
-      [src]="device.images[0]"
-      [alt]="device.images[0]"
+      [src]="device().images[0]"
+      [alt]="device().images[0]"
     />
   </a>
   <div class="device-item__info">
-    <a class="device-item__name" [routerLink]="['/devices', device.id]">{{
-      device.deviceName
+    <a class="device-item__name" [routerLink]="['/devices', device().id]">{{
+      device().deviceName
     }}</a>
     <app-rating
-      [rating]="device.rating"
-      [votes]="device.votes"
-      [deviceId]="device.id"
+      [rating]="device().rating"
+      [votes]="device().votes"
+      [deviceId]="device().id"
     />
     <div class="device-item__price-wrapper">
-      <p class="device-item__price">{{ device.price }} &#8372;</p>
+      <p class="device-item__price">{{ device().price }} &#8372;</p>
       @if (isCartDevice$ | async) {
         <button class="device-item__button" (click)="openCart()">
           <svg-icon

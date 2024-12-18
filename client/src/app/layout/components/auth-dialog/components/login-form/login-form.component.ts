@@ -3,8 +3,7 @@ import {
   Component,
   inject,
   OnInit,
-  QueryList,
-  ViewChildren,
+  viewChildren,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -35,7 +34,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnInit {
-  @ViewChildren(InputComponent) public inputs!: QueryList<InputComponent>;
+  public inputs = viewChildren(InputComponent);
 
   public loginForm!: FormGroup<LoginFormInterface>;
 
@@ -84,7 +83,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   public login(): void {
-    this.inputs.forEach((input: InputComponent) => {
+    this.inputs().forEach((input: InputComponent) => {
       input.markAsDirty();
     });
     if (this.loginForm.valid) {

@@ -3,7 +3,7 @@
     class="paginator__load-more"
     [ngClass]="{
       'paginator__load-more--last':
-        paginationParams.currentPage === paginationParams.maxPage,
+        paginationParams().currentPage === paginationParams().maxPage,
     }"
     (click)="loadMore()"
   >
@@ -11,9 +11,9 @@
   </button>
   <p-paginator
     class="paginator__paginator--large"
-    [first]="(paginationParams.currentPage - 1) * paginationParams.size"
-    [rows]="paginationParams.size"
-    [totalRecords]="paginationParams.total"
+    [first]="(paginationParams().currentPage - 1) * paginationParams().size"
+    [rows]="paginationParams().size"
+    [totalRecords]="paginationParams().total"
     (onPageChange)="pageChange($event)"
   >
     <ng-template pTemplate="firstpagelinkicon">
@@ -44,9 +44,9 @@
   <p-paginator
     class="paginator__paginator--small"
     (onPageChange)="pageChange($event)"
-    [first]="(paginationParams.currentPage - 1) * paginationParams.size"
-    [rows]="paginationParams.size"
-    [totalRecords]="paginationParams.total"
+    [first]="(paginationParams().currentPage - 1) * paginationParams().size"
+    [rows]="paginationParams().size"
+    [totalRecords]="paginationParams().total"
     [showCurrentPageReport]="true"
     [showPageLinks]="false"
     [showJumpToPageDropdown]="false"

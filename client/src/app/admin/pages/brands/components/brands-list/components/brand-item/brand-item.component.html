@@ -1,4 +1,4 @@
-@if (brand.id === (currentId$ | async)) {
+@if (brand().id === (currentId$ | async)) {
   <div class="brand-item__input-wrapper">
     <input class="brand-item__input" type="text" [formControl]="brandCtrl" />
     <div class="brand-item__buttons brand-item__buttons--editable">
@@ -22,7 +22,7 @@
   </div>
 } @else {
   <div class="brand-item">
-    <p class="brand-item__title">{{ brand.brandName }}</p>
+    <p class="brand-item__title">{{ brand().brandName }}</p>
     <div class="brand-item__buttons">
       <button class="brand-item__button" (click)="editBrand()">
         <svg-icon

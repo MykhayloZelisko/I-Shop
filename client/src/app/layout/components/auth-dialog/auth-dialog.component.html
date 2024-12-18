@@ -1,7 +1,7 @@
 <div class="auth-dialog__wrapper">
   <div class="auth-dialog" appClickOutside>
     <div class="auth-dialog__header">
-      <h3 class="auth-dialog__title">{{ dialog.title }}</h3>
+      <h3 class="auth-dialog__title">{{ dialog().title }}</h3>
       <button class="auth-dialog__close" (click)="closeDialog()">
         <svg-icon
           class="auth-dialog__icon auth-dialog__icon--header-icon"
@@ -11,7 +11,7 @@
     </div>
     <div class="auth-dialog__body">
       <div class="auth-dialog__form">
-        @switch (dialog.popupType) {
+        @switch (dialog().popupType) {
           @case (dialogTypeEnum.Registration) {
             <app-registration-form />
           }

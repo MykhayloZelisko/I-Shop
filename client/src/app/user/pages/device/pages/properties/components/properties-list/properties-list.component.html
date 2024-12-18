@@ -1,5 +1,5 @@
 <ul class="properties-list">
-  @for (group of device.groups; track group.groupName) {
+  @for (group of device().groups; track group.groupName) {
     <li class="properties-list__group">
       <p class="properties-list__group-name">{{ group.groupName }}</p>
       <ul class="properties-list__property-list">

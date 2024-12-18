@@ -1,16 +1,16 @@
 <div class="sub-category-item">
   <img
     class="sub-category-item__image"
-    [src]="category.image"
-    [alt]="category.image"
+    [src]="category().image"
+    [alt]="category().image"
   />
   <a
     class="sub-category-item__link"
-    [routerLink]="['/categories', category.id]"
-    >{{ category.categoryName }}</a
+    [routerLink]="['/categories', category().id]"
+    >{{ category().categoryName }}</a
   >
   <ul>
-    @for (subCategory of category.children; track subCategory.id) {
+    @for (subCategory of category().children; track subCategory.id) {
       <li>
         <a
           class="sub-category-item__link sub-category-item__link--sub-link"

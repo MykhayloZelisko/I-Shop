@@ -2,11 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   inject,
-  Input,
+  input,
   OnInit,
-  Output,
+  output,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -42,10 +41,9 @@ import { ImageConfigInterface } from '../../../../../shared/models/interfaces/im
 export class FileControlComponent
   implements ControlValueAccessor, OnInit, Validator
 {
-  @Input({ required: true }) public file!: File;
+  public file = input.required<File>();
 
-  @Output() public uploadFile: EventEmitter<string> =
-    new EventEmitter<string>();
+  public uploadFile = output<string>();
 
   public imageConfig: ImageConfigInterface = {
     width: 0,
@@ -73,9 +71,7 @@ export class FileControlComponent
   }
 
   public ngOnInit(): void {
-    if (this.file) {
-      this.readFile(this.file);
-    }
+    this.readFile(this.file());
   }
 
   public readFile(file: File): void {
@@ -83,7 +79,7 @@ export class FileControlComponent
 
     reader.onload = (e: ProgressEvent<FileReader>): void => {
       this.imageUrl = e.target ? (e.target.result as string) : '';
-      if (this.file.type.startsWith('image')) {
+      if (this.file().type.startsWith('image')) {
         this.uploadFile.emit(this.imageUrl);
       }
       this.onChange(file);

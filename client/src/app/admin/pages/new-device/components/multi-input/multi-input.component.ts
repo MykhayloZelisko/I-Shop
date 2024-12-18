@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import {
@@ -30,12 +30,11 @@ import { SvgIconComponent } from 'angular-svg-icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiInputComponent implements OnInit {
-  @Input({ required: true }) public label!: string;
+  public label = input.required<string>();
 
-  @Input({ required: true }) public withErrors!: boolean;
+  public withErrors = input.required<boolean>();
 
-  @Input({ required: true })
-  public multiInputForm!: FormGroup<DPropertyFormInterface>;
+  public multiInputForm = input.required<FormGroup<DPropertyFormInterface>>();
 
   private fb = inject(FormBuilder);
 
@@ -46,11 +45,11 @@ export class MultiInputComponent implements OnInit {
   }
 
   public setHeight(): Record<string, string> {
-    return this.withErrors ? { height: '56px' } : { height: 'auto' };
+    return this.withErrors() ? { height: '56px' } : { height: 'auto' };
   }
 
   public getValueArrayCtrl(): FormArray<FormControl<string>> {
-    return this.multiInputForm.get('value') as FormArray<FormControl<string>>;
+    return this.multiInputForm().get('value') as FormArray<FormControl<string>>;
   }
 
   public getValueCtrlByIndex(index: number): FormControl<string> {

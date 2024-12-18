@@ -1,21 +1,21 @@
 <div class="comment-item">
   <div class="comment-item__header">
     <p class="comment-item__user">
-      {{ comment.user.firstName }} {{ comment.user.lastName }}
+      {{ comment().user.firstName }} {{ comment().user.lastName }}
     </p>
     <p class="comment-item__date">
-      {{ comment.createdAt | date: 'dd.MM.YYYY HH:mm' }}
+      {{ comment().createdAt | date: 'dd.MM.YYYY HH:mm' }}
     </p>
   </div>
-  <app-rating [deviceId]="comment.device.id" [rating]="comment.rating" />
-  <div class="comment-item__text">{{ comment.content }}</div>
+  <app-rating [deviceId]="comment().device.id" [rating]="comment().rating" />
+  <div class="comment-item__text">{{ comment().content }}</div>
   <div class="comment-item__text">
     <span class="comment-item__text--bold">Переваги: </span
-    >{{ comment.advantages }}
+    >{{ comment().advantages }}
   </div>
   <div class="comment-item__text">
     <span class="comment-item__text--bold">Недоліки: </span
-    >{{ comment.disadvantages }}
+    >{{ comment().disadvantages }}
   </div>
   <div class="comment-item__footer">
     <button class="comment-item__button">Відповісти</button>
@@ -28,7 +28,7 @@
           ></svg-icon>
         </button>
         <span class="comment-item__number-likes">{{
-          comment.likesUsers.length
+          comment().likesUsers.length
         }}</span>
       </div>
       <div class="comment-item__like">
@@ -39,7 +39,7 @@
           ></svg-icon>
         </button>
         <span class="comment-item__number-likes">{{
-          comment.dislikesUsers.length
+          comment().dislikesUsers.length
         }}</span>
       </div>
       <button class="comment-item__icon-button" (click)="openMenu()">
@@ -54,23 +54,23 @@
     @if (currentComment$ | async; as currentComment) {
       @if (
         dialog.popupType === popupEnum.CommentMenu &&
-        currentComment === comment.id
+        currentComment === comment().id
       ) {
         <app-comment-menu
-          [comment]="comment"
-          [user$]="user$"
-          [commentsStatus$]="commentsStatus$"
+          [comment]="comment()"
+          [user$]="user$()"
+          [commentsStatus$]="commentsStatus$()"
         />
       }
       @if (
         dialog.popupType === popupEnum.EditComment &&
-        currentComment === comment.id
+        currentComment === comment().id
       ) {
         <app-comment-dialog
           [dialog]="dialog"
-          [comment]="comment"
-          [deviceId]="comment.device.id"
-          [userId]="comment.user.id"
+          [comment]="comment()"
+          [deviceId]="comment().device.id"
+          [userId]="comment().user.id"
         />
       }
     }

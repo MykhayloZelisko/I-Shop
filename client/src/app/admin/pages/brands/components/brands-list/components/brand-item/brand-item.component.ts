@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { BrandInterface } from '../../../../../../../shared/models/interfaces/brand.interface';
@@ -26,7 +26,7 @@ import { requiredValidator } from '../../../../../../../shared/utils/validators'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BrandItemComponent implements OnInit {
-  @Input({ required: true }) public brand!: BrandInterface;
+  public brand = input.required<BrandInterface>();
 
   public brandCtrl!: FormControl<string>;
 
@@ -38,22 +38,23 @@ export class BrandItemComponent implements OnInit {
 
   public ngOnInit(): void {
     this.currentId$ = this.store.select(selectCurrentBrandId);
-    this.brandCtrl = this.fb.nonNullable.control<string>(this.brand.brandName, [
-      requiredValidator(),
-    ]);
+    this.brandCtrl = this.fb.nonNullable.control<string>(
+      this.brand().brandName,
+      [requiredValidator()],
+    );
   }
 
   public editBrand(): void {
     this.store.dispatch(
-      BrandActions.setCurrentBrandId({ currentId: this.brand.id }),
+      BrandActions.setCurrentBrandId({ currentId: this.brand().id }),
     );
-    this.brandCtrl.setValue(this.brand.brandName);
+    this.brandCtrl.setValue(this.brand().brandName);
   }
 
   public saveBrand(): void {
     const brandName = this.brandCtrl.getRawValue().trim();
     this.store.dispatch(
-      BrandActions.updateBrand({ id: this.brand.id, brandName }),
+      BrandActions.updateBrand({ id: this.brand().id, brandName }),
     );
   }
 
@@ -62,6 +63,6 @@ export class BrandItemComponent implements OnInit {
   }
 
   public deleteBrand(): void {
-    this.store.dispatch(BrandActions.deleteBrand({ id: this.brand.id }));
+    this.store.dispatch(BrandActions.deleteBrand({ id: this.brand().id }));
   }
 }

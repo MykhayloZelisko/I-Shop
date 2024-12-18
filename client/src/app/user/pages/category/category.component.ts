@@ -90,7 +90,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(({ params, result }) => {
-        if (params && params.id) {
+        if (params?.id) {
           if (this.routerParams?.id !== params.id) {
             this.routerParams = {
               id: params.id,

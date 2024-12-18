@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -26,7 +26,7 @@ import { CPropertyActions } from '../../../../../+store/c-properties/actions/c-p
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CPropertyItemComponent implements OnInit {
-  @Input({ required: true }) public property!: CPropertyInterface;
+  public property = input.required<CPropertyInterface>();
 
   public currentPropertyId$!: Observable<string | null>;
 
@@ -39,7 +39,7 @@ export class CPropertyItemComponent implements OnInit {
   public ngOnInit(): void {
     this.currentPropertyId$ = this.store.select(selectCurrentPropertyId);
     this.propertyCtrl = this.fb.nonNullable.control<string>(
-      this.property.propertyName,
+      this.property().propertyName,
       [requiredValidator()],
     );
   }
@@ -48,7 +48,7 @@ export class CPropertyItemComponent implements OnInit {
     this.store.dispatch(
       SharedActions.updateCGPState({
         payload: {
-          currentPropertyId: this.property.id,
+          currentPropertyId: this.property().id,
           isNewCategory: false,
           currentCategory: { id: null, isEditable: false },
           currentGroup: { id: null, isEditable: false },
@@ -60,18 +60,21 @@ export class CPropertyItemComponent implements OnInit {
   public saveProperty(): void {
     const propertyName = this.propertyCtrl.getRawValue();
     this.store.dispatch(
-      CPropertyActions.updateCProperty({ id: this.property.id, propertyName }),
+      CPropertyActions.updateCProperty({
+        id: this.property().id,
+        propertyName,
+      }),
     );
   }
 
   public cancelEditProperty(): void {
     this.store.dispatch(SharedActions.clearCGPState());
-    this.propertyCtrl.setValue(this.property.propertyName);
+    this.propertyCtrl.setValue(this.property().propertyName);
   }
 
   public deleteProperty(): void {
     this.store.dispatch(
-      CPropertyActions.deleteCProperty({ id: this.property.id }),
+      CPropertyActions.deleteCProperty({ id: this.property().id }),
     );
   }
 }

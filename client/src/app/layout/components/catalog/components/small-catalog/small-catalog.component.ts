@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import { PopupDataInterface } from '../../../../../shared/models/interfaces/popup-data.interface';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -22,9 +22,9 @@ import { CascadeCategoryInterface } from '../../../../../shared/models/interface
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SmallCatalogComponent {
-  @Input({ required: true }) public categories!: CascadeCategoryInterface[];
+  public categories = input.required<CascadeCategoryInterface[]>();
 
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
   public isCoreList = true;
 

@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -25,14 +25,16 @@ import { PopupTypeEnum } from '../../models/enums/popup-type.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceAsideComponent implements OnInit {
-  @Input({ required: true }) public device!: DeviceInterface;
+  public device = input.required<DeviceInterface>();
 
   public isCartDevice$!: Observable<boolean>;
 
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.isCartDevice$ = this.store.select(selectDeviceInCart(this.device.id));
+    this.isCartDevice$ = this.store.select(
+      selectDeviceInCart(this.device().id),
+    );
   }
 
   public addDevice(deviceId: string): void {

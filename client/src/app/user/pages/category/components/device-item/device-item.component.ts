@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { DeviceInterface } from '../../../../../shared/models/interfaces/device.interface';
@@ -27,18 +27,20 @@ import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enu
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceItemComponent implements OnInit {
-  @Input({ required: true }) public device!: DeviceInterface;
+  public device = input.required<DeviceInterface>();
 
   public isCartDevice$!: Observable<boolean>;
 
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.isCartDevice$ = this.store.select(selectDeviceInCart(this.device.id));
+    this.isCartDevice$ = this.store.select(
+      selectDeviceInCart(this.device().id),
+    );
   }
 
   public addDevice(): void {
-    this.store.dispatch(CartActions.checkCart({ deviceId: this.device.id }));
+    this.store.dispatch(CartActions.checkCart({ deviceId: this.device().id }));
   }
 
   public openCart(): void {

@@ -6,7 +6,7 @@ import {
   HostListener,
   inject,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DndDirective } from '../../directives/dnd.directive';
@@ -33,7 +33,8 @@ export class DndFileControlComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  @ViewChild('fileUpload') public fileUpload!: ElementRef<HTMLInputElement>;
+  public fileUpload =
+    viewChild.required<ElementRef<HTMLInputElement>>('fileUpload');
 
   @HostListener('change', ['$event.target.files'])
   private emitFiles(event: FileList): void {
@@ -151,7 +152,7 @@ export class DndFileControlComponent
   }
 
   public triggerFileInput(): void {
-    this.fileUpload.nativeElement.click();
+    this.fileUpload().nativeElement.click();
     if (!this.control.value) {
       this.onChange('');
       this.errorMessage = `Зображення є обов'язковим`;

@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -44,7 +44,7 @@ import { CartActions } from '../../../+store/cart/actions/cart.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent implements OnInit, OnDestroy {
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
   public totalCount$!: Observable<number>;
 

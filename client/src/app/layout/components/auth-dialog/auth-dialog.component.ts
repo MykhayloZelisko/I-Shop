@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { PopupTypeEnum } from '../../../shared/models/enums/popup-type.enum';
@@ -30,7 +30,7 @@ import { PopupActions } from '../../../+store/popup/actions/popup.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthDialogComponent {
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
   public readonly dialogTypeEnum = PopupTypeEnum;
 

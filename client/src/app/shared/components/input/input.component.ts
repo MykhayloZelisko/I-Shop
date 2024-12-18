@@ -3,11 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   inject,
-  Input,
-  Output,
-  ViewChild,
+  input,
+  output,
+  viewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -39,17 +38,17 @@ export class InputComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
-  @ViewChild('input') public input!: ElementRef<HTMLInputElement>;
+  public inputComp = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
-  @Input() public placeholder = '';
+  public placeholder = input<string>('');
 
-  @Input() public inputType = 'text';
+  public inputType = input<string>('text');
 
-  @Input({ required: true }) public label!: string;
+  public label = input.required<string>();
 
-  @Input({ required: true }) public withErrors!: boolean;
+  public withErrors = input.required<boolean>();
 
-  @Output() public focusEvent: EventEmitter<void> = new EventEmitter<void>();
+  public focusEvent = output<void>();
 
   public readonly id = uuidV4();
 
@@ -70,11 +69,11 @@ export class InputComponent
   }
 
   public writeValue(value: string): void {
-    if (this.input) {
-      this.input.nativeElement.value = value;
-      this.internalValue = value;
-      this.cdr.markForCheck();
+    this.internalValue = value;
+    if (this.inputComp()) {
+      this.inputComp().nativeElement.value = value;
     }
+    this.cdr.markForCheck();
   }
 
   public showMessage(): string {
@@ -91,7 +90,7 @@ export class InputComponent
   }
 
   public setHeight(): Record<string, string> {
-    return this.withErrors ? { height: '78px' } : { height: '62px' };
+    return this.withErrors() ? { height: '78px' } : { height: '62px' };
   }
 
   public markAsDirty(): void {

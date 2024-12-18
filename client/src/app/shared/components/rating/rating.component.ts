@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -18,11 +18,11 @@ import { NgClass } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingComponent implements OnInit {
-  @Input({ required: true }) public rating!: number;
+  public rating = input.required<number>();
 
-  @Input() public votes!: number;
+  public votes = input<number>(0);
 
-  @Input({ required: true }) public deviceId!: string;
+  public deviceId = input.required<string>();
 
   public idArray: string[] = [];
 
@@ -33,12 +33,10 @@ export class RatingComponent implements OnInit {
   }
 
   public svgGradient(rate: number): string {
-    if (rate <= this.rating) {
-      return '100%';
-    } else if (rate > this.rating && rate < this.rating + 1) {
-      return `${100 - (rate - this.rating) * 100}%`;
-    } else {
-      return '0%';
-    }
+    return rate <= this.rating()
+      ? '100%'
+      : rate > this.rating() && rate < this.rating() + 1
+        ? `${100 - (rate - this.rating()) * 100}%`
+        : '0%';
   }
 }

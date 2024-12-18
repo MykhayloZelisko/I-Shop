@@ -71,7 +71,7 @@ export function passwordPatternValidator(str: RegExp): ValidatorFn {
 export function emailPatternValidator(str: RegExp): ValidatorFn {
   return (control: AbstractControl) => {
     const value = control.value;
-    if (!value || !value.match(str)) {
+    if (!value?.match(str)) {
       return {
         pattern: 'Не валідна адреса електронної пошти',
       };
@@ -83,7 +83,7 @@ export function emailPatternValidator(str: RegExp): ValidatorFn {
 export function namePatternValidator(str: RegExp): ValidatorFn {
   return (control: AbstractControl) => {
     const value = control.value;
-    if (!value || !value.match(str)) {
+    if (!value?.match(str)) {
       return {
         pattern: `Не валідне ім'я/прізвище`,
       };
@@ -95,7 +95,7 @@ export function namePatternValidator(str: RegExp): ValidatorFn {
 export function phoneNumberValidator(str: RegExp): ValidatorFn {
   return (control: AbstractControl) => {
     const value = control.value;
-    if (!value || !value.match(str)) {
+    if (!value?.match(str)) {
       return {
         pattern: `Не валідний номер телефону`,
       };

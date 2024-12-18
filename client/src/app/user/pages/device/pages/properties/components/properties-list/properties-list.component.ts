@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { DeviceInterface } from '../../../../../../../shared/models/interfaces/device.interface';
 
 @Component({
@@ -10,5 +10,5 @@ import { DeviceInterface } from '../../../../../../../shared/models/interfaces/d
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertiesListComponent {
-  @Input({ required: true }) public device!: DeviceInterface;
+  public device = input.required<DeviceInterface>();
 }

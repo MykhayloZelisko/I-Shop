@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CascadeCategoryInterface } from '../../../../../shared/models/interfaces/cascade-category.interface';
 import { RouterLink } from '@angular/router';
 
@@ -11,5 +11,5 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubCategoryItemComponent {
-  @Input({ required: true }) public category!: CascadeCategoryInterface;
+  public category = input.required<CascadeCategoryInterface>();
 }

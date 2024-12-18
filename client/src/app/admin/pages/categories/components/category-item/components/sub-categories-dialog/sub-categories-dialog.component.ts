@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../../../../../shared/directives/click-outside.directive';
@@ -41,11 +41,11 @@ import { SharedActions } from '../../../../../../../+store/shared/actions/shared
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubCategoriesDialogComponent implements OnInit {
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
-  @Input({ required: true }) public parentId!: string;
+  public parentId = input.required<string>();
 
-  @Input({ required: true }) public level!: number;
+  public level = input.required<number>();
 
   public subCategoriesForm!: FormGroup<SubCategoriesFormInterface>;
 
@@ -70,10 +70,10 @@ export class SubCategoriesDialogComponent implements OnInit {
       ]),
       image: this.fb.control<string | null>(null, [requiredValidator()]),
       icon: this.fb.control<string | null>(null),
-      parentId: this.fb.control<string | null>(this.parentId, [
+      parentId: this.fb.control<string | null>(this.parentId(), [
         requiredValidator(),
       ]),
-      level: this.fb.nonNullable.control<number>(this.level, [
+      level: this.fb.nonNullable.control<number>(this.level(), [
         requiredValidator(),
       ]),
     });

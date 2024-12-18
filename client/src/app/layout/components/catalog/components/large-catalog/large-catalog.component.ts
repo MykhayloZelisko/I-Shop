@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -22,7 +22,7 @@ import { CascadeCategoryInterface } from '../../../../../shared/models/interface
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LargeCatalogComponent implements OnInit {
-  @Input({ required: true }) public categories!: CascadeCategoryInterface[];
+  public categories = input.required<CascadeCategoryInterface[]>();
 
   public currentCategory!: CascadeCategoryInterface;
 
@@ -31,7 +31,7 @@ export class LargeCatalogComponent implements OnInit {
   private store = inject(Store<State>);
 
   public ngOnInit(): void {
-    this.currentCategory = this.categories[0];
+    this.currentCategory = this.categories()[0];
   }
 
   public onHover(category: CascadeCategoryInterface): void {

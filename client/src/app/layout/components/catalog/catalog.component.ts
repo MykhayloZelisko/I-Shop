@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { ClickOutsideDirective } from '../../../shared/directives/click-outside.directive';
@@ -30,7 +30,7 @@ import { CascadeCategoryInterface } from '../../../shared/models/interfaces/casc
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CatalogComponent implements OnInit {
-  @Input({ required: true }) public dialog!: PopupDataInterface;
+  public dialog = input.required<PopupDataInterface>();
 
   public categories$!: Observable<CascadeCategoryInterface[]>;
 

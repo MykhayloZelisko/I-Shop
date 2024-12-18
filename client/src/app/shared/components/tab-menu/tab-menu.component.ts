@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
@@ -22,7 +22,7 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabMenuComponent implements OnInit {
-  @Input({ required: true }) public items!: TabMenuItemInterface[];
+  public items = input.required<TabMenuItemInterface[]>();
 
   public activeTab$!: Observable<string | undefined>;
 

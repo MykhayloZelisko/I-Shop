@@ -93,7 +93,7 @@ export class CartDevicesService {
   ): Promise<DeletedCartDevice> {
     await this.cartDeviceModel.deleteMany({ _id: { $in: ids } }).exec();
     await this.cartsService.deleteDevicesFromCart(cartId, ids);
-    const cart = await this.cartsService.findCartById(cartId);
+    const cart = await this.cartsService.getCartById(cartId);
     return {
       ids,
       cart: !cart,

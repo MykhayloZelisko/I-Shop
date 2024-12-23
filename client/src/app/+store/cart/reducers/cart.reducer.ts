@@ -43,7 +43,7 @@ export const reducer = createReducer(
   on(CartActions.deleteCartDevicesSuccess, (state, action) =>
     adapter.removeMany(action.ids, state),
   ),
-  on(CartActions.loadCart, (state, action) => {
+  on(CartActions.loadCartSuccess, (state, action) => {
     const updatedState = adapter.setAll(action.cart.devices, state);
     return {
       ...state,

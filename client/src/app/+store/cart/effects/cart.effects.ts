@@ -223,3 +223,40 @@ export const updateCartDevicesFailure$ = createEffect(
     ),
   { dispatch: false, functional: true },
 );
+
+export const loadCart$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    cartsService = inject(CartsService),
+    store = inject(Store<State>),
+  ) =>
+    actions$.pipe(
+      ofType(CartActions.loadCart),
+      tap(() => store.dispatch(LoaderActions.toggleLoader())),
+      switchMap((action) =>
+        cartsService.getGuestCart(action.id).pipe(
+          mergeMap((cart) => [
+            LoaderActions.toggleLoader(),
+            CartActions.loadCartSuccess({ cart }),
+          ]),
+          catchError(() => {
+            store.dispatch(LoaderActions.toggleLoader());
+            return of(CartActions.loadCartFailure());
+          }),
+        ),
+      ),
+    ),
+  { functional: true },
+);
+
+export const loadCartFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.loadCartFailure),
+      tap(() => {
+        localStorage.removeItem('cartId');
+        // TODO: add dialog
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

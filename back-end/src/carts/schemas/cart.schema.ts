@@ -10,6 +10,15 @@ export class Cart {
     type: [{ type: MongooseSchema.Types.ObjectId, ref: 'CartDevice' }],
   })
   public devices: CartDevice[];
+
+  @Prop({
+    type: Date,
+    default: () => new Date(),
+  })
+  public createdAt: Date;
+
+  @Prop()
+  public isGuest: boolean;
 }
 
 export const CartSchema = SchemaFactory.createForClass(Cart);

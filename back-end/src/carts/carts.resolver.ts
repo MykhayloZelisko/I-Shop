@@ -25,7 +25,7 @@ export class CartsResolver {
     return this.cartsService.createCart(deviceId, context.req.user);
   }
 
-  @Query(() => Cart, { name: 'guestCart' })
+  @Query(() => Cart, { name: 'guestCart', nullable: true })
   public async getGuestCart(
     @Args('id', { type: () => ID }, ParseObjectIdPipe) id: string,
   ): Promise<Cart | null> {

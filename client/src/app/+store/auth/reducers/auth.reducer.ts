@@ -28,8 +28,7 @@ export const reducer = createReducer(
     ...state,
     user: action.user,
   })),
-  on(AuthActions.logoutSuccess, (state) => ({
-    ...state,
+  on(AuthActions.logoutSuccess, () => ({
     ...initialState,
   })),
 );

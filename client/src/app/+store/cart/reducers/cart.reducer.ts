@@ -44,12 +44,18 @@ export const reducer = createReducer(
     adapter.removeMany(action.ids, state),
   ),
   on(CartActions.loadCartSuccess, (state, action) => {
-    const updatedState = adapter.setAll(action.cart.devices, state);
-    return {
-      ...state,
-      ...updatedState,
-      cartId: action.cart.id,
-    };
+    if (action.cart) {
+      const updatedState = adapter.setAll(action.cart.devices, state);
+      return {
+        ...state,
+        ...updatedState,
+        cartId: action.cart.id,
+      };
+    } else {
+      return {
+        ...initialState,
+      };
+    }
   }),
   on(CartActions.createCartSuccess, (state, action) => {
     const updatedState = adapter.setOne(action.cart.devices[0], state);

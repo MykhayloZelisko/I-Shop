@@ -260,3 +260,14 @@ export const loadCartFailure$ = createEffect(
     ),
   { dispatch: false, functional: true },
 );
+
+export const clearCart$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(CartActions.clearCart),
+      tap(() => {
+        localStorage.removeItem('cartId');
+      }),
+    ),
+  { dispatch: false, functional: true },
+);

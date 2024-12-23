@@ -9,7 +9,7 @@ export const CartActions = createActionGroup({
   events: {
     // Cart actions
     LoadCart: props<{ id: string }>(),
-    LoadCartSuccess: props<{ cart: CartInterface }>(),
+    LoadCartSuccess: props<{ cart: CartInterface | null }>(),
     LoadCartFailure: emptyProps(),
     CheckCart: props<{ deviceId: string }>(),
     CreateCart: props<{ deviceId: string }>(),

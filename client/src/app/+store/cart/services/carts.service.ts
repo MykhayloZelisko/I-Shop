@@ -24,9 +24,9 @@ export class CartsService {
     return this.store.select(selectLoggedIn).pipe(take(1));
   }
 
-  public getGuestCart(id: string): Observable<CartInterface> {
+  public getGuestCart(id: string): Observable<CartInterface | null> {
     return this.apollo
-      .query<{ guestCart: CartInterface }>({
+      .query<{ guestCart: CartInterface | null }>({
         query: gql`
           query GetGuestCart($id: ID!) {
             guestCart(id: $id) {
@@ -50,26 +50,35 @@ export class CartsService {
         variables: { id },
       })
       .pipe(
-        map((response: ApolloQueryResult<{ guestCart: CartInterface }>) => {
-          if (response.errors) {
-            throw response.errors[0];
-          } else {
-            return {
-              ...response.data.guestCart,
-              devices: response.data.guestCart.devices.map(
-                (cartDevice: CartDeviceInterface) => ({
-                  ...cartDevice,
-                  device: {
-                    ...cartDevice.device,
-                    images: cartDevice.device.images.map(
-                      (image: string) => `${environment.baseUrl}/${image}`,
-                    ),
-                  },
-                }),
-              ),
-            };
-          }
-        }),
+        map(
+          (
+            response: ApolloQueryResult<{ guestCart: CartInterface | null }>,
+          ) => {
+            if (response.errors) {
+              throw response.errors[0];
+            } else {
+              if (response.data.guestCart) {
+                return {
+                  ...response.data.guestCart,
+                  devices: response.data.guestCart.devices.map(
+                    (cartDevice: CartDeviceInterface) => ({
+                      ...cartDevice,
+                      device: {
+                        ...cartDevice.device,
+                        images: cartDevice.device.images.map(
+                          (image: string) => `${environment.baseUrl}/${image}`,
+                        ),
+                      },
+                    }),
+                  ),
+                };
+              } else {
+                localStorage.removeItem('cartId');
+                return null;
+              }
+            }
+          },
+        ),
         catchError((error) => throwError(() => error)),
       );
   }
@@ -157,13 +166,10 @@ export class CartsService {
                 if (response.errors) {
                   throw response.errors[0];
                 } else {
-                  localStorage.setItem(
-                    'cartId',
-                    response.data.createGuestCart.id,
-                  );
+                  localStorage.setItem('cartId', response.data.createCart.id);
                   return {
-                    ...response.data.createGuestCart,
-                    devices: response.data.createGuestCart.devices.map(
+                    ...response.data.createCart,
+                    devices: response.data.createCart.devices.map(
                       (cartDevice: CartDeviceInterface) => ({
                         ...cartDevice,
                         device: {

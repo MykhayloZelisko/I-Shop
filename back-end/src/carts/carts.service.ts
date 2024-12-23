@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Cart as CartGQL } from './models/cart.model';
@@ -115,18 +116,19 @@ export class CartsService {
     }
   }
 
-  public async getGuestCart(id: string): Promise<CartGQL> {
-    const guestCart = await this.cartModel
-      .findOne({ _id: id, isGuest: true })
-      .populate({
-        path: 'devices',
-        populate: { path: 'device' },
-      })
-      .exec();
-    if (!guestCart) {
-      throw new NotFoundException('Cart not found');
+  public async getGuestCart(id: string): Promise<CartGQL | null> {
+    try {
+      const guestCart = await this.cartModel
+        .findOne({ _id: id, isGuest: true })
+        .populate({
+          path: 'devices',
+          populate: { path: 'device' },
+        })
+        .exec();
+      return guestCart ? await guestCart.toObject() : null;
+    } catch (e) {
+      throw new InternalServerErrorException('Something went wrong');
     }
-    return guestCart.toObject();
   }
 
   public async deleteOldCarts(expirationDate: Date): Promise<void> {

@@ -131,8 +131,8 @@ export class CartsService {
           return this.apollo
             .mutate({
               mutation: gql`
-                mutation CreateGuestCart($deviceId: ID!) {
-                  createGuestCart(deviceId: $deviceId) {
+                mutation CreateCart($deviceId: ID!) {
+                  createCart(deviceId: $deviceId) {
                     id
                     devices {
                       id

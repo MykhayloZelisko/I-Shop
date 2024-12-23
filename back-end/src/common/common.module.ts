@@ -10,7 +10,7 @@ import { CartsModule } from '../carts/carts.module';
   imports: [
     forwardRef(() => CPropertiesGroupsModule),
     forwardRef(() => CPropertiesModule),
-    CartsModule,
+    forwardRef(() => CartsModule),
   ],
   providers: [CommonResolver, ParseObjectIdPipe, CronService],
   exports: [ParseObjectIdPipe],

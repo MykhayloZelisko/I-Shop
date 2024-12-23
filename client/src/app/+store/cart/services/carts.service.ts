@@ -190,7 +190,6 @@ export class CartsService {
     cartId: string,
   ): Observable<CartDeviceInterface> {
     return this.apollo
-      .use('withCredentials')
       .mutate({
         mutation: gql`
           mutation AddDeviceToCart($id: ID!, $cartId: ID!) {
@@ -236,7 +235,6 @@ export class CartsService {
     cartId: string,
   ): Observable<DeletedCartDeviceInterface> {
     return this.apollo
-      .use('withCredentials')
       .mutate({
         mutation: gql`
           mutation DeleteDevicesFromCart($ids: [ID!]!, $cartId: ID!) {
@@ -265,7 +263,6 @@ export class CartsService {
     device: UpdateCartDeviceInterface,
   ): Observable<CartDeviceInterface> {
     return this.apollo
-      .use('withCredentials')
       .mutate({
         mutation: gql`
           mutation UpdateCartDevice(
@@ -316,7 +313,6 @@ export class CartsService {
     data: UpdateCartDevicesInterface,
   ): Observable<boolean> {
     return this.apollo
-      .use('withCredentials')
       .mutate({
         mutation: gql`
           mutation UpdateCartDevices(

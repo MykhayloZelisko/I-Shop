@@ -15,6 +15,6 @@ export class RolesService {
     if (!role) {
       throw new NotFoundException('Role not found');
     }
-    return role.toObject();
+    return role.toObject<RoleGQL>();
   }
 }

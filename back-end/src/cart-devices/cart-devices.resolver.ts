@@ -9,8 +9,6 @@ import {
 import { CartDevicesService } from './cart-devices.service';
 import { CartDevice } from './models/cart-device.model';
 import { Device } from '../devices/models/device.model';
-import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../common/guards/gql-auth/gql-auth.guard';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 import { UpdateCartDeviceInput } from './inputs/update-cart-device.input';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
@@ -19,7 +17,6 @@ import { ParseObjectIdArrayPipe } from '../common/pipes/parse-object-id-array/pa
 import { UpdateCartDevicesInput } from './inputs/update-cart-devices.input';
 
 @Resolver(() => CartDevice)
-@UseGuards(GqlAuthGuard)
 export class CartDevicesResolver {
   public constructor(private cartDevicesService: CartDevicesService) {}
 

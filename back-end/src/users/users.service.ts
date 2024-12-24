@@ -23,7 +23,7 @@ export class UsersService {
       roles: [userRole.id],
     });
     await newUser.populate('roles');
-    return newUser.toObject();
+    return newUser.toObject<UserGQL>();
   }
 
   public async getUserByEmail(email: string): Promise<UserGQL | null> {
@@ -45,7 +45,7 @@ export class UsersService {
       return null;
     }
 
-    const userGQL: UserGQL = user.toObject();
+    const userGQL: UserGQL = user.toObject<UserGQL>();
     if (userGQL.cart) {
       userGQL.cart = await this.cartsService.updateCartPrices(userGQL.cart.id);
     }
@@ -80,6 +80,6 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user.toObject();
+    return user.toObject<UserGQL>();
   }
 }

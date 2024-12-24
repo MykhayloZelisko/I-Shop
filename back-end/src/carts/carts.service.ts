@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Cart as CartGQL } from './models/cart.model';
@@ -12,6 +13,7 @@ import { Model } from 'mongoose';
 import { CartDeviceDocument } from '../cart-devices/schemas/cart-device.schema';
 import { CartDevicesService } from '../cart-devices/cart-devices.service';
 import { UsersService } from '../users/users.service';
+import { User } from '../users/models/user.model';
 
 @Injectable()
 export class CartsService {
@@ -22,20 +24,35 @@ export class CartsService {
     @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
   ) {}
 
-  public async createCart(deviceId: string, userId: string): Promise<CartGQL> {
+  public async createCart(
+    deviceId: string,
+    user: User | undefined,
+  ): Promise<CartGQL> {
     const device = await this.cartDevicesService.createCartDevice(deviceId);
-    const newCart = await this.cartModel.create({ devices: [device.id] });
-    const user = await this.usersService.getUserById(userId);
-    user.cart = newCart.id;
-    await user.save();
+    const userId = user ? user.id.toString() : undefined;
+    let newCart: CartDocument;
+    if (userId) {
+      const userDB = await this.usersService.getUserById(userId);
+      newCart = await this.cartModel.create({
+        devices: [device.id],
+        isGuest: false,
+      });
+      userDB.cart = newCart.id;
+      await userDB.save();
+    } else {
+      newCart = await this.cartModel.create({
+        devices: [device.id],
+        isGuest: true,
+      });
+    }
     await newCart.populate({
       path: 'devices',
       populate: { path: 'device' },
     });
-    return newCart.toObject();
+    return newCart.toObject<CartGQL>();
   }
 
-  public async findCartById(id: string): Promise<CartDocument | null> {
+  public async getCartById(id: string): Promise<CartDocument | null> {
     return this.cartModel.findById(id).exec();
   }
 
@@ -73,7 +90,7 @@ export class CartsService {
     );
 
     await Promise.all(updatePromises);
-    return cart.toObject();
+    return cart.toObject<CartGQL>();
   }
 
   public async deleteDevicesFromCart(
@@ -97,5 +114,27 @@ export class CartsService {
     } catch {
       throw new BadRequestException('Devices are not deleted from the cart');
     }
+  }
+
+  public async getGuestCart(id: string): Promise<CartGQL | null> {
+    try {
+      const guestCart = await this.cartModel
+        .findOne({ _id: id, isGuest: true })
+        .populate({
+          path: 'devices',
+          populate: { path: 'device' },
+        })
+        .exec();
+      return guestCart ? guestCart.toObject<CartGQL>() : null;
+    } catch (e) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+  }
+
+  public async deleteOldCarts(expirationDate: Date): Promise<void> {
+    await this.cartModel.deleteMany({
+      createdAt: { $lt: expirationDate },
+      isGuest: true,
+    });
   }
 }

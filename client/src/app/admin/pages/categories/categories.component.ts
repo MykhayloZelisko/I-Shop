@@ -9,12 +9,8 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
 import { Observable, take } from 'rxjs';
 import { selectCGPTree } from '../../../+store/shared/selectors/shared.selectors';
-import { TreeNode } from 'primeng/api';
-import {
-  Tree,
-  TreeNodeCollapseEvent,
-  TreeNodeExpandEvent,
-} from 'primeng/tree';
+import { PrimeTemplate, TreeNode } from 'primeng/api';
+import { Tree, TreeNodeCollapseEvent, TreeNodeExpandEvent } from 'primeng/tree';
 import { AsyncPipe } from '@angular/common';
 import { CategoryItemComponent } from './components/category-item/category-item.component';
 import { NewCategoryComponent } from './components/new-category/new-category.component';
@@ -38,6 +34,7 @@ import { CPropertyActions } from '../../../+store/c-properties/actions/c-propert
     NewCategoryComponent,
     CPropertiesGroupItemComponent,
     CPropertyItemComponent,
+    PrimeTemplate,
   ],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',

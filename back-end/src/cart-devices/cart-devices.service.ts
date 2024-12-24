@@ -31,7 +31,7 @@ export class CartDevicesService {
       priceAtAdd: device.price,
     });
     await newDevice.populate('device');
-    return newDevice.toObject();
+    return newDevice.toObject<CartDeviceGQL>();
   }
 
   public async addDeviceToCart(
@@ -68,7 +68,7 @@ export class CartDevicesService {
     if (!updatedDevice) {
       throw new BadRequestException('Device is not updated');
     }
-    return updatedDevice.toObject();
+    return updatedDevice.toObject<CartDeviceGQL>();
   }
 
   public async updateCartDevices(
@@ -93,7 +93,7 @@ export class CartDevicesService {
   ): Promise<DeletedCartDevice> {
     await this.cartDeviceModel.deleteMany({ _id: { $in: ids } }).exec();
     await this.cartsService.deleteDevicesFromCart(cartId, ids);
-    const cart = await this.cartsService.findCartById(cartId);
+    const cart = await this.cartsService.getCartById(cartId);
     return {
       ids,
       cart: !cart,

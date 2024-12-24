@@ -28,7 +28,7 @@ export const getMe$ = createEffect(
         authService.getCurrentUser().pipe(
           mergeMap((user: UserInterface) => {
             const actions: ReturnType<
-              | typeof CartActions.loadCart
+              | typeof CartActions.loadCartSuccess
               | typeof AuthActions.getMeSuccess
               | typeof LoaderActions.toggleLoader
             >[] = [
@@ -37,7 +37,7 @@ export const getMe$ = createEffect(
             ];
 
             if (user.cart) {
-              actions.push(CartActions.loadCart({ cart: user.cart }));
+              actions.push(CartActions.loadCartSuccess({ cart: user.cart }));
             }
 
             return actions;
@@ -47,6 +47,22 @@ export const getMe$ = createEffect(
       catchError(() => {
         store.dispatch(LoaderActions.toggleLoader());
         return of(AuthActions.getMeFailure());
+      }),
+    ),
+  { functional: true },
+);
+
+export const getMeFailure$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(AuthActions.getMeFailure),
+      mergeMap(() => {
+        const id = localStorage.getItem('cartId');
+        if (id) {
+          return of(CartActions.loadCart({ id }));
+        } else {
+          return of(CartActions.loadCartFailure());
+        }
       }),
     ),
   { functional: true },
@@ -66,7 +82,7 @@ export const login$ = createEffect(
         authService.login(action.login).pipe(
           mergeMap((user: UserInterface) => {
             const actions: ReturnType<
-              | typeof CartActions.loadCart
+              | typeof CartActions.loadCartSuccess
               | typeof AuthActions.loginSuccess
               | typeof LoaderActions.toggleLoader
               | typeof PopupActions.closePopup
@@ -77,7 +93,7 @@ export const login$ = createEffect(
             ];
 
             if (user.cart) {
-              actions.push(CartActions.loadCart({ cart: user.cart }));
+              actions.push(CartActions.loadCartSuccess({ cart: user.cart }));
             }
 
             return actions;

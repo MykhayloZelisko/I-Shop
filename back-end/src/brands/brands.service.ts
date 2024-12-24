@@ -27,12 +27,12 @@ export class BrandsService {
       throw new ConflictException('This brand already exists');
     }
     const newBrand = await this.brandModel.create(createBrandInput);
-    return newBrand.toObject();
+    return newBrand.toObject<BrandGQL>();
   }
 
   public async getAllBrands(): Promise<BrandGQL[]> {
     const brands = await this.brandModel.find().exec();
-    return brands.map((brand: BrandDocument) => brand.toObject());
+    return brands.map((brand: BrandDocument) => brand.toObject<BrandGQL>());
   }
 
   public async updateBrand(
@@ -53,7 +53,7 @@ export class BrandsService {
       )
       .exec();
     if (updatedBrand) {
-      return updatedBrand.toObject();
+      return updatedBrand.toObject<BrandGQL>();
     }
     throw new BadRequestException('A brand is not updated');
   }
@@ -73,6 +73,6 @@ export class BrandsService {
     if (!brand) {
       throw new NotFoundException('Brand not found');
     }
-    return brand.toObject();
+    return brand.toObject<BrandGQL>();
   }
 }

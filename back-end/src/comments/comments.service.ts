@@ -49,7 +49,7 @@ export class CommentsService {
         'likesUsers',
         'dislikesUsers',
       ]);
-      return await newComment.toObject();
+      return newComment.toObject<CommentGQL>();
     } catch {
       throw new ForbiddenException(
         'You cannot add new comment for this device',
@@ -81,7 +81,9 @@ export class CommentsService {
     }
 
     return {
-      comments: comments.map((comment: CommentDocument) => comment.toObject()),
+      comments: comments.map((comment: CommentDocument) =>
+        comment.toObject<CommentGQL>(),
+      ),
       hasMore,
       cursor: hasMore ? comments[comments.length - 1].id : null,
     };
@@ -162,7 +164,7 @@ export class CommentsService {
       throw new BadRequestException('A comment is not updated');
     }
 
-    return updatedComment.toObject();
+    return updatedComment.toObject<CommentGQL>();
   }
 
   public async updateComment(
@@ -191,7 +193,7 @@ export class CommentsService {
       .populate(['user', 'device'])
       .exec();
     if (updatedComment) {
-      return updatedComment.toObject();
+      return updatedComment.toObject<CommentGQL>();
     }
     throw new BadRequestException('A comment is not updated');
   }

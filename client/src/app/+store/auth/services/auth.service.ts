@@ -84,6 +84,7 @@ export class AuthService {
           if (response.errors) {
             throw response.errors[0];
           } else {
+            localStorage.removeItem('cartId');
             return {
               ...response.data.login,
               cart: response.data.login.cart

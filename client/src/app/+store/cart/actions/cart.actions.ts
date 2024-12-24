@@ -8,7 +8,9 @@ export const CartActions = createActionGroup({
   source: 'Cart/API',
   events: {
     // Cart actions
-    LoadCart: props<{ cart: CartInterface }>(),
+    LoadCart: props<{ id: string }>(),
+    LoadCartSuccess: props<{ cart: CartInterface | null }>(),
+    LoadCartFailure: emptyProps(),
     CheckCart: props<{ deviceId: string }>(),
     CreateCart: props<{ deviceId: string }>(),
     CreateCartSuccess: props<{ cart: CartInterface }>(),

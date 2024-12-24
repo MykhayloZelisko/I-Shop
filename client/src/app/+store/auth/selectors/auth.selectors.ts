@@ -17,3 +17,8 @@ export const selectAdmin = createSelector(
       ? user.roles.some((role: RoleInterface) => role.role === 'administrator')
       : false,
 );
+
+export const selectLoggedIn = createSelector(
+  selectUser,
+  (user: UserInterface | null) => !!user,
+);

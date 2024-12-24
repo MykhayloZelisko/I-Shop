@@ -161,7 +161,7 @@ export class CategoriesService {
         image: fileName,
       });
       return {
-        ...category.toObject(),
+        ...category.toObject<CategoryGQL>(),
         parentId: category.parentId ? category.parentId.toString() : null,
         hasGroups: false,
       };
@@ -178,7 +178,7 @@ export class CategoriesService {
         icon: fileName,
       });
       return {
-        ...category.toObject(),
+        ...category.toObject<CategoryGQL>(),
         hasGroups: false,
       };
     } else {

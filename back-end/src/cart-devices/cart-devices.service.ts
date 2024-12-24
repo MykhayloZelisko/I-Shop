@@ -31,7 +31,7 @@ export class CartDevicesService {
       priceAtAdd: device.price,
     });
     await newDevice.populate('device');
-    return newDevice.toObject();
+    return newDevice.toObject<CartDeviceGQL>();
   }
 
   public async addDeviceToCart(
@@ -68,7 +68,7 @@ export class CartDevicesService {
     if (!updatedDevice) {
       throw new BadRequestException('Device is not updated');
     }
-    return updatedDevice.toObject();
+    return updatedDevice.toObject<CartDeviceGQL>();
   }
 
   public async updateCartDevices(

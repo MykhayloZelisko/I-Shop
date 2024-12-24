@@ -45,7 +45,7 @@ export class CPropertiesGroupsService {
           group.id,
         );
         return {
-          ...group.toObject(),
+          ...group.toObject<CPropertiesGroupGQL>(),
           hasProperties,
         };
       }),
@@ -63,7 +63,7 @@ export class CPropertiesGroupsService {
           group.id,
         );
         return {
-          ...group.toObject(),
+          ...group.toObject<CPropertiesGroupGQL>(),
           hasProperties,
         };
       }),
@@ -81,7 +81,7 @@ export class CPropertiesGroupsService {
       group.id,
     );
     return {
-      ...group.toObject(),
+      ...group.toObject<CPropertiesGroupGQL>(),
       hasProperties,
     };
   }
@@ -128,7 +128,7 @@ export class CPropertiesGroupsService {
       createCPropertiesGroupInputs,
     );
     return createdGroups.map((group: CPropertiesGroupDocument) => ({
-      ...group.toObject(),
+      ...group.toObject<CPropertiesGroupGQL>(),
       hasProperties: false,
     }));
   }
@@ -156,7 +156,7 @@ export class CPropertiesGroupsService {
       const hasProperties = await this.cPropertiesService.hasGroupProperties(
         updatedGroup.id,
       );
-      return { ...updatedGroup.toObject(), hasProperties };
+      return { ...updatedGroup.toObject<CPropertiesGroupGQL>(), hasProperties };
     }
     throw new BadRequestException('A group is not updated');
   }

@@ -79,7 +79,9 @@ export class DevicesService {
       total,
       page,
       size,
-      devices: devices.map((device: DeviceDocument) => device.toObject()),
+      devices: devices.map((device: DeviceDocument) =>
+        device.toObject<DeviceGQL>(),
+      ),
     };
   }
 
@@ -91,7 +93,7 @@ export class DevicesService {
     if (!device) {
       throw new NotFoundException('Brand not found');
     }
-    return device.toObject();
+    return device.toObject<DeviceGQL>();
   }
 
   public async recalculateDeviceRating(

@@ -32,7 +32,9 @@ export class CPropertiesService {
         _id: { $nin: ids },
       })
       .exec();
-    return properties.map((property: CPropertyDocument) => property.toObject());
+    return properties.map((property: CPropertyDocument) =>
+      property.toObject<CPropertyGQL>(),
+    );
   }
 
   public async getCPropertiesByCategoryId(id: string): Promise<CPropertyGQL[]> {
@@ -50,14 +52,18 @@ export class CPropertiesService {
         groupId: { $in: ids },
       })
       .exec();
-    return properties.map((property: CPropertyDocument) => property.toObject());
+    return properties.map((property: CPropertyDocument) =>
+      property.toObject<CPropertyGQL>(),
+    );
   }
 
   public async getCPropertiesByGroupId(
     groupId: string,
   ): Promise<CPropertyGQL[]> {
     const properties = await this.cPropertyModel.find({ groupId }).exec();
-    return properties.map((property: CPropertyDocument) => property.toObject());
+    return properties.map((property: CPropertyDocument) =>
+      property.toObject<CPropertyGQL>(),
+    );
   }
 
   public async createCProperties(
@@ -87,7 +93,7 @@ export class CPropertiesService {
       createCPropertyInputs,
     );
     return createdProperties.map((property: CPropertyDocument) =>
-      property.toObject(),
+      property.toObject<CPropertyGQL>(),
     );
   }
 
@@ -111,7 +117,7 @@ export class CPropertiesService {
       )
       .exec();
     if (updatedProperty) {
-      return updatedProperty.toObject();
+      return updatedProperty.toObject<CPropertyGQL>();
     }
     throw new BadRequestException('A property is not updated');
   }

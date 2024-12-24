@@ -49,7 +49,7 @@ export class CartsService {
       path: 'devices',
       populate: { path: 'device' },
     });
-    return newCart.toObject();
+    return newCart.toObject<CartGQL>();
   }
 
   public async getCartById(id: string): Promise<CartDocument | null> {
@@ -90,7 +90,7 @@ export class CartsService {
     );
 
     await Promise.all(updatePromises);
-    return cart.toObject();
+    return cart.toObject<CartGQL>();
   }
 
   public async deleteDevicesFromCart(
@@ -125,7 +125,7 @@ export class CartsService {
           populate: { path: 'device' },
         })
         .exec();
-      return guestCart ? await guestCart.toObject() : null;
+      return guestCart ? guestCart.toObject<CartGQL>() : null;
     } catch (e) {
       throw new InternalServerErrorException('Something went wrong');
     }

@@ -36,10 +36,7 @@ import { State } from '../../../+store/reducers';
 import { selectAllBrands } from '../../../+store/brands/selectors/brand.selectors';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { selectCascadeCategories } from '../../../+store/categories/selectors/category.selectors';
-import {
-  CascadeSelectChangeEvent,
-  CascadeSelect,
-} from 'primeng/cascadeselect';
+import { CascadeSelectChangeEvent, CascadeSelect } from 'primeng/cascadeselect';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
 import { FileControlComponent } from './components/file-control/file-control.component';
 import { SvgIconComponent } from 'angular-svg-icon';

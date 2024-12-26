@@ -6,5 +6,6 @@
   "bracketSpacing": true,
   "printWidth": 80,
   "bracketSameLine": false,
+  "endOfLine": "lf",
   "overrides": []
 }

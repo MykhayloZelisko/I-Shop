@@ -5,7 +5,6 @@ const angular = require('angular-eslint');
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const stylisticTs = require('@stylistic/eslint-plugin-ts');
 const typescriptEslintPlugin = require('@typescript-eslint/eslint-plugin');
-const prettierConfig = require('eslint-config-prettier')
 
 module.exports = tseslint.config(
   {
@@ -47,6 +46,11 @@ module.exports = tseslint.config(
       "@angular-eslint/sort-lifecycle-methods": [
         "error",
       ],
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-includes': 'error',
+      '@typescript-eslint/no-implied-eval': 'error',
+      '@typescript-eslint/no-for-in-array': 'error',
+      '@typescript-eslint/no-duplicate-type-constituents': 'error',
       '@typescript-eslint/explicit-member-accessibility': 'error',
       '@typescript-eslint/no-duplicate-enum-values': 'off',
       '@typescript-eslint/explicit-function-return-type': 'error',

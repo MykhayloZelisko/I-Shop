@@ -49,7 +49,7 @@ export class CreateUserInput {
   @IsString({ message: 'Must be a string' })
   @Length(8, 32, { message: 'Must be between 8 and 32 characters' })
   @Matches(
-    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,.?\/~_+\-=|\\]).{8,32}$/,
+    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[\]:;<>,?/~_+\-=|\\]).{8,32}$/,
     { message: 'Password is incorrect' },
   )
   @IsNotEmpty({ message: 'Must be a not empty string' })

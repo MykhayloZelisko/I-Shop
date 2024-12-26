@@ -28,7 +28,7 @@ export class FilesService {
       }
       await fs.promises.writeFile(path.join(filePath, fileName), decodedData);
       return fileName;
-    } catch (e) {
+    } catch {
       throw new InternalServerErrorException('Something went wrong');
     }
   }

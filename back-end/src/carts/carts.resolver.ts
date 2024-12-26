@@ -5,7 +5,8 @@ import {
   ResolveField,
   Parent,
   ID,
-  Context, Query,
+  Context,
+  Query,
 } from '@nestjs/graphql';
 import { CartsService } from './carts.service';
 import { Cart } from './models/cart.model';

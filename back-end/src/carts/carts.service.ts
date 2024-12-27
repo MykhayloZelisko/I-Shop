@@ -126,7 +126,7 @@ export class CartsService {
         })
         .exec();
       return guestCart ? guestCart.toObject<CartGQL>() : null;
-    } catch (e) {
+    } catch {
       throw new InternalServerErrorException('Something went wrong');
     }
   }

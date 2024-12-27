@@ -7,7 +7,7 @@ import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 
 async function bootstrap(): Promise<void> {
-  const PORT = Number(process.env.PORT) ?? 3000;
+  const PORT = Number(process.env.PORT) || 3000;
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({

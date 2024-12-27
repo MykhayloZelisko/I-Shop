@@ -132,6 +132,17 @@ export class CartsService {
   }
 
   public async deleteOldCarts(expirationDate: Date): Promise<void> {
+    const carts = await this.cartModel
+      .find({
+        createdAt: { $lt: expirationDate },
+        isGuest: true,
+      })
+      .exec();
+    const deviceIds = carts
+      .map((cart) => cart.devices)
+      .flat()
+      .map((id) => id.toString());
+    await this.cartDevicesService.deleteDevicesFromManyCarts(deviceIds);
     await this.cartModel.deleteMany({
       createdAt: { $lt: expirationDate },
       isGuest: true,

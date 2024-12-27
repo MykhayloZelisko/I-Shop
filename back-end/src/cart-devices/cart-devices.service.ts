@@ -99,4 +99,8 @@ export class CartDevicesService {
       cart: !cart,
     };
   }
+
+  public async deleteDevicesFromManyCarts(ids: string[]): Promise<void> {
+    await this.cartDeviceModel.deleteMany({ _id: { $in: ids } }).exec();
+  }
 }

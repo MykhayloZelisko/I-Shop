@@ -119,7 +119,10 @@ export class CartDevicesService {
     );
   }
 
-  public async deleteDevicesFromManyCarts(ids: string[], session: ClientSession): Promise<void> {
+  public async deleteDevicesFromManyCarts(
+    ids: string[],
+    session: ClientSession,
+  ): Promise<void> {
     if (!ids.length) {
       return;
     }

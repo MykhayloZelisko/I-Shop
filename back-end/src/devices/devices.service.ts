@@ -6,12 +6,14 @@ import {
 import { CreateDeviceInput } from './inputs/create-device.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Device, DeviceDocument } from './schemas/device.schema';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriesService } from '../categories/categories.service';
 import { FilesService } from '../files/files.service';
 import { DevicesList } from './models/devices-list.model';
 import { Device as DeviceGQL } from './models/device.model';
+import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
+import { CPropertiesService } from '../c-properties/c-properties.service';
 
 @Injectable()
 export class DevicesService {
@@ -20,6 +22,8 @@ export class DevicesService {
     private brandsService: BrandsService,
     private categoriesService: CategoriesService,
     private filesService: FilesService,
+    private cPropertiesGroupsService: CPropertiesGroupsService,
+    private cPropertiesService: CPropertiesService,
   ) {}
 
   public async createDevice(
@@ -31,7 +35,7 @@ export class DevicesService {
     const category = await this.categoriesService.getCategoryById(
       createDeviceInput.categoryId,
     );
-    const categoriesIds = await this.categoriesService.findParentCategoriesIds(
+    const categoriesIds = await this.categoriesService.getParentCategoriesIds(
       createDeviceInput.categoryId,
     );
 
@@ -100,12 +104,37 @@ export class DevicesService {
     id: string,
     votes: number,
     rating: number,
+    session: ClientSession,
   ): Promise<void> {
     const device = await this.deviceModel
       .findByIdAndUpdate(id, { votes, rating }, { new: true })
+      .session(session)
       .exec();
     if (!device) {
       throw new NotFoundException('Device not found');
     }
+  }
+
+  public async checkBrand(brandId: string): Promise<boolean> {
+    const device = await this.deviceModel.exists({ brand: brandId }).exec();
+    return !!device;
+  }
+
+  public async checkCategory(categoryId: string): Promise<boolean> {
+    const device = await this.deviceModel
+      .exists({ categories: { $in: [categoryId] } })
+      .exec();
+    return !!device;
+  }
+
+  public async checkGroup(groupId: string): Promise<boolean> {
+    const categoryId =
+      await this.cPropertiesGroupsService.getCategoryId(groupId);
+    return this.checkCategory(categoryId);
+  }
+
+  public async checkProperty(propertyId: string): Promise<boolean> {
+    const groupId = await this.cPropertiesService.getGroupId(propertyId);
+    return this.checkGroup(groupId);
   }
 }

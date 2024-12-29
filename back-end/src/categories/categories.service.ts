@@ -1,11 +1,14 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { Category, CategoryDocument } from './schemas/category.schema';
 import { Category as CategoryGQL } from './models/category.model';
 import { CreateCategoryInput } from './inputs/create-category.input';
@@ -13,6 +16,8 @@ import { FilesService } from '../files/files.service';
 import { UpdateCategoryInput } from './inputs/update-category.input';
 import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
 import { Deleted } from '../common/models/deleted.model';
+import { DevicesService } from '../devices/devices.service';
+import { TransactionsService } from '../common/services/transactions/transactions.service';
 
 @Injectable()
 export class CategoriesService {
@@ -20,6 +25,9 @@ export class CategoriesService {
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
     private filesService: FilesService,
     private cPropertiesGroupsService: CPropertiesGroupsService,
+    @Inject(forwardRef(() => DevicesService))
+    private devicesService: DevicesService,
+    private transactionsService: TransactionsService,
   ) {}
 
   public async getAllCategories(): Promise<CategoryGQL[]> {
@@ -66,56 +74,68 @@ export class CategoriesService {
 
   public async deleteCategory(categoryId: string): Promise<Deleted> {
     const category = await this.getCategoryById(categoryId);
-    const subCategoriesIds = await this.findSubCategoriesIds(categoryId);
-    // TODO: check subcategories and products. If a category cannot be deleted you should throw ForbiddenException
-    for (const id of subCategoriesIds) {
-      const deletedCategory = await this.categoryModel.findById(id).exec();
-      if (deletedCategory && deletedCategory.image) {
-        await this.filesService.removeImageFile(deletedCategory.image);
-      }
-      if (deletedCategory && deletedCategory.icon) {
-        await this.filesService.removeImageFile(deletedCategory.icon);
-      }
-      await this.categoryModel.findByIdAndDelete(id).exec();
-    }
-    const ids =
-      await this.cPropertiesGroupsService.deleteAllGroupsByCategoriesIds(
-        subCategoriesIds,
+    const subCategoriesIds = await this.getSubCategoriesIds(categoryId);
+    const isCategoryUsed = await this.devicesService.checkCategory(categoryId);
+    if (isCategoryUsed) {
+      throw new ForbiddenException(
+        'This category is used in devices and cannot be deleted',
       );
-    if (category.parentId) {
-      const parentCategory = await this.getCategoryById(category.parentId);
+    }
+
+    return this.transactionsService.execute<Deleted>(async (session) => {
+      for (const id of subCategoriesIds) {
+        const deletedCategory = await this.categoryModel
+          .findById(id)
+          .session(session)
+          .exec();
+        if (deletedCategory && deletedCategory.image) {
+          await this.filesService.removeImageFile(deletedCategory.image);
+        }
+        if (deletedCategory && deletedCategory.icon) {
+          await this.filesService.removeImageFile(deletedCategory.icon);
+        }
+        await this.categoryModel.findByIdAndDelete(id).session(session).exec();
+      }
+      const ids =
+        await this.cPropertiesGroupsService.deleteAllGroupsByCategoriesIds(
+          subCategoriesIds,
+          session,
+        );
+      if (category.parentId) {
+        const parentCategory = await this.getCategoryById(category.parentId);
+        return {
+          categoriesIds: subCategoriesIds,
+          groupsIds: ids.groupsIds,
+          propertiesIds: ids.propertiesIds,
+          category: parentCategory,
+          group: null,
+        };
+      }
       return {
         categoriesIds: subCategoriesIds,
         groupsIds: ids.groupsIds,
         propertiesIds: ids.propertiesIds,
-        category: parentCategory,
+        category: null,
         group: null,
       };
-    }
-    return {
-      categoriesIds: subCategoriesIds,
-      groupsIds: ids.groupsIds,
-      propertiesIds: ids.propertiesIds,
-      category: null,
-      group: null,
-    };
+    });
   }
 
-  public async findSubCategoriesIds(categoryId: string): Promise<string[]> {
+  public async getSubCategoriesIds(categoryId: string): Promise<string[]> {
     const subCategories = await this.categoryModel
       .find({ parentId: categoryId })
       .exec();
     let result: string[] = [categoryId];
 
     for (const category of subCategories) {
-      const subSubCategoriesIds = await this.findSubCategoriesIds(category.id);
+      const subSubCategoriesIds = await this.getSubCategoriesIds(category.id);
       result = result.concat(subSubCategoriesIds);
     }
 
     return result;
   }
 
-  public async findParentCategoriesIds(categoryId: string): Promise<string[]> {
+  public async getParentCategoriesIds(categoryId: string): Promise<string[]> {
     const result: string[] = [];
     let id: string | null = categoryId;
     do {
@@ -128,6 +148,7 @@ export class CategoriesService {
 
   public async createCategory(
     createCategoryInput: CreateCategoryInput,
+    session?: ClientSession,
   ): Promise<CategoryGQL> {
     const existedCategory = await this.categoryModel
       .findOne({
@@ -156,10 +177,15 @@ export class CategoriesService {
       const fileName = await this.filesService.createImageFile(
         createCategoryInput.image,
       );
-      const category = await this.categoryModel.create({
-        ...createCategoryInput,
-        image: fileName,
-      });
+      const [category] = await this.categoryModel.create(
+        [
+          {
+            ...createCategoryInput,
+            image: fileName,
+          },
+        ],
+        session ? { session } : undefined,
+      );
       return {
         ...category.toObject<CategoryGQL>(),
         parentId: category.parentId ? category.parentId.toString() : null,
@@ -190,7 +216,7 @@ export class CategoriesService {
     createCategoryInputs: CreateCategoryInput[],
   ): Promise<CategoryGQL[]> {
     const groupsIds =
-      await this.cPropertiesGroupsService.findGroupsIdsByCategoryId(
+      await this.cPropertiesGroupsService.getGroupsIdsByCategoryId(
         createCategoryInputs[0].parentId as string,
       );
     if (groupsIds.length) {
@@ -211,12 +237,14 @@ export class CategoriesService {
       );
     }
 
-    const categories: CategoryGQL[] = [];
-    for (const input of createCategoryInputs) {
-      const category = await this.createCategory(input);
-      categories.push(category);
-    }
-    return categories;
+    return this.transactionsService.execute<CategoryGQL[]>(async (session) => {
+      const categories: CategoryGQL[] = [];
+      for (const input of createCategoryInputs) {
+        const category = await this.createCategory(input, session);
+        categories.push(category);
+      }
+      return categories;
+    });
   }
 
   public async updateCategory(

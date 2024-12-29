@@ -17,6 +17,7 @@ import { RatingsService } from '../ratings/ratings.service';
 import { UpdateLikeDislikeInput } from './inputs/update-like-dislike.input';
 import { DevicesService } from '../devices/devices.service';
 import { UserDocument } from '../users/schemas/user.schema';
+import { TransactionsService } from '../common/services/transactions/transactions.service';
 
 @Injectable()
 export class CommentsService {
@@ -24,25 +25,32 @@ export class CommentsService {
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
     private ratingsService: RatingsService,
     private devicesService: DevicesService,
+    private transactionsService: TransactionsService,
   ) {}
 
   public async createComment(
     createCommentInput: CreateCommentInput,
   ): Promise<CommentGQL> {
-    try {
+    return this.transactionsService.execute<CommentGQL>(async (session) => {
       await this.ratingsService.createRating(
         createCommentInput.userId,
         createCommentInput.deviceId,
         createCommentInput.rating,
+        session,
       );
-      const newComment = await this.commentModel.create({
-        content: createCommentInput.content,
-        advantages: createCommentInput.advantages,
-        disadvantages: createCommentInput.disadvantages,
-        rating: createCommentInput.rating,
-        device: createCommentInput.deviceId,
-        user: createCommentInput.userId,
-      });
+      const [newComment] = await this.commentModel.create(
+        [
+          {
+            content: createCommentInput.content,
+            advantages: createCommentInput.advantages,
+            disadvantages: createCommentInput.disadvantages,
+            rating: createCommentInput.rating,
+            device: createCommentInput.deviceId,
+            user: createCommentInput.userId,
+          },
+        ],
+        { session },
+      );
       await newComment.populate([
         'user',
         'device',
@@ -50,11 +58,7 @@ export class CommentsService {
         'dislikesUsers',
       ]);
       return newComment.toObject<CommentGQL>();
-    } catch {
-      throw new ForbiddenException(
-        'You cannot add new comment for this device',
-      );
-    }
+    });
   }
 
   public async getCommentsByDeviceIdAfterCursor(
@@ -183,19 +187,23 @@ export class CommentsService {
       throw new ForbiddenException('This user cannot update this comment');
     }
 
-    await this.ratingsService.updateRating(
-      userId,
-      deviceId,
-      updateCommentInput.rating,
-    );
-    const updatedComment = await this.commentModel
-      .findByIdAndUpdate(id, updateCommentInput, { new: true })
-      .populate(['user', 'device'])
-      .exec();
-    if (updatedComment) {
-      return updatedComment.toObject<CommentGQL>();
-    }
-    throw new BadRequestException('A comment is not updated');
+    return this.transactionsService.execute<CommentGQL>(async (session) => {
+      await this.ratingsService.updateRating(
+        userId,
+        deviceId,
+        updateCommentInput.rating,
+        session,
+      );
+      const updatedComment = await this.commentModel
+        .findByIdAndUpdate(id, updateCommentInput, { new: true })
+        .populate(['user', 'device'])
+        .session(session)
+        .exec();
+      if (updatedComment) {
+        return updatedComment.toObject<CommentGQL>();
+      }
+      throw new BadRequestException('A comment is not updated');
+    });
   }
 
   public async deleteComment(
@@ -216,23 +224,25 @@ export class CommentsService {
       throw new ForbiddenException('This user cannot delete this comment');
     }
 
-    await this.commentModel.findByIdAndDelete(id);
-    await this.ratingsService.deleteRating(userId, deviceId);
+    return this.transactionsService.execute(async (session) => {
+      await this.commentModel.findByIdAndDelete(id).session(session);
+      await this.ratingsService.deleteRating(userId, deviceId, session);
 
-    const updatedDevice = await this.devicesService.getDeviceById(deviceId);
+      const updatedDevice = await this.devicesService.getDeviceById(deviceId);
 
-    if (id === cursor) {
-      const prevComment = await this.commentModel
-        .findOne({
-          device: comment.device,
-          id: { $lt: comment.id },
-        })
-        .sort({ id: -1 })
-        .exec();
-      const newCursor = prevComment ? prevComment.id.toString() : null;
-      return { id, cursor: newCursor, device: updatedDevice };
-    }
+      if (id === cursor) {
+        const prevComment = await this.commentModel
+          .findOne({
+            device: comment.device,
+            id: { $lt: comment.id },
+          })
+          .sort({ id: -1 })
+          .exec();
+        const newCursor = prevComment ? prevComment.id.toString() : null;
+        return { id, cursor: newCursor, device: updatedDevice };
+      }
 
-    return { id, cursor, device: updatedDevice };
+      return { id, cursor, device: updatedDevice };
+    });
   }
 }

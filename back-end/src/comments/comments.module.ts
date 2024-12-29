@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Comment, CommentSchema } from './schemas/comment.schema';
 import { RatingsModule } from '../ratings/ratings.module';
 import { DevicesModule } from '../devices/devices.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   providers: [CommentsResolver, CommentsService],
@@ -12,6 +13,7 @@ import { DevicesModule } from '../devices/devices.module';
     MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]),
     RatingsModule,
     DevicesModule,
+    CommonModule,
   ],
 })
 export class CommentsModule {}

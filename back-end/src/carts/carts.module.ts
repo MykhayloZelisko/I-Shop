@@ -5,12 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Cart, CartSchema } from './schemas/cart.schema';
 import { CartDevicesModule } from '../cart-devices/cart-devices.module';
 import { UsersModule } from '../users/users.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Cart.name, schema: CartSchema }]),
     CartDevicesModule,
     forwardRef(() => UsersModule),
+    CommonModule,
   ],
   providers: [CartsResolver, CartsService],
   exports: [CartsService],

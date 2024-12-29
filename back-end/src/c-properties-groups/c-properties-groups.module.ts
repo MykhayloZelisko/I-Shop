@@ -9,6 +9,7 @@ import {
 import { CategoriesModule } from '../categories/categories.module';
 import { CPropertiesModule } from '../c-properties/c-properties.module';
 import { CommonModule } from '../common/common.module';
+import { DevicesModule } from '../devices/devices.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CommonModule } from '../common/common.module';
     forwardRef(() => CategoriesModule),
     CPropertiesModule,
     CommonModule,
+    forwardRef(() => DevicesModule),
   ],
   providers: [CPropertiesGroupsResolver, CPropertiesGroupsService],
   exports: [CPropertiesGroupsService],

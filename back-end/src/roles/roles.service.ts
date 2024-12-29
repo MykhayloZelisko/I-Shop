@@ -10,7 +10,7 @@ export class RolesService {
     @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
   ) {}
 
-  public async findRoleByName(roleName: string): Promise<RoleGQL> {
+  public async getRoleByName(roleName: string): Promise<RoleGQL> {
     const role = await this.roleModel.findOne({ role: roleName }).exec();
     if (!role) {
       throw new NotFoundException('Role not found');

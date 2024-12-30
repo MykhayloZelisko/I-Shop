@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
@@ -10,12 +11,13 @@ import {
 import { CreateCPropertyInput } from './inputs/create-c-property.input';
 import { UpdateCPropertyInput } from './inputs/update-c-property.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { CProperty, CPropertyDocument } from './schemas/c-property.schema';
 import { CProperty as CPropertyGQL } from './models/c-property.model';
 import { Deleted } from '../common/models/deleted.model';
 import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
 import { CPropertiesGroup } from '../c-properties-groups/models/c-properties-group.model';
+import { DevicesService } from '../devices/devices.service';
 
 @Injectable()
 export class CPropertiesService {
@@ -24,6 +26,8 @@ export class CPropertiesService {
     private cPropertyModel: Model<CPropertyDocument>,
     @Inject(forwardRef(() => CPropertiesGroupsService))
     private cPropertiesGroupsService: CPropertiesGroupsService,
+    @Inject(forwardRef(() => DevicesService))
+    private devicesService: DevicesService,
   ) {}
 
   public async getFilteredCProperties(ids: string[]): Promise<CPropertyGQL[]> {
@@ -123,7 +127,12 @@ export class CPropertiesService {
   }
 
   public async deleteCProperty(id: string): Promise<Deleted> {
-    // TODO: check products. If a property cannot be deleted you should throw ForbiddenException
+    const isPropertyUsed = await this.devicesService.checkProperty(id);
+    if (isPropertyUsed) {
+      throw new ForbiddenException(
+        'This property is used in devices and cannot be deleted',
+      );
+    }
     const property = await this.cPropertyModel.findByIdAndDelete(id).exec();
     if (property) {
       const group = await this.cPropertiesGroupsService.getCPropertiesGroupById(
@@ -143,6 +152,7 @@ export class CPropertiesService {
 
   public async deleteAllCPropertiesByGroupsIds(
     groupsIds: string[],
+    session: ClientSession,
   ): Promise<Deleted> {
     try {
       const properties = await this.cPropertyModel
@@ -153,6 +163,7 @@ export class CPropertiesService {
       const propertiesIds = properties.map((property) => property.id);
       await this.cPropertyModel
         .deleteMany({ groupId: { $in: groupsIds } })
+        .session(session)
         .exec();
       return {
         groupsIds,
@@ -171,5 +182,13 @@ export class CPropertiesService {
       .countDocuments({ groupId })
       .exec();
     return countProperties > 0;
+  }
+
+  public async getGroupId(id: string): Promise<string> {
+    const property = await this.cPropertyModel.findById(id).exec();
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+    return property.groupId;
   }
 }

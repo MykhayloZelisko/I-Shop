@@ -5,6 +5,7 @@ import { CPropertiesModule } from '../c-properties/c-properties.module';
 import { ParseObjectIdPipe } from './pipes/parse-object-id/parse-object-id.pipe';
 import { CronService } from './services/cron/cron.service';
 import { CartsModule } from '../carts/carts.module';
+import { TransactionsService } from './services/transactions/transactions.service';
 
 @Module({
   imports: [
@@ -12,7 +13,12 @@ import { CartsModule } from '../carts/carts.module';
     forwardRef(() => CPropertiesModule),
     forwardRef(() => CartsModule),
   ],
-  providers: [CommonResolver, ParseObjectIdPipe, CronService],
-  exports: [ParseObjectIdPipe],
+  providers: [
+    CommonResolver,
+    ParseObjectIdPipe,
+    CronService,
+    TransactionsService,
+  ],
+  exports: [ParseObjectIdPipe, TransactionsService],
 })
 export class CommonModule {}

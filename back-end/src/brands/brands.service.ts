@@ -1,6 +1,9 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,11 +13,14 @@ import { Brand as BrandGQL } from '../brands/models/brand.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Brand, BrandDocument } from './schemas/brand.schema';
+import { DevicesService } from '../devices/devices.service';
 
 @Injectable()
 export class BrandsService {
   public constructor(
     @InjectModel(Brand.name) private brandModel: Model<BrandDocument>,
+    @Inject(forwardRef(() => DevicesService))
+    private devicesService: DevicesService,
   ) {}
 
   public async createBrand(
@@ -59,7 +65,12 @@ export class BrandsService {
   }
 
   public async deleteBrand(id: string): Promise<string> {
-    // TODO: check products. If a brand cannot be deleted you should throw ForbiddenException
+    const isBrandUsed = await this.devicesService.checkBrand(id);
+    if (isBrandUsed) {
+      throw new ForbiddenException(
+        'This brand is used in devices and cannot be deleted',
+      );
+    }
     const brand = await this.brandModel.findByIdAndDelete(id).exec();
     if (brand) {
       return brand.id;

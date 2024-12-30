@@ -7,13 +7,14 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CartDevice, CartDeviceDocument } from './schemas/cart-device.schema';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { CartDevice as CartDeviceGQL } from './models/cart-device.model';
 import { CartsService } from '../carts/carts.service';
 import { DevicesService } from '../devices/devices.service';
 import { DeletedCartDevice } from './models/deleted-cart-device.model';
 import { UpdateCartDeviceInput } from './inputs/update-cart-device.input';
 import { UpdateCartDevicesInput } from './inputs/update-cart-devices.input';
+import { TransactionsService } from '../common/services/transactions/transactions.service';
 
 @Injectable()
 export class CartDevicesService {
@@ -22,14 +23,23 @@ export class CartDevicesService {
     private cartDeviceModel: Model<CartDeviceDocument>,
     @Inject(forwardRef(() => CartsService)) private cartsService: CartsService,
     private devicesService: DevicesService,
+    private transactionsService: TransactionsService,
   ) {}
 
-  public async createCartDevice(id: string): Promise<CartDeviceGQL> {
+  public async createCartDevice(
+    id: string,
+    session: ClientSession,
+  ): Promise<CartDeviceGQL> {
     const device = await this.devicesService.getDeviceById(id);
-    const newDevice = await this.cartDeviceModel.create({
-      device: id,
-      priceAtAdd: device.price,
-    });
+    const [newDevice] = await this.cartDeviceModel.create(
+      [
+        {
+          device: id,
+          priceAtAdd: device.price,
+        },
+      ],
+      { session },
+    );
     await newDevice.populate('device');
     return newDevice.toObject<CartDeviceGQL>();
   }
@@ -38,9 +48,11 @@ export class CartDevicesService {
     id: string, // device id
     cartId: string,
   ): Promise<CartDeviceGQL> {
-    const device = await this.createCartDevice(id);
-    await this.cartsService.addDeviceToCart(cartId, device.id); // cartDevice id
-    return device;
+    return this.transactionsService.execute<CartDeviceGQL>(async (session) => {
+      const device = await this.createCartDevice(id, session);
+      await this.cartsService.addDeviceToCart(cartId, device.id, session); // cartDevice id
+      return device;
+    });
   }
 
   public async updateCartDevice(
@@ -91,16 +103,32 @@ export class CartDevicesService {
     ids: string[],
     cartId: string,
   ): Promise<DeletedCartDevice> {
-    await this.cartDeviceModel.deleteMany({ _id: { $in: ids } }).exec();
-    await this.cartsService.deleteDevicesFromCart(cartId, ids);
-    const cart = await this.cartsService.getCartById(cartId);
-    return {
-      ids,
-      cart: !cart,
-    };
+    return this.transactionsService.execute<DeletedCartDevice>(
+      async (session) => {
+        await this.cartDeviceModel
+          .deleteMany({ _id: { $in: ids } })
+          .session(session)
+          .exec();
+        await this.cartsService.deleteDevicesFromCart(cartId, ids, session);
+        const cart = await this.cartsService.getCartById(cartId);
+        return {
+          ids,
+          cart: !cart,
+        };
+      },
+    );
   }
 
-  public async deleteDevicesFromManyCarts(ids: string[]): Promise<void> {
-    await this.cartDeviceModel.deleteMany({ _id: { $in: ids } }).exec();
+  public async deleteDevicesFromManyCarts(
+    ids: string[],
+    session: ClientSession,
+  ): Promise<void> {
+    if (!ids.length) {
+      return;
+    }
+    await this.cartDeviceModel
+      .deleteMany({ _id: { $in: ids } })
+      .session(session)
+      .exec();
   }
 }

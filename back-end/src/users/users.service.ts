@@ -16,7 +16,7 @@ export class UsersService {
   ) {}
 
   public async createUser(createUserInput: CreateUserInput): Promise<UserGQL> {
-    const userRole = await this.rolesService.findRoleByName('user');
+    const userRole = await this.rolesService.getRoleByName('user');
 
     const newUser = await this.userModel.create({
       ...createUserInput,

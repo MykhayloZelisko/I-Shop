@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CProperty, CPropertySchema } from './schemas/c-property.schema';
 import { CPropertiesGroupsModule } from '../c-properties-groups/c-properties-groups.module';
 import { CommonModule } from '../common/common.module';
+import { DevicesModule } from '../devices/devices.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CommonModule } from '../common/common.module';
     ]),
     forwardRef(() => CPropertiesGroupsModule),
     CommonModule,
+    forwardRef(() => DevicesModule),
   ],
   providers: [CPropertiesResolver, CPropertiesService],
   exports: [CPropertiesService],

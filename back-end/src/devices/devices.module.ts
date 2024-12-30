@@ -6,6 +6,8 @@ import { Device, DeviceSchema } from './schemas/device.schema';
 import { BrandsModule } from '../brands/brands.module';
 import { CategoriesModule } from '../categories/categories.module';
 import { FilesModule } from '../files/files.module';
+import { CPropertiesGroupsModule } from '../c-properties-groups/c-properties-groups.module';
+import { CPropertiesModule } from '../c-properties/c-properties.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { FilesModule } from '../files/files.module';
     BrandsModule,
     CategoriesModule,
     FilesModule,
+    CPropertiesGroupsModule,
+    CPropertiesModule,
   ],
   providers: [DevicesResolver, DevicesService],
   exports: [DevicesService],

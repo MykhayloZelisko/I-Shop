@@ -20,7 +20,6 @@ import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enu
 
 @Component({
   selector: 'app-device-item',
-  standalone: true,
   imports: [RouterLink, RatingComponent, SvgIconComponent, AsyncPipe],
   templateUrl: './device-item.component.html',
   styleUrl: './device-item.component.scss',

@@ -18,7 +18,6 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 
 @Component({
   selector: 'app-new-brand',
-  standalone: true,
   imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './new-brand.component.html',
   styleUrl: './new-brand.component.scss',

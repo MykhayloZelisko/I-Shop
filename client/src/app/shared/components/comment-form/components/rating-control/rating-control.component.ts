@@ -12,7 +12,6 @@ import { showErrorMessage } from '../../../../utils/validators';
 
 @Component({
   selector: 'app-rating-control',
-  standalone: true,
   imports: [SvgIconComponent, NgClass],
   providers: [
     {

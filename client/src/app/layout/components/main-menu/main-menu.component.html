@@ -75,11 +75,30 @@
         </li>
       }
       <li class="main-menu__list-item">
-        <button class="main-menu__list-button">
-          <svg-icon
-            class="main-menu__list-button-icon"
-            src="assets/images/shopping-cart-icon.svg"
-          ></svg-icon>
+        <button class="main-menu__list-button" (click)="openCart()">
+          @if (cartInfo$ | async; as cartInfo) {
+            @if (cartInfo.count) {
+              <svg-icon
+                class="main-menu__list-button-icon"
+                src="assets/images/shopping-cart-full-icon.svg"
+              ></svg-icon>
+              <div
+                class="main-menu__cart-count"
+                [ngClass]="
+                  cartInfo.isOrder
+                    ? 'main-menu__cart-count--full'
+                    : 'main-menu__cart-count--empty'
+                "
+              >
+                {{ cartInfo.count }}
+              </div>
+            } @else {
+              <svg-icon
+                class="main-menu__list-button-icon"
+                src="assets/images/shopping-cart-icon.svg"
+              ></svg-icon>
+            }
+          }
           Кошик
         </button>
       </li>
@@ -99,15 +118,6 @@
             src="assets/images/language-translator-icon.svg"
           ></svg-icon>
           Мова
-        </button>
-      </li>
-      <li class="main-menu__list-item main-menu__list-item--underlined">
-        <button class="main-menu__list-button">
-          <svg-icon
-            class="main-menu__list-button-icon"
-            src="assets/images/maps-pin-black-icon.svg"
-          ></svg-icon>
-          Місто
         </button>
       </li>
       @if (user$() | async) {

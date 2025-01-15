@@ -17,7 +17,6 @@ import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 
 @Component({
   selector: 'app-auth-dialog',
-  standalone: true,
   imports: [
     SvgIconComponent,
     RegistrationFormComponent,

@@ -25,7 +25,6 @@ import { CommentDialogComponent } from '../../../../../../../shared/components/c
 
 @Component({
   selector: 'app-comment-item',
-  standalone: true,
   imports: [
     DatePipe,
     RatingComponent,

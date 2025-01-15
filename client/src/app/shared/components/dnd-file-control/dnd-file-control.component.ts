@@ -16,7 +16,6 @@ import { GetControlDirective } from '../../directives/get-control.directive';
 
 @Component({
   selector: 'app-dnd-file-control',
-  standalone: true,
   imports: [DndDirective, NgStyle, NgClass],
   providers: [
     {

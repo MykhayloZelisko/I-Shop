@@ -4,7 +4,6 @@ import { BrandsListComponent } from './components/brands-list/brands-list.compon
 
 @Component({
   selector: 'app-brands',
-  standalone: true,
   imports: [NewBrandComponent, BrandsListComponent],
   templateUrl: './brands.component.html',
   styleUrl: './brands.component.scss',

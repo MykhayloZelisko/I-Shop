@@ -241,19 +241,25 @@
     }
   }
 
-  .p-select-list-container::-webkit-scrollbar {
-    appearance: none;
-  }
+  .p-select-list-container {
+    &::-webkit-scrollbar {
+      appearance: none;
+    }
 
-  .p-select-list-container::-webkit-scrollbar:vertical {
-    width: 7px;
-    background-color: variables.$white-1;
-  }
+    &::-webkit-scrollbar:vertical {
+      width: 7px;
+      background-color: variables.$white-1;
+    }
 
-  .p-select-list-container::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    border: 2px solid variables.$white-1;
-    background-color: variables.$brown-1;
+    &::-webkit-scrollbar:horizontal {
+      height: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      border: 2px solid variables.$white-1;
+      background-color: variables.$brown-1;
+    }
   }
 
   .p-select.invalid-dropdown.ng-invalid.ng-touched,

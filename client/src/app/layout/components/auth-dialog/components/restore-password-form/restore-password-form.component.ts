@@ -19,7 +19,6 @@ import { REG_EMAIL } from '../../../../../shared/models/constants/reg-exp-patter
 
 @Component({
   selector: 'app-restore-password-form',
-  standalone: true,
   imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './restore-password-form.component.html',
   styleUrl: './restore-password-form.component.scss',

@@ -15,7 +15,6 @@ import { GetControlDirective } from '../../directives/get-control.directive';
 
 @Component({
   selector: 'app-svg-file-control',
-  standalone: true,
   imports: [SvgIconComponent, NgClass],
   providers: [
     {

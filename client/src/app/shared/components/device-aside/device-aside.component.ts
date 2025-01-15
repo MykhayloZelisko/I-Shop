@@ -18,7 +18,6 @@ import { PopupTypeEnum } from '../../models/enums/popup-type.enum';
 
 @Component({
   selector: 'app-device-aside',
-  standalone: true,
   imports: [SvgIconComponent, AsyncPipe],
   templateUrl: './device-aside.component.html',
   styleUrl: './device-aside.component.scss',

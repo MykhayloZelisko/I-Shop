@@ -18,7 +18,6 @@ import { CascadeCategoryInterface } from '../../../shared/models/interfaces/casc
 
 @Component({
   selector: 'app-catalog',
-  standalone: true,
   imports: [
     AsyncPipe,
     ClickOutsideDirective,

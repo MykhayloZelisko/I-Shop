@@ -4,7 +4,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-device-carousel',
-  standalone: true,
   imports: [SvgIconComponent, NgClass],
   templateUrl: './device-carousel.component.html',
   styleUrl: './device-carousel.component.scss',

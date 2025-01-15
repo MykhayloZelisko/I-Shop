@@ -29,7 +29,6 @@ import { CategoryInterface } from '../../../../../../../shared/models/interfaces
 
 @Component({
   selector: 'app-c-properties-groups-dialog',
-  standalone: true,
   imports: [ClickOutsideDirective, SvgIconComponent, ReactiveFormsModule],
   templateUrl: './c-properties-groups-dialog.component.html',
   styleUrl: './c-properties-groups-dialog.component.scss',

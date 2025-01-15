@@ -24,7 +24,6 @@ import { selectCartInfo } from '../../../+store/cart/selectors/cart.selectors';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [SvgIconComponent, RouterLink, AsyncPipe, NgClass],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -86,6 +85,8 @@ export class HeaderComponent implements OnInit {
 
   public openCatalog(event: MouseEvent): void {
     event.stopPropagation();
+    this.store.dispatch(SharedActions.clearCGPState());
+    this.store.dispatch(BrandActions.clearCurrentBrandId());
     this.store.dispatch(
       PopupActions.openPopup({
         popup: {

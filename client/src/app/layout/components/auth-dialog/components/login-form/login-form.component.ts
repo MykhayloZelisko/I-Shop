@@ -27,7 +27,6 @@ import {
 
 @Component({
   selector: 'app-login-form',
-  standalone: true,
   imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',

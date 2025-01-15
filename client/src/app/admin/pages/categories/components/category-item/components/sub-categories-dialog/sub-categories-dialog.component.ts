@@ -29,7 +29,6 @@ import { SharedActions } from '../../../../../../../+store/shared/actions/shared
 
 @Component({
   selector: 'app-sub-categories-dialog',
-  standalone: true,
   imports: [
     ClickOutsideDirective,
     SvgIconComponent,

@@ -21,7 +21,6 @@ import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
 
 @Component({
   selector: 'app-cart-device',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     CheckboxComponent,

@@ -15,7 +15,6 @@ import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-breadcrumbs',
-  standalone: true,
   imports: [AsyncPipe, RouterLink, SvgIconComponent],
   templateUrl: './breadcrumbs.component.html',
   styleUrl: './breadcrumbs.component.scss',

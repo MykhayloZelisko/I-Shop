@@ -8,7 +8,6 @@ import {
 
 @Directive({
   selector: '[appDnd]',
-  standalone: true,
 })
 export class DndDirective {
   @Output() public fileDropped: EventEmitter<FileList> =

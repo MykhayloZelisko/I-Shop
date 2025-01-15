@@ -14,7 +14,6 @@ import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-textarea',
-  standalone: true,
   imports: [NgClass, NgStyle],
   providers: [
     {

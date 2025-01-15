@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sub-category-item',
-  standalone: true,
   imports: [RouterLink],
   templateUrl: './sub-category-item.component.html',
   styleUrl: './sub-category-item.component.scss',

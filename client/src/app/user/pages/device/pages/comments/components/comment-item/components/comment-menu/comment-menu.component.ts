@@ -20,7 +20,6 @@ import { PopupTypeEnum } from '../../../../../../../../../shared/models/enums/po
 
 @Component({
   selector: 'app-comment-menu',
-  standalone: true,
   imports: [ClickOutsideDirective, AsyncPipe],
   templateUrl: './comment-menu.component.html',
   styleUrl: './comment-menu.component.scss',

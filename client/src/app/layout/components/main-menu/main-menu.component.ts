@@ -3,10 +3,11 @@ import {
   Component,
   inject,
   input,
+  OnInit,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { Store } from '@ngrx/store';
@@ -17,23 +18,30 @@ import { UserRouteNameEnum } from '../../../shared/models/enums/user-route-name.
 import { LayoutRouteNameEnum } from '../../../shared/models/enums/layout-route-name.enum';
 import { AuthActions } from '../../../+store/auth/actions/auth.actions';
 import { PopupActions } from '../../../+store/popup/actions/popup.actions';
+import { CartInfoInterface } from '../../../shared/models/interfaces/cart-info.interface';
+import { selectCartInfo } from '../../../+store/cart/selectors/cart.selectors';
 
 @Component({
   selector: 'app-main-menu',
-  standalone: true,
-  imports: [AsyncPipe, SvgIconComponent, ClickOutsideDirective],
+  imports: [AsyncPipe, SvgIconComponent, ClickOutsideDirective, NgClass],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainMenuComponent {
+export class MainMenuComponent implements OnInit {
   public user$ = input.required<Observable<UserInterface | null>>();
 
   public isAdmin$ = input.required<Observable<boolean>>();
 
+  public cartInfo$!: Observable<CartInfoInterface>;
+
   private store = inject(Store<State>);
 
   private router = inject(Router);
+
+  public ngOnInit(): void {
+    this.cartInfo$ = this.store.select(selectCartInfo);
+  }
 
   public closeMainMenu(): void {
     this.store.dispatch(PopupActions.closePopup());
@@ -82,6 +90,17 @@ export class MainMenuComponent {
         popup: {
           title: 'Каталог',
           popupType: PopupTypeEnum.Catalog,
+        },
+      }),
+    );
+  }
+
+  public openCart(): void {
+    this.store.dispatch(
+      PopupActions.openPopup({
+        popup: {
+          title: 'Кошик',
+          popupType: PopupTypeEnum.Cart,
         },
       }),
     );

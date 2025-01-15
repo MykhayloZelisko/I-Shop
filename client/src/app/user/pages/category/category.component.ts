@@ -33,7 +33,6 @@ import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/bre
 
 @Component({
   selector: 'app-category',
-  standalone: true,
   imports: [
     AsyncPipe,
     PageNotFoundComponent,

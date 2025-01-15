@@ -23,7 +23,6 @@ import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-multi-input',
-  standalone: true,
   imports: [ReactiveFormsModule, NgStyle, NgClass, SvgIconComponent],
   templateUrl: './multi-input.component.html',
   styleUrl: './multi-input.component.scss',

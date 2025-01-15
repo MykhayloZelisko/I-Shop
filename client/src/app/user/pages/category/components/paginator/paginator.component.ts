@@ -17,7 +17,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-paginator',
-  standalone: true,
   imports: [Paginator, SvgIconComponent, NgClass],
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.scss',

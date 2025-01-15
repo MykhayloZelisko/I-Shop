@@ -19,7 +19,6 @@ import { SharedActions } from '../../../../../+store/shared/actions/shared.actio
 
 @Component({
   selector: 'app-new-category',
-  standalone: true,
   imports: [
     SvgIconComponent,
     AsyncPipe,

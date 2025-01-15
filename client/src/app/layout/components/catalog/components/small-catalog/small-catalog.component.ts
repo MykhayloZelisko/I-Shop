@@ -15,7 +15,6 @@ import { CascadeCategoryInterface } from '../../../../../shared/models/interface
 
 @Component({
   selector: 'app-small-catalog',
-  standalone: true,
   imports: [SvgIconComponent],
   templateUrl: './small-catalog.component.html',
   styleUrl: './small-catalog.component.scss',

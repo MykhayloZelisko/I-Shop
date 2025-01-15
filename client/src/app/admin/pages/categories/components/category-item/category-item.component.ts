@@ -38,7 +38,6 @@ import { CPropertiesGroupsDialogComponent } from './components/c-properties-grou
 
 @Component({
   selector: 'app-category-item',
-  standalone: true,
   imports: [
     SvgIconComponent,
     AsyncPipe,

@@ -26,7 +26,6 @@ import { CartComponent } from './components/cart/cart.component';
 
 @Component({
   selector: 'app-layout',
-  standalone: true,
   imports: [
     HeaderComponent,
     RouterOutlet,

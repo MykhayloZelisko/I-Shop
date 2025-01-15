@@ -25,7 +25,6 @@ import { SharedActions } from '../../../../../+store/shared/actions/shared.actio
 
 @Component({
   selector: 'app-c-properties-group-item',
-  standalone: true,
   imports: [
     AsyncPipe,
     NgClass,

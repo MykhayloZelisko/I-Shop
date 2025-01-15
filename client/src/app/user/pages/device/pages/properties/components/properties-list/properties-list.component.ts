@@ -3,7 +3,6 @@ import { DeviceInterface } from '../../../../../../../shared/models/interfaces/d
 
 @Component({
   selector: 'app-properties-list',
-  standalone: true,
   templateUrl: './properties-list.component.html',
   styleUrl: './properties-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

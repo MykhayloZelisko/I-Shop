@@ -20,7 +20,6 @@ import { ImageConfigInterface } from '../../../../../shared/models/interfaces/im
 
 @Component({
   selector: 'app-file-control',
-  standalone: true,
   imports: [NgStyle],
   providers: [
     {

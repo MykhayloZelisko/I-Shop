@@ -24,7 +24,6 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
 
 @Component({
   selector: 'app-comment-form',
-  standalone: true,
   imports: [
     InputComponent,
     RatingControlComponent,

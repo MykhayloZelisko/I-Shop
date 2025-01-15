@@ -57,7 +57,6 @@ import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-new-device',
-  standalone: true,
   imports: [
     NgxMaskDirective,
     ReactiveFormsModule,

@@ -21,7 +21,6 @@ import { v4 as uuidV4 } from 'uuid';
 
 @Component({
   selector: 'app-input',
-  standalone: true,
   imports: [ReactiveFormsModule, NgClass, NgStyle],
   providers: [
     {

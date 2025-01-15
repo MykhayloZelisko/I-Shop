@@ -30,7 +30,6 @@ import { CartActions } from '../../../+store/cart/actions/cart.actions';
 
 @Component({
   selector: 'app-cart',
-  standalone: true,
   imports: [
     ClickOutsideDirective,
     CheckboxComponent,

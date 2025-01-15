@@ -37,7 +37,6 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 
 @Component({
   selector: 'app-registration-form',
-  standalone: true,
   imports: [ReactiveFormsModule, NgxMaskDirective, InputComponent],
   templateUrl: './registration-form.component.html',
   styleUrl: './registration-form.component.scss',

@@ -14,17 +14,18 @@ export class AuthService {
   public constructor(private usersService: UsersService) {}
 
   public async registration(createUserInput: CreateUserInput): Promise<void> {
-    const candidate = await this.usersService.getUserByEmail(
-      createUserInput.email,
-    );
-    if (candidate) {
-      throw new ConflictException('A user with this email already exists');
+    try {
+      const hashPassword = await bcrypt.hash(createUserInput.password, 10);
+      await this.usersService.createUser({
+        ...createUserInput,
+        password: hashPassword,
+      });
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('A user with this email already exists');
+      }
+      throw error;
     }
-    const hashPassword = await bcrypt.hash(createUserInput.password, 10);
-    await this.usersService.createUser({
-      ...createUserInput,
-      password: hashPassword,
-    });
   }
 
   public async validateUser(loginInput: LoginInput): Promise<User> {

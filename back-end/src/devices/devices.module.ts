@@ -8,6 +8,7 @@ import { CategoriesModule } from '../categories/categories.module';
 import { FilesModule } from '../files/files.module';
 import { CPropertiesGroupsModule } from '../c-properties-groups/c-properties-groups.module';
 import { CPropertiesModule } from '../c-properties/c-properties.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CPropertiesModule } from '../c-properties/c-properties.module';
     FilesModule,
     CPropertiesGroupsModule,
     CPropertiesModule,
+    CommonModule,
   ],
   providers: [DevicesResolver, DevicesService],
   exports: [DevicesService],

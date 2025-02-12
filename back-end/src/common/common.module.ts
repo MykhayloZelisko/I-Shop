@@ -9,8 +9,8 @@ import { TransactionsService } from './services/transactions/transactions.servic
 
 @Module({
   imports: [
-    forwardRef(() => CPropertiesGroupsModule),
-    forwardRef(() => CPropertiesModule),
+    CPropertiesGroupsModule,
+    CPropertiesModule,
     forwardRef(() => CartsModule),
   ],
   providers: [

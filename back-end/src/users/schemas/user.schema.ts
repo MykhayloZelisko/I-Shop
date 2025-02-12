@@ -13,10 +13,10 @@ export class User {
   @Prop()
   public lastName: string;
 
-  @Prop()
+  @Prop({ unique: true })
   public phone: string;
 
-  @Prop()
+  @Prop({ unique: true, index: 1 })
   public email: string;
 
   @Prop()

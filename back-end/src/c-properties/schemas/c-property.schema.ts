@@ -14,6 +14,8 @@ export class CProperty {
 
 export const CPropertySchema = SchemaFactory.createForClass(CProperty);
 
+CPropertySchema.index({ groupId: 1, propertyName: 1 }, { unique: true });
+
 CPropertySchema.set('toObject', {
   transform: (_doc, ret) => {
     ret.id = ret._id.toString();

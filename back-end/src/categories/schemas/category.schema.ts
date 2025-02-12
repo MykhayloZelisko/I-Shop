@@ -23,6 +23,8 @@ export class Category {
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
 
+CategorySchema.index({ parentId: 1, categoryName: 1 }, { unique: true });
+
 CategorySchema.set('toObject', {
   transform: (_doc, ret) => {
     ret.id = ret._id.toString();

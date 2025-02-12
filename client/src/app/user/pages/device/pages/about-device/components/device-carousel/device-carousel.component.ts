@@ -18,12 +18,12 @@ export class DeviceCarouselComponent {
     if (this.currentImageIndex > 0) {
       this.currentImageIndex--;
     } else {
-      this.currentImageIndex = this.carousel.length - 1;
+      this.currentImageIndex = this.carousel().length - 1;
     }
   }
 
   public nextImage(): void {
-    if (this.currentImageIndex < this.carousel.length - 1) {
+    if (this.currentImageIndex < this.carousel().length - 1) {
       this.currentImageIndex++;
     } else {
       this.currentImageIndex = 0;

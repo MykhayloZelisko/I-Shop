@@ -97,78 +97,85 @@ export class CommentsService {
     updateLikeDislikeInput: UpdateLikeDislikeInput,
     user: User,
   ): Promise<CommentGQL> {
-    const { commentId, status } = updateLikeDislikeInput;
-    const comment = await this.commentModel
-      .findById(commentId)
-      .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
-      .exec();
+    return this.transactionsService.execute(async (session) => {
+      const { commentId, status } = updateLikeDislikeInput;
+      const comment = await this.commentModel
+        .findById(commentId)
+        .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+        .session(session)
+        .exec();
 
-    if (!comment) {
-      throw new NotFoundException('Comment not found');
-    }
-
-    let updatedComment: CommentDocument | null = null;
-    if (status === 1) {
-      const isLiked = comment.likesUsers.some(
-        (likeUser: UserDocument) => likeUser.id.toString() === user.id,
-      );
-
-      if (isLiked) {
-        updatedComment = await this.commentModel
-          .findByIdAndUpdate(
-            commentId,
-            { $pull: { likesUsers: user.id } },
-            { new: true },
-          )
-          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
-          .exec();
-      } else {
-        updatedComment = await this.commentModel
-          .findByIdAndUpdate(
-            commentId,
-            {
-              $addToSet: { likesUsers: user.id },
-              $pull: { dislikesUsers: user.id },
-            },
-            { new: true },
-          )
-          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
-          .exec();
+      if (!comment) {
+        throw new NotFoundException('Comment not found');
       }
-    } else if (status === -1) {
-      const isDisliked = comment.dislikesUsers.some(
-        (dislikeUser: UserDocument) => dislikeUser.id.toString() === user.id,
-      );
 
-      if (isDisliked) {
-        updatedComment = await this.commentModel
-          .findByIdAndUpdate(
-            commentId,
-            { $pull: { dislikesUsers: user.id } },
-            { new: true },
-          )
-          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
-          .exec();
-      } else {
-        updatedComment = await this.commentModel
-          .findByIdAndUpdate(
-            commentId,
-            {
-              $addToSet: { dislikesUsers: user.id },
-              $pull: { likesUsers: user.id },
-            },
-            { new: true },
-          )
-          .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
-          .exec();
+      let updatedComment: CommentDocument | null = null;
+      if (status === 1) {
+        const isLiked = comment.likesUsers.some(
+          (likeUser: UserDocument) => likeUser.id.toString() === user.id,
+        );
+
+        if (isLiked) {
+          updatedComment = await this.commentModel
+            .findByIdAndUpdate(
+              commentId,
+              { $pull: { likesUsers: user.id } },
+              { new: true },
+            )
+            .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+            .session(session)
+            .exec();
+        } else {
+          updatedComment = await this.commentModel
+            .findByIdAndUpdate(
+              commentId,
+              {
+                $addToSet: { likesUsers: user.id },
+                $pull: { dislikesUsers: user.id },
+              },
+              { new: true },
+            )
+            .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+            .session(session)
+            .exec();
+        }
+      } else if (status === -1) {
+        const isDisliked = comment.dislikesUsers.some(
+          (dislikeUser: UserDocument) => dislikeUser.id.toString() === user.id,
+        );
+
+        if (isDisliked) {
+          updatedComment = await this.commentModel
+            .findByIdAndUpdate(
+              commentId,
+              { $pull: { dislikesUsers: user.id } },
+              { new: true },
+            )
+            .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+            .session(session)
+            .exec();
+        } else {
+          updatedComment = await this.commentModel
+            .findByIdAndUpdate(
+              commentId,
+              {
+                $addToSet: { dislikesUsers: user.id },
+                $pull: { likesUsers: user.id },
+              },
+              { new: true },
+            )
+            .populate(['user', 'device', 'likesUsers', 'dislikesUsers'])
+            .session(session)
+            .exec();
+        }
       }
-    }
 
-    if (!updatedComment) {
-      throw new BadRequestException('A comment is not updated');
-    }
+      if (!updatedComment) {
+        throw new BadRequestException('A comment is not updated');
+      }
 
-    return updatedComment.toObject<CommentGQL>();
+      return updatedComment.toObject<CommentGQL>();
+    });
   }
 
   public async updateComment(
@@ -176,18 +183,21 @@ export class CommentsService {
     updateCommentInput: UpdateCommentInput,
     user: User,
   ): Promise<CommentGQL> {
-    const comment = await this.commentModel.findById(id).exec();
-    if (!comment) {
-      throw new BadRequestException('Comment not found');
-    }
-
-    const userId = comment.user.toString();
-    const deviceId = comment.device.toString();
-    if (userId !== user.id) {
-      throw new ForbiddenException('This user cannot update this comment');
-    }
-
     return this.transactionsService.execute<CommentGQL>(async (session) => {
+      const comment = await this.commentModel
+        .findById(id)
+        .session(session)
+        .exec();
+      if (!comment) {
+        throw new BadRequestException('Comment not found');
+      }
+
+      const userId = comment.user.toString();
+      const deviceId = comment.device.toString();
+      if (userId !== user.id) {
+        throw new ForbiddenException('This user cannot update this comment');
+      }
+
       await this.ratingsService.updateRating(
         userId,
         deviceId,
@@ -211,24 +221,30 @@ export class CommentsService {
     cursor: string | null,
     user: User,
   ): Promise<DeletedComment> {
-    const comment = await this.commentModel.findById(id).exec();
-    if (!comment) {
-      throw new BadRequestException('Comment not found');
-    }
-
-    const isAdmin = user.roles.some((role) => role.role === 'administrator');
-
-    const userId = comment.user.toString();
-    const deviceId = comment.device.toString();
-    if (userId !== user.id && !isAdmin) {
-      throw new ForbiddenException('This user cannot delete this comment');
-    }
-
     return this.transactionsService.execute(async (session) => {
+      const comment = await this.commentModel
+        .findById(id)
+        .session(session)
+        .exec();
+      if (!comment) {
+        throw new BadRequestException('Comment not found');
+      }
+
+      const isAdmin = user.roles.some((role) => role.role === 'administrator');
+
+      const userId = comment.user.toString();
+      const deviceId = comment.device.toString();
+      if (userId !== user.id && !isAdmin) {
+        throw new ForbiddenException('This user cannot delete this comment');
+      }
+
       await this.commentModel.findByIdAndDelete(id).session(session);
       await this.ratingsService.deleteRating(userId, deviceId, session);
 
-      const updatedDevice = await this.devicesService.getDeviceById(deviceId);
+      const updatedDevice = await this.devicesService.getDeviceById(
+        deviceId,
+        session,
+      );
 
       if (id === cursor) {
         const prevComment = await this.commentModel
@@ -237,6 +253,7 @@ export class CommentsService {
             id: { $lt: comment.id },
           })
           .sort({ id: -1 })
+          .session(session)
           .exec();
         const newCursor = prevComment ? prevComment.id.toString() : null;
         return { id, cursor: newCursor, device: updatedDevice };

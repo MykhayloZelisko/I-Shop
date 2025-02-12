@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { ClientSession, Connection } from 'mongoose';
 
@@ -23,16 +18,7 @@ export class TransactionsService {
       return result;
     } catch (error) {
       await session.abortTransaction();
-      if (
-        error instanceof NotFoundException ||
-        error instanceof BadRequestException
-      ) {
-        throw error;
-      } else {
-        throw new InternalServerErrorException(
-          `Database operation failed: ${error.message}`,
-        );
-      }
+      throw error;
     } finally {
       await session.endSession();
     }

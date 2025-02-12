@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -100,6 +101,8 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   private store = inject(Store<State>);
 
+  private cdr = inject(ChangeDetectorRef);
+
   private destroy$: Subject<void> = new Subject<void>();
 
   public ngOnInit(): void {
@@ -197,6 +200,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           } else if (hasGroups) {
             this.newDeviceForm.controls.categoryId.setErrors(null);
           }
+          this.cdr.detectChanges();
         }),
       );
   }

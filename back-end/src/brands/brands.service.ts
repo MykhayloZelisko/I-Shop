@@ -11,9 +11,10 @@ import { CreateBrandInput } from './inputs/create-brand.input';
 import { UpdateBrandInput } from './inputs/update-brand.input';
 import { Brand as BrandGQL } from '../brands/models/brand.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { Brand, BrandDocument } from './schemas/brand.schema';
 import { DevicesService } from '../devices/devices.service';
+import { TransactionsService } from '../common/services/transactions/transactions.service';
 
 @Injectable()
 export class BrandsService {
@@ -21,19 +22,21 @@ export class BrandsService {
     @InjectModel(Brand.name) private brandModel: Model<BrandDocument>,
     @Inject(forwardRef(() => DevicesService))
     private devicesService: DevicesService,
+    private transactionsService: TransactionsService,
   ) {}
 
   public async createBrand(
     createBrandInput: CreateBrandInput,
   ): Promise<BrandGQL> {
-    const brand = await this.brandModel
-      .findOne({ brandName: createBrandInput.brandName })
-      .exec();
-    if (brand) {
-      throw new ConflictException('This brand already exists');
+    try {
+      const newBrand = await this.brandModel.create(createBrandInput);
+      return newBrand.toObject<BrandGQL>();
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('This brand already exists');
+      }
+      throw error;
     }
-    const newBrand = await this.brandModel.create(createBrandInput);
-    return newBrand.toObject<BrandGQL>();
   }
 
   public async getAllBrands(): Promise<BrandGQL[]> {
@@ -45,42 +48,56 @@ export class BrandsService {
     id: string,
     updateBrandInput: UpdateBrandInput,
   ): Promise<BrandGQL> {
-    const brand = await this.brandModel
-      .findOne({ brandName: updateBrandInput.brandName })
-      .exec();
-    if (brand && brand.id !== id) {
-      throw new ConflictException('This brand already exists');
+    try {
+      const updatedBrand = await this.brandModel
+        .findByIdAndUpdate(
+          id,
+          { brandName: updateBrandInput.brandName },
+          { new: true },
+        )
+        .exec();
+
+      if (updatedBrand) {
+        return updatedBrand.toObject<BrandGQL>();
+      }
+
+      throw new BadRequestException('A brand is not updated');
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('This brand name already exists');
+      }
+      throw error;
     }
-    const updatedBrand = await this.brandModel
-      .findByIdAndUpdate(
-        id,
-        { brandName: updateBrandInput.brandName },
-        { new: true },
-      )
-      .exec();
-    if (updatedBrand) {
-      return updatedBrand.toObject<BrandGQL>();
-    }
-    throw new BadRequestException('A brand is not updated');
   }
 
   public async deleteBrand(id: string): Promise<string> {
-    const isBrandUsed = await this.devicesService.checkBrand(id);
-    if (isBrandUsed) {
-      throw new ForbiddenException(
-        'This brand is used in devices and cannot be deleted',
-      );
-    }
-    const brand = await this.brandModel.findByIdAndDelete(id).exec();
-    if (brand) {
+    return this.transactionsService.execute<string>(async (session) => {
+      const isBrandUsed = await this.devicesService.checkBrand(id, session);
+
+      if (isBrandUsed) {
+        throw new ForbiddenException(
+          'This brand is used in devices and cannot be deleted',
+        );
+      }
+
+      const brand = await this.brandModel
+        .findByIdAndDelete(id)
+        .session(session)
+        .exec();
+
+      if (!brand) {
+        throw new NotFoundException('A brand not found');
+      }
+
       return brand.id;
-    } else {
-      throw new NotFoundException('A brand not found');
-    }
+    });
   }
 
-  public async getBrandById(id: string): Promise<BrandGQL> {
-    const brand = await this.brandModel.findById(id).exec();
+  public async getBrandById(
+    id: string,
+    session: ClientSession,
+  ): Promise<BrandGQL> {
+    const brand = await this.brandModel.findById(id).session(session).exec();
     if (!brand) {
       throw new NotFoundException('Brand not found');
     }

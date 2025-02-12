@@ -13,7 +13,7 @@ import { DevicesModule } from '../devices/devices.module';
       { name: CProperty.name, schema: CPropertySchema },
     ]),
     forwardRef(() => CPropertiesGroupsModule),
-    CommonModule,
+    forwardRef(() => CommonModule),
     forwardRef(() => DevicesModule),
   ],
   providers: [CPropertiesResolver, CPropertiesService],

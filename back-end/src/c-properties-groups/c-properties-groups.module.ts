@@ -16,9 +16,9 @@ import { DevicesModule } from '../devices/devices.module';
     MongooseModule.forFeature([
       { name: CPropertiesGroup.name, schema: CPropertiesGroupSchema },
     ]),
-    forwardRef(() => CategoriesModule),
+    CategoriesModule,
     CPropertiesModule,
-    CommonModule,
+    forwardRef(() => CommonModule),
     forwardRef(() => DevicesModule),
   ],
   providers: [CPropertiesGroupsResolver, CPropertiesGroupsService],

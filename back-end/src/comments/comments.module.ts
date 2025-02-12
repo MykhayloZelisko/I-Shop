@@ -8,12 +8,12 @@ import { DevicesModule } from '../devices/devices.module';
 import { CommonModule } from '../common/common.module';
 
 @Module({
-  providers: [CommentsResolver, CommentsService],
   imports: [
     MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]),
     RatingsModule,
     DevicesModule,
     CommonModule,
   ],
+  providers: [CommentsResolver, CommentsService],
 })
 export class CommentsModule {}

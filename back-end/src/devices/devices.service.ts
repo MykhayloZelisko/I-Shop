@@ -14,6 +14,7 @@ import { DevicesList } from './models/devices-list.model';
 import { Device as DeviceGQL } from './models/device.model';
 import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
 import { CPropertiesService } from '../c-properties/c-properties.service';
+import { TransactionsService } from '../common/services/transactions/transactions.service';
 
 @Injectable()
 export class DevicesService {
@@ -24,43 +25,54 @@ export class DevicesService {
     private filesService: FilesService,
     private cPropertiesGroupsService: CPropertiesGroupsService,
     private cPropertiesService: CPropertiesService,
+    private transactionsService: TransactionsService,
   ) {}
 
   public async createDevice(
     createDeviceInput: CreateDeviceInput,
   ): Promise<boolean> {
-    const brand = await this.brandsService.getBrandById(
-      createDeviceInput.brandId,
-    );
-    const category = await this.categoriesService.getCategoryById(
-      createDeviceInput.categoryId,
-    );
-    const categoriesIds = await this.categoriesService.getParentCategoriesIds(
-      createDeviceInput.categoryId,
-    );
+    return this.transactionsService.execute<boolean>(async (session) => {
+      const brand = await this.brandsService.getBrandById(
+        createDeviceInput.brandId,
+        session,
+      );
+      const category = await this.categoriesService.getCategoryById(
+        createDeviceInput.categoryId,
+        session,
+      );
+      const categoriesIds = await this.categoriesService.getParentCategoriesIds(
+        createDeviceInput.categoryId,
+        session,
+      );
 
-    try {
-      const fileNames: string[] = [];
-      for (const image of createDeviceInput.images) {
-        const fileName = await this.filesService.createImageFile(image);
-        fileNames.push(fileName);
+      try {
+        const fileNames: string[] = [];
+        for (const image of createDeviceInput.images) {
+          const fileName = await this.filesService.createImageFile(image);
+          fileNames.push(fileName);
+        }
+
+        await this.deviceModel.create(
+          [
+            {
+              deviceName: createDeviceInput.deviceName,
+              price: createDeviceInput.price,
+              quantity: createDeviceInput.quantity,
+              images: fileNames,
+              category: category.id,
+              categories: categoriesIds,
+              brand: brand.id,
+              groups: createDeviceInput.groups,
+            },
+          ],
+          { session },
+        );
+      } catch {
+        throw new InternalServerErrorException('Device is not created');
       }
 
-      await this.deviceModel.create({
-        deviceName: createDeviceInput.deviceName,
-        price: createDeviceInput.price,
-        quantity: createDeviceInput.quantity,
-        images: fileNames,
-        category: category.id,
-        categories: categoriesIds,
-        brand: brand.id,
-        groups: createDeviceInput.groups,
-      });
-    } catch {
-      throw new InternalServerErrorException('Device is not created');
-    }
-
-    return true;
+      return true;
+    });
   }
 
   public async getAllDevicesByCategoryIdWithPagination(
@@ -68,34 +80,43 @@ export class DevicesService {
     page: number,
     size: number,
   ): Promise<DevicesList> {
-    const devices = await this.deviceModel
-      .find({ categories: { $in: [categoryId] } })
-      .skip((page - 1) * size)
-      .limit(size)
-      .populate(['category', 'brand', 'categories'])
-      .exec();
+    return this.transactionsService.execute<DevicesList>(async (session) => {
+      const devices = await this.deviceModel
+        .find({ categories: { $in: [categoryId] } })
+        .skip((page - 1) * size)
+        .limit(size)
+        .populate(['category', 'brand', 'categories'])
+        .session(session)
+        .exec();
 
-    const total = await this.deviceModel.countDocuments({
-      categories: { $in: [categoryId] },
+      const total = await this.deviceModel
+        .countDocuments({
+          categories: { $in: [categoryId] },
+        })
+        .session(session);
+
+      return {
+        total,
+        page,
+        size,
+        devices: devices.map((device: DeviceDocument) =>
+          device.toObject<DeviceGQL>(),
+        ),
+      };
     });
-
-    return {
-      total,
-      page,
-      size,
-      devices: devices.map((device: DeviceDocument) =>
-        device.toObject<DeviceGQL>(),
-      ),
-    };
   }
 
-  public async getDeviceById(id: string): Promise<DeviceGQL> {
+  public async getDeviceById(
+    id: string,
+    session: ClientSession | null = null,
+  ): Promise<DeviceGQL> {
     const device = await this.deviceModel
       .findById(id)
       .populate(['category', 'brand', 'categories'])
+      .session(session)
       .exec();
     if (!device) {
-      throw new NotFoundException('Brand not found');
+      throw new NotFoundException('Device not found');
     }
     return device.toObject<DeviceGQL>();
   }
@@ -115,26 +136,47 @@ export class DevicesService {
     }
   }
 
-  public async checkBrand(brandId: string): Promise<boolean> {
-    const device = await this.deviceModel.exists({ brand: brandId }).exec();
-    return !!device;
-  }
-
-  public async checkCategory(categoryId: string): Promise<boolean> {
+  public async checkBrand(
+    brandId: string,
+    session: ClientSession,
+  ): Promise<boolean> {
     const device = await this.deviceModel
-      .exists({ categories: { $in: [categoryId] } })
+      .exists({ brand: brandId })
+      .session(session)
       .exec();
     return !!device;
   }
 
-  public async checkGroup(groupId: string): Promise<boolean> {
-    const categoryId =
-      await this.cPropertiesGroupsService.getCategoryId(groupId);
-    return this.checkCategory(categoryId);
+  public async checkCategory(
+    categoryId: string,
+    session: ClientSession,
+  ): Promise<boolean> {
+    const device = await this.deviceModel
+      .exists({ categories: { $in: [categoryId] } })
+      .session(session)
+      .exec();
+    return !!device;
   }
 
-  public async checkProperty(propertyId: string): Promise<boolean> {
-    const groupId = await this.cPropertiesService.getGroupId(propertyId);
-    return this.checkGroup(groupId);
+  public async checkGroup(
+    groupId: string,
+    session: ClientSession,
+  ): Promise<boolean> {
+    const categoryId = await this.cPropertiesGroupsService.getCategoryId(
+      groupId,
+      session,
+    );
+    return this.checkCategory(categoryId, session);
+  }
+
+  public async checkProperty(
+    propertyId: string,
+    session: ClientSession,
+  ): Promise<boolean> {
+    const groupId = await this.cPropertiesService.getGroupId(
+      propertyId,
+      session,
+    );
+    return this.checkGroup(groupId, session);
   }
 }

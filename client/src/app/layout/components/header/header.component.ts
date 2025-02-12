@@ -85,8 +85,6 @@ export class HeaderComponent implements OnInit {
 
   public openCatalog(event: MouseEvent): void {
     event.stopPropagation();
-    this.store.dispatch(SharedActions.clearCGPState());
-    this.store.dispatch(BrandActions.clearCurrentBrandId());
     this.store.dispatch(
       PopupActions.openPopup({
         popup: {

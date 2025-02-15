@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   inject,
   input,
   output,
-  viewChild,
+  signal,
+  WritableSignal,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -37,8 +37,6 @@ export class InputComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
-  public inputComp = viewChild.required<ElementRef<HTMLInputElement>>('input');
-
   public placeholder = input<string>('');
 
   public inputType = input<string>('text');
@@ -51,7 +49,7 @@ export class InputComponent
 
   public readonly id = uuidV4();
 
-  public internalValue: string | null = null;
+  public internalValue: WritableSignal<string> = signal<string>('');
 
   public onChange = (_: unknown): void => {};
 
@@ -68,11 +66,7 @@ export class InputComponent
   }
 
   public writeValue(value: string): void {
-    this.internalValue = value;
-    if (this.inputComp()) {
-      this.inputComp().nativeElement.value = value;
-    }
-    this.cdr.markForCheck();
+    this.internalValue.set(value);
   }
 
   public showMessage(): string {
@@ -80,8 +74,8 @@ export class InputComponent
   }
 
   public changeValue($event: Event): void {
-    const value = ($event.target as HTMLInputElement).value;
-    this.onChange(value);
+    this.internalValue.set(($event.target as HTMLInputElement).value);
+    this.onChange(this.internalValue());
   }
 
   public onBlur(): void {
@@ -94,6 +88,11 @@ export class InputComponent
 
   public markAsDirty(): void {
     this.control.markAsDirty();
+    this.cdr.markForCheck();
+  }
+
+  public markAsPristine(): void {
+    this.control.markAsPristine();
     this.cdr.markForCheck();
   }
 

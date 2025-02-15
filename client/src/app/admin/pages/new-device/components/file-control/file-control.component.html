@@ -1,6 +1,6 @@
 <div class="file-control">
   <img
-    [src]="imageUrl"
+    [src]="imageUrl()"
     [alt]="file().name"
     (load)="onImageLoad($event)"
     [ngStyle]="getImageStyle()"

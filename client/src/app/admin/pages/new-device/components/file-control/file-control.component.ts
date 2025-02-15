@@ -1,11 +1,11 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
   input,
   OnInit,
   output,
+  signal,
+  WritableSignal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -49,9 +49,7 @@ export class FileControlComponent
     height: 0,
   };
 
-  public imageUrl = '';
-
-  private cdr = inject(ChangeDetectorRef);
+  public imageUrl: WritableSignal<string> = signal<string>('');
 
   public onChange = (_file: File): void => {};
 
@@ -77,12 +75,11 @@ export class FileControlComponent
     const reader = new FileReader();
 
     reader.onload = (e: ProgressEvent<FileReader>): void => {
-      this.imageUrl = e.target ? (e.target.result as string) : '';
+      this.imageUrl.set(e.target ? (e.target.result as string) : '');
       if (this.file().type.startsWith('image')) {
-        this.uploadFile.emit(this.imageUrl);
+        this.uploadFile.emit(this.imageUrl());
       }
       this.onChange(file);
-      this.cdr.markForCheck();
     };
 
     reader.readAsDataURL(file);

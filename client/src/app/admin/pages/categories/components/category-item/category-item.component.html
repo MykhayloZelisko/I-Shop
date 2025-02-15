@@ -1,27 +1,28 @@
+@let categorySignal = category();
+@let hasChildren = hasChildren$ | async;
+
 @if (currentCategory$ | async; as currentCategory) {
-  @if (currentCategory.id === category().id && currentCategory.isEditable) {
+  @if (currentCategory.id === categorySignal.id && currentCategory.isEditable) {
     <div
       class="category-item category-item--editable"
       [ngClass]="{
-        'category-item--empty': !(
-          category().hasGroups || (hasChildren$ | async)
-        ),
+        'category-item--empty': !(categorySignal.hasGroups || hasChildren),
       }"
       [formGroup]="categoryForm"
     >
       <div
         class="category-item__content"
         [ngClass]="{
-          'category-item__content--subcategory': category().parentId,
+          'category-item__content--subcategory': categorySignal.parentId,
         }"
       >
-        @if (category().image) {
+        @if (categorySignal.image) {
           <div class="category-item__dnd">
             <app-dnd-file-control formControlName="image" />
           </div>
         }
         <div class="category-item__name-wrapper--editable">
-          @if (category().icon) {
+          @if (categorySignal.icon) {
             <app-svg-file-control formControlName="icon" />
           }
           <input
@@ -34,7 +35,9 @@
       </div>
       <div
         class="category-item__buttons--editable"
-        [ngClass]="{ 'category-item__buttons--not-first': category().parentId }"
+        [ngClass]="{
+          'category-item__buttons--not-first': categorySignal.parentId,
+        }"
       >
         <button
           class="category-item__button"
@@ -58,46 +61,44 @@
     <div
       class="category-item"
       [ngClass]="{
-        'category-item--empty': !(
-          category().hasGroups || (hasChildren$ | async)
-        ),
+        'category-item--empty': !(categorySignal.hasGroups || hasChildren),
       }"
     >
       <div
         class="category-item__content"
         [ngClass]="{
-          'category-item__content--subcategory': category().parentId,
+          'category-item__content--subcategory': categorySignal.parentId,
         }"
       >
-        @if (category().image) {
-          <img
-            class="category-item__image"
-            [src]="category().image"
-            alt="image"
-            [ngStyle]="getImageStyle()"
-            [alt]="category().image"
-            (load)="onImageLoad($event)"
-          />
+        @if (categorySignal.image) {
+          <div class="category-item__image-wrapper">
+            <img
+              class="category-item__image"
+              [ngSrc]="categorySignal.image"
+              [alt]="categorySignal.image"
+              fill
+            />
+          </div>
         }
         <div class="category-item__name-wrapper">
-          @if (category().icon; as icon) {
+          @if (categorySignal.icon; as icon) {
             <svg-icon class="category-item__icon" [src]="icon"></svg-icon>
           }
           <p class="category-item__name">
-            {{ category().categoryName }}
+            {{ categorySignal.categoryName }}
           </p>
         </div>
       </div>
       <div
         class="category-item__buttons"
         [ngClass]="{
-          'category-item__buttons--not-first': category().parentId,
+          'category-item__buttons--not-first': categorySignal.parentId,
         }"
       >
         <button
           class="category-item__button"
           (click)="openGroupsDialog()"
-          [disabled]="hasChildren$ | async"
+          [disabled]="hasChildren"
         >
           <svg-icon
             class="category-item__icon category-item__icon--add"
@@ -107,7 +108,7 @@
         <button
           class="category-item__button"
           (click)="openSubCategoriesDialog()"
-          [disabled]="category().hasGroups || category().level === 3"
+          [disabled]="categorySignal.hasGroups || categorySignal.level === 3"
         >
           <svg-icon
             class="category-item__icon category-item__icon--add"
@@ -133,22 +134,22 @@
   @if (dialog$ | async; as dialog) {
     @if (
       dialog.popupType === dialogEnum.SubCategories &&
-      currentCategory.id === category().id
+      currentCategory.id === categorySignal.id
     ) {
       <app-sub-categories-dialog
         [dialog]="dialog"
-        [parentId]="category().id"
-        [level]="category().level + 1"
+        [parentId]="categorySignal.id"
+        [level]="categorySignal.level + 1"
       />
     }
 
     @if (
       dialog.popupType === dialogEnum.CPropertiesGroups &&
-      currentCategory.id === category().id
+      currentCategory.id === categorySignal.id
     ) {
       <app-c-properties-groups-dialog
         [dialog]="dialog"
-        [category]="category()"
+        [category]="categorySignal"
       />
     }
   }

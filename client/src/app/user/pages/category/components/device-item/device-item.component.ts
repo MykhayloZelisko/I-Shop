@@ -14,13 +14,19 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { selectDeviceInCart } from '../../../../../+store/cart/selectors/cart.selectors';
 import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 
 @Component({
   selector: 'app-device-item',
-  imports: [RouterLink, RatingComponent, SvgIconComponent, AsyncPipe],
+  imports: [
+    RouterLink,
+    RatingComponent,
+    SvgIconComponent,
+    AsyncPipe,
+    NgOptimizedImage,
+  ],
   templateUrl: './device-item.component.html',
   styleUrl: './device-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

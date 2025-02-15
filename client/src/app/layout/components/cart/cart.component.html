@@ -1,3 +1,5 @@
+@let cartId = cartId$ | async;
+
 <div class="cart__wrapper">
   <div class="cart" appClickOutside>
     <div class="cart__header">
@@ -43,7 +45,7 @@
         @if (devices.length) {
           <div class="cart__devices">
             @for (device of devices; track device.id) {
-              <app-cart-device [device]="device" [cartId$]="cartId$" />
+              <app-cart-device [device]="device" [cartId]="cartId" />
             }
           </div>
           <div class="cart__footer">

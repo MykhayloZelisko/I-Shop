@@ -2,10 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   inject,
   input,
-  viewChild,
+  signal,
+  WritableSignal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { GetControlDirective } from '../../directives/get-control.directive';
@@ -30,9 +30,6 @@ export class TextareaComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
-  public textarea =
-    viewChild.required<ElementRef<HTMLTextAreaElement>>('textarea');
-
   public placeholder = input<string>('');
 
   public label = input.required<string>();
@@ -43,7 +40,7 @@ export class TextareaComponent
 
   public resizeY = input.required<boolean>();
 
-  public internalValue: string | null = null;
+  public internalValue: WritableSignal<string> = signal<string>('');
 
   public onChange = (_: unknown): void => {};
 
@@ -60,11 +57,7 @@ export class TextareaComponent
   }
 
   public writeValue(value: string): void {
-    this.internalValue = value;
-    if (this.textarea()) {
-      this.textarea().nativeElement.value = this.internalValue;
-    }
-    this.cdr.markForCheck();
+    this.internalValue.set(value);
   }
 
   public showMessage(): string {
@@ -72,8 +65,8 @@ export class TextareaComponent
   }
 
   public changeValue($event: Event): void {
-    const value = ($event.target as HTMLInputElement).value;
-    this.onChange(value);
+    this.internalValue.set(($event.target as HTMLInputElement).value);
+    this.onChange(this.internalValue());
   }
 
   public onBlur(): void {

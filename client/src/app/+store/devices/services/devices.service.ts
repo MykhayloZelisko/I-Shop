@@ -78,7 +78,7 @@ export class DevicesService {
           }
         `,
         variables: { categoryId, page, size },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map(
@@ -137,7 +137,7 @@ export class DevicesService {
           }
         `,
         variables: { id },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map((response: ApolloQueryResult<{ device: DeviceInterface }>) => {

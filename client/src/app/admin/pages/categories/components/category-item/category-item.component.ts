@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { CategoryInterface } from '../../../../../shared/models/interfaces/category.interface';
-import { AsyncPipe, NgClass, NgStyle } from '@angular/common';
+import { AsyncPipe, NgClass, NgOptimizedImage } from '@angular/common';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { State } from '../../../../../+store/reducers';
 import { Store } from '@ngrx/store';
@@ -20,7 +20,6 @@ import { PopupDataInterface } from '../../../../../shared/models/interfaces/popu
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { SubCategoriesDialogComponent } from './components/sub-categories-dialog/sub-categories-dialog.component';
 import { CurrentStatusInterface } from '../../../../../shared/models/interfaces/current-status.interface';
-import { ImageConfigInterface } from '../../../../../shared/models/interfaces/image-config.interface';
 import { selectPopup } from '../../../../../+store/popup/selectors/popup.selectors';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import {
@@ -43,12 +42,12 @@ import { CPropertiesGroupsDialogComponent } from './components/c-properties-grou
     AsyncPipe,
     SubCategoriesDialogComponent,
     NgClass,
-    NgStyle,
     FormsModule,
     ReactiveFormsModule,
     SvgFileControlComponent,
     DndFileControlComponent,
     CPropertiesGroupsDialogComponent,
+    NgOptimizedImage,
   ],
   templateUrl: './category-item.component.html',
   styleUrl: './category-item.component.scss',
@@ -66,11 +65,6 @@ export class CategoryItemComponent implements OnInit {
   public dialog$!: Observable<PopupDataInterface>;
 
   public categoryForm!: FormGroup<CategoryFormInterface>;
-
-  public imageConfig: ImageConfigInterface = {
-    width: 0,
-    height: 0,
-  };
 
   private store = inject(Store<State>);
 
@@ -162,24 +156,6 @@ export class CategoryItemComponent implements OnInit {
         },
       }),
     );
-  }
-
-  public getImageStyle(): Record<string, string> {
-    return this.imageConfig.height > this.imageConfig.width
-      ? {
-          height: '100px',
-          width: `${(this.imageConfig.width / this.imageConfig.height) * 100}px`,
-        }
-      : {
-          width: '100px',
-          height: `${(this.imageConfig.height / this.imageConfig.width) * 100}px`,
-        };
-  }
-
-  public onImageLoad(event: Event): void {
-    const imgElement = event.target as HTMLImageElement;
-    this.imageConfig.width = imgElement.width;
-    this.imageConfig.height = imgElement.height;
   }
 
   public openGroupsDialog(): void {

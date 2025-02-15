@@ -30,9 +30,9 @@ import { selectCartInfo } from '../../../+store/cart/selectors/cart.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
-  public user$ = input.required<Observable<UserInterface | null>>();
+  public user = input.required<UserInterface | null>();
 
-  public isAdmin$ = input.required<Observable<boolean>>();
+  public isAdmin = input.required<boolean>();
 
   public readonly popupType = PopupTypeEnum;
 

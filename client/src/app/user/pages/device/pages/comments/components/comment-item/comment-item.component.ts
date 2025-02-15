@@ -40,10 +40,9 @@ import { CommentDialogComponent } from '../../../../../../../shared/components/c
 export class CommentItemComponent implements OnInit {
   public comment = input.required<CommentInterface>();
 
-  public user$ = input.required<Observable<UserInterface | null>>();
+  public user = input.required<UserInterface | null>();
 
-  public commentsStatus$ =
-    input.required<Observable<CommentsListStatusInterface>>();
+  public commentsStatus = input.required<CommentsListStatusInterface>();
 
   public readonly popupEnum = PopupTypeEnum;
 

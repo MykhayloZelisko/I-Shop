@@ -1,3 +1,6 @@
+@let user = user$ | async;
+@let status = commentsStatus$ | async;
+
 @if (device$ | async; as device) {
   <div class="comments">
     <div class="comments__title">
@@ -19,7 +22,7 @@
                 <p class="comments__create-text">
                   Залиште свій відгук про цей товар
                 </p>
-                @if (user$ | async; as user) {
+                @if (user) {
                   <button
                     class="comments__create-button"
                     (click)="openDialog(user)"
@@ -36,14 +39,14 @@
                 }
               </div>
               <div class="comments__list">
-                @for (comment of comments; track comment.id) {
-                  <app-comment-item
-                    [comment]="comment"
-                    [user$]="user$"
-                    [commentsStatus$]="commentsStatus$"
-                  />
-                }
-                @if (commentsStatus$ | async; as status) {
+                @if (status) {
+                  @for (comment of comments; track comment.id) {
+                    <app-comment-item
+                      [comment]="comment"
+                      [user]="user"
+                      [commentsStatus]="status"
+                    />
+                  }
                   @if (status.cursor) {
                     <button
                       class="comments__more"
@@ -56,7 +59,7 @@
               </div>
             </div>
           } @else {
-            @if (user$ | async; as user) {
+            @if (user) {
               <app-comment-form [deviceId]="device.id" [userId]="user.id" />
             } @else {
               <app-comment-form [deviceId]="device.id" [userId]="null" />
@@ -68,7 +71,7 @@
     </div>
   </div>
 
-  @if (user$ | async; as user) {
+  @if (user) {
     @if (dialog$ | async; as dialog) {
       @if (dialog.popupType === popupEnum.NewComment) {
         <app-comment-dialog

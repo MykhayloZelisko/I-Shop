@@ -1,5 +1,8 @@
+@let user = user$ | async;
+@let isAdmin = !!(isAdmin$ | async);
+
 <div class="layout">
-  <app-header [user$]="user$" [isAdmin$]="isAdmin$" />
+  <app-header [user]="user" [isAdmin]="isAdmin" />
   <div class="layout__container">
     @if (popup$ | async; as popup) {
       @if (
@@ -10,7 +13,7 @@
         <app-auth-dialog [dialog]="popup" />
       }
       @if (popup.popupType === popupEnum.MainMenu) {
-        <app-main-menu [user$]="user$" [isAdmin$]="isAdmin$" />
+        <app-main-menu [user]="user" [isAdmin]="isAdmin" />
       }
       @if (popup.popupType === popupEnum.Catalog) {
         <app-catalog [dialog]="popup" />

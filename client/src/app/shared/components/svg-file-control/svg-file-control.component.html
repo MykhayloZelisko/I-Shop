@@ -1,3 +1,5 @@
+@let url = imageUrl();
+
 <div class="svg-file-control">
   <input
     #fileUpload
@@ -11,12 +13,12 @@
       'svg-file-control__icon-container--invalid': isInvalid(),
     }"
   >
-    @if (imageUrl) {
-      <svg-icon class="svg-file-control__icon" [src]="imageUrl"></svg-icon>
+    @if (url) {
+      <svg-icon class="svg-file-control__icon" [src]="url"></svg-icon>
     }
   </div>
   <button class="svg-file-control__icon-button" (click)="triggerFileInput()">
-    @if (imageUrl) {
+    @if (url) {
       <svg-icon
         class="svg-file-control__icon"
         src="assets/images/pencil-icon.svg"

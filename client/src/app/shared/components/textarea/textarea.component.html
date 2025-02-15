@@ -1,7 +1,6 @@
 <div class="textarea">
   <label class="textarea__label" for="textarea">{{ label() }}</label>
   <textarea
-    #textarea
     id="textarea"
     class="textarea__textarea"
     [ngClass]="{
@@ -9,7 +8,7 @@
     }"
     [ngStyle]="setStyle()"
     [placeholder]="placeholder()"
-    [value]="internalValue || ''"
+    [value]="internalValue()"
     (input)="changeValue($event)"
     (blur)="onBlur()"
   ></textarea>

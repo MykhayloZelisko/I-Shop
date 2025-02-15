@@ -200,7 +200,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
           } else if (hasGroups) {
             this.newDeviceForm.controls.categoryId.setErrors(null);
           }
-          this.cdr.detectChanges();
         }),
       );
   }
@@ -239,6 +238,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         this.addImageCtrl(selectedFiles.item(i) as File);
         this.addBase64Ctrl();
       }
+      this.cdr.detectChanges();
     }
   }
 
@@ -383,6 +383,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   public cancelDevice(): void {
     this.store.dispatch(FormActions.clearFormOn());
+    this.inputComp().markAsPristine();
   }
 
   public getPropertyCtrl(
@@ -402,7 +403,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         const valueArray = multiInput.multiInputForm().controls.value;
         valueArray.controls.forEach((control) => {
           control.markAsDirty();
-          multiInput.updateState();
         });
       }
     }

@@ -14,10 +14,11 @@ import { RouterParamsInterface } from '../../../../../shared/models/interfaces/r
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { Router } from '@angular/router';
+import { PrimeTemplate } from 'primeng/api';
 
 @Component({
   selector: 'app-paginator',
-  imports: [Paginator, SvgIconComponent, NgClass],
+  imports: [Paginator, SvgIconComponent, NgClass, PrimeTemplate],
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

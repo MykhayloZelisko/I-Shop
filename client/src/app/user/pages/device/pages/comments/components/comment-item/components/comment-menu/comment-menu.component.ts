@@ -28,10 +28,9 @@ import { PopupTypeEnum } from '../../../../../../../../../shared/models/enums/po
 export class CommentMenuComponent implements OnInit {
   public comment = input.required<CommentInterface>();
 
-  public user$ = input.required<Observable<UserInterface | null>>();
+  public user = input.required<UserInterface | null>();
 
-  public commentsStatus$ =
-    input.required<Observable<CommentsListStatusInterface>>();
+  public commentsStatus = input.required<CommentsListStatusInterface>();
 
   public isAdmin$!: Observable<boolean>;
 
@@ -53,17 +52,11 @@ export class CommentMenuComponent implements OnInit {
   }
 
   public deleteComment(id: string): void {
-    this.commentsStatus$()
-      .pipe(take(1))
-      .subscribe({
-        next: (status: CommentsListStatusInterface) => {
-          this.store.dispatch(
-            CommentActions.deleteComment({
-              id,
-              cursor: status.cursor,
-            }),
-          );
-        },
-      });
+    this.store.dispatch(
+      CommentActions.deleteComment({
+        id,
+        cursor: this.commentsStatus().cursor,
+      }),
+    );
   }
 }

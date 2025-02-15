@@ -1,10 +1,13 @@
 <aside class="device-aside">
   <div class="device-aside__device">
-    <img
-      class="device-aside__device-photo"
-      [src]="device().images[0]"
-      alt="device-photo"
-    />
+    <div class="device-aside__device-photo-container">
+      <img
+        class="device-aside__device-photo"
+        [ngSrc]="device().images[0]"
+        alt="device-photo"
+        fill
+      />
+    </div>
     <p class="device-aside__device-title">{{ device().deviceName }}</p>
   </div>
   <div class="device-aside__buying">

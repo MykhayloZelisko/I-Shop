@@ -1,9 +1,10 @@
 <div class="device-item">
-  <a [routerLink]="['/devices', device().id]">
+  <a class="device-item__link" [routerLink]="['/devices', device().id]">
     <img
       class="device-item__image"
-      [src]="device().images[0]"
+      [ngSrc]="device().images[0]"
       [alt]="device().images[0]"
+      fill
     />
   </a>
   <div class="device-item__info">

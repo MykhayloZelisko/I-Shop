@@ -1,9 +1,12 @@
 <div class="sub-category-item">
-  <img
-    class="sub-category-item__image"
-    [src]="category().image"
-    [alt]="category().image"
-  />
+  <div class="sub-category-item__image-wrapper">
+    <img
+      class="sub-category-item__image"
+      [ngSrc]="category().image ?? ''"
+      [alt]="category().image"
+      fill
+    />
+  </div>
   <a
     class="sub-category-item__link"
     [routerLink]="['/categories', category().id]"

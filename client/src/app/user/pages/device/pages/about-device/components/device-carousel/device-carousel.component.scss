@@ -11,8 +11,6 @@
   gap: 12px;
 
   &__image {
-    aspect-ratio: 1;
-    width: 100%;
     object-fit: contain;
   }
 
@@ -52,6 +50,7 @@
   }
 
   &__list-item {
+    position: relative;
     padding: 5px;
     border: 1px solid transparent;
     aspect-ratio: 1;

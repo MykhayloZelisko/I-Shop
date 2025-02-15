@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
-  inject,
   OnInit,
+  signal,
   viewChild,
+  WritableSignal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DndDirective } from '../../directives/dnd.directive';
@@ -45,13 +45,13 @@ export class DndFileControlComponent
     } else {
       this.errorMessage = `Зображення є обов'язковим`;
       this.fileName = '';
-      this.imageUrl = null;
-      this.onChange(this.imageUrl);
+      this.imageUrl.set(null);
+      this.onChange(this.imageUrl());
     }
     this.onTouched();
   }
 
-  public imageUrl: string | null = null;
+  public imageUrl: WritableSignal<string | null> = signal<string | null>(null);
 
   public imageConfig: ImageConfigInterface = {
     width: 0,
@@ -66,12 +66,11 @@ export class DndFileControlComponent
 
   public onTouched = (): void => {};
 
-  private cdr = inject(ChangeDetectorRef);
-
   public override ngOnInit(): void {
     super.ngOnInit();
-    this.imageUrl =
-      typeof this.control.value === 'string' ? this.control.value : null;
+    this.imageUrl.set(
+      typeof this.control.value === 'string' ? this.control.value : null,
+    );
   }
 
   public registerOnChange(fn: () => void): void {
@@ -96,7 +95,7 @@ export class DndFileControlComponent
   }
 
   public validateFiles(files: File[]): void {
-    if (this.imageUrl) {
+    if (this.imageUrl()) {
       if (files.length > 1) {
         this.errorMessage = 'Завантажувати можна лише один файл';
       } else if (files[0] && !(files[0] instanceof File)) {
@@ -138,15 +137,14 @@ export class DndFileControlComponent
       this.fileName = file.name;
       const reader = new FileReader();
       reader.onload = (): void => {
-        this.imageUrl = reader.result as string;
-        this.onChange(this.imageUrl);
-        this.cdr.markForCheck();
+        this.imageUrl.set(reader.result as string);
+        this.onChange(this.imageUrl());
       };
       reader.readAsDataURL(file);
     } else {
       this.fileName = '';
-      this.imageUrl = null;
-      this.onChange(this.imageUrl);
+      this.imageUrl.set(null);
+      this.onChange(this.imageUrl());
     }
   }
 

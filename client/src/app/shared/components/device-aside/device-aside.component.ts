@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { DeviceInterface } from '../../models/interfaces/device.interface';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Observable } from 'rxjs';
 import { selectDeviceInCart } from '../../../+store/cart/selectors/cart.selectors';
 import { Store } from '@ngrx/store';
@@ -18,7 +18,7 @@ import { PopupTypeEnum } from '../../models/enums/popup-type.enum';
 
 @Component({
   selector: 'app-device-aside',
-  imports: [SvgIconComponent, AsyncPipe],
+  imports: [SvgIconComponent, AsyncPipe, NgOptimizedImage],
   templateUrl: './device-aside.component.html',
   styleUrl: './device-aside.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

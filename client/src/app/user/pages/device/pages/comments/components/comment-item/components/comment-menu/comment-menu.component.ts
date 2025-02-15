@@ -8,7 +8,7 @@ import {
 import { ClickOutsideDirective } from '../../../../../../../../../shared/directives/click-outside.directive';
 import { CommentInterface } from '../../../../../../../../../shared/models/interfaces/comment.interface';
 import { UserInterface } from '../../../../../../../../../shared/models/interfaces/user.interface';
-import { Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../../../+store/reducers';

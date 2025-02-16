@@ -9,7 +9,6 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { NgxMaskDirective } from 'ngx-mask';
 import {
   FormArray,
   FormBuilder,
@@ -59,7 +58,6 @@ import { Select } from 'primeng/select';
 @Component({
   selector: 'app-new-device',
   imports: [
-    NgxMaskDirective,
     ReactiveFormsModule,
     AsyncPipe,
     NgClass,
@@ -407,9 +405,5 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       }
     }
     this.inputComp().markAsDirty();
-  }
-
-  public markAsDirtyCtrl(ctrlName: keyof NewDeviceFormInterface): void {
-    this.newDeviceForm.controls[ctrlName].markAsDirty();
   }
 }

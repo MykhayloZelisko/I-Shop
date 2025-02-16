@@ -5,8 +5,6 @@ import {
   inject,
   input,
   output,
-  signal,
-  WritableSignal,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -16,12 +14,12 @@ import {
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
 import { GetControlDirective } from '../../directives/get-control.directive';
-
 import { v4 as uuidV4 } from 'uuid';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-input',
-  imports: [ReactiveFormsModule, NgClass, NgStyle],
+  imports: [ReactiveFormsModule, NgClass, NgStyle, NgxMaskDirective],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,6 +39,18 @@ export class InputComponent
 
   public inputType = input<string>('text');
 
+  public mask = input<string>();
+
+  public prefix = input<string>('');
+
+  public showMaskTyped = input<boolean>(false);
+
+  public dropSpecialCharacters = input<boolean>(false);
+
+  public thousandSeparator = input<string>('');
+
+  public decimalMarker = input<'.' | ',' | ['.', ',']>('.');
+
   public label = input.required<string>();
 
   public withErrors = input.required<boolean>();
@@ -48,8 +58,6 @@ export class InputComponent
   public focusEvent = output<void>();
 
   public readonly id = uuidV4();
-
-  public internalValue: WritableSignal<string> = signal<string>('');
 
   public onChange = (_: unknown): void => {};
 
@@ -65,17 +73,16 @@ export class InputComponent
     this.onTouched = fn;
   }
 
-  public writeValue(value: string): void {
-    this.internalValue.set(value);
+  public writeValue(): void {
+    return;
   }
 
   public showMessage(): string {
     return showErrorMessage(this.control);
   }
 
-  public changeValue($event: Event): void {
-    this.internalValue.set(($event.target as HTMLInputElement).value);
-    this.onChange(this.internalValue());
+  public changeValue(): void {
+    this.onChange(this.control.value);
   }
 
   public onBlur(): void {

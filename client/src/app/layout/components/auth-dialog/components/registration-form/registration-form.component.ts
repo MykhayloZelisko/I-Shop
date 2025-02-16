@@ -23,7 +23,6 @@ import {
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
-import { NgxMaskDirective } from 'ngx-mask';
 import { AuthActions } from '../../../../../+store/auth/actions/auth.actions';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import { RegistrationFormInterface } from '../../../../../shared/models/interfaces/registration-form.interface';
@@ -37,7 +36,7 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 
 @Component({
   selector: 'app-registration-form',
-  imports: [ReactiveFormsModule, NgxMaskDirective, InputComponent],
+  imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './registration-form.component.html',
   styleUrl: './registration-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

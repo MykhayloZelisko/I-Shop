@@ -4,17 +4,19 @@ import {
   Component,
   inject,
   input,
-  signal,
-  WritableSignal,
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { GetControlDirective } from '../../directives/get-control.directive';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-textarea',
-  imports: [NgClass, NgStyle],
+  imports: [NgClass, NgStyle, ReactiveFormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -40,8 +42,6 @@ export class TextareaComponent
 
   public resizeY = input.required<boolean>();
 
-  public internalValue: WritableSignal<string> = signal<string>('');
-
   public onChange = (_: unknown): void => {};
 
   public onTouched = (): void => {};
@@ -56,17 +56,16 @@ export class TextareaComponent
     this.onTouched = fn;
   }
 
-  public writeValue(value: string): void {
-    this.internalValue.set(value);
+  public writeValue(): void {
+    return;
   }
 
   public showMessage(): string {
     return showErrorMessage(this.control);
   }
 
-  public changeValue($event: Event): void {
-    this.internalValue.set(($event.target as HTMLInputElement).value);
-    this.onChange(this.internalValue());
+  public changeValue(): void {
+    this.onChange(this.control.value);
   }
 
   public onBlur(): void {

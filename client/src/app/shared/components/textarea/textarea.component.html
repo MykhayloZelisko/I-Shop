@@ -8,8 +8,8 @@
     }"
     [ngStyle]="setStyle()"
     [placeholder]="placeholder()"
-    [value]="internalValue()"
-    (input)="changeValue($event)"
+    [formControl]="control"
+    (input)="changeValue()"
     (blur)="onBlur()"
   ></textarea>
   @if (isInvalid() && withErrors()) {

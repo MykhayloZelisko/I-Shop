@@ -2,11 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   inject,
   OnInit,
   output,
-  viewChild,
 } from '@angular/core';
 import { v4 as uuidV4 } from 'uuid';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -31,9 +29,6 @@ export class CheckboxComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  public checkbox =
-    viewChild.required<ElementRef<HTMLInputElement>>('checkbox');
-
   public changeEvent = output<void>();
 
   public checkboxId!: string;

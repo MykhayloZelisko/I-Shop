@@ -1,3 +1,5 @@
+@let categories = (categories$ | async) ?? [];
+
 <div class="categories">
   <div class="categories__buttons">
     <button class="categories__button" (click)="expandAll()">
@@ -33,26 +35,24 @@
       </div>
     </div>
   </div>
-  @if (categories$ | async; as categories) {
-    <div class="categories__tree">
-      <p-tree
-        [value]="categories"
-        (onNodeExpand)="nodeExpand($event)"
-        (onNodeCollapse)="nodeCollapse($event)"
-      >
-        <ng-template let-node pTemplate="category">
-          <app-category-item [category]="node.data" />
-        </ng-template>
-        <ng-template let-node pTemplate="group">
-          <app-c-properties-group-item [group]="node.data" />
-        </ng-template>
-        <ng-template pTemplate="default">
-          <app-new-category />
-        </ng-template>
-        <ng-template let-node pTemplate="property">
-          <app-c-property-item [property]="node.data" />
-        </ng-template>
-      </p-tree>
-    </div>
-  }
+  <div class="categories__tree">
+    <p-tree
+      [value]="categories"
+      (onNodeExpand)="nodeExpand($event)"
+      (onNodeCollapse)="nodeCollapse($event)"
+    >
+      <ng-template let-node pTemplate="category">
+        <app-category-item [category]="node.data" />
+      </ng-template>
+      <ng-template let-node pTemplate="group">
+        <app-c-properties-group-item [group]="node.data" />
+      </ng-template>
+      <ng-template pTemplate="default">
+        <app-new-category />
+      </ng-template>
+      <ng-template let-node pTemplate="property">
+        <app-c-property-item [property]="node.data" />
+      </ng-template>
+    </p-tree>
+  </div>
 </div>

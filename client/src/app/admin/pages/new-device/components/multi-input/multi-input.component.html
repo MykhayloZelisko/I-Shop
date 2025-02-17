@@ -6,12 +6,14 @@
       track control;
       let index = $index
     ) {
+      @let invalid = isInvalid(index) && withErrors();
+
       <div class="multi-input__field" [ngStyle]="setHeight()">
         <div class="multi-input__input-wrapper">
           <input
             class="multi-input__input"
             [ngClass]="{
-              'multi-input__input--invalid': isInvalid(index) && withErrors(),
+              'multi-input__input--invalid': invalid,
             }"
             [formControlName]="index"
           />
@@ -37,7 +39,7 @@
             </button>
           </div>
         </div>
-        @if (isInvalid(index) && withErrors()) {
+        @if (invalid) {
           <p class="multi-input__error">
             {{ showMessage(getValueCtrlByIndex(index)) }}
           </p>

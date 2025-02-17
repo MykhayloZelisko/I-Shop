@@ -1,19 +1,20 @@
 @let userSignal = user();
+@let commentSignal = comment();
 
 @if (userSignal) {
   <div class="comment-menu" appClickOutside>
     <button
       class="comment-menu__button"
       (click)="editComment()"
-      [disabled]="userSignal.id !== comment().user.id"
+      [disabled]="userSignal.id !== commentSignal.user.id"
     >
       Змінити
     </button>
     <button
       class="comment-menu__button"
-      (click)="deleteComment(comment().id)"
+      (click)="deleteComment(commentSignal.id)"
       [disabled]="
-        userSignal.id !== comment().user.id && (isAdmin$ | async) === false
+        userSignal.id !== commentSignal.user.id && (isAdmin$ | async) === false
       "
     >
       Видалити

@@ -1,7 +1,9 @@
+@let dialogSignal = dialog();
+
 <div class="comment-dialog__wrapper">
   <div class="comment-dialog" appClickOutside>
     <div class="comment-dialog__header">
-      <h3 class="comment-dialog__title">{{ dialog().title }}</h3>
+      <h3 class="comment-dialog__title">{{ dialogSignal.title }}</h3>
       <button class="comment-dialog__close" (click)="closeDialog()">
         <svg-icon
           class="comment-dialog__icon"
@@ -12,7 +14,7 @@
     <div class="comment-dialog__body">
       <app-comment-form
         [userId]="userId()"
-        [dialog]="dialog()"
+        [dialog]="dialogSignal"
         [deviceId]="deviceId()"
         [comment]="comment()"
       ></app-comment-form>

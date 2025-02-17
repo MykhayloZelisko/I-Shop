@@ -1,4 +1,6 @@
 @let commentSignal = comment();
+@let dialog = dialog$ | async;
+@let currentComment = currentComment$ | async;
 
 <div class="comment-item">
   <div class="comment-item__header">
@@ -55,29 +57,22 @@
       </button>
     </div>
   </div>
-  @if (dialog$ | async; as dialog) {
-    @if (currentComment$ | async; as currentComment) {
-      @if (
-        dialog.popupType === popupEnum.CommentMenu &&
-        currentComment === commentSignal.id
-      ) {
-        <app-comment-menu
-          [comment]="commentSignal"
-          [user]="user()"
-          [commentsStatus]="commentsStatus()"
-        />
-      }
-      @if (
-        dialog.popupType === popupEnum.EditComment &&
-        currentComment === commentSignal.id
-      ) {
-        <app-comment-dialog
-          [dialog]="dialog"
-          [comment]="commentSignal"
-          [deviceId]="commentSignal.device.id"
-          [userId]="commentSignal.user.id"
-        />
-      }
+
+  @if (dialog && currentComment && currentComment === commentSignal.id) {
+    @if (dialog.popupType === popupEnum.CommentMenu) {
+      <app-comment-menu
+        [comment]="commentSignal"
+        [user]="user()"
+        [commentsStatus]="commentsStatus()"
+      />
+    }
+    @if (dialog.popupType === popupEnum.EditComment) {
+      <app-comment-dialog
+        [dialog]="dialog"
+        [comment]="commentSignal"
+        [deviceId]="commentSignal.device.id"
+        [userId]="commentSignal.user.id"
+      />
     }
   }
 </div>

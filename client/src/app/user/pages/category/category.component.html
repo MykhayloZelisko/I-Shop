@@ -1,3 +1,6 @@
+@let paginationParams = paginationParams$ | async;
+@let devices = (devices$ | async) ?? [];
+
 @if (cascadeCategories$ | async; as category) {
   <div class="category">
     <app-breadcrumbs />
@@ -12,23 +15,19 @@
     @if ((hasChildChain$ | async) === false) {
       <div class="category__devices-filter-wrapper">
         <app-filter class="category__devices-filter" />
-        @if (devices$ | async; as devices) {
-          <div class="category__devices-wrapper">
-            <div class="category__devices">
-              @for (device of devices; track device.id) {
-                <app-device-item [device]="device" />
-              }
-            </div>
-            @if (devices.length) {
-              @if (paginationParams$ | async; as paginationParams) {
-                <app-paginator
-                  [paginationParams]="paginationParams"
-                  [routerParams]="routerParams"
-                />
-              }
+        <div class="category__devices-wrapper">
+          <div class="category__devices">
+            @for (device of devices; track device.id) {
+              <app-device-item [device]="device" />
             }
           </div>
-        }
+          @if (devices.length && paginationParams) {
+            <app-paginator
+              [paginationParams]="paginationParams"
+              [routerParams]="routerParams"
+            />
+          }
+        </div>
       </div>
     }
   </div>

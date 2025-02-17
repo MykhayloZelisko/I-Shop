@@ -1,5 +1,6 @@
 @let categorySignal = category();
 @let hasChildren = hasChildren$ | async;
+@let dialog = dialog$ | async;
 
 @if (currentCategory$ | async; as currentCategory) {
   @if (currentCategory.id === categorySignal.id && currentCategory.isEditable) {
@@ -81,8 +82,11 @@
           </div>
         }
         <div class="category-item__name-wrapper">
-          @if (categorySignal.icon; as icon) {
-            <svg-icon class="category-item__icon" [src]="icon"></svg-icon>
+          @if (categorySignal.icon) {
+            <svg-icon
+              class="category-item__icon"
+              [src]="categorySignal.icon"
+            ></svg-icon>
           }
           <p class="category-item__name">
             {{ categorySignal.categoryName }}
@@ -131,11 +135,8 @@
     </div>
   }
 
-  @if (dialog$ | async; as dialog) {
-    @if (
-      dialog.popupType === dialogEnum.SubCategories &&
-      currentCategory.id === categorySignal.id
-    ) {
+  @if (dialog && currentCategory.id === categorySignal.id) {
+    @if (dialog.popupType === dialogEnum.SubCategories) {
       <app-sub-categories-dialog
         [dialog]="dialog"
         [parentId]="categorySignal.id"
@@ -143,10 +144,7 @@
       />
     }
 
-    @if (
-      dialog.popupType === dialogEnum.CPropertiesGroups &&
-      currentCategory.id === categorySignal.id
-    ) {
+    @if (dialog.popupType === dialogEnum.CPropertiesGroups) {
       <app-c-properties-groups-dialog
         [dialog]="dialog"
         [category]="categorySignal"

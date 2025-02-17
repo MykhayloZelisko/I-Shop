@@ -1,10 +1,12 @@
+@let isInvalidWithErrors = isInvalid() && withErrors();
+
 <div class="textarea">
   <label class="textarea__label" for="textarea">{{ label() }}</label>
   <textarea
     id="textarea"
     class="textarea__textarea"
     [ngClass]="{
-      'textarea__textarea--invalid': isInvalid() && withErrors(),
+      'textarea__textarea--invalid': isInvalidWithErrors,
     }"
     [ngStyle]="setStyle()"
     [placeholder]="placeholder()"
@@ -12,7 +14,7 @@
     (input)="changeValue()"
     (blur)="onBlur()"
   ></textarea>
-  @if (isInvalid() && withErrors()) {
+  @if (isInvalidWithErrors) {
     <p class="textarea__error">{{ showMessage() }}</p>
   } @else {
     <p class="textarea__error--empty"></p>

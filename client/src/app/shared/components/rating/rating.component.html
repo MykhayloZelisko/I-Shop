@@ -1,6 +1,8 @@
+@let votesSignal = votes();
+
 <div
   class="rating"
-  [ngClass]="{ 'rating--hover': votes() >= 0 }"
+  [ngClass]="{ 'rating--hover': votesSignal >= 0 }"
   [routerLink]="['/devices', deviceId(), 'comments']"
 >
   @if (rating()) {
@@ -126,13 +128,13 @@
         />
       </svg>
     </div>
-    @if (votes()) {
+    @if (votesSignal) {
       <div class="rating__info">
         <svg-icon
           class="rating__comment"
           src="assets/images/message-icon.svg"
         ></svg-icon>
-        <span class="rating__votes">{{ votes() }}</span>
+        <span class="rating__votes">{{ votesSignal }}</span>
       </div>
     }
   } @else {

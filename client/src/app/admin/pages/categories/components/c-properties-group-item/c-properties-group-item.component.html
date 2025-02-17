@@ -1,4 +1,5 @@
 @let groupSignal = group();
+@let dialog = dialog$ | async;
 
 @if (currentGroup$ | async; as currentGroup) {
   @if (currentGroup.id === groupSignal.id && currentGroup.isEditable) {
@@ -69,12 +70,11 @@
     </div>
   }
 
-  @if (dialog$ | async; as dialog) {
-    @if (
-      dialog.popupType === dialogEnum.CProperties &&
-      currentGroup.id === groupSignal.id
-    ) {
-      <app-c-properties-dialog [dialog]="dialog" [group]="groupSignal" />
-    }
+  @if (
+    dialog &&
+    dialog.popupType === dialogEnum.CProperties &&
+    currentGroup.id === groupSignal.id
+  ) {
+    <app-c-properties-dialog [dialog]="dialog" [group]="groupSignal" />
   }
 }

@@ -1,4 +1,5 @@
 @let maskSignal = mask();
+@let isInvalidWithErrors = isInvalid() && withErrors();
 
 <div class="input" [ngStyle]="setHeight()">
   <label class="input__label" [for]="id">{{ label() }}</label>
@@ -7,7 +8,7 @@
       [id]="id"
       class="input__input"
       [ngClass]="{
-        'input__input--invalid': isInvalid() && withErrors(),
+        'input__input--invalid': isInvalidWithErrors,
       }"
       [type]="inputType()"
       [formControl]="control"
@@ -27,7 +28,7 @@
       [id]="id"
       class="input__input"
       [ngClass]="{
-        'input__input--invalid': isInvalid() && withErrors(),
+        'input__input--invalid': isInvalidWithErrors,
       }"
       [type]="inputType()"
       [formControl]="control"
@@ -37,7 +38,7 @@
       (focus)="onFocus()"
     />
   }
-  @if (isInvalid() && withErrors()) {
+  @if (isInvalidWithErrors) {
     <p class="input__error">{{ showMessage() }}</p>
   }
 </div>

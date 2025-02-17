@@ -1,15 +1,15 @@
+@let categories = (categories$ | async) ?? [];
+
 <div class="catalog">
-  @if (categories$ | async; as categories) {
-    <app-large-catalog
-      appClickOutside
-      class="catalog__large"
-      [categories]="categories"
-    />
-    <app-small-catalog
-      appClickOutside
-      class="catalog__small"
-      [categories]="categories"
-      [dialog]="dialog()"
-    />
-  }
+  <app-large-catalog
+    appClickOutside
+    class="catalog__large"
+    [categories]="categories"
+  />
+  <app-small-catalog
+    appClickOutside
+    class="catalog__small"
+    [categories]="categories"
+    [dialog]="dialog()"
+  />
 </div>

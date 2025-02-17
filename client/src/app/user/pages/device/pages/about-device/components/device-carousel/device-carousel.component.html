@@ -1,9 +1,11 @@
+@let carouselSignal = carousel();
+
 <div class="device-carousel">
   <div class="device-carousel__current">
     <img
       class="device-carousel__image"
-      [ngSrc]="carousel()[currentImageIndex]"
-      [alt]="carousel()[currentImageIndex]"
+      [ngSrc]="carouselSignal[currentImageIndex]"
+      [alt]="carouselSignal[currentImageIndex]"
       fill
     />
     <div class="device-carousel__buttons">
@@ -22,7 +24,7 @@
     </div>
   </div>
   <ul class="device-carousel__list">
-    @for (image of carousel(); track image; let index = $index) {
+    @for (image of carouselSignal; track image; let index = $index) {
       <li
         class="device-carousel__list-item"
         [ngClass]="{
@@ -32,8 +34,8 @@
       >
         <img
           class="device-carousel__image"
-          [ngSrc]="carousel()[index]"
-          [alt]="carousel()[index]"
+          [ngSrc]="carouselSignal[index]"
+          [alt]="carouselSignal[index]"
           fill
         />
       </li>

@@ -1,0 +1,109 @@
+@use 'variables';
+@use 'mixins';
+
+.select {
+  &__label {
+    font-size: 14px;
+    display: block;
+    font-family: variables.$source;
+    font-weight: 600;
+  }
+
+  &__error {
+    font-family: variables.$source;
+    font-size: 12px;
+    color: variables.$red-1;
+    font-weight: 700;
+  }
+}
+
+:host ::ng-deep {
+  .p-select-label {
+    padding: 11px 12px;
+    font-family: variables.$source;
+    font-size: 16px;
+    color: variables.$black;
+
+    &.p-placeholder {
+      color: variables.$gray-6 !important;
+    }
+  }
+
+  .p-select-dropdown {
+    display: none;
+  }
+
+  .p-select {
+    border-radius: 3px;
+    border: 1px solid variables.$brown-5;
+    width: 100%;
+    margin-top: 8px;
+
+    &:hover {
+      border-color: variables.$brown-1 !important;
+    }
+
+    &::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: url('/assets/images/line-angle-down-icon.svg') center center
+        no-repeat;
+      position: relative;
+      top: 15px;
+      right: 15px;
+    }
+
+    &.select {
+      &--invalid.ng-invalid,
+      &--invalid.ng-invalid:hover {
+        border: 1px solid variables.$red-1 !important;
+      }
+    }
+  }
+
+  .p-focus {
+    border-color: variables.$brown-2 !important;
+  }
+
+  .p-select-list-container {
+    border-radius: 4px;
+
+    & .p-select-list {
+      & .p-select-option {
+        padding: 8px 12px;
+        font-family: variables.$source;
+        font-size: 16px;
+        color: variables.$black;
+
+        &:not(.p-disabled).p-focus {
+          background-color: variables.$brown-4;
+        }
+
+        &:hover {
+          background-color: variables.$brown-4;
+          color: variables.$black;
+        }
+      }
+    }
+
+    &::-webkit-scrollbar {
+      appearance: none;
+    }
+
+    &::-webkit-scrollbar:vertical {
+      width: 7px;
+      background-color: variables.$white-1;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+      height: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      border: 2px solid variables.$white-1;
+      background-color: variables.$brown-1;
+    }
+  }
+}

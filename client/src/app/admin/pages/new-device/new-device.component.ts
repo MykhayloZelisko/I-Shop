@@ -1,6 +1,6 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -36,7 +36,7 @@ import { State } from '../../../+store/reducers';
 import { selectAllBrands } from '../../../+store/brands/selectors/brand.selectors';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { selectCascadeCategories } from '../../../+store/categories/selectors/category.selectors';
-import { CascadeSelectChangeEvent, CascadeSelect } from 'primeng/cascadeselect';
+import { CascadeSelectChangeEvent } from 'primeng/cascadeselect';
 import { CPropertyInterface } from '../../../shared/models/interfaces/c-property.interface';
 import { FileControlComponent } from './components/file-control/file-control.component';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -53,7 +53,9 @@ import {
 import { SharedActions } from '../../../+store/shared/actions/shared.actions';
 import { CPropertyActions } from '../../../+store/c-properties/actions/c-property.actions';
 import { MultiInputComponent } from './components/multi-input/multi-input.component';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '../../../shared/components/select/select.component';
+import { CascadeSelectComponent } from '../../../shared/components/cascade-select/cascade-select.component';
+import { CascadeCategoryInterface } from '../../../shared/models/interfaces/cascade-category.interface';
 
 @Component({
   selector: 'app-new-device',
@@ -61,33 +63,29 @@ import { Select } from 'primeng/select';
     ReactiveFormsModule,
     AsyncPipe,
     NgClass,
-    CascadeSelect,
     FileControlComponent,
     SvgIconComponent,
     InputComponent,
     MultiInputComponent,
-    Select,
+    SelectComponent,
+    CascadeSelectComponent,
   ],
   templateUrl: './new-device.component.html',
   styleUrl: './new-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewDeviceComponent implements OnInit, OnDestroy {
+export class NewDeviceComponent implements OnInit, OnDestroy, AfterViewInit {
   public fileInput = viewChild.required<ElementRef<HTMLInputElement>>('input');
-
-  public inputComp = viewChild.required(InputComponent);
 
   public multiInputs = viewChildren(MultiInputComponent);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public readonly optionGroupChildrenValue: any = ['children', 'children'];
+  public readonly optionGroupChildrenValue: string[] = ['children', 'children'];
 
   public newDeviceForm!: FormGroup<NewDeviceFormInterface>;
 
   public brands$!: Observable<BrandInterface[]>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public categories$!: Observable<any[]>;
+  public categories$!: Observable<CascadeCategoryInterface[]>;
 
   public propertiesGroups$!: Observable<GPTreeInterface[]>;
 
@@ -99,8 +97,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
 
   private store = inject(Store<State>);
 
-  private cdr = inject(ChangeDetectorRef);
-
   private destroy$: Subject<void> = new Subject<void>();
 
   public ngOnInit(): void {
@@ -109,6 +105,10 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
     this.isFormCleared$ = this.store.select(selectFormCleared);
     this.initDeviceForm();
     this.clearForm();
+  }
+
+  public ngAfterViewInit(): void {
+    this.startClearForm();
   }
 
   public ngOnDestroy(): void {
@@ -147,7 +147,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         [nonEmptyArrayValidator('groups')],
       ),
     });
-    this.newDeviceForm.markAsPristine();
   }
 
   public showMessage(controlName: string): string {
@@ -236,7 +235,6 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         this.addImageCtrl(selectedFiles.item(i) as File);
         this.addBase64Ctrl();
       }
-      this.cdr.detectChanges();
     }
   }
 
@@ -379,9 +377,8 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
       });
   }
 
-  public cancelDevice(): void {
+  public startClearForm(): void {
     this.store.dispatch(FormActions.clearFormOn());
-    this.inputComp().markAsPristine();
   }
 
   public getPropertyCtrl(
@@ -404,6 +401,5 @@ export class NewDeviceComponent implements OnInit, OnDestroy {
         });
       }
     }
-    this.inputComp().markAsDirty();
   }
 }

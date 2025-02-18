@@ -3,14 +3,8 @@ import {
   Component,
   inject,
   OnInit,
-  viewChildren,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   emailPatternValidator,
   minMaxLengthValidator,
@@ -18,7 +12,6 @@ import {
   passwordPatternValidator,
   phoneNumberValidator,
   requiredValidator,
-  showErrorMessage,
 } from '../../../../../shared/utils/validators';
 import { PopupTypeEnum } from '../../../../../shared/models/enums/popup-type.enum';
 import { Store } from '@ngrx/store';
@@ -42,8 +35,6 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationFormComponent implements OnInit {
-  public inputs = viewChildren(InputComponent);
-
   public registrationForm!: FormGroup<RegistrationFormInterface>;
 
   private fb = inject(FormBuilder);
@@ -82,11 +73,6 @@ export class RegistrationFormComponent implements OnInit {
     });
   }
 
-  public showMessage(controlName: string): string {
-    const control = this.registrationForm.get(controlName) as FormControl;
-    return showErrorMessage(control);
-  }
-
   public login(): void {
     this.store.dispatch(
       PopupActions.openPopup({
@@ -98,11 +84,14 @@ export class RegistrationFormComponent implements OnInit {
     );
   }
 
-  public registration(): void {
-    this.inputs().forEach((input: InputComponent) => {
-      input.markAsDirty();
+  public markAsDirty(): void {
+    Object.values(this.registrationForm.controls).forEach((control) => {
+      control.markAsDirty();
     });
-    this.registrationForm.controls.phone.markAsDirty();
+  }
+
+  public registration(): void {
+    this.markAsDirty();
     if (this.registrationForm.valid) {
       const registrationData = this.registrationForm.getRawValue();
       this.store.dispatch(

@@ -4,26 +4,27 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { Select } from 'primeng/select';
 import { GetControlDirective } from '../../directives/get-control.directive';
+import { v4 as uuidV4 } from 'uuid';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
-import { v4 as uuidV4 } from 'uuid';
 
 @Component({
-  selector: 'app-textarea',
-  imports: [NgClass, NgStyle, ReactiveFormsModule],
+  selector: 'app-select',
+  imports: [ReactiveFormsModule, Select, NgStyle, NgClass],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: TextareaComponent,
+      useExisting: SelectComponent,
       multi: true,
     },
   ],
-  templateUrl: './textarea.component.html',
-  styleUrl: './textarea.component.scss',
+  templateUrl: './select.component.html',
+  styleUrl: './select.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextareaComponent
+export class SelectComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
@@ -33,9 +34,11 @@ export class TextareaComponent
 
   public withErrors = input.required<boolean>();
 
-  public resizeX = input.required<boolean>();
+  public options = input.required<unknown[]>();
 
-  public resizeY = input.required<boolean>();
+  public optionLabel = input.required<string>();
+
+  public optionValue = input.required<string>();
 
   public readonly id = uuidV4();
 
@@ -67,14 +70,7 @@ export class TextareaComponent
     this.onTouched();
   }
 
-  public setStyle(): Record<string, string> {
-    const resize = this.resizeX()
-      ? this.resizeY()
-        ? 'both'
-        : 'horizontal'
-      : this.resizeY()
-        ? 'vertical'
-        : 'none';
-    return { resize };
+  public setHeight(): Record<string, string> {
+    return this.withErrors() ? { height: '78px' } : { height: '62px' };
   }
 }

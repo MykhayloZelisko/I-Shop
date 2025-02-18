@@ -1,0 +1,23 @@
+@let isInvalidWithErrors = isInvalid() && withErrors();
+
+<div class="cascade-select" [ngStyle]="setHeight()">
+  <label class="cascade-select__label" [for]="id">{{ label() }}</label>
+  <p-cascadeSelect
+    [ngClass]="{
+      'cascade-select--invalid': isInvalidWithErrors,
+    }"
+    [id]="id"
+    [options]="options()"
+    [optionLabel]="optionLabel()"
+    [optionValue]="optionValue()"
+    [optionGroupLabel]="optionGroupLabel()"
+    [optionGroupChildren]="optionGroupChildren()"
+    [placeholder]="placeholder()"
+    [formControl]="control"
+    (onChange)="changeValue($event)"
+    (onBlur)="onBlur()"
+  ></p-cascadeSelect>
+  @if (isInvalidWithErrors) {
+    <p class="cascade-select__error">{{ showMessage() }}</p>
+  }
+</div>

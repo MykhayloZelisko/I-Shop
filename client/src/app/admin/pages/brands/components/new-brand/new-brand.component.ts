@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
@@ -34,8 +33,6 @@ export class NewBrandComponent implements OnInit, OnDestroy {
 
   private store = inject(Store<State>);
 
-  private cdr = inject(ChangeDetectorRef);
-
   public ngOnInit(): void {
     this.brandCtrl = this.fb.nonNullable.control<string>('', [
       requiredValidator(),
@@ -67,7 +64,6 @@ export class NewBrandComponent implements OnInit, OnDestroy {
         if (isFormCleared) {
           this.brandCtrl.reset();
           this.store.dispatch(FormActions.clearFormOff());
-          this.cdr.markForCheck();
         }
       });
   }

@@ -1,29 +1,35 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
+import { CascadeSelect, CascadeSelectChangeEvent } from 'primeng/cascadeselect';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { GetControlDirective } from '../../directives/get-control.directive';
+import { v4 as uuidV4 } from 'uuid';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
-import { v4 as uuidV4 } from 'uuid';
 
 @Component({
-  selector: 'app-textarea',
-  imports: [NgClass, NgStyle, ReactiveFormsModule],
+  selector: 'app-cascade-select',
+  imports: [CascadeSelect, ReactiveFormsModule, NgStyle, NgClass],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: TextareaComponent,
+      useExisting: CascadeSelectComponent,
       multi: true,
     },
   ],
-  templateUrl: './textarea.component.html',
-  styleUrl: './textarea.component.scss',
+  templateUrl: './cascade-select.component.html',
+  styleUrl: './cascade-select.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextareaComponent
+export class CascadeSelectComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
@@ -33,9 +39,19 @@ export class TextareaComponent
 
   public withErrors = input.required<boolean>();
 
-  public resizeX = input.required<boolean>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public options = input.required<any[]>();
 
-  public resizeY = input.required<boolean>();
+  public optionLabel = input.required<string>();
+
+  public optionGroupLabel = input.required<string>();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public optionGroupChildren = input.required<any>();
+
+  public optionValue = input.required<string>();
+
+  public changeEvent = output<CascadeSelectChangeEvent>();
 
   public readonly id = uuidV4();
 
@@ -59,22 +75,16 @@ export class TextareaComponent
     return showErrorMessage(this.control);
   }
 
-  public changeValue(): void {
+  public changeValue(event: CascadeSelectChangeEvent): void {
     this.onChange(this.control.value);
+    this.changeEvent.emit(event);
   }
 
   public onBlur(): void {
     this.onTouched();
   }
 
-  public setStyle(): Record<string, string> {
-    const resize = this.resizeX()
-      ? this.resizeY()
-        ? 'both'
-        : 'horizontal'
-      : this.resizeY()
-        ? 'vertical'
-        : 'none';
-    return { resize };
+  public setHeight(): Record<string, string> {
+    return this.withErrors() ? { height: '78px' } : { height: '62px' };
   }
 }

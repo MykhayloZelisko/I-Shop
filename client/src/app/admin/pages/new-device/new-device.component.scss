@@ -137,7 +137,6 @@
 }
 
 :host ::ng-deep {
-  .p-select-label,
   .p-cascadeselect-label {
     padding: 11px 12px;
     font-family: variables.$source;
@@ -149,12 +148,10 @@
     }
   }
 
-  .p-select-dropdown,
   .p-cascadeselect-dropdown {
     display: none;
   }
 
-  .p-select,
   .p-cascadeselect {
     border-radius: 3px;
     border: 1px solid variables.$brown-5;
@@ -189,28 +186,6 @@
     width: 33.33%;
   }
 
-  .p-select-list-container {
-    border-radius: 4px;
-
-    & .p-select-list {
-      & .p-select-option {
-        padding: 8px 12px;
-        font-family: variables.$source;
-        font-size: 16px;
-        color: variables.$black;
-
-        &:not(.p-disabled).p-focus {
-          background-color: variables.$brown-4;
-        }
-
-        &:hover {
-          background-color: variables.$brown-4;
-          color: variables.$black;
-        }
-      }
-    }
-  }
-
   .p-cascadeselect-option-text {
     color: variables.$black;
   }
@@ -241,28 +216,6 @@
     }
   }
 
-  .p-select-list-container {
-    &::-webkit-scrollbar {
-      appearance: none;
-    }
-
-    &::-webkit-scrollbar:vertical {
-      width: 7px;
-      background-color: variables.$white-1;
-    }
-
-    &::-webkit-scrollbar:horizontal {
-      height: 0;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      border: 2px solid variables.$white-1;
-      background-color: variables.$brown-1;
-    }
-  }
-
-  .p-select.invalid-dropdown.ng-invalid.ng-touched,
   .invalid-dropdown.ng-invalid.ng-touched .p-cascadeselect {
     border: 1px solid variables.$red-1 !important;
   }
@@ -270,7 +223,7 @@
 
 @media screen and (width <= 960px) {
   :host ::ng-deep {
-    .p-overlay {
+    .p-cascadeselect .p-overlay {
       max-width: 100%;
       width: 100%;
     }

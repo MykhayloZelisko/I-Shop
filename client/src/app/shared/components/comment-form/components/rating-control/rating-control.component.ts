@@ -1,10 +1,9 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-} from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { NgClass } from '@angular/common';
 import { GetControlDirective } from '../../../../directives/get-control.directive';
@@ -12,7 +11,7 @@ import { showErrorMessage } from '../../../../utils/validators';
 
 @Component({
   selector: 'app-rating-control',
-  imports: [SvgIconComponent, NgClass],
+  imports: [SvgIconComponent, NgClass, ReactiveFormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -39,8 +38,6 @@ export class RatingControlComponent
   public onChange = (_: number): void => {};
 
   public onTouched = (): void => {};
-
-  private cdr = inject(ChangeDetectorRef);
 
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
@@ -73,10 +70,5 @@ export class RatingControlComponent
 
   public showMessage(): string {
     return showErrorMessage(this.control);
-  }
-
-  public markAsDirty(): void {
-    this.control.markAsDirty();
-    this.cdr.markForCheck();
   }
 }

@@ -1,8 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
   input,
   output,
 } from '@angular/core';
@@ -63,8 +61,6 @@ export class InputComponent
 
   public onTouched = (): void => {};
 
-  private cdr = inject(ChangeDetectorRef);
-
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
   }
@@ -91,16 +87,6 @@ export class InputComponent
 
   public setHeight(): Record<string, string> {
     return this.withErrors() ? { height: '78px' } : { height: '62px' };
-  }
-
-  public markAsDirty(): void {
-    this.control.markAsDirty();
-    this.cdr.markForCheck();
-  }
-
-  public markAsPristine(): void {
-    this.control.markAsPristine();
-    this.cdr.markForCheck();
   }
 
   public onFocus(): void {

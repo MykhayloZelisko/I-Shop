@@ -1,0 +1,21 @@
+@let isInvalidWithErrors = isInvalid() && withErrors();
+
+<div class="select" [ngStyle]="setHeight()">
+  <label class="select__label" [for]="id">{{ label() }}</label>
+  <p-select
+    [ngClass]="{
+      'select--invalid': isInvalidWithErrors,
+    }"
+    [id]="id"
+    [options]="options()"
+    [optionLabel]="optionLabel()"
+    [optionValue]="optionValue()"
+    [formControl]="control"
+    placeholder="Виберіть бренд"
+    (onBlur)="onBlur()"
+    (onChange)="changeValue()"
+  ></p-select>
+  @if (isInvalidWithErrors) {
+    <p class="select__error">{{ showMessage() }}</p>
+  }
+</div>

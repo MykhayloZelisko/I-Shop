@@ -108,7 +108,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    this.startClearForm();
+    this.startCleanForm();
   }
 
   public ngOnDestroy(): void {
@@ -377,7 +377,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  public startClearForm(): void {
+  public startCleanForm(): void {
     this.store.dispatch(FormActions.clearFormOn());
   }
 

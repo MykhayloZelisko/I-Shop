@@ -17,7 +17,10 @@
       @if (totalCount > 1) {
         <div class="cart__devices-header">
           <div class="cart__select-all">
-            <app-checkbox [formControl]="selectAllCtrl" />
+            <app-checkbox
+              [formControl]="selectAllCtrl"
+              (changeEvent)="updateAll()"
+            />
             <p class="cart__select-all-text">
               Вибрано {{ orderedCount$ | async }} з {{ totalCount }}
             </p>

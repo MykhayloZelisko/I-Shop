@@ -13,7 +13,7 @@ import { PopupActions } from '../../../+store/popup/actions/popup.actions';
 import { ClickOutsideDirective } from '../../../shared/directives/click-outside.directive';
 import { CheckboxComponent } from '../../../shared/components/checkbox/checkbox.component';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, Subject, take, takeUntil } from 'rxjs';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   selectAllCDevices,
@@ -124,7 +124,7 @@ export class CartComponent implements OnInit, OnDestroy {
   public updateAll(): void {
     const ctrlValue$ = this.selectAllCtrl.valueChanges;
     combineLatest([ctrlValue$, this.devicesIds$])
-      .pipe(takeUntil(this.destroy$))
+      .pipe(take(1))
       .subscribe({
         next: ([value, ids]) => {
           const isInOrder = value ?? false;

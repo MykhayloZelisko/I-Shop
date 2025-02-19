@@ -9,11 +9,15 @@ import {
 import { v4 as uuidV4 } from 'uuid';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { GetControlDirective } from '../../directives/get-control.directive';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-checkbox',
-  imports: [SvgIconComponent],
+  imports: [ReactiveFormsModule, SvgIconComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -56,8 +60,8 @@ export class CheckboxComponent
     this.cdr.markForCheck();
   }
 
-  public changeValue(event: Event): void {
-    const value = (event.target as HTMLInputElement).checked;
+  public changeValue(): void {
+    const value = this.control.value === null ? null : !!this.control.value;
     this.onChange(value);
     this.changeEvent.emit();
     this.onTouched();

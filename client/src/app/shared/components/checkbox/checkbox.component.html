@@ -5,7 +5,8 @@
     [id]="checkboxId"
     [checked]="control.value === true"
     [indeterminate]="control.value === null"
-    (change)="changeValue($event)"
+    [formControl]="control"
+    (change)="changeValue()"
   />
   <label class="checkbox__label" [for]="checkboxId">
     @if (control.value === null) {

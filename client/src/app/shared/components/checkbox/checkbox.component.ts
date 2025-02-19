@@ -1,8 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
   OnInit,
   output,
 } from '@angular/core';
@@ -14,10 +12,11 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-checkbox',
-  imports: [ReactiveFormsModule, SvgIconComponent],
+  imports: [ReactiveFormsModule, SvgIconComponent, Checkbox],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,8 +40,6 @@ export class CheckboxComponent
 
   public onChange = (_: boolean | null): void => {};
 
-  private cdr = inject(ChangeDetectorRef);
-
   public override ngOnInit(): void {
     super.ngOnInit();
     this.checkboxId = uuidV4();
@@ -57,7 +54,7 @@ export class CheckboxComponent
   }
 
   public writeValue(_: boolean | null): void {
-    this.cdr.markForCheck();
+    return;
   }
 
   public changeValue(): void {

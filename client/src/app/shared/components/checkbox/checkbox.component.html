@@ -1,12 +1,12 @@
 <div class="checkbox">
-  <input
+  <p-checkbox
     class="checkbox__input"
-    type="checkbox"
-    [id]="checkboxId"
-    [checked]="control.value === true"
+    [binary]="true"
+    [inputId]="checkboxId"
+    [value]="control.value"
     [indeterminate]="control.value === null"
     [formControl]="control"
-    (change)="changeValue()"
+    (onChange)="changeValue()"
   />
   <label class="checkbox__label" [for]="checkboxId">
     @if (control.value === null) {

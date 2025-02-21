@@ -8,7 +8,7 @@ import { GqlAdminGuard } from '../common/guards/gql-admin/gql-admin.guard';
 import { ValidationPipe } from '../common/pipes/validation/validation.pipe';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 
-@Resolver(() => Brand)
+@Resolver()
 @UseGuards(GqlAdminGuard)
 export class BrandsResolver {
   public constructor(private brandsService: BrandsService) {}

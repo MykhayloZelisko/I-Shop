@@ -29,7 +29,6 @@ import { CPropertiesGroupInterface } from '../../../../../../../shared/models/in
 
 @Component({
   selector: 'app-c-properties-dialog',
-  standalone: true,
   imports: [ClickOutsideDirective, SvgIconComponent, ReactiveFormsModule],
   templateUrl: './c-properties-dialog.component.html',
   styleUrl: './c-properties-dialog.component.scss',

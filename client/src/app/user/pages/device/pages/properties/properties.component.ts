@@ -16,7 +16,6 @@ import { DeviceAsideComponent } from '../../../../../shared/components/device-as
 
 @Component({
   selector: 'app-properties',
-  standalone: true,
   imports: [
     AsyncPipe,
     RatingComponent,

@@ -19,7 +19,6 @@ import { CPropertyActions } from '../../../../../+store/c-properties/actions/c-p
 
 @Component({
   selector: 'app-c-property-item',
-  standalone: true,
   imports: [AsyncPipe, SvgIconComponent, ReactiveFormsModule],
   templateUrl: './c-property-item.component.html',
   styleUrl: './c-property-item.component.scss',

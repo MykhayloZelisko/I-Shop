@@ -18,6 +18,7 @@ import { Deleted } from '../common/models/deleted.model';
 import { CPropertiesGroupsService } from '../c-properties-groups/c-properties-groups.service';
 import { CPropertiesGroup } from '../c-properties-groups/models/c-properties-group.model';
 import { DevicesService } from '../devices/devices.service';
+import { TransactionsService } from '../common/services/transactions/transactions.service';
 
 @Injectable()
 export class CPropertiesService {
@@ -28,6 +29,7 @@ export class CPropertiesService {
     private cPropertiesGroupsService: CPropertiesGroupsService,
     @Inject(forwardRef(() => DevicesService))
     private devicesService: DevicesService,
+    private transactionsService: TransactionsService,
   ) {}
 
   public async getFilteredCProperties(ids: string[]): Promise<CPropertyGQL[]> {
@@ -73,81 +75,86 @@ export class CPropertiesService {
   public async createCProperties(
     createCPropertyInputs: CreateCPropertyInput[],
   ): Promise<CPropertyGQL[]> {
-    const groupId = createCPropertyInputs[0].groupId;
-    const propertyNames = createCPropertyInputs.map(
-      (input) => input.propertyName,
-    );
-
-    const hasDuplicates = new Set(propertyNames).size !== propertyNames.length;
-
-    const existedProperties = await this.cPropertyModel
-      .find({
-        groupId,
-        propertyName: { $in: propertyNames },
-      })
-      .exec();
-
-    if (existedProperties.length || hasDuplicates) {
-      throw new ConflictException(
-        'A group of properties cannot have two properties with the same name',
+    try {
+      const createdProperties = await this.cPropertyModel.insertMany(
+        createCPropertyInputs,
       );
+      return createdProperties.map((property: CPropertyDocument) =>
+        property.toObject<CPropertyGQL>(),
+      );
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException(
+          'A group of properties cannot have two properties with the same name',
+        );
+      }
+      throw error;
     }
-
-    const createdProperties = await this.cPropertyModel.insertMany(
-      createCPropertyInputs,
-    );
-    return createdProperties.map((property: CPropertyDocument) =>
-      property.toObject<CPropertyGQL>(),
-    );
   }
 
   public async updateCProperty(
     id: string,
     updateCPropertyInput: UpdateCPropertyInput,
   ): Promise<CPropertyGQL> {
-    const property = await this.cPropertyModel
-      .findOne({ propertyName: updateCPropertyInput.propertyName })
-      .exec();
-    if (property && property.id !== id) {
-      throw new ConflictException(
-        'A group cannot have two properties with the same name',
-      );
+    try {
+      const updatedProperty = await this.cPropertyModel
+        .findByIdAndUpdate(
+          id,
+          { propertyName: updateCPropertyInput.propertyName },
+          { new: true },
+        )
+        .exec();
+
+      if (updatedProperty) {
+        return updatedProperty.toObject<CPropertyGQL>();
+      }
+
+      throw new BadRequestException('A property is not updated');
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException(
+          'A group cannot have two properties with the same name',
+        );
+      }
+      throw error;
     }
-    const updatedProperty = await this.cPropertyModel
-      .findByIdAndUpdate(
-        id,
-        { propertyName: updateCPropertyInput.propertyName },
-        { new: true },
-      )
-      .exec();
-    if (updatedProperty) {
-      return updatedProperty.toObject<CPropertyGQL>();
-    }
-    throw new BadRequestException('A property is not updated');
   }
 
   public async deleteCProperty(id: string): Promise<Deleted> {
-    const isPropertyUsed = await this.devicesService.checkProperty(id);
-    if (isPropertyUsed) {
-      throw new ForbiddenException(
-        'This property is used in devices and cannot be deleted',
+    return this.transactionsService.execute<Deleted>(async (session) => {
+      const isPropertyUsed = await this.devicesService.checkProperty(
+        id,
+        session,
       );
-    }
-    const property = await this.cPropertyModel.findByIdAndDelete(id).exec();
-    if (property) {
-      const group = await this.cPropertiesGroupsService.getCPropertiesGroupById(
-        property.groupId,
-      );
-      return {
-        categoriesIds: [],
-        groupsIds: [],
-        propertiesIds: [id],
-        group,
-        category: null,
-      };
-    } else {
-      throw new NotFoundException('Property not found');
-    }
+
+      if (isPropertyUsed) {
+        throw new ForbiddenException(
+          'This property is used in devices and cannot be deleted',
+        );
+      }
+
+      const property = await this.cPropertyModel
+        .findByIdAndDelete(id)
+        .session(session)
+        .exec();
+
+      if (property) {
+        const group =
+          await this.cPropertiesGroupsService.getCPropertiesGroupById(
+            property.groupId,
+            session,
+          );
+        return {
+          categoriesIds: [],
+          groupsIds: [],
+          propertiesIds: [id],
+          group,
+          category: null,
+        };
+      } else {
+        throw new NotFoundException('Property not found');
+      }
+    });
   }
 
   public async deleteAllCPropertiesByGroupsIds(
@@ -159,6 +166,7 @@ export class CPropertiesService {
         .find({
           groupId: { $in: groupsIds },
         })
+        .session(session)
         .exec();
       const propertiesIds = properties.map((property) => property.id);
       await this.cPropertyModel
@@ -177,15 +185,22 @@ export class CPropertiesService {
     }
   }
 
-  public async hasGroupProperties(groupId: string): Promise<boolean> {
+  public async hasGroupProperties(
+    groupId: string,
+    session: ClientSession,
+  ): Promise<boolean> {
     const countProperties = await this.cPropertyModel
       .countDocuments({ groupId })
+      .session(session)
       .exec();
     return countProperties > 0;
   }
 
-  public async getGroupId(id: string): Promise<string> {
-    const property = await this.cPropertyModel.findById(id).exec();
+  public async getGroupId(id: string, session: ClientSession): Promise<string> {
+    const property = await this.cPropertyModel
+      .findById(id)
+      .session(session)
+      .exec();
     if (!property) {
       throw new NotFoundException('Property not found');
     }

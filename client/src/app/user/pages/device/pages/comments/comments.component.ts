@@ -34,7 +34,6 @@ import { CommentsListStatusInterface } from '../../../../../shared/models/interf
 
 @Component({
   selector: 'app-comments',
-  standalone: true,
   imports: [
     AsyncPipe,
     CommentDialogComponent,

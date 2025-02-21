@@ -25,7 +25,6 @@ import { TabMenuComponent } from '../../../shared/components/tab-menu/tab-menu.c
 
 @Component({
   selector: 'app-device',
-  standalone: true,
   imports: [
     RouterOutlet,
     PageNotFoundComponent,

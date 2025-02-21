@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { NgClass } from '@angular/common';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-device-carousel',
-  standalone: true,
-  imports: [SvgIconComponent, NgClass],
+  imports: [SvgIconComponent, NgClass, NgOptimizedImage],
   templateUrl: './device-carousel.component.html',
   styleUrl: './device-carousel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,12 +18,12 @@ export class DeviceCarouselComponent {
     if (this.currentImageIndex > 0) {
       this.currentImageIndex--;
     } else {
-      this.currentImageIndex = this.carousel.length - 1;
+      this.currentImageIndex = this.carousel().length - 1;
     }
   }
 
   public nextImage(): void {
-    if (this.currentImageIndex < this.carousel.length - 1) {
+    if (this.currentImageIndex < this.carousel().length - 1) {
       this.currentImageIndex++;
     } else {
       this.currentImageIndex = 0;

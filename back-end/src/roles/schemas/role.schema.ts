@@ -5,7 +5,7 @@ export type RoleDocument = HydratedDocument<Role>;
 
 @Schema()
 export class Role {
-  @Prop()
+  @Prop({ unique: true })
   public role: string;
 }
 

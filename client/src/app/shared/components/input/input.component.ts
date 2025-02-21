@@ -1,12 +1,8 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  ElementRef,
-  inject,
   input,
   output,
-  viewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -16,13 +12,12 @@ import {
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
 import { GetControlDirective } from '../../directives/get-control.directive';
-
 import { v4 as uuidV4 } from 'uuid';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-input',
-  standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgStyle],
+  imports: [ReactiveFormsModule, NgClass, NgStyle, NgxMaskDirective],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -38,11 +33,21 @@ export class InputComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
-  public inputComp = viewChild.required<ElementRef<HTMLInputElement>>('input');
-
   public placeholder = input<string>('');
 
   public inputType = input<string>('text');
+
+  public mask = input<string>();
+
+  public prefix = input<string>('');
+
+  public showMaskTyped = input<boolean>(false);
+
+  public dropSpecialCharacters = input<boolean>(false);
+
+  public thousandSeparator = input<string>('');
+
+  public decimalMarker = input<'.' | ',' | ['.', ',']>('.');
 
   public label = input.required<string>();
 
@@ -52,13 +57,9 @@ export class InputComponent
 
   public readonly id = uuidV4();
 
-  public internalValue: string | null = null;
-
   public onChange = (_: unknown): void => {};
 
   public onTouched = (): void => {};
-
-  private cdr = inject(ChangeDetectorRef);
 
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
@@ -68,21 +69,16 @@ export class InputComponent
     this.onTouched = fn;
   }
 
-  public writeValue(value: string): void {
-    this.internalValue = value;
-    if (this.inputComp()) {
-      this.inputComp().nativeElement.value = value;
-    }
-    this.cdr.markForCheck();
+  public writeValue(): void {
+    return;
   }
 
   public showMessage(): string {
     return showErrorMessage(this.control);
   }
 
-  public changeValue($event: Event): void {
-    const value = ($event.target as HTMLInputElement).value;
-    this.onChange(value);
+  public changeValue(): void {
+    this.onChange(this.control.value);
   }
 
   public onBlur(): void {
@@ -91,11 +87,6 @@ export class InputComponent
 
   public setHeight(): Record<string, string> {
     return this.withErrors() ? { height: '78px' } : { height: '62px' };
-  }
-
-  public markAsDirty(): void {
-    this.control.markAsDirty();
-    this.cdr.markForCheck();
   }
 
   public onFocus(): void {

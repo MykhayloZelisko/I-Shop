@@ -1,15 +1,17 @@
+@let url = imageUrl();
+
 <div class="dnd-file-control">
   <div
     class="dnd-file-control__skeleton"
-    [ngClass]="{ 'dnd-file-control__skeleton--empty': !imageUrl }"
+    [ngClass]="{ 'dnd-file-control__skeleton--empty': !url }"
   >
-    @if (imageUrl) {
+    @if (url) {
       <img
         class="category-item__image"
-        [src]="imageUrl"
+        [src]="url"
         alt="image"
         [ngStyle]="getImageStyle()"
-        [alt]="imageUrl"
+        [alt]="url"
         (load)="onImageLoad($event)"
       />
     }

@@ -212,7 +212,18 @@ export class CategoriesService {
           if (response.errors) {
             throw response.errors[0];
           } else {
-            return response.data.deleteCategory;
+            return {
+              ...response.data.deleteCategory,
+              category: {
+                ...response.data.deleteCategory.category,
+                image: response.data.deleteCategory.category.image
+                  ? `${environment.baseUrl}/${response.data.deleteCategory.category.image}`
+                  : null,
+                icon: response.data.deleteCategory.category.icon
+                  ? `${environment.baseUrl}/${response.data.deleteCategory.category.icon}`
+                  : null,
+              },
+            };
           }
         }),
         catchError((error) => throwError(() => error)),

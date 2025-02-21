@@ -1,3 +1,5 @@
+@let cartInfo = cartInfo$ | async;
+
 <div class="header" (click)="clearState()">
   <div class="header__inner">
     <button class="header__icon-btn" (click)="openMainMenu($event)">
@@ -46,7 +48,7 @@
       </button>
     </div>
     <div class="header__language">UA</div>
-    @if ((user$() | async) === null) {
+    @if (!user()) {
       <button
         class="header__icon-btn header__icon-btn--large-scr-btn"
         (click)="login($event)"
@@ -64,31 +66,29 @@
       ></svg-icon>
     </button>
     <button class="header__icon-btn" (click)="openCart($event)">
-      @if (cartInfo$ | async; as cartInfo) {
-        @if (cartInfo.count) {
-          <svg-icon
-            class="header__icon"
-            src="assets/images/shopping-cart-full-icon.svg"
-          ></svg-icon>
-          <div
-            class="header__cart-count"
-            [ngClass]="
-              cartInfo.isOrder
-                ? 'header__cart-count--full'
-                : 'header__cart-count--empty'
-            "
-          >
-            {{ cartInfo.count }}
-          </div>
-        } @else {
-          <svg-icon
-            class="header__icon"
-            src="assets/images/shopping-cart-icon.svg"
-          ></svg-icon>
-        }
+      @if (cartInfo && cartInfo.count) {
+        <svg-icon
+          class="header__icon"
+          src="assets/images/shopping-cart-full-icon.svg"
+        ></svg-icon>
+        <div
+          class="header__cart-count"
+          [ngClass]="
+            cartInfo.isOrder
+              ? 'header__cart-count--full'
+              : 'header__cart-count--empty'
+          "
+        >
+          {{ cartInfo.count }}
+        </div>
+      } @else {
+        <svg-icon
+          class="header__icon"
+          src="assets/images/shopping-cart-icon.svg"
+        ></svg-icon>
       }
     </button>
-    @if (isAdmin$() | async) {
+    @if (isAdmin()) {
       <button
         class="header__icon-btn header__icon-btn--small-scr-btn"
         (click)="goAdmin()"

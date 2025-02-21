@@ -20,7 +20,6 @@ import { selectDeviceInCart } from '../../../../../+store/cart/selectors/cart.se
 
 @Component({
   selector: 'app-about-device',
-  standalone: true,
   imports: [
     AsyncPipe,
     SvgIconComponent,

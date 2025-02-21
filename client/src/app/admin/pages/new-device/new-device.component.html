@@ -1,3 +1,7 @@
+@let brands = (brands$ | async) ?? [];
+@let categories = (categories$ | async) ?? [];
+@let groups = (propertiesGroups$ | async) ?? [];
+
 <div class="new-device">
   <div class="new-device__form" [formGroup]="newDeviceForm">
     <app-input
@@ -6,98 +10,44 @@
       formControlName="deviceName"
       [withErrors]="true"
     />
-    <div class="new-device__field">
-      <label class="new-device__label" for="price">Ціна в гривнях</label>
-      <input
-        id="price"
-        mask="separator.2"
-        thousandSeparator=""
-        [dropSpecialCharacters]="false"
-        decimalMarker="."
-        class="new-device__input"
-        formControlName="price"
-        type="text"
-        placeholder="Ціна в гривнях"
-        (blur)="markAsDirtyCtrl('price')"
-      />
-      @if (
-        newDeviceForm.controls.price.invalid &&
-        (newDeviceForm.controls.price.dirty ||
-          newDeviceForm.controls.price.touched)
-      ) {
-        <p class="new-device__error">{{ showMessage('price') }}</p>
-      }
-    </div>
-    <div class="new-device__field">
-      <label class="new-device__label" for="count">Кількість</label>
-      <input
-        id="count"
-        mask="0*"
-        thousandSeparator=""
-        class="new-device__input"
-        formControlName="quantity"
-        type="text"
-        placeholder="Кількість"
-        (blur)="markAsDirtyCtrl('quantity')"
-      />
-      @if (
-        newDeviceForm.controls.quantity.invalid &&
-        (newDeviceForm.controls.quantity.dirty ||
-          newDeviceForm.controls.quantity.touched)
-      ) {
-        <p class="new-device__error">{{ showMessage('quantity') }}</p>
-      }
-    </div>
-    @if (brands$ | async; as brands) {
-      <div class="new-device__field">
-        <label class="new-device__label" for="brand-id">Бренд</label>
-        <p-select
-          [ngClass]="{
-            'invalid-dropdown': newDeviceForm.controls.brandId.invalid,
-          }"
-          id="brand-id"
-          [options]="brands"
-          optionLabel="brandName"
-          optionValue="id"
-          placeholder="Виберіть бренд"
-          formControlName="brandId"
-        ></p-select>
-        @if (
-          newDeviceForm.controls.brandId.invalid &&
-          (newDeviceForm.controls.brandId.dirty ||
-            newDeviceForm.controls.brandId.touched)
-        ) {
-          <p class="new-device__error">{{ showMessage('brandId') }}</p>
-        }
-      </div>
-    }
-    @if (categories$ | async; as categories) {
-      <div class="new-device__field">
-        <label class="new-device__label" for="category-id">Категорія</label>
-        <p-cascadeSelect
-          [ngClass]="{
-            'invalid-dropdown': newDeviceForm.controls.categoryId.invalid,
-          }"
-          id="category-id"
-          [options]="categories"
-          optionLabel="categoryName"
-          optionValue="id"
-          optionGroupLabel="categoryName"
-          [optionGroupChildren]="optionGroupChildrenValue"
-          placeholder="Виберіть категорію"
-          formControlName="categoryId"
-          (onChange)="changeValue($event)"
-        >
-        </p-cascadeSelect>
-        @if (
-          newDeviceForm.controls.categoryId.invalid &&
-          (newDeviceForm.controls.categoryId.dirty ||
-            newDeviceForm.controls.categoryId.touched)
-        ) {
-          <p class="new-device__error">{{ showMessage('categoryId') }}</p>
-        }
-      </div>
-    }
+    <app-input
+      label="Ціна в гривнях"
+      placeholder="Ціна в гривнях"
+      formControlName="price"
+      [withErrors]="true"
+      mask="separator.2"
+      thousandSeparator=""
+      [dropSpecialCharacters]="false"
+      decimalMarker="."
+    />
+    <app-input
+      label="Кількість"
+      placeholder="Кількість"
+      formControlName="quantity"
+      [withErrors]="true"
+      mask="0*"
+      thousandSeparator=""
+    />
+    <app-select
+      label="Бренд"
+      [withErrors]="true"
+      [options]="brands"
+      optionLabel="brandName"
+      optionValue="id"
+      formControlName="brandId"
+    />
+    <app-cascade-select
+      label="Категорія"
+      placeholder="Виберіть категорію"
+      formControlName="categoryId"
+      [withErrors]="true"
+      [options]="categories"
+      optionLabel="categoryName"
+      optionValue="id"
+      optionGroupLabel="categoryName"
+      [optionGroupChildren]="optionGroupChildrenValue"
+      (changeEvent)="changeValue($event)"
+    />
     <div>
       <label class="new-device__label" for="file">Зображення</label>
       <input
@@ -148,54 +98,50 @@
         }
       </div>
     </div>
-    @if (propertiesGroups$ | async; as groups) {
-      @if (groups.length) {
-        <h3 class="new-device__title">Характеристики</h3>
-      }
-      <ng-container formArrayName="groups">
-        @for (group of groups; track group.id; let groupIndex = $index) {
-          <ng-container [formGroupName]="groupIndex">
-            <h4
-              class="new-device__sub-title"
-              [ngClass]="{
-                'new-device__sub-title--invalid':
-                  !getPropertiesCtrl(groupIndex).length,
-              }"
-            >
-              {{ group.groupName }}
-            </h4>
-            @if (getPropertiesCtrl(groupIndex).invalid) {
-              <p class="new-device__error new-device__error--group">
-                {{ showMessageArrayItem('groups', groupIndex) }}
-              </p>
-            }
-            <ng-container formArrayName="properties">
-              @for (
-                property of group.properties;
-                track property.id;
-                let propertyIndex = $index
-              ) {
-                <ng-container [formGroupName]="propertyIndex">
-                  <app-multi-input
-                    [label]="property.propertyName"
-                    [multiInputForm]="
-                      getPropertyCtrl(groupIndex, propertyIndex)
-                    "
-                    [withErrors]="true"
-                  />
-                </ng-container>
-              }
-            </ng-container>
-          </ng-container>
-        }
-      </ng-container>
+    @if (groups.length) {
+      <h3 class="new-device__title">Характеристики</h3>
     }
+    <ng-container formArrayName="groups">
+      @for (group of groups; track group.id; let groupIndex = $index) {
+        <ng-container [formGroupName]="groupIndex">
+          <h4
+            class="new-device__sub-title"
+            [ngClass]="{
+              'new-device__sub-title--invalid':
+                !getPropertiesCtrl(groupIndex).length,
+            }"
+          >
+            {{ group.groupName }}
+          </h4>
+          @if (getPropertiesCtrl(groupIndex).invalid) {
+            <p class="new-device__error new-device__error--group">
+              {{ showMessageArrayItem('groups', groupIndex) }}
+            </p>
+          }
+          <ng-container formArrayName="properties">
+            @for (
+              property of group.properties;
+              track property.id;
+              let propertyIndex = $index
+            ) {
+              <ng-container [formGroupName]="propertyIndex">
+                <app-multi-input
+                  [label]="property.propertyName"
+                  [multiInputForm]="getPropertyCtrl(groupIndex, propertyIndex)"
+                  [withErrors]="true"
+                />
+              </ng-container>
+            }
+          </ng-container>
+        </ng-container>
+      }
+    </ng-container>
   </div>
   <div class="new-device__buttons">
     <button class="new-device__save-button" (click)="saveDevice()">
       Зберегти
     </button>
-    <button class="new-device__cancel-button" (click)="cancelDevice()">
+    <button class="new-device__cancel-button" (click)="startCleanForm()">
       Відмінити
     </button>
   </div>

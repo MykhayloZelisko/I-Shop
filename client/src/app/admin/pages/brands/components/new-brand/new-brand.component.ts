@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnDestroy,
@@ -18,7 +17,6 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 
 @Component({
   selector: 'app-new-brand',
-  standalone: true,
   imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './new-brand.component.html',
   styleUrl: './new-brand.component.scss',
@@ -34,8 +32,6 @@ export class NewBrandComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
 
   private store = inject(Store<State>);
-
-  private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.brandCtrl = this.fb.nonNullable.control<string>('', [
@@ -68,7 +64,6 @@ export class NewBrandComponent implements OnInit, OnDestroy {
         if (isFormCleared) {
           this.brandCtrl.reset();
           this.store.dispatch(FormActions.clearFormOff());
-          this.cdr.markForCheck();
         }
       });
   }

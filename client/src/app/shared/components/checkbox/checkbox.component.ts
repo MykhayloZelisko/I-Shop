@@ -1,22 +1,22 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  ElementRef,
-  inject,
   OnInit,
   output,
-  viewChild,
 } from '@angular/core';
 import { v4 as uuidV4 } from 'uuid';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { GetControlDirective } from '../../directives/get-control.directive';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-checkbox',
-  standalone: true,
-  imports: [SvgIconComponent],
+  imports: [ReactiveFormsModule, SvgIconComponent, Checkbox],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -32,9 +32,6 @@ export class CheckboxComponent
   extends GetControlDirective
   implements OnInit, ControlValueAccessor
 {
-  public checkbox =
-    viewChild.required<ElementRef<HTMLInputElement>>('checkbox');
-
   public changeEvent = output<void>();
 
   public checkboxId!: string;
@@ -42,8 +39,6 @@ export class CheckboxComponent
   public onTouched = (): void => {};
 
   public onChange = (_: boolean | null): void => {};
-
-  private cdr = inject(ChangeDetectorRef);
 
   public override ngOnInit(): void {
     super.ngOnInit();
@@ -59,11 +54,11 @@ export class CheckboxComponent
   }
 
   public writeValue(_: boolean | null): void {
-    this.cdr.markForCheck();
+    return;
   }
 
-  public changeValue(event: Event): void {
-    const value = (event.target as HTMLInputElement).checked;
+  public changeValue(): void {
+    const value = this.control.value === null ? null : !!this.control.value;
     this.onChange(value);
     this.changeEvent.emit();
     this.onTouched();

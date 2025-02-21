@@ -8,7 +8,7 @@ import {
 import { ClickOutsideDirective } from '../../../../../../../../../shared/directives/click-outside.directive';
 import { CommentInterface } from '../../../../../../../../../shared/models/interfaces/comment.interface';
 import { UserInterface } from '../../../../../../../../../shared/models/interfaces/user.interface';
-import { Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../../../../../+store/reducers';
@@ -20,7 +20,6 @@ import { PopupTypeEnum } from '../../../../../../../../../shared/models/enums/po
 
 @Component({
   selector: 'app-comment-menu',
-  standalone: true,
   imports: [ClickOutsideDirective, AsyncPipe],
   templateUrl: './comment-menu.component.html',
   styleUrl: './comment-menu.component.scss',
@@ -29,10 +28,9 @@ import { PopupTypeEnum } from '../../../../../../../../../shared/models/enums/po
 export class CommentMenuComponent implements OnInit {
   public comment = input.required<CommentInterface>();
 
-  public user$ = input.required<Observable<UserInterface | null>>();
+  public user = input.required<UserInterface | null>();
 
-  public commentsStatus$ =
-    input.required<Observable<CommentsListStatusInterface>>();
+  public commentsStatus = input.required<CommentsListStatusInterface>();
 
   public isAdmin$!: Observable<boolean>;
 
@@ -54,17 +52,11 @@ export class CommentMenuComponent implements OnInit {
   }
 
   public deleteComment(id: string): void {
-    this.commentsStatus$()
-      .pipe(take(1))
-      .subscribe({
-        next: (status: CommentsListStatusInterface) => {
-          this.store.dispatch(
-            CommentActions.deleteComment({
-              id,
-              cursor: status.cursor,
-            }),
-          );
-        },
-      });
+    this.store.dispatch(
+      CommentActions.deleteComment({
+        id,
+        cursor: this.commentsStatus().cursor,
+      }),
+    );
   }
 }

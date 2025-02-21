@@ -5,7 +5,6 @@ import { PopupActions } from '../../+store/popup/actions/popup.actions';
 
 @Directive({
   selector: '[appClickOutside]',
-  standalone: true,
 })
 export class ClickOutsideDirective {
   private elementRef = inject(ElementRef);

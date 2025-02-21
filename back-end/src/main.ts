@@ -5,19 +5,32 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
+import { RedisStore } from 'connect-redis';
+import { createClient } from 'redis';
 
 async function bootstrap(): Promise<void> {
   const PORT = Number(process.env.PORT) || 3000;
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'http://localhost:4000'],
     credentials: true,
   });
+
+  const redisClient = createClient({
+    url: process.env.REDIS_URL ?? 'redis://localhost:6379',
+  });
+  redisClient.on('error', (err) => console.error('Redis Client Error:', err));
+  await redisClient.connect();
+  const redisStore = new RedisStore({
+    client: redisClient,
+  });
+
   app.use(cookieParser(String(process.env.PRIVATE_KEY)));
   app.use(
     session({
       name: 'SESSION_ID',
+      store: redisStore,
       secret: String(process.env.PRIVATE_KEY),
       resave: false,
       saveUninitialized: false,

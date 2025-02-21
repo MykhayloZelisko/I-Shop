@@ -1,21 +1,17 @@
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  input,
-  viewChild,
-} from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { GetControlDirective } from '../../directives/get-control.directive';
 import { showErrorMessage } from '../../utils/validators';
 import { NgClass, NgStyle } from '@angular/common';
+import { v4 as uuidV4 } from 'uuid';
 
 @Component({
   selector: 'app-textarea',
-  standalone: true,
-  imports: [NgClass, NgStyle],
+  imports: [NgClass, NgStyle, ReactiveFormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -31,9 +27,6 @@ export class TextareaComponent
   extends GetControlDirective
   implements ControlValueAccessor
 {
-  public textarea =
-    viewChild.required<ElementRef<HTMLTextAreaElement>>('textarea');
-
   public placeholder = input<string>('');
 
   public label = input.required<string>();
@@ -44,13 +37,11 @@ export class TextareaComponent
 
   public resizeY = input.required<boolean>();
 
-  public internalValue: string | null = null;
+  public readonly id = uuidV4();
 
   public onChange = (_: unknown): void => {};
 
   public onTouched = (): void => {};
-
-  private cdr = inject(ChangeDetectorRef);
 
   public registerOnChange(fn: () => void): void {
     this.onChange = fn;
@@ -60,21 +51,16 @@ export class TextareaComponent
     this.onTouched = fn;
   }
 
-  public writeValue(value: string): void {
-    this.internalValue = value;
-    if (this.textarea()) {
-      this.textarea().nativeElement.value = this.internalValue;
-    }
-    this.cdr.markForCheck();
+  public writeValue(): void {
+    return;
   }
 
   public showMessage(): string {
     return showErrorMessage(this.control);
   }
 
-  public changeValue($event: Event): void {
-    const value = ($event.target as HTMLInputElement).value;
-    this.onChange(value);
+  public changeValue(): void {
+    this.onChange(this.control.value);
   }
 
   public onBlur(): void {
@@ -90,10 +76,5 @@ export class TextareaComponent
         ? 'vertical'
         : 'none';
     return { resize };
-  }
-
-  public markAsDirty(): void {
-    this.control.markAsDirty();
-    this.cdr.markForCheck();
   }
 }

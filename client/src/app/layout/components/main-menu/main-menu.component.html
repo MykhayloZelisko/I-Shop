@@ -1,3 +1,5 @@
+@let currentUser = user();
+
 <div class="main-menu__wrapper">
   <div class="main-menu" appClickOutside>
     <div class="main-menu__logo-wrapper">
@@ -15,18 +17,18 @@
         ></svg-icon>
       </button>
     </div>
-    @if (user$() | async; as user) {
+    @if (currentUser) {
       <div class="main-menu__login-wrapper">
         <div class="main-menu__user">
           <span class="main-menu__user-first-letter">{{
-            user.firstName.at(0)
+            currentUser.firstName.at(0)
           }}</span>
         </div>
         <div class="main-menu__login">
           <div class="main-menu__user-name">
-            {{ user.firstName }} {{ user.lastName }}
+            {{ currentUser.firstName }} {{ currentUser.lastName }}
           </div>
-          <div class="main-menu__user-email">{{ user.email }}</div>
+          <div class="main-menu__user-email">{{ currentUser.email }}</div>
         </div>
       </div>
     } @else {
@@ -63,7 +65,7 @@
           Каталог
         </button>
       </li>
-      @if (isAdmin$() | async) {
+      @if (isAdmin()) {
         <li class="main-menu__list-item main-menu__list-item--underlined">
           <button class="main-menu__list-button" (click)="goAdmin()">
             <svg-icon
@@ -75,11 +77,30 @@
         </li>
       }
       <li class="main-menu__list-item">
-        <button class="main-menu__list-button">
-          <svg-icon
-            class="main-menu__list-button-icon"
-            src="assets/images/shopping-cart-icon.svg"
-          ></svg-icon>
+        <button class="main-menu__list-button" (click)="openCart()">
+          @if (cartInfo$ | async; as cartInfo) {
+            @if (cartInfo.count) {
+              <svg-icon
+                class="main-menu__list-button-icon"
+                src="assets/images/shopping-cart-full-icon.svg"
+              ></svg-icon>
+              <div
+                class="main-menu__cart-count"
+                [ngClass]="
+                  cartInfo.isOrder
+                    ? 'main-menu__cart-count--full'
+                    : 'main-menu__cart-count--empty'
+                "
+              >
+                {{ cartInfo.count }}
+              </div>
+            } @else {
+              <svg-icon
+                class="main-menu__list-button-icon"
+                src="assets/images/shopping-cart-icon.svg"
+              ></svg-icon>
+            }
+          }
           Кошик
         </button>
       </li>
@@ -101,16 +122,7 @@
           Мова
         </button>
       </li>
-      <li class="main-menu__list-item main-menu__list-item--underlined">
-        <button class="main-menu__list-button">
-          <svg-icon
-            class="main-menu__list-button-icon"
-            src="assets/images/maps-pin-black-icon.svg"
-          ></svg-icon>
-          Місто
-        </button>
-      </li>
-      @if (user$() | async) {
+      @if (currentUser) {
         <li class="main-menu__list-item">
           <button class="main-menu__list-button">
             <svg-icon

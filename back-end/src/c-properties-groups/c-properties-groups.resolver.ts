@@ -10,7 +10,7 @@ import { UpdateCPropertiesGroupInput } from './inputs/update-c-properties-group.
 import { Deleted } from '../common/models/deleted.model';
 import { ParseObjectIdArrayPipe } from '../common/pipes/parse-object-id-array/parse-object-id-array.pipe';
 
-@Resolver(() => CPropertiesGroup)
+@Resolver()
 @UseGuards(GqlAdminGuard)
 export class CPropertiesGroupsResolver {
   public constructor(

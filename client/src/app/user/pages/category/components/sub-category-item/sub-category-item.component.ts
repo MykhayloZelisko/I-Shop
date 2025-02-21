@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CascadeCategoryInterface } from '../../../../../shared/models/interfaces/cascade-category.interface';
 import { RouterLink } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-sub-category-item',
-  standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgOptimizedImage],
   templateUrl: './sub-category-item.component.html',
   styleUrl: './sub-category-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

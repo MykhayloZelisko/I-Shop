@@ -10,7 +10,7 @@ import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-
 import { Deleted } from '../common/models/deleted.model';
 import { ParseObjectIdArrayPipe } from '../common/pipes/parse-object-id-array/parse-object-id-array.pipe';
 
-@Resolver(() => CProperty)
+@Resolver()
 @UseGuards(GqlAdminGuard)
 export class CPropertiesResolver {
   public constructor(private cPropertiesService: CPropertiesService) {}

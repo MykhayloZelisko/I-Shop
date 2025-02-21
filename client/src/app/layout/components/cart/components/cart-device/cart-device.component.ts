@@ -16,12 +16,10 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
-import { Observable, take } from 'rxjs';
 import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
 
 @Component({
   selector: 'app-cart-device',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     CheckboxComponent,
@@ -35,7 +33,7 @@ import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
 export class CartDeviceComponent implements OnInit {
   public device = input.required<CartDeviceInterface>();
 
-  public cartId$ = input.required<Observable<string | null>>();
+  public cartId = input.required<string | null>();
 
   public cartDeviceForm!: FormGroup<CartDeviceFormInterface>;
 
@@ -94,20 +92,15 @@ export class CartDeviceComponent implements OnInit {
   }
 
   public deleteDevice(): void {
-    this.cartId$()
-      .pipe(take(1))
-      .subscribe({
-        next: (id: string | null) => {
-          if (id) {
-            this.store.dispatch(
-              CartActions.deleteCartDevices({
-                deviceIds: [this.device().id],
-                cartId: id,
-              }),
-            );
-          }
-        },
-      });
+    const cartId = this.cartId();
+    if (cartId) {
+      this.store.dispatch(
+        CartActions.deleteCartDevices({
+          deviceIds: [this.device().id],
+          cartId,
+        }),
+      );
+    }
   }
 
   public changeQuantity(value: 1 | -1): void {

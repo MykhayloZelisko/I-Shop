@@ -14,7 +14,6 @@ import { TabMenuItemInterface } from '../shared/models/interfaces/tab-menu-item.
 
 @Component({
   selector: 'app-admin',
-  standalone: true,
   imports: [RouterOutlet, TabMenuComponent],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',

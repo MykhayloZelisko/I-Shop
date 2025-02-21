@@ -3,7 +3,6 @@ import {
   Component,
   inject,
   OnInit,
-  viewChildren,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -27,15 +26,12 @@ import {
 
 @Component({
   selector: 'app-login-form',
-  standalone: true,
   imports: [ReactiveFormsModule, InputComponent],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnInit {
-  public inputs = viewChildren(InputComponent);
-
   public loginForm!: FormGroup<LoginFormInterface>;
 
   private fb = inject(FormBuilder);
@@ -82,10 +78,14 @@ export class LoginFormComponent implements OnInit {
     );
   }
 
-  public login(): void {
-    this.inputs().forEach((input: InputComponent) => {
-      input.markAsDirty();
+  public markAsDirty(): void {
+    Object.values(this.loginForm.controls).forEach((control) => {
+      control.markAsDirty();
     });
+  }
+
+  public login(): void {
+    this.markAsDirty();
     if (this.loginForm.valid) {
       const loginData: LoginInterface = this.loginForm.getRawValue();
       this.store.dispatch(AuthActions.login({ login: loginData }));

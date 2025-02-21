@@ -14,7 +14,6 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, LoadingSpinnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

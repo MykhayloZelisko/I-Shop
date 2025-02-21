@@ -24,16 +24,15 @@ import { selectCartInfo } from '../../../+store/cart/selectors/cart.selectors';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [SvgIconComponent, RouterLink, AsyncPipe, NgClass],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
-  public user$ = input.required<Observable<UserInterface | null>>();
+  public user = input.required<UserInterface | null>();
 
-  public isAdmin$ = input.required<Observable<boolean>>();
+  public isAdmin = input.required<boolean>();
 
   public readonly popupType = PopupTypeEnum;
 

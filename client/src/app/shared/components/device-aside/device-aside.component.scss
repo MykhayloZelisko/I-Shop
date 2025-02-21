@@ -12,9 +12,13 @@
   background-color: variables.$white-1;
 
   &__device-photo {
-    aspect-ratio: 1;
-    width: 96px;
     object-fit: contain;
+  }
+
+  &__device-photo-container {
+    position: relative;
+    width: 96px;
+    height: 96px;
   }
 
   &__device {
@@ -142,8 +146,9 @@
     padding: 12px 24px;
     box-shadow: 0 -2px 8px variables.$blue-3;
 
-    &__device-photo {
+    &__device-photo-container {
       width: 40px;
+      height: 40px;
     }
 
     &__device {

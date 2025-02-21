@@ -21,7 +21,8 @@ export class CartDevicesService {
   public constructor(
     @InjectModel(CartDevice.name)
     private cartDeviceModel: Model<CartDeviceDocument>,
-    @Inject(forwardRef(() => CartsService)) private cartsService: CartsService,
+    @Inject(forwardRef(() => CartsService))
+    private cartsService: CartsService,
     private devicesService: DevicesService,
     private transactionsService: TransactionsService,
   ) {}
@@ -30,7 +31,7 @@ export class CartDevicesService {
     id: string,
     session: ClientSession,
   ): Promise<CartDeviceGQL> {
-    const device = await this.devicesService.getDeviceById(id);
+    const device = await this.devicesService.getDeviceById(id, session);
     const [newDevice] = await this.cartDeviceModel.create(
       [
         {
@@ -59,28 +60,32 @@ export class CartDevicesService {
     id: string,
     updateDeviceInput: UpdateCartDeviceInput,
   ): Promise<CartDeviceGQL> {
-    let updatedDevice: CartDeviceDocument | null = await this.cartDeviceModel
-      .findById(id)
-      .populate('device')
-      .exec();
-    if (!updatedDevice) {
-      throw new NotFoundException('Device not found');
-    }
-    if (
-      updateDeviceInput.quantity > 0 &&
-      updateDeviceInput.quantity <= updatedDevice.device.quantity
-    ) {
-      updatedDevice = await this.cartDeviceModel
-        .findByIdAndUpdate(id, updateDeviceInput, { new: true })
+    return this.transactionsService.execute<CartDeviceGQL>(async (session) => {
+      let updatedDevice: CartDeviceDocument | null = await this.cartDeviceModel
+        .findById(id)
         .populate('device')
+        .session(session)
         .exec();
-    } else {
-      throw new BadRequestException('Quantity is incorrect');
-    }
-    if (!updatedDevice) {
-      throw new BadRequestException('Device is not updated');
-    }
-    return updatedDevice.toObject<CartDeviceGQL>();
+      if (!updatedDevice) {
+        throw new NotFoundException('Device not found');
+      }
+      if (
+        updateDeviceInput.quantity > 0 &&
+        updateDeviceInput.quantity <= updatedDevice.device.quantity
+      ) {
+        updatedDevice = await this.cartDeviceModel
+          .findByIdAndUpdate(id, updateDeviceInput, { new: true })
+          .populate('device')
+          .session(session)
+          .exec();
+      } else {
+        throw new BadRequestException('Quantity is incorrect');
+      }
+      if (!updatedDevice) {
+        throw new BadRequestException('Device is not updated');
+      }
+      return updatedDevice.toObject<CartDeviceGQL>();
+    });
   }
 
   public async updateCartDevices(
@@ -110,7 +115,7 @@ export class CartDevicesService {
           .session(session)
           .exec();
         await this.cartsService.deleteDevicesFromCart(cartId, ids, session);
-        const cart = await this.cartsService.getCartById(cartId);
+        const cart = await this.cartsService.getCartById(cartId, session);
         return {
           ids,
           cart: !cart,

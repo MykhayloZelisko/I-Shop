@@ -4,8 +4,6 @@ import {
   inject,
   input,
   OnInit,
-  viewChild,
-  viewChildren,
 } from '@angular/core';
 import { InputComponent } from '../input/input.component';
 import { RatingControlComponent } from './components/rating-control/rating-control.component';
@@ -24,7 +22,6 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
 
 @Component({
   selector: 'app-comment-form',
-  standalone: true,
   imports: [
     InputComponent,
     RatingControlComponent,
@@ -36,12 +33,6 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentFormComponent implements OnInit {
-  public inputs = viewChildren(InputComponent);
-
-  public textarea = viewChild.required(TextareaComponent);
-
-  public ratingCtrl = viewChild.required(RatingControlComponent);
-
   public dialog = input<PopupDataInterface>();
 
   public deviceId = input.required<string>();
@@ -84,12 +75,14 @@ export class CommentFormComponent implements OnInit {
     });
   }
 
-  public sendComment(userId: string | null): void {
-    this.inputs().forEach((item: InputComponent) => {
-      item.markAsDirty();
+  public markAsDirty(): void {
+    Object.values(this.commentForm.controls).forEach((control) => {
+      control.markAsDirty();
     });
-    this.textarea().markAsDirty();
-    this.ratingCtrl().markAsDirty();
+  }
+
+  public sendComment(userId: string | null): void {
+    this.markAsDirty();
     if (this.commentForm.valid && userId) {
       const formData = this.commentForm.getRawValue();
       const comment: CreateCommentInterface = {

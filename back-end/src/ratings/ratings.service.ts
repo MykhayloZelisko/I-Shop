@@ -33,7 +33,10 @@ export class RatingsService {
     deviceId: string,
     session: ClientSession,
   ): Promise<void> {
-    const ratings = await this.ratingModel.find({ deviceId }).exec();
+    const ratings = await this.ratingModel
+      .find({ deviceId })
+      .session(session)
+      .exec();
     const totalRating = ratings.reduce((acc, rating) => acc + rating.rate, 0);
     const newRating = ratings.length ? totalRating / ratings.length : 0;
     await this.devicesService.recalculateDeviceRating(

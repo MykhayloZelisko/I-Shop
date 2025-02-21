@@ -15,7 +15,6 @@ import { CascadeCategoryInterface } from '../../../../../shared/models/interface
 
 @Component({
   selector: 'app-large-catalog',
-  standalone: true,
   imports: [SvgIconComponent, NgClass],
   templateUrl: './large-catalog.component.html',
   styleUrl: './large-catalog.component.scss',

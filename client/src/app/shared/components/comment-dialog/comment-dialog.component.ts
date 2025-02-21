@@ -15,7 +15,6 @@ import { CommentInterface } from '../../models/interfaces/comment.interface';
 
 @Component({
   selector: 'app-comment-dialog',
-  standalone: true,
   imports: [ClickOutsideDirective, SvgIconComponent, CommentFormComponent],
   templateUrl: './comment-dialog.component.html',
   styleUrl: './comment-dialog.component.scss',

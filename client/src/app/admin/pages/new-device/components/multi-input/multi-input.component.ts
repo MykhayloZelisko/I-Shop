@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   input,
@@ -23,7 +22,6 @@ import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-multi-input',
-  standalone: true,
   imports: [ReactiveFormsModule, NgStyle, NgClass, SvgIconComponent],
   templateUrl: './multi-input.component.html',
   styleUrl: './multi-input.component.scss',
@@ -37,8 +35,6 @@ export class MultiInputComponent implements OnInit {
   public multiInputForm = input.required<FormGroup<DPropertyFormInterface>>();
 
   private fb = inject(FormBuilder);
-
-  private cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.addValueCtrlAtEnd();
@@ -82,9 +78,5 @@ export class MultiInputComponent implements OnInit {
       (this.getValueCtrlByIndex(index).dirty ||
         this.getValueCtrlByIndex(index).touched)
     );
-  }
-
-  public updateState(): void {
-    this.cdr.markForCheck();
   }
 }

@@ -16,7 +16,6 @@ import { BrandActions } from '../../../../../+store/brands/actions/brand.actions
 
 @Component({
   selector: 'app-brands-list',
-  standalone: true,
   imports: [AsyncPipe, BrandItemComponent],
   templateUrl: './brands-list.component.html',
   styleUrl: './brands-list.component.scss',

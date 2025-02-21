@@ -32,10 +32,6 @@
     flex-wrap: wrap;
   }
 
-  &__field {
-    height: 78px;
-  }
-
   &__label {
     font-size: 14px;
     display: block;
@@ -44,10 +40,6 @@
   }
 
   &__input {
-    @include mixins.input-style(9px 12px);
-
-    margin-top: 8px;
-
     &--file {
       display: none;
     }
@@ -133,140 +125,5 @@
     display: flex;
     justify-content: center;
     gap: 18px;
-  }
-}
-
-:host ::ng-deep {
-  .p-select-label,
-  .p-cascadeselect-label {
-    padding: 11px 12px;
-    font-family: variables.$source;
-    font-size: 16px;
-    color: variables.$black;
-
-    &.p-placeholder {
-      color: variables.$gray-6;
-    }
-  }
-
-  .p-select-dropdown,
-  .p-cascadeselect-dropdown {
-    display: none;
-  }
-
-  .p-select,
-  .p-cascadeselect {
-    border-radius: 3px;
-    border: 1px solid variables.$brown-5;
-    width: 100%;
-    margin-top: 8px;
-
-    &:hover {
-      border-color: variables.$brown-1 !important;
-    }
-
-    &::after {
-      content: '';
-      width: 10px;
-      height: 10px;
-      background: url('/assets/images/line-angle-down-icon.svg') center center
-        no-repeat;
-      position: relative;
-      top: 15px;
-      right: 15px;
-    }
-  }
-
-  .p-focus {
-    border-color: variables.$brown-2 !important;
-  }
-
-  .p-cascadeselect .p-overlay {
-    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
-      drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
-    max-width: 525px;
-    min-width: 0 !important;
-    width: 33.33%;
-  }
-
-  .p-select-list-container {
-    border-radius: 4px;
-
-    & .p-select-list {
-      & .p-select-option {
-        padding: 8px 12px;
-        font-family: variables.$source;
-        font-size: 16px;
-        color: variables.$black;
-
-        &:not(.p-disabled).p-focus {
-          background-color: variables.$brown-4;
-        }
-
-        &:hover {
-          background-color: variables.$brown-4;
-          color: variables.$black;
-        }
-      }
-    }
-  }
-
-  .p-cascadeselect-option-text {
-    color: variables.$black;
-  }
-
-  .p-cascadeselect-overlay {
-    padding: 0;
-  }
-
-  .p-cascadeselect-list-container {
-    border-radius: 4px;
-
-    & .p-cascadeselect-option-active > .p-cascadeselect-option-content {
-      background-color: variables.$brown-4;
-    }
-
-    & .p-cascadeselect-option-active.p-focus > .p-cascadeselect-option-content {
-      background-color: variables.$brown-4;
-    }
-
-    & .p-cascadeselect-option.p-focus > .p-cascadeselect-option-content {
-      background-color: variables.$brown-4 !important;
-    }
-
-    & .p-cascadeselect-option {
-      font-family: variables.$source;
-      font-size: 16px;
-      color: variables.$black;
-    }
-  }
-
-  .p-select-list-container::-webkit-scrollbar {
-    appearance: none;
-  }
-
-  .p-select-list-container::-webkit-scrollbar:vertical {
-    width: 7px;
-    background-color: variables.$white-1;
-  }
-
-  .p-select-list-container::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    border: 2px solid variables.$white-1;
-    background-color: variables.$brown-1;
-  }
-
-  .p-select.invalid-dropdown.ng-invalid.ng-touched,
-  .invalid-dropdown.ng-invalid.ng-touched .p-cascadeselect {
-    border: 1px solid variables.$red-1 !important;
-  }
-}
-
-@media screen and (width <= 960px) {
-  :host ::ng-deep {
-    .p-overlay {
-      max-width: 100%;
-      width: 100%;
-    }
   }
 }

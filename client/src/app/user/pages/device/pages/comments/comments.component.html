@@ -1,3 +1,8 @@
+@let user = user$ | async;
+@let status = commentsStatus$ | async;
+@let comments = (comments$ | async) ?? [];
+@let dialog = dialog$ | async;
+
 @if (device$ | async; as device) {
   <div class="comments">
     <div class="comments__title">
@@ -12,71 +17,63 @@
     </div>
     <div class="comments__inner">
       <div class="comments__main">
-        @if (comments$ | async; as comments) {
-          @if (comments.length) {
-            <div class="comments__list-wrapper">
-              <div class="comments__create">
-                <p class="comments__create-text">
-                  Залиште свій відгук про цей товар
-                </p>
-                @if (user$ | async; as user) {
-                  <button
-                    class="comments__create-button"
-                    (click)="openDialog(user)"
-                  >
-                    Написати відгук
-                  </button>
-                } @else {
-                  <button
-                    class="comments__create-button"
-                    (click)="openDialog(null)"
-                  >
-                    Написати відгук
-                  </button>
-                }
-              </div>
-              <div class="comments__list">
+        @if (comments.length) {
+          <div class="comments__list-wrapper">
+            <div class="comments__create">
+              <p class="comments__create-text">
+                Залиште свій відгук про цей товар
+              </p>
+              @if (user) {
+                <button
+                  class="comments__create-button"
+                  (click)="openDialog(user)"
+                >
+                  Написати відгук
+                </button>
+              } @else {
+                <button
+                  class="comments__create-button"
+                  (click)="openDialog(null)"
+                >
+                  Написати відгук
+                </button>
+              }
+            </div>
+            <div class="comments__list">
+              @if (status) {
                 @for (comment of comments; track comment.id) {
                   <app-comment-item
                     [comment]="comment"
-                    [user$]="user$"
-                    [commentsStatus$]="commentsStatus$"
+                    [user]="user"
+                    [commentsStatus]="status"
                   />
                 }
-                @if (commentsStatus$ | async; as status) {
-                  @if (status.cursor) {
-                    <button
-                      class="comments__more"
-                      (click)="loadMore(device.id, status.cursor)"
-                    >
-                      Показати ще
-                    </button>
-                  }
+                @if (status.cursor) {
+                  <button
+                    class="comments__more"
+                    (click)="loadMore(device.id, status.cursor)"
+                  >
+                    Показати ще
+                  </button>
                 }
-              </div>
+              }
             </div>
-          } @else {
-            @if (user$ | async; as user) {
-              <app-comment-form [deviceId]="device.id" [userId]="user.id" />
-            } @else {
-              <app-comment-form [deviceId]="device.id" [userId]="null" />
-            }
-          }
+          </div>
+        } @else if (user) {
+          <app-comment-form [deviceId]="device.id" [userId]="user.id" />
+        } @else {
+          <app-comment-form [deviceId]="device.id" [userId]="null" />
         }
       </div>
       <app-device-aside class="comments__aside" [device]="device" />
     </div>
   </div>
 
-  @if (user$ | async; as user) {
-    @if (dialog$ | async; as dialog) {
-      @if (dialog.popupType === popupEnum.NewComment) {
-        <app-comment-dialog
-          [dialog]="dialog"
-          [deviceId]="device.id"
-          [userId]="user.id"
-        />
-      }
-    }
+  @if (user && dialog && dialog.popupType === popupEnum.NewComment) {
+    <app-comment-dialog
+      [dialog]="dialog"
+      [deviceId]="device.id"
+      [userId]="user.id"
+    />
   }
 }

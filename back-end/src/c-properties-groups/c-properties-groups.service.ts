@@ -38,52 +38,73 @@ export class CPropertiesGroupsService {
   public async getFilteredCPropertiesGroups(
     ids: string[],
   ): Promise<CPropertiesGroupGQL[]> {
-    const groups = await this.cPropertiesGroupModel
-      .find({
-        _id: { $nin: ids },
-      })
-      .exec();
+    return this.transactionsService.execute<CPropertiesGroupGQL[]>(
+      async (session) => {
+        const groups = await this.cPropertiesGroupModel
+          .find({
+            _id: { $nin: ids },
+          })
+          .session(session)
+          .exec();
 
-    return Promise.all(
-      groups.map(async (group: CPropertiesGroupDocument) => {
-        const hasProperties = await this.cPropertiesService.hasGroupProperties(
-          group.id,
+        return Promise.all(
+          groups.map(async (group: CPropertiesGroupDocument) => {
+            const hasProperties =
+              await this.cPropertiesService.hasGroupProperties(
+                group.id,
+                session,
+              );
+            return {
+              ...group.toObject<CPropertiesGroupGQL>(),
+              hasProperties,
+            };
+          }),
         );
-        return {
-          ...group.toObject<CPropertiesGroupGQL>(),
-          hasProperties,
-        };
-      }),
+      },
     );
   }
 
   public async getCPGroupsByCategoryId(
     categoryId: string,
   ): Promise<CPropertiesGroupGQL[]> {
-    const groups = await this.cPropertiesGroupModel.find({ categoryId }).exec();
+    return this.transactionsService.execute<CPropertiesGroupGQL[]>(
+      async (session) => {
+        const groups = await this.cPropertiesGroupModel
+          .find({ categoryId })
+          .session(session)
+          .exec();
 
-    return Promise.all(
-      groups.map(async (group: CPropertiesGroupDocument) => {
-        const hasProperties = await this.cPropertiesService.hasGroupProperties(
-          group.id,
+        return Promise.all(
+          groups.map(async (group: CPropertiesGroupDocument) => {
+            const hasProperties =
+              await this.cPropertiesService.hasGroupProperties(
+                group.id,
+                session,
+              );
+            return {
+              ...group.toObject<CPropertiesGroupGQL>(),
+              hasProperties,
+            };
+          }),
         );
-        return {
-          ...group.toObject<CPropertiesGroupGQL>(),
-          hasProperties,
-        };
-      }),
+      },
     );
   }
 
   public async getCPropertiesGroupById(
     id: string,
+    session: ClientSession,
   ): Promise<CPropertiesGroupGQL> {
-    const group = await this.cPropertiesGroupModel.findById(id).exec();
+    const group = await this.cPropertiesGroupModel
+      .findById(id)
+      .session(session)
+      .exec();
     if (!group) {
       throw new NotFoundException('Group not found');
     }
     const hasProperties = await this.cPropertiesService.hasGroupProperties(
       group.id,
+      session,
     );
     return {
       ...group.toObject<CPropertiesGroupGQL>(),
@@ -91,9 +112,13 @@ export class CPropertiesGroupsService {
     };
   }
 
-  public async hasCategoryGroups(categoryId: string): Promise<boolean> {
+  public async hasCategoryGroups(
+    categoryId: string,
+    session: ClientSession,
+  ): Promise<boolean> {
     const countGroups = await this.cPropertiesGroupModel
       .countDocuments({ categoryId })
+      .session(session)
       .exec();
     return countGroups > 0;
   }
@@ -101,79 +126,87 @@ export class CPropertiesGroupsService {
   public async createCPropertiesGroups(
     createCPropertiesGroupInputs: CreateCPropertiesGroupInput[],
   ): Promise<CPropertiesGroupGQL[]> {
-    const categoryId = createCPropertiesGroupInputs[0].categoryId;
-    const subcategoriesIds =
-      await this.categoriesService.getSubCategoriesIds(categoryId);
-    if (subcategoriesIds.length > 1) {
-      throw new ConflictException(
-        'A category cannot include properties and subcategories',
-      );
-    }
+    return this.transactionsService.execute<CPropertiesGroupGQL[]>(
+      async (session) => {
+        const categoryId = createCPropertiesGroupInputs[0].categoryId;
+        const subcategoriesIds =
+          await this.categoriesService.getSubCategoriesIds(categoryId, session);
+        if (subcategoriesIds.length > 1) {
+          throw new ConflictException(
+            'A category cannot include properties and subcategories',
+          );
+        }
 
-    const groupNames = createCPropertiesGroupInputs.map(
-      (input) => input.groupName,
+        try {
+          const createdGroups = await this.cPropertiesGroupModel.insertMany(
+            createCPropertiesGroupInputs,
+            { session },
+          );
+          return createdGroups.map((group: CPropertiesGroupDocument) => ({
+            ...group.toObject<CPropertiesGroupGQL>(),
+            hasProperties: false,
+          }));
+        } catch (error) {
+          if (error.code === 11000) {
+            throw new ConflictException(
+              'A category cannot have two groups with the same name',
+            );
+          }
+          throw error;
+        }
+      },
     );
-
-    const hasDuplicates = new Set(groupNames).size !== groupNames.length;
-
-    const existedGroups = await this.cPropertiesGroupModel
-      .find({
-        categoryId,
-        groupName: { $in: groupNames },
-      })
-      .exec();
-
-    if (existedGroups.length || hasDuplicates) {
-      throw new ConflictException(
-        'A category cannot have two groups with the same name',
-      );
-    }
-
-    const createdGroups = await this.cPropertiesGroupModel.insertMany(
-      createCPropertiesGroupInputs,
-    );
-    return createdGroups.map((group: CPropertiesGroupDocument) => ({
-      ...group.toObject<CPropertiesGroupGQL>(),
-      hasProperties: false,
-    }));
   }
 
   public async updateCPropertiesGroup(
     id: string,
     updateCPropertiesGroupInput: UpdateCPropertiesGroupInput,
   ): Promise<CPropertiesGroupGQL> {
-    const group = await this.cPropertiesGroupModel
-      .findOne({ groupName: updateCPropertiesGroupInput.groupName })
-      .exec();
-    if (group && group.id !== id) {
-      throw new ConflictException(
-        'A category cannot have two groups with the same name',
-      );
-    }
-    const updatedGroup = await this.cPropertiesGroupModel
-      .findByIdAndUpdate(
-        id,
-        { groupName: updateCPropertiesGroupInput.groupName },
-        { new: true },
-      )
-      .exec();
-    if (updatedGroup) {
-      const hasProperties = await this.cPropertiesService.hasGroupProperties(
-        updatedGroup.id,
-      );
-      return { ...updatedGroup.toObject<CPropertiesGroupGQL>(), hasProperties };
-    }
-    throw new BadRequestException('A group is not updated');
+    return this.transactionsService.execute<CPropertiesGroupGQL>(
+      async (session) => {
+        try {
+          const updatedGroup = await this.cPropertiesGroupModel
+            .findByIdAndUpdate(
+              id,
+              { groupName: updateCPropertiesGroupInput.groupName },
+              { new: true },
+            )
+            .session(session)
+            .exec();
+
+          if (updatedGroup) {
+            const hasProperties =
+              await this.cPropertiesService.hasGroupProperties(
+                updatedGroup.id,
+                session,
+              );
+            return {
+              ...updatedGroup.toObject<CPropertiesGroupGQL>(),
+              hasProperties,
+            };
+          }
+
+          throw new BadRequestException('A group is not updated');
+        } catch (error) {
+          if (error.code === 11000) {
+            throw new ConflictException(
+              'A category cannot have two groups with the same name',
+            );
+          }
+          throw error;
+        }
+      },
+    );
   }
 
   public async deleteCPropertiesGroup(id: string): Promise<Deleted> {
-    const isGroupUsed = await this.devicesService.checkGroup(id);
-    if (isGroupUsed) {
-      throw new ForbiddenException(
-        'This group is used in devices and cannot be deleted',
-      );
-    }
     return this.transactionsService.execute<Deleted>(async (session) => {
+      const isGroupUsed = await this.devicesService.checkGroup(id, session);
+      if (isGroupUsed) {
+        throw new ForbiddenException(
+          'This group is used in devices and cannot be deleted',
+        );
+      }
       const group = await this.cPropertiesGroupModel
         .findByIdAndDelete(id)
         .session(session)
@@ -186,6 +219,7 @@ export class CPropertiesGroupsService {
           );
         const category = await this.categoriesService.getCategoryById(
           group.categoryId,
+          session,
         );
         return {
           ...ids,
@@ -194,7 +228,7 @@ export class CPropertiesGroupsService {
           group: null,
         };
       } else {
-        throw new NotFoundException('Property not found');
+        throw new NotFoundException('Group not found');
       }
     });
   }
@@ -205,6 +239,7 @@ export class CPropertiesGroupsService {
   ): Promise<Deleted> {
     const groups = await this.cPropertiesGroupModel
       .find({ categoryId: { $in: categoriesIds } })
+      .session(session)
       .exec();
     const groupsIds: string[] = groups.map(
       (group: CPropertiesGroupDocument) => group.id,
@@ -226,13 +261,25 @@ export class CPropertiesGroupsService {
     };
   }
 
-  public async getGroupsIdsByCategoryId(categoryId: string): Promise<string[]> {
-    const groups = await this.cPropertiesGroupModel.find({ categoryId }).exec();
+  public async getGroupsIdsByCategoryId(
+    categoryId: string,
+    session: ClientSession,
+  ): Promise<string[]> {
+    const groups = await this.cPropertiesGroupModel
+      .find({ categoryId })
+      .session(session)
+      .exec();
     return groups.map((group) => group.id);
   }
 
-  public async getCategoryId(id: string): Promise<string> {
-    const group = await this.cPropertiesGroupModel.findById(id).exec();
+  public async getCategoryId(
+    id: string,
+    session: ClientSession,
+  ): Promise<string> {
+    const group = await this.cPropertiesGroupModel
+      .findById(id)
+      .session(session)
+      .exec();
     if (!group) {
       throw new NotFoundException('Group not found');
     }

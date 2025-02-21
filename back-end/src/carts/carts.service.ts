@@ -22,7 +22,8 @@ export class CartsService {
     @InjectModel(Cart.name)
     private cartModel: Model<CartDocument>,
     private cartDevicesService: CartDevicesService,
-    @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
     private transactionsService: TransactionsService,
   ) {}
 
@@ -38,7 +39,7 @@ export class CartsService {
       const userId = user ? user.id.toString() : undefined;
       let newCart: CartDocument;
       if (userId) {
-        const userDB = await this.usersService.getUserById(userId);
+        const userDB = await this.usersService.getUserById(userId, session);
         [newCart] = await this.cartModel.create(
           [
             {
@@ -69,8 +70,11 @@ export class CartsService {
     });
   }
 
-  public async getCartById(id: string): Promise<CartDocument | null> {
-    return this.cartModel.findById(id).exec();
+  public async getCartById(
+    id: string,
+    session: ClientSession,
+  ): Promise<CartDocument | null> {
+    return this.cartModel.findById(id).session(session).exec();
   }
 
   public async addDeviceToCart(
@@ -88,34 +92,36 @@ export class CartsService {
     }
   }
 
-  public async updateCartPrices(id: string): Promise<CartGQL> {
+  public async updateCartPrices(
+    id: string,
+    session: ClientSession,
+  ): Promise<CartGQL> {
     const cart = await this.cartModel
       .findById(id)
       .populate({
         path: 'devices',
         populate: { path: 'device' },
       })
+      .session(session)
       .exec();
 
     if (!cart) {
       throw new NotFoundException('Cart not found');
     }
 
-    return this.transactionsService.execute<CartGQL>(async (session) => {
-      const updatePromises = cart.devices.map(
-        async (cartDevice: CartDeviceDocument) => {
-          if (cartDevice.device.price !== cartDevice.priceAtAdd) {
-            cartDevice.priceAtAdd = cartDevice.device.price;
-            return cartDevice.save({ session });
-          }
-          return cartDevice;
-        },
-      );
+    const updatePromises = cart.devices.map(
+      async (cartDevice: CartDeviceDocument) => {
+        if (cartDevice.device.price !== cartDevice.priceAtAdd) {
+          cartDevice.priceAtAdd = cartDevice.device.price;
+          return cartDevice.save({ session });
+        }
+        return cartDevice;
+      },
+    );
 
-      cart.devices = await Promise.all(updatePromises);
+    cart.devices = await Promise.all(updatePromises);
 
-      return cart.toObject<CartGQL>();
-    });
+    return cart.toObject<CartGQL>();
   }
 
   public async deleteDevicesFromCart(
@@ -144,31 +150,34 @@ export class CartsService {
   }
 
   public async getGuestCart(id: string): Promise<CartGQL | null> {
-    try {
-      const isGuestCart = await this.cartModel
-        .exists({ _id: id, isGuest: true })
-        .exec();
-      if (isGuestCart) {
-        return this.updateCartPrices(id);
+    return this.transactionsService.execute<CartGQL | null>(async (session) => {
+      try {
+        const isGuestCart = await this.cartModel
+          .exists({ _id: id, isGuest: true })
+          .session(session)
+          .exec();
+        if (isGuestCart) {
+          return this.updateCartPrices(id, session);
+        }
+        return null;
+      } catch {
+        throw new InternalServerErrorException('Something went wrong');
       }
-      return null;
-    } catch {
-      throw new InternalServerErrorException('Something went wrong');
-    }
+    });
   }
 
   public async deleteOldCarts(expirationDate: Date): Promise<void> {
-    const carts = await this.cartModel
-      .find({
-        createdAt: { $lt: expirationDate },
-        isGuest: true,
-      })
-      .exec();
-    const deviceIds = carts
-      .map((cart) => cart.devices)
-      .flat()
-      .map((id) => id.toString());
     return this.transactionsService.execute<void>(async (session) => {
+      const carts = await this.cartModel
+        .find({
+          createdAt: { $lt: expirationDate },
+          isGuest: true,
+        })
+        .exec();
+      const deviceIds = carts
+        .map((cart) => cart.devices)
+        .flat()
+        .map((id) => id.toString());
       await this.cartDevicesService.deleteDevicesFromManyCarts(
         deviceIds,
         session,

@@ -19,3 +19,6 @@ Thumbs.db
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
+
+# env
+docker-config

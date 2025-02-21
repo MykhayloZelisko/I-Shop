@@ -1,20 +1,44 @@
+@let maskSignal = mask();
+@let isInvalidWithErrors = isInvalid() && withErrors();
+
 <div class="input" [ngStyle]="setHeight()">
   <label class="input__label" [for]="id">{{ label() }}</label>
-  <input
-    #input
-    [id]="id"
-    class="input__input"
-    [ngClass]="{
-      'input__input--invalid': isInvalid() && withErrors(),
-    }"
-    [type]="inputType()"
-    [placeholder]="placeholder()"
-    [value]="internalValue || ''"
-    (input)="changeValue($event)"
-    (blur)="onBlur()"
-    (focus)="onFocus()"
-  />
-  @if (isInvalid() && withErrors()) {
+  @if (maskSignal) {
+    <input
+      [id]="id"
+      class="input__input"
+      [ngClass]="{
+        'input__input--invalid': isInvalidWithErrors,
+      }"
+      [type]="inputType()"
+      [formControl]="control"
+      [placeholder]="placeholder()"
+      [mask]="maskSignal"
+      [prefix]="prefix()"
+      [showMaskTyped]="showMaskTyped()"
+      [thousandSeparator]="thousandSeparator()"
+      [dropSpecialCharacters]="dropSpecialCharacters()"
+      [decimalMarker]="decimalMarker()"
+      (input)="changeValue()"
+      (blur)="onBlur()"
+      (focus)="onFocus()"
+    />
+  } @else {
+    <input
+      [id]="id"
+      class="input__input"
+      [ngClass]="{
+        'input__input--invalid': isInvalidWithErrors,
+      }"
+      [type]="inputType()"
+      [formControl]="control"
+      [placeholder]="placeholder()"
+      (input)="changeValue()"
+      (blur)="onBlur()"
+      (focus)="onFocus()"
+    />
+  }
+  @if (isInvalidWithErrors) {
     <p class="input__error">{{ showMessage() }}</p>
   }
 </div>

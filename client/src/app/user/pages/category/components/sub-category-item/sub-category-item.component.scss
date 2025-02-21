@@ -3,11 +3,15 @@
 .sub-category-item {
   padding-bottom: 10px;
 
-  &__image {
+  &__image-wrapper {
+    position: relative;
     aspect-ratio: 1;
     width: 100%;
-    object-fit: contain;
     margin-bottom: 10px;
+  }
+
+  &__image {
+    object-fit: contain;
   }
 
   &__link {

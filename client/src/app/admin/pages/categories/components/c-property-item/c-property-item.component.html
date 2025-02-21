@@ -1,4 +1,6 @@
-@if ((currentPropertyId$ | async) === property().id) {
+@let propertySignal = property();
+
+@if ((currentPropertyId$ | async) === propertySignal.id) {
   <div class="c-property-item--editable">
     <input
       class="c-property-item__input"
@@ -28,7 +30,7 @@
 } @else {
   <div class="c-property-item">
     <p class="c-property-item__name">
-      {{ property().propertyName }}
+      {{ propertySignal.propertyName }}
     </p>
     <div class="c-property-item__buttons">
       <button class="c-property-item__button" (click)="editProperty()">

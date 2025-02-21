@@ -1,3 +1,5 @@
+@let isCartDevice = isCartDevice$ | async;
+
 @if (device$ | async; as device) {
   <div class="about-device">
     <app-device-carousel [carousel]="device.images" />
@@ -11,7 +13,7 @@
       <div class="about-device__buying">
         <span class="about-device__price">{{ device.price }} &#8372;</span>
         <div class="about-device__buttons--large">
-          @if (isCartDevice$ | async) {
+          @if (isCartDevice) {
             <button
               class="about-device__button about-device__button--cart"
               (click)="openCart()"
@@ -49,7 +51,7 @@
         </div>
       </div>
       <div class="about-device__buttons--small">
-        @if (isCartDevice$ | async) {
+        @if (isCartDevice) {
           <button
             class="about-device__button about-device__button--cart"
             (click)="openCart()"

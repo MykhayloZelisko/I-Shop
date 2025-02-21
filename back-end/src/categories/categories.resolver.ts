@@ -9,7 +9,7 @@ import { UpdateCategoryInput } from './inputs/update-category.input';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id/parse-object-id.pipe';
 import { Deleted } from '../common/models/deleted.model';
 
-@Resolver(() => Category)
+@Resolver()
 export class CategoriesResolver {
   public constructor(private categoriesService: CategoriesService) {}
 

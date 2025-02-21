@@ -1,0 +1,118 @@
+@use 'variables';
+@use 'mixins';
+
+.cascade-select {
+  &__label {
+    font-size: 14px;
+    display: block;
+    font-family: variables.$source;
+    font-weight: 600;
+  }
+
+  &__error {
+    font-family: variables.$source;
+    font-size: 12px;
+    color: variables.$red-1;
+    font-weight: 700;
+  }
+}
+
+:host ::ng-deep .p-cascadeselect.ng-dirty {
+  border: 1px solid variables.$brown-5 !important;
+}
+
+:host ::ng-deep {
+  .p-cascadeselect-label {
+    padding: 11px 12px;
+    font-family: variables.$source;
+    font-size: 16px;
+    color: variables.$black;
+
+    &.p-placeholder {
+      color: variables.$gray-6 !important;
+    }
+  }
+
+  .p-cascadeselect-dropdown {
+    display: none;
+  }
+
+  .p-cascadeselect {
+    border-radius: 3px;
+    border: 1px solid variables.$brown-5;
+    width: 100%;
+    margin-top: 8px;
+
+    &:hover {
+      border-color: variables.$brown-1 !important;
+    }
+
+    &::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: url('/assets/images/line-angle-down-icon.svg') center center
+      no-repeat;
+      position: relative;
+      top: 15px;
+      right: 15px;
+    }
+  }
+
+  .p-focus {
+    border-color: variables.$brown-2 !important;
+  }
+
+  .p-cascadeselect .p-overlay {
+    filter: drop-shadow(0 1px 3px rgb(29 30 38 / 10%))
+    drop-shadow(0 3px 6px rgb(29 30 38 / 10%));
+    max-width: 525px;
+    min-width: 0 !important;
+    width: 33.33%;
+  }
+
+  .p-cascadeselect-option-text {
+    color: variables.$black;
+  }
+
+  .p-cascadeselect-overlay {
+    padding: 0;
+  }
+
+  .p-cascadeselect-list-container {
+    border-radius: 4px;
+
+    & .p-cascadeselect-option-active > .p-cascadeselect-option-content {
+      background-color: variables.$brown-4;
+    }
+
+    & .p-cascadeselect-option-active.p-focus > .p-cascadeselect-option-content {
+      background-color: variables.$brown-4;
+    }
+
+    & .p-cascadeselect-option.p-focus > .p-cascadeselect-option-content {
+      background-color: variables.$brown-4 !important;
+    }
+
+    & .p-cascadeselect-option {
+      font-family: variables.$source;
+      font-size: 16px;
+      color: variables.$black;
+    }
+  }
+
+  .cascade-select {
+    &--invalid.ng-invalid .p-cascadeselect {
+      border: 1px solid variables.$red-1 !important;
+    }
+  }
+}
+
+@media screen and (width <= 960px) {
+  :host ::ng-deep {
+    .p-overlay {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}

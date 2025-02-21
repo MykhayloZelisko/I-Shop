@@ -8,6 +8,7 @@
           name="rating"
           class="rating-control__radio"
           type="radio"
+          [formControl]="control"
           (change)="changeRating(ratingValue)"
         />
         <label

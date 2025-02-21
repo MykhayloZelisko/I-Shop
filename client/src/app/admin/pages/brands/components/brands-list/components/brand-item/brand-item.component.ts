@@ -18,7 +18,6 @@ import { requiredValidator } from '../../../../../../../shared/utils/validators'
 
 @Component({
   selector: 'app-brand-item',
-  standalone: true,
   imports: [AsyncPipe, SvgIconComponent, ReactiveFormsModule],
   templateUrl: './brand-item.component.html',
   styleUrl: './brand-item.component.scss',

@@ -26,7 +26,6 @@ import { CPropertyActions } from '../../../+store/c-properties/actions/c-propert
 
 @Component({
   selector: 'app-categories',
-  standalone: true,
   imports: [
     Tree,
     AsyncPipe,

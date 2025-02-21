@@ -11,7 +11,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-rating',
-  standalone: true,
   imports: [SvgIconComponent, RouterLink, NgClass],
   templateUrl: './rating.component.html',
   styleUrl: './rating.component.scss',

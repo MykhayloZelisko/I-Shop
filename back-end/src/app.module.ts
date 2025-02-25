@@ -21,6 +21,7 @@ import { CommentsModule } from './comments/comments.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { CartsModule } from './carts/carts.module';
 import { CartDevicesModule } from './cart-devices/cart-devices.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { CartDevicesModule } from './cart-devices/cart-devices.module';
     RatingsModule,
     CartsModule,
     CartDevicesModule,
+    OrdersModule,
   ],
 })
 export class AppModule {}

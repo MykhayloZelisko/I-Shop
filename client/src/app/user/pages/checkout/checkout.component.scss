@@ -1,0 +1,26 @@
+@use 'variables';
+@use 'mixins';
+
+.checkout {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+
+  &__inner {
+    padding: 0 8px;
+    display: flex;
+    gap: 24px;
+  }
+
+  &__main {
+    width: 100%;
+  }
+
+  &__title {
+    font-family: variables.$source;
+    font-size: 32px;
+    font-weight: bold;
+  }
+}

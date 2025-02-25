@@ -1,0 +1,25 @@
+@use 'variables';
+@use 'mixins';
+
+.contact-form {
+  &__group {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__field {
+    flex: 1;
+  }
+
+  &__button {
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      8px 24px,
+      variables.$brown-2,
+      true
+    );
+
+    margin-top: 12px;
+  }
+}

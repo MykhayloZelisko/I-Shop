@@ -63,7 +63,10 @@
                 <span class="cart__total-text">Разом</span>
                 <span class="cart__total-price">{{ totalPrice }} &#8372;</span>
               </div>
-              <button class="cart__button cart__button--order">
+              <button
+                class="cart__button cart__button--order"
+                (click)="checkoutOrder()"
+              >
                 Оформити замовлення
               </button>
             </div>

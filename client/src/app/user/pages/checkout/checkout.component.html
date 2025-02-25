@@ -1,0 +1,18 @@
+<div class="checkout">
+  <h2 class="checkout__title">Оформлення замовлення</h2>
+  <div class="checkout__inner" [formGroup]="checkoutForm">
+    <div class="checkout__main">
+      @if (user$ | async) {
+        <app-checkout-contact-info
+          [contactInfoForm]="checkoutForm.controls.contactInfo"
+        />
+      } @else {
+        <app-checkout-login />
+      }
+      <div>Місто</div>
+      <app-checkout-order-list />
+      <app-checkout-order-recipient />
+    </div>
+    <app-checkout-aside />
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="checkout-contact-info">
+  <h4 class="checkout-contact-info__title">Ваші контактні дані</h4>
+  <app-contact-form
+    [contactInfoForm]="contactInfoForm()"
+    [isFormExpanded]="isFormExpanded"
+    (toggleForm)="toggle(false)"
+  />
+  @if (!isFormExpanded) {
+    <button class="checkout-contact-info__button" (click)="toggle(true)">
+      <div class="checkout-contact-info__button-inner">
+        <svg-icon
+          class="checkout-contact-info__icon"
+          src="assets/images/male-icon.svg"
+        ></svg-icon>
+        <span>
+          {{ contactInfoForm().getRawValue().firstName }}
+          {{ contactInfoForm().getRawValue().lastName }}
+        </span>
+      </div>
+      <span class="checkout-contact-info__edit">Змінити</span>
+    </button>
+  }
+</div>

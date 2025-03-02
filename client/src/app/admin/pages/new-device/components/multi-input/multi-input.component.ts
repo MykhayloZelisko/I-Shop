@@ -45,7 +45,7 @@ export class MultiInputComponent implements OnInit {
   }
 
   public getValueArrayCtrl(): FormArray<FormControl<string>> {
-    return this.multiInputForm().get('value') as FormArray<FormControl<string>>;
+    return this.multiInputForm().controls.value;
   }
 
   public getValueCtrlByIndex(index: number): FormControl<string> {

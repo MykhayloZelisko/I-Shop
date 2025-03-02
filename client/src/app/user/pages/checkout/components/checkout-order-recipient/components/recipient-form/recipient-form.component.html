@@ -1,0 +1,45 @@
+<div class="recipient-form" [formGroup]="recipientForm()">
+  <div class="recipient-form__group">
+    <app-input
+      class="recipient-form__field"
+      label="Прізвище"
+      placeholder="Введіть прізвище"
+      formControlName="lastName"
+      [withErrors]="true"
+    />
+    <app-input
+      class="recipient-form__field"
+      label="Ім'я"
+      placeholder="Введіть ім'я"
+      formControlName="firstName"
+      [withErrors]="true"
+    />
+  </div>
+  <div class="recipient-form__group">
+    <app-input
+      class="recipient-form__field"
+      label="По батькові"
+      placeholder=""
+      formControlName="patronymic"
+      [withErrors]="true"
+    />
+    <app-input
+      class="recipient-form__field"
+      label="Мобільний телефон"
+      placeholder="+380 (XX) XXX-XX-XX"
+      formControlName="phone"
+      [withErrors]="true"
+      mask="(00) 000-00-00"
+      prefix="+380 "
+      [showMaskTyped]="true"
+      [dropSpecialCharacters]="true"
+    />
+  </div>
+  <button
+    class="recipient-form__button"
+    [disabled]="recipientForm().invalid"
+    (click)="collapseForm()"
+  >
+    Згорнути
+  </button>
+</div>

@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, Observable, Subject, takeUntil } from 'rxjs';
 import { UserInterface } from '../../../shared/models/interfaces/user.interface';
 import { Store } from '@ngrx/store';
 import { State } from '../../../+store/reducers';
@@ -16,10 +16,16 @@ import { CheckoutContactInfoComponent } from './components/checkout-contact-info
 import { CheckoutLoginComponent } from './components/checkout-login/checkout-login.component';
 import { CheckoutOrderListComponent } from './components/checkout-order-list/checkout-order-list.component';
 import { CheckoutOrderRecipientComponent } from './components/checkout-order-recipient/checkout-order-recipient.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   CheckoutFormInterface,
   ContactInfoFormInterface,
+  OrderedDeviceFormInterface,
   RecipientFormInterface,
 } from '../../../shared/models/interfaces/checkout-form.interface';
 import {
@@ -34,6 +40,12 @@ import {
   REG_NAME,
   REG_PHONE,
 } from '../../../shared/models/constants/reg-exp-patterns';
+import { SvgIconComponent } from 'angular-svg-icon';
+import { CartDeviceInterface } from '../../../shared/models/interfaces/cart-device.interface';
+import {
+  selectAllCDevices,
+  selectTotalPrice,
+} from '../../../+store/cart/selectors/cart.selectors';
 
 @Component({
   selector: 'app-checkout',
@@ -45,6 +57,7 @@ import {
     CheckoutOrderListComponent,
     CheckoutOrderRecipientComponent,
     ReactiveFormsModule,
+    SvgIconComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -52,6 +65,10 @@ import {
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   public user$!: Observable<UserInterface | null>;
+
+  public totalPrice$!: Observable<number>;
+
+  public devices$!: Observable<CartDeviceInterface[]>;
 
   public checkoutForm!: FormGroup<CheckoutFormInterface>;
 
@@ -62,11 +79,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   public ngOnInit(): void {
-    this.initForm(null);
-    this.user$ = this.store.select(selectUser).pipe(
-      takeUntil(this.destroy$),
-      tap((user) => this.initForm(user)),
-    );
+    this.initForm(null, 0, []);
+    this.user$ = this.store.select(selectUser);
+    this.totalPrice$ = this.store.select(selectTotalPrice);
+    this.devices$ = this.store.select(selectAllCDevices);
+    combineLatest([this.user$, this.totalPrice$, this.devices$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([user, totalPrice, devices]) =>
+        this.initForm(user, totalPrice, devices),
+      );
   }
 
   public ngOnDestroy(): void {
@@ -74,7 +95,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public initForm(user: UserInterface | null): void {
+  public initForm(
+    user: UserInterface | null,
+    totalPrice: number,
+    devices: CartDeviceInterface[],
+  ): void {
     this.checkoutForm = this.fb.group<CheckoutFormInterface>({
       contactInfo: this.fb.group<ContactInfoFormInterface>({
         phone: this.fb.nonNullable.control<string>(user ? user.phone : '', [
@@ -123,8 +148,42 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             namePatternValidator(REG_NAME),
           ],
         ),
-        patronymic: this.fb.nonNullable.control<string>('', []),
+        patronymic: this.fb.nonNullable.control<string>(
+          user ? user.patronymic : '',
+          [],
+        ),
       }),
+      totalPrice: this.fb.nonNullable.control<number>(totalPrice),
+      devices: this.fb.nonNullable.array<FormGroup<OrderedDeviceFormInterface>>(
+        [],
+      ),
     });
+    for (const device of devices) {
+      this.addDeviceCtrl(device);
+    }
+  }
+
+  public createDeviceCtrl(
+    device: CartDeviceInterface,
+  ): FormGroup<OrderedDeviceFormInterface> {
+    return this.fb.group({
+      id: this.fb.nonNullable.control<string>(device.device.id),
+      priceAtAdd: this.fb.nonNullable.control<number>(device.priceAtAdd),
+      quantity: this.fb.nonNullable.control<number>(device.quantity),
+    });
+  }
+
+  public getDevicesArrayCtrl(): FormArray<
+    FormGroup<OrderedDeviceFormInterface>
+  > {
+    return this.checkoutForm.controls.devices;
+  }
+
+  public addDeviceCtrl(device: CartDeviceInterface): void {
+    this.getDevicesArrayCtrl().push(this.createDeviceCtrl(device));
+  }
+
+  public createOrder(): void {
+    console.log(this.checkoutForm.getRawValue());
   }
 }

@@ -1,0 +1,31 @@
+@let deviceSignal = device();
+
+<div class="checkout-list-item">
+  <a
+    class="checkout-list-item__image-wrapper"
+    [routerLink]="['..', 'devices', deviceSignal.device.id]"
+  >
+    <img
+      class="checkout-list-item__image"
+      [ngSrc]="deviceSignal.device.images[0]"
+      [alt]="deviceSignal.device.deviceName"
+      fill
+    />
+  </a>
+  <div class="checkout-list-item__text-wrapper">
+    <a
+      class="checkout-list-item__link"
+      [routerLink]="['..', 'devices', deviceSignal.device.id]"
+      >{{ deviceSignal.device.deviceName }}</a
+    >
+    <div class="checkout-list-item__price-wrapper">
+      <p class="checkout-list-item__quantity">
+        {{ deviceSignal.priceAtAdd }} &#8372; &#215;
+        {{ deviceSignal.quantity }}од.
+      </p>
+      <p class="checkout-list-item__price">
+        {{ deviceSignal.priceAtAdd * deviceSignal.quantity }} &#8372;
+      </p>
+    </div>
+  </div>
+</div>

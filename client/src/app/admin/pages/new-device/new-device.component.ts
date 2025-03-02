@@ -239,21 +239,17 @@ export class NewDeviceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getImagesCtrl(): FormArray<FormControl<File>> {
-    return this.newDeviceForm.get('images') as FormArray<FormControl<File>>;
+    return this.newDeviceForm.controls.images;
   }
 
   public getBase64Ctrl(): FormArray<FormControl<string>> {
-    return this.newDeviceForm.get('base64images') as FormArray<
-      FormControl<string>
-    >;
+    return this.newDeviceForm.controls.base64images;
   }
 
   public getPropertiesCtrl(
     index: number,
   ): FormArray<FormGroup<DPropertyFormInterface>> {
-    return this.getGroupsCtrl().at(index).get('properties') as FormArray<
-      FormGroup<DPropertyFormInterface>
-    >;
+    return this.getGroupsCtrl().at(index).controls.properties;
   }
 
   public addPropertyCtrl(
@@ -280,9 +276,7 @@ export class NewDeviceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getGroupsCtrl(): FormArray<FormGroup<DPropertiesGroupFormInterface>> {
-    return this.newDeviceForm.get('groups') as FormArray<
-      FormGroup<DPropertiesGroupFormInterface>
-    >;
+    return this.newDeviceForm.controls.groups;
   }
 
   public addGroupCtrl(group: GPTreeInterface): void {

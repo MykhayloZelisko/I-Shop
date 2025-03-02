@@ -1,1 +1,17 @@
-<p>checkout-order-list works!</p>
+<div class="checkout-order-list">
+  <div class="checkout-order-list__header">
+    <h3 class="checkout-order-list__title">Замовлення</h3>
+    <p class="checkout-order-list__total">
+      на суму:
+      <span class="checkout-order-list__price">{{ totalPrice() }} &#8372;</span>
+    </p>
+  </div>
+  <div class="checkout-order-list__list">
+    @for (device of devices(); track device.id) {
+      <app-checkout-list-item
+        class="checkout-order-list__item"
+        [device]="device"
+      ></app-checkout-list-item>
+    }
+  </div>
+</div>

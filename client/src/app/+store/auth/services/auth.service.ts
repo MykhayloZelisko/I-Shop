@@ -51,6 +51,7 @@ export class AuthService {
               email
               firstName
               lastName
+              patronymic
               phone
               roles {
                 id
@@ -122,6 +123,7 @@ export class AuthService {
               email
               firstName
               lastName
+              patronymic
               phone
               roles {
                 id

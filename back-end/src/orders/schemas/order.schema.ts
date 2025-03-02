@@ -3,6 +3,7 @@ import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { User } from '../../users/schemas/user.schema';
 import { OrderStatusEnum } from '../../common/enums/order-status.enum';
 import { OrderedDevice } from './ordered-device.schema';
+import { Recipient } from './recipient.schema';
 
 export type OrderDocument = HydratedDocument<Order>;
 
@@ -23,6 +24,9 @@ export class Order {
     default: OrderStatusEnum.PendingConfirmation,
   })
   public status: OrderStatusEnum;
+
+  @Prop({ type: Recipient })
+  public recipient: Recipient;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

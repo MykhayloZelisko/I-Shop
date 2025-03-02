@@ -17,6 +17,7 @@ import { Store } from '@ngrx/store';
 import { State } from '../../../../../+store/reducers';
 import { PopupActions } from '../../../../../+store/popup/actions/popup.actions';
 import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-cart-device',
@@ -25,6 +26,7 @@ import { CartActions } from '../../../../../+store/cart/actions/cart.actions';
     CheckboxComponent,
     SvgIconComponent,
     NgxMaskDirective,
+    NgOptimizedImage,
   ],
   templateUrl: './cart-device.component.html',
   styleUrl: './cart-device.component.scss',

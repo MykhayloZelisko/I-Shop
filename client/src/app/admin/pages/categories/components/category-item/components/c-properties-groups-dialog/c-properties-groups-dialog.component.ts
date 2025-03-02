@@ -61,9 +61,7 @@ export class CPropertiesGroupsDialogComponent implements OnInit {
   }
 
   public getGroups(): FormArray<FormGroup<CPropertiesGroupFormInterface>> {
-    return this.cPropertiesGroupsForm.get('groups') as FormArray<
-      FormGroup<CPropertiesGroupFormInterface>
-    >;
+    return this.cPropertiesGroupsForm.controls.groups;
   }
 
   public newGroup(): FormGroup<CPropertiesGroupFormInterface> {

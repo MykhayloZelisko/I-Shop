@@ -5,6 +5,7 @@ export interface UserInterface {
   id: string;
   firstName: string;
   lastName: string;
+  patronymic: string;
   phone: string;
   email: string;
   roles: RoleInterface[];

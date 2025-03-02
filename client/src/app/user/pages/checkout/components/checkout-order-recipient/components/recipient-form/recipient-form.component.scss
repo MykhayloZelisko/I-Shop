@@ -1,7 +1,7 @@
 @use 'variables';
 @use 'mixins';
 
-.contact-form {
+.recipient-form {
   &__group {
     display: flex;
     gap: 16px;
@@ -25,7 +25,7 @@
 }
 
 @media screen and (width <= 768px) {
-  .contact-form {
+  .recipient-form {
     &__group {
       display: flex;
       flex-direction: column;

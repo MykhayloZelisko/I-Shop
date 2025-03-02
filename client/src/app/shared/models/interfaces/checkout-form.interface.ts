@@ -1,8 +1,10 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface CheckoutFormInterface {
   contactInfo: FormGroup<ContactInfoFormInterface>;
   recipient: FormGroup<RecipientFormInterface>;
+  totalPrice: FormControl<number>;
+  devices: FormArray<FormGroup<OrderedDeviceFormInterface>>;
 }
 
 export interface ContactInfoFormInterface {
@@ -17,4 +19,10 @@ export interface RecipientFormInterface {
   firstName: FormControl<string>;
   lastName: FormControl<string>;
   patronymic: FormControl<string>;
+}
+
+export interface OrderedDeviceFormInterface {
+  id: FormControl<string>;
+  priceAtAdd: FormControl<number>;
+  quantity: FormControl<number>;
 }

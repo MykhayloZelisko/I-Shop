@@ -13,6 +13,9 @@ export class User {
   @Field({ description: 'Last name' })
   public lastName: string;
 
+  @Field({ description: 'Patronymic name' })
+  public patronymic: string;
+
   @Field({ description: 'Phone number' })
   public phone: string;
 

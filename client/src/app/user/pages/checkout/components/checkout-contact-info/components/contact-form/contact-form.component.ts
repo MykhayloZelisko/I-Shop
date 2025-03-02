@@ -19,8 +19,6 @@ export class ContactFormComponent {
   public contactInfoForm =
     input.required<FormGroup<ContactInfoFormInterface>>();
 
-  public isFormExpanded = input.required<boolean>();
-
   public toggleForm = output<void>();
 
   public collapseForm(): void {

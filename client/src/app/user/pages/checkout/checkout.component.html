@@ -1,3 +1,6 @@
+@let totalPrice = (totalPrice$ | async) ?? 0;
+@let devices = (devices$ | async) ?? [];
+
 <div class="checkout">
   <h2 class="checkout__title">Оформлення замовлення</h2>
   <div class="checkout__inner" [formGroup]="checkoutForm">
@@ -9,10 +12,25 @@
       } @else {
         <app-checkout-login />
       }
-      <div>Місто</div>
-      <app-checkout-order-list />
-      <app-checkout-order-recipient />
+      <div class="checkout__city">
+        <div class="checkout__location">
+          <svg-icon
+            class="checkout__icon"
+            src="assets/images/maps-pin-black-icon.svg"
+          ></svg-icon>
+          <span>Місто</span>
+        </div>
+        <span class="checkout__edit">Змінити</span>
+      </div>
+      <app-checkout-order-list [totalPrice]="totalPrice" [devices]="devices" />
+      <app-checkout-order-recipient
+        [recipientForm]="checkoutForm.controls.recipient"
+      />
     </div>
-    <app-checkout-aside />
+    <app-checkout-aside
+      [totalPrice]="totalPrice"
+      [isInvalid]="checkoutForm.invalid"
+      (clickEvent)="createOrder()"
+    />
   </div>
 </div>

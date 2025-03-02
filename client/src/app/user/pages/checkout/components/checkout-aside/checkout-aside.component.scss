@@ -1,0 +1,108 @@
+@use 'variables';
+@use 'mixins';
+
+.checkout-aside {
+  width: 320px;
+  border-radius: 8px;
+  padding: 16px;
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  gap: 16px;
+  font-family: variables.$source;
+  background-color: variables.$brown-4;
+  color: variables.$brown-1;
+
+  &__title {
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  &__quantity {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__divider {
+    height: 0;
+    border-bottom: 1px solid variables.$gray-3;
+  }
+
+  &__text {
+    font-size: 16px;
+  }
+
+  &__price {
+    font-size: 28px;
+  }
+
+  &__total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__button {
+    @include mixins.button-style(
+      variables.$brown-1,
+      variables.$yellow,
+      8px 24px,
+      variables.$brown-2,
+      true
+    );
+
+    width: 100%;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .checkout-aside {
+    width: 100%;
+    position: relative;
+    top: 0;
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__quantity {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__divider {
+      height: 0;
+      border-bottom: 1px solid variables.$gray-3;
+    }
+
+    &__text {
+      font-size: 16px;
+    }
+
+    &__price {
+      font-size: 28px;
+    }
+
+    &__total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__button {
+      @include mixins.button-style(
+        variables.$brown-1,
+        variables.$yellow,
+        8px 0,
+        variables.$brown-2,
+        true
+      );
+
+      width: 100%;
+      white-space: nowrap;
+    }
+  }
+}

@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { OrderedDeviceInput } from './ordered-device.input';
 import { Type } from 'class-transformer';
+import { RecipientInput } from './recipient.input';
 
 @InputType()
 export class CreateOrderInput {
@@ -24,4 +25,11 @@ export class CreateOrderInput {
   @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Must be a number' })
   @IsPositive({ message: 'Must be a positive number' })
   public totalPrice: number;
+
+  @Field(() => RecipientInput, {
+    description: 'Recipient of an order',
+  })
+  @ValidateNested()
+  @Type(() => RecipientInput)
+  public recipient: RecipientInput;
 }

@@ -23,7 +23,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    overflow: hidden;
 
     &:hover {
       border: 1px solid variables.$gray-5;
@@ -37,12 +36,24 @@
   }
 
   &__icon {
-    @include mixins.icon-style(variables.$black, 24px);
+    @include mixins.icon-style(variables.$black, 24px, false);
+
+    max-height: 24px;
   }
 
   &__edit {
+    color: variables.$blue-1;
+
     &:hover {
       color: variables.$blue-2;
+    }
+  }
+}
+
+@media screen and (width <= 1024px) {
+  .checkout-contact-info {
+    &__title {
+      font-size: 18px;
     }
   }
 }

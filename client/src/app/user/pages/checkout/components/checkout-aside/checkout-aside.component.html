@@ -1,0 +1,22 @@
+@let orderedCount = (orderedCount$ | async) ?? 0;
+
+<aside class="checkout-aside">
+  <h2 class="checkout-aside__title">Разом</h2>
+  <div class="checkout-aside__quantity">
+    <p class="checkout-aside__text">{{ orderedCount | devices }} на суму</p>
+    <p class="checkout-aside__text">{{ totalPrice() }} &#8372;</p>
+  </div>
+  <div class="checkout-aside__divider"></div>
+  <div class="checkout-aside__total">
+    <p class="checkout-aside__text">До сплати</p>
+    <p class="checkout-aside__price">{{ totalPrice() }} &#8372;</p>
+  </div>
+  <div class="checkout-aside__divider"></div>
+  <button
+    class="checkout-aside__button"
+    [disabled]="isInvalid()"
+    (click)="createOrder()"
+  >
+    Замовлення підтверджую
+  </button>
+</aside>

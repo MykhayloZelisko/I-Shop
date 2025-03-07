@@ -1,0 +1,29 @@
+<div class="checkout-order-recipient">
+  <h4 class="checkout-order-recipient__title">Отримувач</h4>
+  @if (isFormExpanded) {
+    <app-recipient-form
+      [recipientForm]="recipientForm()"
+      (toggleForm)="toggle(false)"
+    />
+  } @else {
+    <button class="checkout-order-recipient__button" (click)="toggle(true)">
+      <div class="checkout-order-recipient__button-inner">
+        <svg-icon
+          class="checkout-order-recipient__icon"
+          src="assets/images/male-icon.svg"
+        ></svg-icon>
+        <div class="checkout-order-recipient__user">
+          <span>
+            {{ recipientForm().getRawValue().lastName }}
+            {{ recipientForm().getRawValue().firstName }}
+            {{ recipientForm().getRawValue().patronymic || '' }}
+          </span>
+          <span class="checkout-order-recipient__phone">{{
+            recipientForm().getRawValue().phone | phone
+          }}</span>
+        </div>
+      </div>
+      <span class="checkout-order-recipient__edit">Змінити</span>
+    </button>
+  }
+</div>

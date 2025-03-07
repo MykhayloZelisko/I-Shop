@@ -162,7 +162,10 @@ export const logoutSuccess$ = createEffect(
     actions$.pipe(
       ofType(AuthActions.logoutSuccess),
       tap(() => {
-        if (router.url.includes(LayoutRouteNameEnum.Admin)) {
+        if (
+          router.url.includes(LayoutRouteNameEnum.Admin) ||
+          router.url.includes(UserRouteNameEnum.Checkout)
+        ) {
           router.navigateByUrl(UserRouteNameEnum.Home);
         }
       }),

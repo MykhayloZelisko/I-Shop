@@ -18,4 +18,8 @@ export const ADMIN_MENU: TabMenuItemInterface[] = [
     label: 'Бренди',
     route: AdminRouteNameEnum.Brands,
   },
+  {
+    label: 'Замовлення',
+    route: AdminRouteNameEnum.Orders,
+  },
 ];

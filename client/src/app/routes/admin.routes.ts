@@ -36,6 +36,13 @@ export const adminRoutes: Routes = [
           ),
       },
       {
+        path: AdminRouteNameEnum.Orders,
+        loadComponent: () =>
+          import('../admin/pages/orders/orders.component').then(
+            (m) => m.OrdersComponent,
+          ),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: AdminRouteNameEnum.Categories,

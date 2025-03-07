@@ -4,4 +4,5 @@ export enum AdminRouteNameEnum {
   NewDevice = 'new-device',
   Users = 'users',
   Brands = 'brands',
+  Orders = 'orders',
 }

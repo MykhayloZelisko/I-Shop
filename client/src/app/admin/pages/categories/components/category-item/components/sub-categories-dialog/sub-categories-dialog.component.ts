@@ -57,9 +57,7 @@ export class SubCategoriesDialogComponent implements OnInit {
   }
 
   public getCategories(): FormArray<FormGroup<CategoryFormInterface>> {
-    return this.subCategoriesForm.get('categories') as FormArray<
-      FormGroup<CategoryFormInterface>
-    >;
+    return this.subCategoriesForm.controls.categories;
   }
 
   public newCategory(): FormGroup<CategoryFormInterface> {

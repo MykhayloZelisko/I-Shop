@@ -3,11 +3,18 @@
 <div class="cart-device" [formGroup]="cartDeviceForm">
   <div class="cart-device__device">
     <app-checkbox formControlName="isInOrder" (changeEvent)="submitData()" />
-    <img
-      class="cart-device__image"
-      [src]="deviceSignal.device.images[0]"
-      [alt]="deviceSignal.device.deviceName"
-    />
+    <a
+      class="cart-device__image-wrapper"
+      href="#"
+      (click)="redirectToDevice($event)"
+    >
+      <img
+        class="cart-device__image"
+        [ngSrc]="deviceSignal.device.images[0]"
+        [alt]="deviceSignal.device.deviceName"
+        fill
+      />
+    </a>
     <a class="cart-device__link" href="#" (click)="redirectToDevice($event)">{{
       deviceSignal.device.deviceName
     }}</a>

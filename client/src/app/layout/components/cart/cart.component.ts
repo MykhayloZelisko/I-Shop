@@ -27,6 +27,8 @@ import { AsyncPipe } from '@angular/common';
 import { CartDeviceInterface } from '../../../shared/models/interfaces/cart-device.interface';
 import { CartDeviceComponent } from './components/cart-device/cart-device.component';
 import { CartActions } from '../../../+store/cart/actions/cart.actions';
+import { Router } from '@angular/router';
+import { UserRouteNameEnum } from '../../../shared/models/enums/user-route-name.enum';
 
 @Component({
   selector: 'app-cart',
@@ -64,6 +66,8 @@ export class CartComponent implements OnInit, OnDestroy {
   private store = inject(Store<State>);
 
   private fb = inject(FormBuilder);
+
+  private router = inject(Router);
 
   public ngOnInit(): void {
     this.selectAllCtrl = this.fb.control<boolean | null>(null);
@@ -135,5 +139,11 @@ export class CartComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  public checkoutOrder(): void {
+    this.router.navigateByUrl(UserRouteNameEnum.Checkout).then(() => {
+      this.store.dispatch(PopupActions.closePopup());
+    });
   }
 }

@@ -61,9 +61,7 @@ export class CPropertiesDialogComponent implements OnInit {
   }
 
   public getProperties(): FormArray<FormGroup<CPropertyFormInterface>> {
-    return this.cPropertiesForm.get('properties') as FormArray<
-      FormGroup<CPropertyFormInterface>
-    >;
+    return this.cPropertiesForm.controls.properties;
   }
 
   public newProperty(): FormGroup<CPropertyFormInterface> {

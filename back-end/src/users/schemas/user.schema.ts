@@ -13,6 +13,9 @@ export class User {
   @Prop()
   public lastName: string;
 
+  @Prop({ default: '' })
+  public patronymic: string;
+
   @Prop({ unique: true })
   public phone: string;
 
